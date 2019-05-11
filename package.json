@@ -1,0 +1,9 @@
+{
+  "name": "node-seal",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "deasync": "^0.1.15"
+  }
+}
