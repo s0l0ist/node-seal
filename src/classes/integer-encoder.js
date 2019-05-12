@@ -1,4 +1,3 @@
-const PlainText = require('./plain-text')
 class IntegerEncoder {
   constructor({module}) {
     this._module = module
@@ -25,29 +24,19 @@ class IntegerEncoder {
   }
 
   encodeInt32({value}) {
-    const instance = this._instance.encodeInt32(value)
-    PlainText.inject({instance})
-    return PlainText
+    return this._instance.encodeInt32(value)
   }
   encodeInt64({value}) {
-    const instance = this._instance.encodeInt64(value)
-    PlainText.inject({instance})
-    return PlainText
+    return this._instance.encodeInt64(value)
   }
   encodeUInt32({value}) {
-    const instance = this._instance.encodeUInt32(value)
-    PlainText.inject({instance})
-    return PlainText
+    return this._instance.encodeUInt32(value)
   }
   encodeUInt64({value}) {
-    const instance = this._instance.encodeUInt64(value)
-    PlainText.inject({instance})
-    return PlainText
+    return this._instance.encodeUInt64(value)
   }
   encodeBigInt({value}) {
-    const instance = this._instance.encodeBigInt(value)
-    PlainText.inject({instance})
-    return PlainText
+    return this._instance.encodeBigInt(value)
   }
 
   decodeInt32({plainText}) {

@@ -2,6 +2,7 @@ class CipherText {
   constructor({module}) {
     this._module = module
     this._Ciphertext = module.Ciphertext
+
     this._instance = null
   }
 
@@ -21,6 +22,14 @@ class CipherText {
       delete this._instance
     }
     this._instance = instance
+  }
+
+  save() {
+    return this._instance.saveToString()
+  }
+
+  load({context, encoded}) {
+    this._instance.loadFromString(context, encoded)
   }
 }
 

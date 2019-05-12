@@ -23,12 +23,12 @@ class Crypt {
   initializeLow({schemeType}) {
 
     this.module.SmallModulus.initialize()
-    this.module.SmallModulus.setValue({value: 8192})
+    this.module.SmallModulus.setValue({value: 256})
 
     this.module.EncryptionParameters.initialize({
       schemeType: schemeType,
-      polyDegree: 8192,
-      coeffModulus: this.module.DefaultParams.coeffModulus128({value: 8192}),
+      polyDegree: 2048,
+      coeffModulus: this.module.DefaultParams.coeffModulus128({value: 2048}),
       plainModulus: this.module.SmallModulus.instance
     })
 
@@ -69,15 +69,22 @@ class Crypt {
   }
 
   encrypt({value}) {
-    const plainText = (this.module.IntegerEncoder.encodeInt32({value})).instance
-    const cipherText = (this.module.CipherText.initialize()).instance
+    const plainText = this.module.IntegerEncoder.encodeInt32({value})
+
+
+    this.module.PlainText.initialize()
+    this.module.PlainText.inject({instance: plainText})
+
+    this.module.CipherText.initialize()
+    const cipherText = this.module.CipherText.instance
     this.module.Encryptor.encrypt({plainText, cipherText})
     return this.module.CipherText
   }
 
   decrypt({cipherText}) {
-    const plainText = (this.module.PlainText.initialize()).instance
-    this.module.Decryptor.decrypt({cipherText, plainText})
+    this.module.PlainText.initialize()
+    const plainText = this.module.PlainText.instance
+    this.module.Decryptor.decrypt({cipherText: cipherText.instance, plainText})
     return this.module.IntegerEncoder.decodeInt32({plainText})
   }
 
@@ -87,7 +94,11 @@ class Crypt {
 
   secretKey() {
     return this.module.SecretKey.save()
+  }
 
+  loadEncodedCipher({encoded}) {
+    console.log('context:', this.module.Context.instance)
+    this.module.CipherText.load({context: this.module.Context.instance, encoded})
   }
 }
 
