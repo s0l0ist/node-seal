@@ -1,10 +1,10 @@
-class SchemeType {
-  constructor({module}) {
-    this._module = module
+export class SchemeType {
+  constructor({library}) {
+    this._library = library
 
     // Static methods
-    this._BFV = module.SchemeType.BFV
-    this._CKKS = module.SchemeType.CKKS
+    this._BFV = library.SchemeType.BFV
+    this._CKKS = library.SchemeType.CKKS
   }
 
   get BFV() {
@@ -14,5 +14,3 @@ class SchemeType {
     return this._CKKS
   }
 }
-
-module.exports = SchemeType

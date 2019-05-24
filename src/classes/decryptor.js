@@ -1,7 +1,7 @@
-class Decryptor {
-  constructor({module}) {
-    this._module = module
-    this._Decryptor = module.Decryptor
+export class Decryptor {
+  constructor({library}) {
+    this._library = library
+    this._Decryptor = library.Decryptor
     this._instance = null
   }
 
@@ -30,5 +30,3 @@ class Decryptor {
     return this._instance.invariantNoiseBudget(cipherText)
   }
 }
-
-module.exports = Decryptor

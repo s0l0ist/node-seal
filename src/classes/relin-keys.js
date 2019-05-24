@@ -1,6 +1,6 @@
-export class PublicKey {
+export class RelinKeys {
   constructor({library}) {
-    this._instance = new library.PublicKey()
+    this._instance = new library.RelinKeys()
   }
 
   get instance() {

@@ -1,14 +1,13 @@
-class Encryptor {
-  constructor({module}) {
-    this._module = module
-    this._Encryptor = module.Encryptor
+export class Encryptor {
+  constructor({library}) {
+    this._library = library
+    this._Encryptor = library.Encryptor
 
     // Static Methods
-    this._MemoryPoolHandleGlobal = module.MemoryPoolHandle.MemoryPoolHandleGlobal
-    this._MemoryPoolHandleThreadLocal = module.MemoryPoolHandle.MemoryPoolHandleThreadLocal
+    this._MemoryPoolHandleGlobal = library.MemoryPoolHandle.MemoryPoolHandleGlobal
+    this._MemoryPoolHandleThreadLocal = library.MemoryPoolHandle.MemoryPoolHandleThreadLocal
 
     this._instance = null
-
   }
 
   get instance() {
@@ -33,5 +32,3 @@ class Encryptor {
     this._instance.encrypt(plainText, cipherText, this._MemoryPoolHandleGlobal())
   }
 }
-
-module.exports = Encryptor

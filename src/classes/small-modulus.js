@@ -1,11 +1,11 @@
-class SmallModulus {
-  constructor({module}) {
-    this._module = module
-    this._SmallModulus = module.SmallModulus
+export class SmallModulus {
+  constructor({library}) {
+    this._library = library
+    this._SmallModulus = library.SmallModulus
 
     // Static methods
-    this._saveToString = module.SmallModulus.saveToString
-    this._createFromString = module.SmallModulus.createFromString
+    this._saveToString = library.SmallModulus.saveToString
+    this._createFromString = library.SmallModulus.createFromString
 
     this._instance = null
   }
@@ -45,5 +45,3 @@ class SmallModulus {
     return this._saveToString(this._instance)
   }
 }
-
-module.exports = SmallModulus

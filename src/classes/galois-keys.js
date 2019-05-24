@@ -1,6 +1,7 @@
-export class PublicKey {
+export class GaloisKeys {
   constructor({library}) {
-    this._instance = new library.PublicKey()
+    this._library = library
+    this._instance = new library.GaloisKeys()
   }
 
   get instance() {

@@ -1,7 +1,7 @@
-class KeyGenerator {
-  constructor({module}) {
-    this._module = module
-    this._KeyGenerator = module.KeyGenerator
+export class KeyGenerator {
+  constructor({library}) {
+    this._library = library
+    this._KeyGenerator = library.KeyGenerator
     this._instance = null
   }
 
@@ -30,6 +30,12 @@ class KeyGenerator {
   getSecretKey() {
     return this._instance.getSecretKey()
   }
-}
 
-module.exports = KeyGenerator
+  genRelinKeys({decompositionBitCount, size}) {
+    return this._instance.createRelinKeys(decompositionBitCount, size)
+  }
+
+  genGaloisKeys({decompositionBitCount}) {
+    return this._instance.createGaloisKeys(decompositionBitCount)
+  }
+}
