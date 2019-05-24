@@ -1,4 +1,4 @@
-describe('Generate GaloisKeys', () => {
+describe.skip('Generate GaloisKeys', () => {
 
   describe('BFV genGaloisKeys', () => {
     test('low', async () => {

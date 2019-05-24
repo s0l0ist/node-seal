@@ -38,7 +38,7 @@ Module.then((Crypt) => {
    * For BFV
    *
    * If we are using `int32` then the maximum value for any element in the array
-   * has to be __less_than_half__ of the `plainModulus` size (default = 786433, half = 393216)
+   * has to be __less_than_half__ of the `plainModulus` size (default = 786433, half = 393216.5)
    *
    * If we are using `uint32` then the max value for any element in the array
    * has to be __less_than__ `plainModulus` (default = 786433)
@@ -50,12 +50,12 @@ Module.then((Crypt) => {
   let encrypted;
 
   const step = parms.plainModulus / parms.polyDegree
-  encrypted = Crypt.encrypt({value: Array.apply(null, Array(parms.polyDegree)).map(
+  encrypted = Crypt.encrypt({value: Array.from({length: parms.polyDegree}).map(
       (x, i) =>  {
         if (i >= (parms.polyDegree / 2)) {
-          return (parms.plainModulus - (step * i))
+          return Math.floor((parms.plainModulus - (step * i)))
         }
-        return  -(step + (step * i))
+        return  Math.ceil(-(step + (step * i)))
       }),
     type: 'int32'
   })

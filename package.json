@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node src/index",
     "test": "jest",
-    "coverage": "jest --collectCoverageFrom=src/**.js --coverage src"
+    "coverage": "jest --collectCoverageFrom=src/lib/**.js --coverage src/test"
   },
   "dependencies": {
     "esm": "^3.2.25"

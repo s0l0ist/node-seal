@@ -1,4 +1,4 @@
-describe('Generate RelinKeys', () => {
+describe.skip('Generate RelinKeys', () => {
 
   describe('BFV genRelinKeys', () => {
     test('low', async () => {

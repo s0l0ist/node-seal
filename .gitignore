@@ -3,6 +3,9 @@
 # dependencies
 /node_modules
 
+# Code cov
+/coverage
+
 # misc
 .DS_Store
 .env.local
