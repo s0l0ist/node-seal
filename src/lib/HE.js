@@ -301,26 +301,51 @@ export class HE {
 
     const array = Array.isArray(value)? value: [value]
     if (array.length > this._polyDegree) {
-      throw new Error('Input array is too large for the `coeffModulus` specified')
+      throw new Error('Input array is too large for the `polyDegree` specified')
+    }
+
+    /**
+     * Each element in the array should not be larger than half of the plainModulus
+     *
+     * For int32, the limit is -1/2 * `plainModulus` <-> +1/2 * `plainModulus`
+     * for uint32, the limit is 0 <-> `plainModulus`
+     */
+    const isNotValid = array.some(el => {
+      if (type === 'int32') {
+        return (Math.abs(el) > Math.floor(this._plainModulus / 2))
+      }
+      if (type === 'uint32') {
+        return (el < 0 || el > this._plainModulus)
+      }
+      return false
+    })
+
+    if (isNotValid) {
+      if (type === 'int32') {
+        throw new Error('Array element out of range: -1/2 * `plainModulus` <-> +1/2 * `plainModulus`')
+      }
+      if (type === 'uint32') {
+        throw new Error('Array element out of range: 0 <-> `plainModulus`')
+      }
     }
 
     // TODO: fix this hack for `vecFromArray`
     array.forEach(el => vector.push_back(el))
-    console.log('printing vector...')
-    this.printVector({vector, type})
-    console.log('printing matrix...')
-    this.printMatrix({vector, rowSize: this._BatchEncoder.slotCount() / 2, type})
+    // console.log('printing vector...')
+    // this.printVector({vector, type})
+    // console.log('printing matrix...')
+    // this.printMatrix({vector, rowSize: this._BatchEncoder.slotCount() / 2, type})
 
     const plainText = new this._PlainText({library: this._Library.instance})
 
-    console.log('encoding...')
+    // console.log('encoding...')
     this._BatchEncoder.encode({vector, plainText: plainText.instance, type})
-    console.log('encoding...done!')
+    // console.log('encoding...done!')
 
     const cipherText = new this._CipherText({library: this._Library.instance})
-    console.log('encrypting...')
+    // console.log('encrypting...')
     this._Encryptor.encrypt({plainText: plainText.instance, cipherText: cipherText.instance})
-    console.log('encrypting...done!')
+    // console.log('encrypting...done!')
 
     // Store the vector size so that we may filter the array upon decryption
     cipherText.setVectorSize({size: vector.size()})
@@ -341,13 +366,28 @@ export class HE {
 
     const array = Array.isArray(value)? value: [value]
     if (array.length > this._polyDegree) {
-      throw new Error('Input array is too large for the `coeffModulus` specified')
+      throw new Error('Input array is too large for the `polyDegree` specified')
+    }
+
+    /**
+     * Each element in the array should not be larger than 2^53 to ensure
+     * more reliable decryption. This is due to JS Number limitations.
+     *
+     * For int32, the limit is -1/2 * `plainModulus` <-> +1/2 * `plainModulus`
+     * for uint32, the limit is 0 <-> `plainModulus`
+     */
+    const isNotValid = array.some(el => {
+      return (Math.abs(el) > Math.pow(2, 53))
+    })
+
+    if (isNotValid) {
+      throw new Error('Array element out of range: -2^53 <-> +2^53')
     }
 
     // TODO: fix this hack for `vecFromArray`
     array.forEach(el => vector.push_back(el))
 
-    this.printVector({vector, type})
+    // this.printVector({vector, type})
 
     const plainText = new this._PlainText({library: this._Library.instance})
 

@@ -5,13 +5,23 @@ import * as Class from '../classes'
 export const Module = (async () => {
 
   /**
-   * First, we initialize the library which loads from a WASM file
+   * First, we initialize the library which loads from a WASM file.
+   * This file is loaded asynchronously and therefore we must wait
+   * until it has fully initialized before calling any other methods.
    */
   const Library = new Class.Library({source})
   await Library.initialize()
 
   /**
-   * Then, instantiate everything else we need
+   * Now, we can instantiate everything else we need.
+   *
+   * Some are singletons while others are class constructors.
+   *
+   * We are using singletons as a wrapper around some of the
+   * WASM modules and keeps track of internal methods. It also
+   * helps prevent a user from initializing the library with
+   * different encryption parameters, thus ensuring they are
+   * operating in the same context.
    */
   const methods = {
     BatchEncoder: new Class.BatchEncoder({library: Library.instance}),
