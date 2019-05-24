@@ -1,19 +1,11 @@
-class SecretKey {
-  constructor({module}) {
-    this._module = module
-    this._SecretKey = module.SecretKey
-    this._instance = null
+export class SecretKey {
+  constructor({library}) {
+    this._library = library
+    this._instance = new library.SecretKey()
   }
 
   get instance() {
     return this._instance
-  }
-
-  initialize() {
-    if (this._instance) {
-      delete this._instance
-    }
-    this._instance = new this._SecretKey()
   }
 
   inject({instance}) {
@@ -27,9 +19,7 @@ class SecretKey {
     return this._instance.saveToString()
   }
 
-  load({value}) {
-    this._instance.loadFromString(value)
+  load({context, encoded}) {
+    this._instance.loadFromString(context, encoded)
   }
 }
-
-module.exports = SecretKey

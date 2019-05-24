@@ -1,11 +1,11 @@
-class EncryptionParameters {
-  constructor({module}) {
-    this._module = module
-    this._EncryptionParameters = module.EncryptionParameters
+export class EncryptionParameters {
+  constructor({library}) {
+    this._library = library
+    this._EncryptionParameters = library.EncryptionParameters
 
     // Static methods
-    this._createFromString = module.EncryptionParameters.createFromString
-    this._saveToString = module.EncryptionParameters.saveToString
+    this._createFromString = library.EncryptionParameters.createFromString
+    this._saveToString = library.EncryptionParameters.saveToString
 
     this._instance = null
   }
@@ -21,7 +21,10 @@ class EncryptionParameters {
     this._instance = new this._EncryptionParameters(schemeType)
     this._instance.setPolyModulusDegree(polyDegree)
     this._instance.setCoeffModulus(coeffModulus)
-    this._instance.setPlainModulus(plainModulus)
+
+    if (plainModulus) {
+      this._instance.setPlainModulus(plainModulus)
+    }
   }
 
   inject({instance}) {
@@ -38,5 +41,3 @@ class EncryptionParameters {
     this._instance = this._createFromString(encryptionParametersString)
   }
 }
-
-module.exports = EncryptionParameters

@@ -1,8 +1,8 @@
-class Context {
-  constructor({module}) {
-    this._module = module
-    this._SEALContext = module.SEALContext
-    this._printContext = module.printContext
+export class Context {
+  constructor({library}) {
+    this._library = library
+    this._SEALContext = library.SEALContext
+    this._printContext = library.printContext
     this._instance = null
   }
 
@@ -28,6 +28,18 @@ class Context {
   print() {
     this._printContext(this._instance)
   }
-}
 
-module.exports = Context
+  contextData() {
+    return this._instance.contextData()
+  }
+
+  firstParmsId() {
+    return this._instance.firstParmsId()
+  }
+  lastParmsId() {
+    return this._instance.lastParmsId()
+  }
+  parametersSet() {
+    return this._instance.parametersSet()
+  }
+}

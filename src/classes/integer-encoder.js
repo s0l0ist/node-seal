@@ -1,7 +1,7 @@
-class IntegerEncoder {
-  constructor({module}) {
-    this._module = module
-    this._IntegerEncoder = module.IntegerEncoder
+export class IntegerEncoder {
+  constructor({library}) {
+    this._library = library
+    this._IntegerEncoder = library.IntegerEncoder
     this._instance = null
   }
 
@@ -55,5 +55,3 @@ class IntegerEncoder {
     return this._instance.decodeBigInt(plainText)
   }
 }
-
-module.exports = IntegerEncoder

@@ -2,8 +2,17 @@
   "name": "node-seal",
   "version": "1.0.0",
   "main": "index.js",
+  "library": "main.js",
   "license": "MIT",
+  "scripts": {
+    "start": "node src/index",
+    "test": "jest",
+    "coverage": "jest --collectCoverageFrom=src/**.js --coverage src"
+  },
   "dependencies": {
-    "deasync": "^0.1.15"
+    "esm": "^3.2.25"
+  },
+  "devDependencies": {
+    "jest": "^24.8.0"
   }
 }
