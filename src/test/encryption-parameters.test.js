@@ -1,7 +1,7 @@
 describe('Creating Encryption Parameters', () => {
   test('low', async () => {
-    const { Module } = require('../../src')
-    const Crypt = await Module
+    const { HCrypt } = process.env.NODE_ENV === 'development'? require('../../index.js') : require('../../dist/bundle.node.js')
+    const Crypt = await HCrypt
     const parms = Crypt.createParams({security: 'low'})
     expect(parms).toEqual({
       polyDegree: 4096,

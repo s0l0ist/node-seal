@@ -1,15 +1,17 @@
-import source from '../bin/a.out'
+import source from '../bin/a.out.js'
+import sourceWasm from '../bin/a.out'
+
 import { HE } from './HE'
 import * as Class from '../classes'
 
-export const Module = (async () => {
+export const HCrypt = (async () => {
 
   /**
    * First, we initialize the library which loads from a WASM file.
    * This file is loaded asynchronously and therefore we must wait
    * until it has fully initialized before calling any other methods.
    */
-  const Library = new Class.Library({source})
+  const Library = new Class.Library({source, sourceWasm})
   await Library.initialize()
 
   /**

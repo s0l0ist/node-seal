@@ -1,17 +1,32 @@
+import { resolve } from 'path'
+
 export class Library {
-  constructor({source}) {
-    this._source = null
+  constructor({source, sourceWasm}) {
+    this._module = null
     this._ready = false
 
+    const module = source({
+      locateFile(path) {
+        if (process.env.NODE_ENV === 'development') {
+          return resolve(__dirname, '../bin', path)
+        }
+
+        if(path.endsWith('.wasm')) {
+          return sourceWasm
+        }
+        return path
+      }
+    })
+
     // Set the callback handle
-    source.onRuntimeInitialized = () => {
-      this._source = source
+    module.onRuntimeInitialized = () => {
+      this._module = module
       this._ready = true
     }
   }
 
   get instance() {
-    return this._source
+    return this._module
   }
 
   _timeout(ms) {
