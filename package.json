@@ -8,9 +8,9 @@
   "scripts": {
     "start": "NODE_ENV=development node index.js",
     "test": "NODE_ENV=development jest",
-    "test:production": "jest",
     "coverage": "NODE_ENV=development jest --collectCoverageFrom=src/lib/**.js --coverage src/test",
     "build": "webpack",
+    "build:test": "jest",
     "serve": "http-server"
   },
   "devDependencies": {
