@@ -476,7 +476,7 @@ export class HE {
   /**
    * Decrypt a ciphertext using the BFV scheme
    * @param cipherText
-   * @returns {*}
+   * @returns {Int32Array|Uint32Array|BigInt64Array|BigUint64Array|Float64Array|Array}
    * @private
    */
   _decryptBFV({cipherText}) {
@@ -494,13 +494,14 @@ export class HE {
 
     // this.printVector({vector, type: cipherText.getVectorType()})
     // this.printMatrix({vector, rowSize: this._BatchEncoder.slotCount() / 2, type: cipherText.getVectorType()})
-    return vector
+
+    return this._vecToArray({vector, type: cipherText.getVectorType()})
   }
 
   /**
    * Decrypt a ciphertext using the CKKS scheme
    * @param cipherText
-   * @returns {*}
+   * @returns {Int32Array|Uint32Array|BigInt64Array|BigUint64Array|Float64Array|Array}
    * @private
    */
   _decryptCKKS({cipherText}) {
@@ -514,14 +515,68 @@ export class HE {
     // We trim back the vector to the original size that was recorded before encryption was performed
     vector.resize(cipherText.getVectorSize(), 0)
 
-    // this.printVector({vector, type: cipherText.getVectorType()})
-    return vector
+    this.printVector({vector, type: cipherText.getVectorType()})
+
+    return this._vecToArray({vector, type: cipherText.getVectorType()})
+  }
+
+  /**
+   * Copy a vector's data into a Typed or regular JS array
+   * @param vector
+   * @param type
+   * @returns {Int32Array|Uint32Array|BigInt64Array|BigUint64Array|Float64Array|Array}
+   * @private
+   */
+  _vecToArray({vector, type}) {
+    switch (type) {
+      case 'int32':
+        const int32Array = new Int32Array(vector.size())
+        // retrieve value from the vector
+        for (let i = 0; i < vector.size(); i++) {
+          int32Array[i] = vector.get(i)
+        }
+        return int32Array
+      case 'uint32':
+        const uint32Array = new Uint32Array(vector.size())
+        // retrieve value from the vector
+        for (let i = 0; i < vector.size(); i++) {
+          uint32Array[i] = vector.get(i)
+        }
+        return uint32Array
+      case 'int64':
+        const int64Array = new BigInt64Array(vector.size())
+        // retrieve value from the vector
+        for (let i = 0; i < vector.size(); i++) {
+          int64Array[i] = vector.get(i)
+        }
+        return int64Array
+      case 'uint64':
+        const uint64Array = new BigUint64Array(vector.size())
+        // retrieve value from the vector
+        for (let i = 0; i < vector.size(); i++) {
+          uint64Array[i] = vector.get(i)
+        }
+        return uint64Array
+      case 'double':
+        const float64Array = new Float64Array(vector.size())
+        // retrieve value from the vector
+        for (let i = 0; i < vector.size(); i++) {
+          float64Array[i] = vector.get(i)
+        }
+        return float64Array
+      default:
+        const array = []
+        for (let i = 0; i < vector.size(); i++) {
+          array[i] = vector.get(i)
+        }
+        return array
+    }
   }
 
   /**
    * Decrypt a given ciphertext
    * @param cipherText
-   * @returns {*}
+   * @returns {Int32Array|Uint32Array|BigInt64Array|BigUint64Array|Float64Array|Array}
    */
   decrypt({cipherText}) {
     switch (this._schemeType) {
@@ -596,7 +651,7 @@ export class HE {
 
   /**
    * Save a public key as a base64 string
-   * @returns {*}
+   * @returns {string}
    */
   savePublicKey() {
     return this.publicKey.save()
@@ -604,7 +659,7 @@ export class HE {
 
   /**
    * Save a secret key as a base64 string
-   * @returns {*}
+   * @returns {string}
    */
   saveSecretKey() {
     return this.secretKey.save()
@@ -612,7 +667,7 @@ export class HE {
 
   /**
    * Save the relin keys as a base64 string
-   * @returns {*}
+   * @returns {string}
    */
   saveRelinKeys() {
     return this.relinKeys.save()
@@ -620,7 +675,7 @@ export class HE {
 
   /**
    * Save the galois keys as a base64 string
-   * @returns {*}
+   * @returns {string}
    */
   saveGaloisKeys() {
     return this.galoisKeys.save()

@@ -107,12 +107,9 @@ CommonJS
   // Receive the encrypted result back.
   // ...
   
-  // Decrypt the result
-  const vector = Crypt.decrypt({cipherText})
+  // Decrypt the result which returns a TypedArray
+  const int32Array = Crypt.decrypt({cipherText})
   
-  // TODO: Convert vector back to JS array so we don't have to operate on C++ vectors
-  Crypt.printVector({vector, type: cipherText.getVectorType()})
-
 })()
 
 ```
