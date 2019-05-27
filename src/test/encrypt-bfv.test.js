@@ -2,8 +2,8 @@ describe('Encrypt BFV', () => {
 
   describe('Int32', () => {
     test('Valid range', async () => {
-      const { HCrypt } = require('../index.js')
-      const Crypt = await HCrypt
+      const { Seal } = require('../index.js')
+      const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'low'})
       Crypt.initialize({...parms, schemeType: 'BFV'})
       Crypt.genKeys()
@@ -22,8 +22,8 @@ describe('Encrypt BFV', () => {
     })
 
     test('Invalid range', async () => {
-      const { HCrypt } = require('../index.js')
-      const Crypt = await HCrypt
+      const { Seal } = require('../index.js')
+      const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'low'})
       Crypt.initialize({...parms, schemeType: 'BFV'})
       Crypt.genKeys()
@@ -44,8 +44,8 @@ describe('Encrypt BFV', () => {
 
   describe('UInt32', () => {
     test('Valid range', async () => {
-      const { HCrypt } = require('../index.js')
-      const Crypt = await HCrypt
+      const { Seal } = require('../index.js')
+      const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'low'})
       Crypt.initialize({...parms, schemeType: 'BFV'})
       Crypt.genKeys()
@@ -58,8 +58,8 @@ describe('Encrypt BFV', () => {
     })
 
     test('Invalid range', async () => {
-      const { HCrypt } = require('../index.js')
-      const Crypt = await HCrypt
+      const { Seal } = require('../index.js')
+      const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'low'})
       Crypt.initialize({...parms, schemeType: 'BFV'})
       Crypt.genKeys()

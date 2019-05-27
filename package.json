@@ -1,8 +1,8 @@
 {
   "name": "node-seal",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Port of Microsoft SEAL to Javascript",
-  "main": "dist/hcrypt.node.js",
+  "main": "dist/seal.node.js",
   "library": "src/main.js",
   "module": "src/main.js",
   "license": "MIT",

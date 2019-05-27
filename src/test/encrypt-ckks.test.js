@@ -2,8 +2,8 @@ describe('Encrypt CKKS', () => {
 
   describe('Double', () => {
     test('Valid range', async () => {
-      const { HCrypt } = require('../index.js')
-      const Crypt = await HCrypt
+      const { Seal } = require('../index.js')
+      const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'low'})
       Crypt.initialize({...parms, schemeType: 'CKKS'})
       Crypt.genKeys()
@@ -17,8 +17,8 @@ describe('Encrypt CKKS', () => {
     })
 
     test('Invalid range', async () => {
-      const { HCrypt } = require('../index.js')
-      const Crypt = await HCrypt
+      const { Seal } = require('../index.js')
+      const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'low'})
       Crypt.initialize({...parms, schemeType: 'CKKS'})
       Crypt.genKeys()
