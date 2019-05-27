@@ -45,6 +45,23 @@ const serverConfig = {...commonConfig,
     umdNamedDefine: true
   },
   target: 'node',
+  module: {
+    rules: [
+      {
+        test: /a\.out\.wasm$/,
+        type: 'javascript/auto',
+        loader: 'file-loader',
+        options: {
+          publicPath: (url, resourcePath, context) => {
+            if (process.env.NODE_ENV === 'production') {
+              return 'node_modules/node-seal/dist/'
+            }
+            return 'dist/'
+          }
+        }
+      }
+    ]
+  },
   externals: [nodeExternals()],
 }
 
