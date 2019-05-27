@@ -1,17 +1,16 @@
 {
   "name": "node-seal",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Port of Microsoft SEAL to Javascript",
-  "main": "node_modules/node-seal/dist/hcrypt.node.js",
+  "main": "dist/hcrypt.node.js",
   "library": "src/main.js",
   "module": "src/main.js",
   "license": "MIT",
   "scripts": {
-    "start:web": "webpack-dev-server --open",
-    "test": "NODE_ENV=development jest",
-    "coverage": "NODE_ENV=development jest --collectCoverageFrom=src/lib/**.js --coverage src/test",
-    "build": "webpack",
-    "build:test": "jest"
+    "start": "webpack-dev-server --open",
+    "test": "jest",
+    "coverage": "jest --collectCoverageFrom=src/lib/**.js --coverage src/test",
+    "build": "webpack"
   },
   "devDependencies": {
     "esm": "^3.2.25",

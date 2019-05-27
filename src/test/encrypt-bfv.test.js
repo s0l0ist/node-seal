@@ -2,7 +2,7 @@ describe('Encrypt BFV', () => {
 
   describe('Int32', () => {
     test('Valid range', async () => {
-      const { HCrypt } = process.env.NODE_ENV === 'development'? require('../index.js') : require('../../dist/hcrypt.node.js')
+      const { HCrypt } = require('../index.js')
       const Crypt = await HCrypt
       const parms = Crypt.createParams({computationLevel: 'low'})
       Crypt.initialize({...parms, schemeType: 'BFV'})
@@ -22,7 +22,7 @@ describe('Encrypt BFV', () => {
     })
 
     test('Invalid range', async () => {
-      const { HCrypt } = process.env.NODE_ENV === 'development'? require('../index.js') : require('../../dist/hcrypt.node.js')
+      const { HCrypt } = require('../index.js')
       const Crypt = await HCrypt
       const parms = Crypt.createParams({computationLevel: 'low'})
       Crypt.initialize({...parms, schemeType: 'BFV'})
@@ -44,7 +44,7 @@ describe('Encrypt BFV', () => {
 
   describe('UInt32', () => {
     test('Valid range', async () => {
-      const { HCrypt } = process.env.NODE_ENV === 'development'? require('../index.js') : require('../../dist/hcrypt.node.js')
+      const { HCrypt } = require('../index.js')
       const Crypt = await HCrypt
       const parms = Crypt.createParams({computationLevel: 'low'})
       Crypt.initialize({...parms, schemeType: 'BFV'})
@@ -58,7 +58,7 @@ describe('Encrypt BFV', () => {
     })
 
     test('Invalid range', async () => {
-      const { HCrypt } = process.env.NODE_ENV === 'development'? require('../index.js') : require('../../dist/hcrypt.node.js')
+      const { HCrypt } = require('../index.js')
       const Crypt = await HCrypt
       const parms = Crypt.createParams({computationLevel: 'low'})
       Crypt.initialize({...parms, schemeType: 'BFV'})
