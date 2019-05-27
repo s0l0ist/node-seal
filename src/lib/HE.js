@@ -492,8 +492,8 @@ export class HE {
     // We trim back the vector to the original size that was recorded before encryption was performed
     vector.resize(cipherText.getVectorSize(), 0)
 
-    this.printVector({vector, type: cipherText.getVectorType()})
-    this.printMatrix({vector, rowSize: this._BatchEncoder.slotCount() / 2, type: cipherText.getVectorType()})
+    // this.printVector({vector, type: cipherText.getVectorType()})
+    // this.printMatrix({vector, rowSize: this._BatchEncoder.slotCount() / 2, type: cipherText.getVectorType()})
     return vector
   }
 
@@ -514,7 +514,7 @@ export class HE {
     // We trim back the vector to the original size that was recorded before encryption was performed
     vector.resize(cipherText.getVectorSize(), 0)
 
-    this.printVector({vector, type: cipherText.getVectorType()})
+    // this.printVector({vector, type: cipherText.getVectorType()})
     return vector
   }
 
