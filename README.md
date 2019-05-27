@@ -1,8 +1,9 @@
 # Microsoft SEAL
 
-This is a port from C++ to Javascript of the Microsoft SEAL library.
+This is a library wrapper for the Web Assembly port of the C++ Microsoft SEAL library.
 
-It contains most of the functionality 
+It contains high level functions to make using this library easy. There are default parameters
+which can be customized and overridden for advanced use cases.
 
 Microsoft SEAL is an easy-to-use homomorphic encryption library developed by researchers in 
 the Cryptography Research group at Microsoft Research. Microsoft SEAL is written in modern 
@@ -34,6 +35,8 @@ Frontend:
 <script src="./dist/hcrypt.js"></script>
 ```
 
+At this time, the library is not available on a CDN.
+
 
 # Usage
 
@@ -42,9 +45,14 @@ CommonJS
 (async () => {
   // Due to limitations with how the WASM file is loaded, 
   // we need to await on the main library in order to have
-  // a fully instanciated instance.
+  // a fully instanciated instance. This limitation mostly
+  // because of browser limitations on the size of 
+  // synchronously loaded WASM files. Therefore, the loading
+  // must be done asynchronously.
   const { Hcrypt } = require('node-seal')
   const Crypt = await HCrypt
+  
+  
   
   // There are 3 different computationLevel's that have been predefined
   // for ease of use. 'low', 'medium', and 'high'. The computation levels
@@ -87,11 +95,27 @@ CommonJS
   // Encrypt the data
   const cipherText = Crypt.encrypt({value, type: 'int32'})
   
-  // Decrypt the data
+  // Send the encrypted data to a 3rd party for 
+  // homomorphic operations. But we need more
+  // metadata of the cipherText as well to help  
+  // facilitate homomorphic operations involving
+  // optional matrix rotations, etc.
+  const cipherObject = {
+    cipherText: cipherText.save(),
+    schemeType: cipherText.getSchemeType(),
+    vector: {
+      size: cipherText.getVectorSize(),
+      type: cipherText.getVectorType(),
+    }
+  }
+  
+  // Receive the encrypted result back.
+  
+  // Decrypt the result
   const vector = Crypt.decrypt({cipherText})
   
   // TODO: Convert vector back to JS array so we don't have to operate on C++ vectors
-  Crypt.printVector({vector, type: cipherText.getType()})
+  Crypt.printVector({vector, type: cipherText.getVectorType()})
 
 })()
 
