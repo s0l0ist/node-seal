@@ -42,17 +42,17 @@ export class CipherText {
     return this._vectorSize
   }
 
-  setType({type}) {
+  setVectorType({type}) {
     this._type = type
   }
-  getType() {
+  getVectorType() {
     return this._type
   }
 
-  setScheme({scheme}) {
+  setSchemeType({scheme}) {
     this._scheme = scheme
   }
-  getScheme() {
+  getSchemeType() {
     return this._scheme
   }
 }

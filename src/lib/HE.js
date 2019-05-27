@@ -146,7 +146,7 @@ export class HE {
           polyDegree: 4096,
           coeffModulus: 4096,
           plainModulus: 786433,
-          scale: Math.pow(2, 54),
+          scale: Math.pow(2, 54), // max 109 - 55
           security
         }
     }
@@ -387,10 +387,6 @@ export class HE {
 
     // TODO: fix this hack for `vecFromArray`
     array.forEach(el => vector.push_back(el))
-    // console.log('printing vector...')
-    // this.printVector({vector, type})
-    // console.log('printing matrix...')
-    // this.printMatrix({vector, rowSize: this._BatchEncoder.slotCount() / 2, type})
 
     const plainText = new this._PlainText({library: this._Library.instance})
 
@@ -405,8 +401,8 @@ export class HE {
 
     // Store the vector size so that we may filter the array upon decryption
     cipherText.setVectorSize({size: vector.size()})
-    cipherText.setType({type})
-    cipherText.setScheme({scheme: 'BFV'})
+    cipherText.setVectorType({type})
+    cipherText.setSchemeType({scheme: 'BFV'})
     return cipherText
   }
 
@@ -429,8 +425,7 @@ export class HE {
      * Each element in the array should not be larger than 2^53 to ensure
      * more reliable decryption. This is due to JS Number limitations.
      *
-     * For int32, the limit is -1/2 * `plainModulus` <-> +1/2 * `plainModulus`
-     * for uint32, the limit is 0 <-> `plainModulus`
+     * For double, the limit is -2^53 <-> +2^53
      */
     const isNotValid = array.some(el => {
       return (Math.abs(el) > Math.pow(2, 53))
@@ -442,8 +437,6 @@ export class HE {
 
     // TODO: fix this hack for `vecFromArray`
     array.forEach(el => vector.push_back(el))
-
-    // this.printVector({vector, type})
 
     const plainText = new this._PlainText({library: this._Library.instance})
 
@@ -462,8 +455,8 @@ export class HE {
 
     // Set a few attributes on the
     cipherText.setVectorSize({size: vector.size()})
-    cipherText.setType({type})
-    cipherText.setScheme({scheme: 'BFV'})
+    cipherText.setVectorType({type})
+    cipherText.setSchemeType({scheme: 'BFV'})
     return cipherText
   }
 
@@ -490,17 +483,17 @@ export class HE {
     // const plainText = new this._PlainText({library: this._Library.instance})
     // this._Decryptor.decrypt({cipherText: cipherText.instance, plainText: plainText.instance})
     // return this._IntegerEncoder.decodeInt32({plainText: plainText.instance})
-    const vector = this.vecFromArray({array: [], type: cipherText.getType()})
+    const vector = this.vecFromArray({array: [], type: cipherText.getVectorType()})
     const plainText = new this._PlainText({library: this._Library.instance})
 
     this._Decryptor.decrypt({cipherText: cipherText.instance, plainText: plainText.instance})
-    this._BatchEncoder.decode({plainText: plainText.instance, vector, type: cipherText.getType()})
+    this._BatchEncoder.decode({plainText: plainText.instance, vector, type: cipherText.getVectorType()})
 
     // We trim back the vector to the original size that was recorded before encryption was performed
     vector.resize(cipherText.getVectorSize(), 0)
 
-    this.printVector({vector, type: cipherText.getType()})
-    this.printMatrix({vector, rowSize: this._BatchEncoder.slotCount() / 2, type: cipherText.getType()})
+    this.printVector({vector, type: cipherText.getVectorType()})
+    this.printMatrix({vector, rowSize: this._BatchEncoder.slotCount() / 2, type: cipherText.getVectorType()})
     return vector
   }
 
@@ -512,16 +505,16 @@ export class HE {
    */
   _decryptCKKS({cipherText}) {
 
-    const vector = this.vecFromArray({array: [], type: cipherText.getType()})
+    const vector = this.vecFromArray({array: [], type: cipherText.getVectorType()})
     const plainText = new this._PlainText({library: this._Library.instance})
 
     this._Decryptor.decrypt({cipherText: cipherText.instance, plainText: plainText.instance})
-    this._CKKSEncoder.decode({plainText: plainText.instance, vector, type: cipherText.getType()})
+    this._CKKSEncoder.decode({plainText: plainText.instance, vector, type: cipherText.getVectorType()})
 
     // We trim back the vector to the original size that was recorded before encryption was performed
     vector.resize(cipherText.getVectorSize(), 0)
 
-    this.printVector({vector, type: cipherText.getType()})
+    this.printVector({vector, type: cipherText.getVectorType()})
     return vector
   }
 
