@@ -1,6 +1,6 @@
 {
   "name": "node-seal",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Port of Microsoft SEAL to Javascript",
   "main": "dist/seal.node.js",
   "library": "src/main.js",
