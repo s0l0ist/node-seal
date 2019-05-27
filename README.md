@@ -49,7 +49,7 @@ CommonJS
   // because of browser limitations on the size of 
   // synchronously loaded WASM files. Therefore, the loading
   // must be done asynchronously.
-  const { Hcrypt } = require('node-seal')
+  const { HCrypt } = require('node-seal')
   const Crypt = await HCrypt
   
   
