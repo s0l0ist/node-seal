@@ -52,12 +52,7 @@ const serverConfig = {...commonConfig,
         type: 'javascript/auto',
         loader: 'file-loader',
         options: {
-          publicPath: (url, resourcePath, context) => {
-            if (process.env.NODE_ENV === 'production') {
-              return 'node_modules/node-seal/dist/'
-            }
-            return 'dist/'
-          }
+          publicPath: 'node_modules/node-seal/dist/'
         }
       }
     ]
