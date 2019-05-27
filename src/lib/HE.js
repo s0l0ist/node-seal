@@ -111,38 +111,43 @@ export class HE {
    *
    * The `scale` parameter is only used for the CKKS scheme.
    *
+   * @param computationLevel
    * @param security
    * @returns {{plainModulus: number, scale: number, coeffModulus: number, polyDegree: number}}
    */
-  createParams({security = 'low'} = {}) {
-    switch (security.toLowerCase()) {
+  createParams({computationLevel = 'low', security = 128, } = {}) {
+    switch (computationLevel.toLowerCase()) {
       case 'low':
         return {
           polyDegree: 4096,
           coeffModulus: 4096,
           plainModulus: 786433,
-          scale: Math.pow(2, 54) // max 109 - 55
+          scale: Math.pow(2, 54), // max 109 - 55
+          security
         }
       case 'medium':
         return {
           polyDegree: 8192,
           coeffModulus: 8192,
           plainModulus: 786433,
-          scale: Math.pow(2, 163) // max 218 - 55
+          scale: Math.pow(2, 163), // max 218 - 55
+          security
         }
       case 'high':
         return {
           polyDegree: 16384,
           coeffModulus: 16384,
           plainModulus: 786433,
-          scale: Math.pow(2, 383) // max 438 - 55
+          scale: Math.pow(2, 383), // max 438 - 55
+          security
         }
       default:
         return {
           polyDegree: 4096,
           coeffModulus: 4096,
           plainModulus: 786433,
-          scale: Math.pow(2, 54)
+          scale: Math.pow(2, 54),
+          security
         }
     }
   }
@@ -163,18 +168,44 @@ export class HE {
    * @param polyDegree
    * @param coeffModulus
    * @param plainModulus
+   * @param security
    * @private
    */
-  _initBFV({polyDegree, coeffModulus, plainModulus}) {
+  _initBFV({polyDegree, coeffModulus, plainModulus, security}) {
     this._SmallModulus.initialize()
     this._SmallModulus.setValue({value: plainModulus})
 
-    this._EncryptionParameters.initialize({
-      schemeType: this._SchemeType.BFV,
-      polyDegree: polyDegree,
-      coeffModulus: this._DefaultParams.coeffModulus128({value: coeffModulus}),
-      plainModulus: this._SmallModulus.instance
-    })
+    switch (security) {
+      case 128:
+        this._EncryptionParameters.initialize({
+          schemeType: this._SchemeType.BFV,
+          polyDegree: polyDegree,
+          coeffModulus: this._DefaultParams.coeffModulus128({value: coeffModulus}),
+          plainModulus: this._SmallModulus.instance
+        }); break;
+      case 192:
+        this._EncryptionParameters.initialize({
+          schemeType: this._SchemeType.BFV,
+          polyDegree: polyDegree,
+          coeffModulus: this._DefaultParams.coeffModulus192({value: coeffModulus}),
+          plainModulus: this._SmallModulus.instance
+        }); break;
+      case 256:
+        this._EncryptionParameters.initialize({
+          schemeType: this._SchemeType.BFV,
+          polyDegree: polyDegree,
+          coeffModulus: this._DefaultParams.coeffModulus256({value: coeffModulus}),
+          plainModulus: this._SmallModulus.instance
+        }); break;
+      default:
+        this._EncryptionParameters.initialize({
+          schemeType: this._SchemeType.BFV,
+          polyDegree: polyDegree,
+          coeffModulus: this._DefaultParams.coeffModulus128({value: coeffModulus}),
+          plainModulus: this._SmallModulus.instance
+        }); break;
+    }
+
     this._initContext()
 
     this._IntegerEncoder.initialize({
@@ -190,14 +221,37 @@ export class HE {
    * Initialize the CKKS parameters for the library
    * @param polyDegree
    * @param coeffModulus
+   * @param security
    * @private
    */
-  _initCKKS({polyDegree, coeffModulus}) {
-    this._EncryptionParameters.initialize({
-      schemeType: this._SchemeType.CKKS,
-      polyDegree: polyDegree,
-      coeffModulus: this._DefaultParams.coeffModulus128({value: coeffModulus}),
-    })
+  _initCKKS({polyDegree, coeffModulus, security}) {
+    switch (security) {
+      case 128:
+        this._EncryptionParameters.initialize({
+          schemeType: this._SchemeType.CKKS,
+          polyDegree: polyDegree,
+          coeffModulus: this._DefaultParams.coeffModulus128({value: coeffModulus}),
+        }); break;
+      case 192:
+        this._EncryptionParameters.initialize({
+          schemeType: this._SchemeType.CKKS,
+          polyDegree: polyDegree,
+          coeffModulus: this._DefaultParams.coeffModulus192({value: coeffModulus}),
+        }); break;
+      case 256:
+        this._EncryptionParameters.initialize({
+          schemeType: this._SchemeType.CKKS,
+          polyDegree: polyDegree,
+          coeffModulus: this._DefaultParams.coeffModulus256({value: coeffModulus}),
+        }); break;
+      default:
+        this._EncryptionParameters.initialize({
+          schemeType: this._SchemeType.CKKS,
+          polyDegree: polyDegree,
+          coeffModulus: this._DefaultParams.coeffModulus128({value: coeffModulus}),
+        }); break;
+    }
+
     this._initContext()
 
     this._CKKSEncoder.initialize({
@@ -213,19 +267,21 @@ export class HE {
    * @param polyDegree
    * @param coeffModulus
    * @param plainModulus
+   * @param security
    * @param scale
    */
-  initialize({schemeType, polyDegree, coeffModulus, plainModulus, scale}) {
+  initialize({schemeType, polyDegree, coeffModulus, plainModulus, scale, security}) {
     switch (schemeType) {
-      case 'BFV': this._initBFV({polyDegree, coeffModulus, plainModulus}); break;
-      case 'CKKS': this._initCKKS({polyDegree, coeffModulus}); break;
-      default: this._initBFV({polyDegree, coeffModulus, plainModulus});
+      case 'BFV': this._initBFV({polyDegree, coeffModulus, plainModulus, security}); break;
+      case 'CKKS': this._initCKKS({polyDegree, coeffModulus, security}); break;
+      default: this._initBFV({polyDegree, coeffModulus, plainModulus, security});
     }
     this._scale = scale
     this._polyDegree = polyDegree
     this._plainModulus = plainModulus
     this._coeffModulus = coeffModulus
     this._schemeType = schemeType
+    this._security = security
   }
 
   /**
