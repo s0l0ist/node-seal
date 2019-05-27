@@ -34,12 +34,12 @@ const commonConfig = {
 
 const serverConfig = {...commonConfig,
   entry: {
-    hcrypt: './src/main.js'
+    seal: './src/main.js'
   },
   output: {
     filename: '[name].node.js',
     path: path.resolve(__dirname, 'dist'),
-    // library: 'HCrypt',
+    // library: 'Seal',
     libraryTarget: 'umd',
     globalObject: `(typeof self !== 'undefined' ? self : this)`,
     umdNamedDefine: true
@@ -62,12 +62,12 @@ const serverConfig = {...commonConfig,
 
 const clientConfig = {...commonConfig,
   entry: {
-    hcrypt: './src/main.js'
+    seal: './src/main.js'
   },
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
-    // library: 'HCrypt',
+    // library: 'Seal',
     libraryTarget: 'umd',
     globalObject: `(typeof self !== 'undefined' ? self : this)`,
     umdNamedDefine: true

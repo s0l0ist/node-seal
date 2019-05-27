@@ -18,21 +18,14 @@ Microsoft SEAL is licensed under the MIT license; see [LICENSE](LICENSE).
 
 # Installation
 
-You can install the library in backend or frontend javascript.
-
-Backend npm:
+npm:
 ```
 npm install node-seal
 ```
 
-Backend yarn:
+yarn:
 ```
 yarn install node-seal
-```
-
-Frontend:
-```
-<script src="./dist/hcrypt.js"></script>
 ```
 
 At this time, the library is not available on a CDN.
@@ -46,13 +39,11 @@ CommonJS
   // Due to limitations with how the WASM file is loaded, 
   // we need to await on the main library in order to have
   // a fully instanciated instance. This limitation mostly
-  // because of browser limitations on the size of 
-  // synchronously loaded WASM files. Therefore, the loading
-  // must be done asynchronously.
-  const { HCrypt } = require('node-seal')
-  const Crypt = await HCrypt
-  
-  
+  // because of how chrome limits the size of synchronously
+  // loaded WASM files. Therefore, loading must be done 
+  // asynchronously.
+  const { Seal } = require('node-seal')
+  const Crypt = await Seal
   
   // There are 3 different computationLevel's that have been predefined
   // for ease of use. 'low', 'medium', and 'high'. The computation levels
@@ -97,11 +88,15 @@ CommonJS
   
   // Send the encrypted data to a 3rd party for 
   // homomorphic operations. But we need more
-  // metadata of the cipherText as well to help  
+  // metadata of the cipherText to help  
   // facilitate homomorphic operations involving
   // optional matrix rotations, etc.
+  //
+  // At this time, homomorphic evaluations are not performed
+  // in javascript although there are plans to build this feature
+  // in the near future.
   const cipherObject = {
-    cipherText: cipherText.save(),
+    cipherText: cipherText.save(), // gets the base64 string representation of the cipher
     schemeType: cipherText.getSchemeType(),
     vector: {
       size: cipherText.getVectorSize(),
@@ -110,6 +105,7 @@ CommonJS
   }
   
   // Receive the encrypted result back.
+  // ...
   
   // Decrypt the result
   const vector = Crypt.decrypt({cipherText})

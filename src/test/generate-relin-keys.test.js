@@ -2,8 +2,8 @@ describe.skip('Generate RelinKeys', () => {
 
   describe('BFV genRelinKeys', () => {
     test('low', async () => {
-      const { HCrypt } = require('../index.js')
-      const Crypt = await HCrypt
+      const { Seal } = require('../index.js')
+      const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'low'})
       Crypt.initialize({...parms, schemeType: 'BFV'})
       const spy = jest.spyOn(Crypt, 'genRelinKeys')
@@ -15,8 +15,8 @@ describe.skip('Generate RelinKeys', () => {
 
   describe('CKKS genRelinKeys', () => {
     test('low', async () => {
-      const { HCrypt } = require('../index.js')
-      const Crypt = await HCrypt
+      const { Seal } = require('../index.js')
+      const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'low'})
       Crypt.initialize({...parms, schemeType: 'CKKS'})
       const spy = jest.spyOn(Crypt, 'genRelinKeys')

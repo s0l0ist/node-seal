@@ -4,7 +4,7 @@ import sourceWasm from '../bin/a.out'
 import { HE } from './HE'
 import * as Class from '../classes'
 
-export const HCrypt = (async () => {
+export const Seal = (async () => {
 
   /**
    * First, we initialize the library which loads from a WASM file.

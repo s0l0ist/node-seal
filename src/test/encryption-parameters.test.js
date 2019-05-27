@@ -1,7 +1,7 @@
 describe('Creating Encryption Parameters', () => {
   test('low', async () => {
-    const { HCrypt } = require('../index.js')
-    const Crypt = await HCrypt
+    const { Seal } = require('../index.js')
+    const Crypt = await Seal
     const parms = Crypt.createParams({computationLevel: 'low'})
     expect(parms).toEqual({
       polyDegree: 4096,
