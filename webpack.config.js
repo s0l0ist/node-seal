@@ -12,21 +12,12 @@
  */
 
 const path = require('path')
+const nodeExternals = require('webpack-node-externals')
 
-const serverConfig = {
+const commonConfig = {
   mode: 'production',
   context: path.resolve(__dirname, '.'),
-  entry: './main.js',
   devtool: 'source-map',
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.node.js',
-    // library: 'HCrypt',
-    libraryTarget: 'umd',
-    globalObject: `(typeof self !== 'undefined' ? self : this)`,
-    umdNamedDefine: true
-  },
-  target: 'node',
   module: {
     rules: [
       {
@@ -41,14 +32,29 @@ const serverConfig = {
   }
 }
 
-const clientConfig = {
-  mode: 'production',
-  context: path.resolve(__dirname, '.'),
-  entry: './main.js',
-  devtool: 'source-map',
+const serverConfig = {...commonConfig,
+  entry: {
+    hcrypt: './src/main.js'
+  },
   output: {
+    filename: '[name].node.js',
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    // library: 'HCrypt',
+    libraryTarget: 'umd',
+    globalObject: `(typeof self !== 'undefined' ? self : this)`,
+    umdNamedDefine: true
+  },
+  target: 'node',
+  externals: [nodeExternals()],
+}
+
+const clientConfig = {...commonConfig,
+  entry: {
+    hcrypt: './src/main.js'
+  },
+  output: {
+    filename: '[name].js',
+    path: path.resolve(__dirname, 'dist'),
     // library: 'HCrypt',
     libraryTarget: 'umd',
     globalObject: `(typeof self !== 'undefined' ? self : this)`,
@@ -56,23 +62,9 @@ const clientConfig = {
   },
   target: 'web',
   node: {
-    __dirname: false,
     fs: 'empty',
-    Buffer: false,
-    process: false
   },
-  module: {
-    rules: [
-      {
-        test: /a\.out\.wasm$/,
-        type: 'javascript/auto',
-        loader: 'file-loader',
-        options: {
-          publicPath: 'dist/'
-        }
-      }
-    ]
-  }
 }
+
 
 module.exports = [ serverConfig, clientConfig ]
