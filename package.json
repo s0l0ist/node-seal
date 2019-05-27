@@ -1,6 +1,6 @@
 {
   "name": "node-seal",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "description": "Port of Microsoft SEAL to Javascript",
   "main": "dist/seal.node.js",
   "library": "src/main.js",
@@ -10,7 +10,8 @@
     "start": "webpack-dev-server --open",
     "test": "jest",
     "coverage": "jest --collectCoverageFrom=src/lib/**.js --coverage src/test",
-    "build": "webpack"
+    "build": "webpack",
+    "publish": "yarn build && yarn test && npm publish"
   },
   "devDependencies": {
     "esm": "^3.2.25",
