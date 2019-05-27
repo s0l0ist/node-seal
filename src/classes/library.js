@@ -7,6 +7,7 @@ export class Library {
 
     const module = source({
       locateFile(path) {
+        // for jest
         if (process.env.NODE_ENV === 'development') {
           return resolve(__dirname, '../bin', path)
         }
