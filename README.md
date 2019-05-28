@@ -75,6 +75,9 @@ CommonJS
   // Create some values in an array. Note the limitations of the array 
   // size, and value size
   const step = parms.plainModulus / parms.polyDegree
+  
+  // Could be a regular JS array or a TypedArray
+  // const value = Int32Array.from...
   const value = Array.from({length: parms.polyDegree}).map(
   (x, i) =>  {
     if (i >= (parms.polyDegree / 2)) {
@@ -84,6 +87,9 @@ CommonJS
   })
   
   // Encrypt the data
+  // We auto detect the 'type', but if the hint is specified
+  // it will speed up encryption slightly.
+  // TypedArrays will set the type automatically.
   const cipherText = Crypt.encrypt({value, type: 'int32'})
   
   // Send the encrypted data to a 3rd party for 
