@@ -353,12 +353,12 @@ export class HE {
    * @private
    */
   _encryptBFV({value, type}) {
-    const vector = this.vecFromArray({array: [], type})
 
-    const array = Array.isArray(value)? value: [value]
-    if (array.length > this._polyDegree) {
-      throw new Error('Input array is too large for the `polyDegree` specified')
+    if (value.length > this._polyDegree) {
+      throw new Error(`Input array is too large for the 'polyDegree' specified ${this._polyDegree}`)
     }
+
+    const vector = this.vecFromArray({array: [], type})
 
     /**
      * Each element in the array should not be larger than half of the plainModulus
@@ -366,7 +366,7 @@ export class HE {
      * For int32, the limit is -1/2 * `plainModulus` <-> +1/2 * `plainModulus`
      * for uint32, the limit is 0 <-> `plainModulus`
      */
-    const isNotValid = array.some(el => {
+    const isNotValid = value.some(el => {
       if (type === 'int32') {
         return (Math.abs(el) > Math.floor(this._plainModulus / 2))
       }
@@ -378,15 +378,15 @@ export class HE {
 
     if (isNotValid) {
       if (type === 'int32') {
-        throw new Error('Array element out of range: -1/2 * `plainModulus` <-> +1/2 * `plainModulus`')
+        throw new Error(`Array element out of range: -1/2 * 'plainModulus' (${this._plainModulus}) <-> +1/2 * 'plainModulus' (${this._plainModulus})`)
       }
       if (type === 'uint32') {
-        throw new Error('Array element out of range: 0 <-> `plainModulus`')
+        throw new Error(`Array element out of range: 0 <-> 'plainModulus' (${this._plainModulus})`)
       }
     }
 
     // TODO: fix this hack for `vecFromArray`
-    array.forEach(el => vector.push_back(el))
+    value.forEach(el => vector.push_back(el))
 
     const plainText = new this._PlainText({library: this._Library.instance})
 
@@ -414,12 +414,12 @@ export class HE {
    * @private
    */
   _encryptCKKS({value, type}) {
-    const vector = this.vecFromArray({array: [], type})
 
-    const array = Array.isArray(value)? value: [value]
-    if (array.length > this._polyDegree) {
-      throw new Error('Input array is too large for the `polyDegree` specified')
+    if (value.length > this._polyDegree) {
+      throw new Error(`Input array is too large for the 'polyDegree' specified ${this._polyDegree}`)
     }
+
+    const vector = this.vecFromArray({array: [], type})
 
     /**
      * Each element in the array should not be larger than 2^53 to ensure
@@ -427,7 +427,7 @@ export class HE {
      *
      * For double, the limit is -2^53 <-> +2^53
      */
-    const isNotValid = array.some(el => {
+    const isNotValid = value.some(el => {
       return (Math.abs(el) > Math.pow(2, 53))
     })
 
@@ -436,7 +436,7 @@ export class HE {
     }
 
     // TODO: fix this hack for `vecFromArray`
-    array.forEach(el => vector.push_back(el))
+    value.forEach(el => vector.push_back(el))
 
     const plainText = new this._PlainText({library: this._Library.instance})
 
@@ -463,13 +463,82 @@ export class HE {
   /**
    * Encrypt a given value
    * @param value
+   * @param type?
    * @returns {*|CipherText}
    */
-  encrypt({value, type}) {
+  encrypt({value, type = null}) {
+
+    // determine the array type automatically
+    let array;
+
+    // Set the type flag
+    let detectedType;
+
+    // ensure we have a Typed or JS Array
+    switch (value.constructor) {
+      case Int32Array: array = value; detectedType = 'int32'; break
+      case Uint32Array: array = value; detectedType = 'uint32'; break
+      case Float64Array: array = value; detectedType = 'double'; break
+      case Array: array = value; detectedType = type; break
+      default: array = [value]; detectedType = type; break
+    }
+
+    /**
+     * Check if we have NaNs
+     */
+    if (array.some(Number.isNaN)) {
+      throw new Error(`All values must be a 'Number'`)
+    }
+
+    /**
+     * Check if we have values that are out of bounds
+     * IEEE-754 double precision number (all integers from (2^53 - 1) to -(2^53 - 1))
+     */
+    if (array.some(x => x > Number.MAX_SAFE_INTEGER)) {
+      throw new Error(`Cannot encrypt elements with values greater than 'Number.MAX_SAFE_INTEGER' (${Number.MAX_SAFE_INTEGER})`)
+    }
+    if (array.some(x => x < Number.MIN_SAFE_INTEGER)) {
+      throw new Error(`Cannot encrypt elements with values less than 'Number.MIN_SAFE_INTEGER' (${Number.MIN_SAFE_INTEGER})`)
+    }
+
+
+    /**
+     * Now, determine type for generic JS Array
+     *
+     * If the user specified a type, this will not execute and the user is
+     * responsible for understanding the type of data that will be encrypted
+     */
+    if (!detectedType) {
+      detectedType = 'double' // by default
+
+      if (array.every(x => Number.isInteger(x) && x >= -(Math.pow(2, 31) - 1) && x <= (Math.pow(2, 31) - 1))) {
+        // Convert to TypedArray
+        array = Int32Array.from(array)
+        detectedType = 'int32'
+      }
+
+      if (array.every(x => Number.isInteger(x) && x >= 0 && x <= (Math.pow(2, 31) - 1))) {
+        // Convert to TypedArray
+        array = Uint32Array.from(array)
+        detectedType = 'uint32'
+      }
+    }
+
+    /**
+     * Detect validity of schemeType with element types
+     */
+    if ((this._schemeType === 'BFV') && !((detectedType === 'int32') || (detectedType === 'uint32'))) {
+      throw new Error(`Invalid mix of schemeType '${this._schemeType}' and element type '${detectedType}'.`)
+    }
+
+    if ((this._schemeType === 'CKKS') && (detectedType !== 'double')) {
+      throw new Error(`Invalid mix of schemeType '${this._schemeType}' and element type '${detectedType}'.`)
+    }
+
     switch (this._schemeType) {
-      case 'BFV': return this._encryptBFV({value, type})
-      case 'CKKS': return this._encryptCKKS({value, type})
-      default: return this._encryptBFV({value, type})
+      case 'BFV': return this._encryptBFV({value: array, type: detectedType})
+      case 'CKKS': return this._encryptCKKS({value: array, type: detectedType})
+      default: return this._encryptBFV({value: array, type: detectedType})
     }
   }
 
@@ -515,7 +584,7 @@ export class HE {
     // We trim back the vector to the original size that was recorded before encryption was performed
     vector.resize(cipherText.getVectorSize(), 0)
 
-    this.printVector({vector, type: cipherText.getVectorType()})
+    // this.printVector({vector, type: cipherText.getVectorType()})
 
     return this._vecToArray({vector, type: cipherText.getVectorType()})
   }
