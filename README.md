@@ -108,7 +108,7 @@ CommonJS
   // We auto detect the 'type' for JS Arrays, but if the hint is specified
   // it will speed up encryption slightly.
   // TypedArrays will set the type automatically.
-  const cipherText = Crypt.encrypt({value, type: 'int32'})
+  const oldCipherText = Crypt.encrypt({value, type: 'int32'})
   
   // You can save the cipherText for later as a base64 string
   const savedRawCipher = oldCipherText.save()
