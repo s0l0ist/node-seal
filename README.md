@@ -30,8 +30,10 @@ yarn install node-seal
 
 At this time, the library is not available on a CDN.
 
-
 # Usage
+
+There are a lot of assumptions made to help ease the burden of learning 
+SEAL all at once. Instead, you can refer to the sample code below.
 
 CommonJS
 ```
@@ -68,7 +70,7 @@ CommonJS
   const publicKey = Crypt.savePublicKey()
   const secretKey = Crypt.saveSecretKey()
   
-  // Optionally load them instead of calling `Crypt.genKeys()`
+  // You can skip `Crypt.genKeys()` by loading them instead 
   Crypt.loadPublicKey({encoded: publicKey})
   Crypt.loadSecretKey({encoded: secretKey})
   
@@ -77,7 +79,7 @@ CommonJS
   const step = parms.plainModulus / parms.polyDegree
   
   // Could be a regular JS array or a TypedArray
-  // const value = Int32Array.from...
+  // `const value = Int32Array.from...`
   const value = Array.from({length: parms.polyDegree}).map(
   (x, i) =>  {
     if (i >= (parms.polyDegree / 2)) {
@@ -87,11 +89,17 @@ CommonJS
   })
   
   // Encrypt the data
-  // We auto detect the 'type', but if the hint is specified
+  // We auto detect the 'type' for JS Arrays, but if the hint is specified
   // it will speed up encryption slightly.
   // TypedArrays will set the type automatically.
   const cipherText = Crypt.encrypt({value, type: 'int32'})
   
+  // You can save the cipherText for later as a base64 string
+  const savedCipher = cipherText.save()
+
+  // And reload it later using the helper
+  const oldCipher = Crypt.reviveCipher({encoded: savedCipher})
+
   // Send the encrypted data to a 3rd party for 
   // homomorphic operations. But we need more
   // metadata of the cipherText to help  
@@ -120,3 +128,14 @@ CommonJS
 
 ```
 
+# Testing
+
+You can find the list of tests in `package.json`. Some of the tests will
+take a long time to complete and consume a lot of memory.
+
+If you're seeing `Javascript heap out of memory`, please file a 
+bug report.
+
+Saving keys is very memory intensive especially for `computationLevel`s above low. 
+This is because there's currently no way to use streams across JS and WASM, so
+the strings have to be buffered completely in RAM and they can be very, very large.

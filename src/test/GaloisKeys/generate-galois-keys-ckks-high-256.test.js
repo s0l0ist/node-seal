@@ -14,24 +14,19 @@ describe('Generate GaloisKeys CKKS Scheme', () => {
       Crypt.initialize({...parms, schemeType: 'CKKS'})
       expect(Crypt._Context.parametersSet()).toBe(true)
 
-      // Gen Keys
-      const spyGenKeys = jest.spyOn(Crypt, 'genKeys')
-      Crypt.genKeys()
-      expect(spyGenKeys).toHaveBeenCalled()
-
       // Gen Galois Keys
       const spyGenGaloisKeys = jest.spyOn(Crypt, 'genGaloisKeys')
       Crypt.genGaloisKeys()
       expect(spyGenGaloisKeys).toHaveBeenCalled()
 
-      // Save / Load keys
-      const spySaveGaloisKeys = jest.spyOn(Crypt, 'saveGaloisKeys')
-      const galoisKeys = Crypt.saveGaloisKeys()
-      expect(spySaveGaloisKeys).toHaveBeenCalled()
-
-      const spyLoadGaloisKeys = jest.spyOn(Crypt, 'loadGaloisKeys')
-      Crypt.loadGaloisKeys({encoded: galoisKeys})
-      expect(spyLoadGaloisKeys).toHaveBeenCalled()
+      // // Save / Load keys
+      // const spySaveGaloisKeys = jest.spyOn(Crypt, 'saveGaloisKeys')
+      // const galoisKeys = Crypt.saveGaloisKeys()
+      // expect(spySaveGaloisKeys).toHaveBeenCalled()
+      //
+      // const spyLoadGaloisKeys = jest.spyOn(Crypt, 'loadGaloisKeys')
+      // Crypt.loadGaloisKeys({encoded: galoisKeys})
+      // expect(spyLoadGaloisKeys).toHaveBeenCalled()
     })
   })
 })

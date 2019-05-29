@@ -9,11 +9,22 @@ export class KeyGenerator {
     return this._instance
   }
 
-  initialize({context}) {
+  initialize({context, secretKey = null, publicKey = null}) {
     if (this._instance) {
       delete this._instance
     }
-    this._instance = new this._KeyGenerator(context)
+    if (!secretKey && !publicKey) {
+      this._instance = new this._KeyGenerator(context)
+      return
+    }
+    if (secretKey && !publicKey) {
+      this._instance = new this._KeyGenerator(context, secretKey)
+      return
+    }
+    if (secretKey && publicKey) {
+      this._instance = new this._KeyGenerator(context, secretKey, publicKey)
+      return
+    }
   }
 
   inject({instance}) {

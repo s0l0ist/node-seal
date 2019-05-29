@@ -362,6 +362,12 @@ export class HE {
    * @param size - number of relin keys to generate
    */
   genRelinKeys({decompositionBitCount = this._DefaultParams.dbcMax(), size = 1} = {}) {
+    this._KeyGenerator.initialize({
+      context: this._Context.instance,
+      secretKey: this.secretKey ? this.secretKey.instance : null,
+      publicKey: this.publicKey ? this.publicKey.instance : null
+    })
+
     if (this.relinKeys) {
       delete this.relinKeys
     }
@@ -376,6 +382,12 @@ export class HE {
    * @param decompositionBitCount
    */
   genGaloisKeys({decompositionBitCount = this._DefaultParams.dbcMax()} = {}) {
+    this._KeyGenerator.initialize({
+      context: this._Context.instance,
+      secretKey: this.secretKey ? this.secretKey.instance : null,
+      publicKey: this.publicKey ? this.publicKey.instance : null
+    })
+
     if (this.galoisKeys) {
       delete this.galoisKeys
     }
@@ -711,7 +723,6 @@ export class HE {
       context: this._Context.instance,
       publicKey: this.publicKey.instance
     })
-
   }
 
   /**
@@ -788,5 +799,16 @@ export class HE {
    */
   saveGaloisKeys() {
     return this.galoisKeys.save()
+  }
+
+  /**
+   * Helpter to revitalize a cipherText from a base64 encoded cipherText
+   * @param encoded
+   * @returns {*|CipherText}
+   */
+  reviveCipher({encoded}) {
+    const cipherText = new this._CipherText({library: this._Library.instance})
+    cipherText.load({context: this._Context.instance, encoded})
+    return cipherText
   }
 }
