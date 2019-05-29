@@ -14,7 +14,7 @@ For more information about the Microsoft SEAL project, see [http://sealcrypto.or
 
 # License
 
-Microsoft SEAL is licensed under the MIT license; see [LICENSE](LICENSE).
+Microsoft SEAL is licensed under the MIT license.
 
 # Installation
 
@@ -28,12 +28,26 @@ yarn:
 yarn install node-seal
 ```
 
-At this time, the library is not available on a CDN.
+At this time, the library is not available on a CDN. This is a TODO.
+
+# Source
+Source will be posted on a public repository in the future with 
+plans on also releasing the C++ fork from Microsoft SEAL.
+
+My goal is to take this library to the browser, but there will be limitations.
+
+Several limitations include:
+- Dealing with 2^53 numbers (not true 64 bit)
+- We can control nodejs heap size, but not inside a user's browser
+- 
 
 # Usage
 
 There are a lot of assumptions made to help ease the burden of learning 
 SEAL all at once. Instead, you can refer to the sample code below.
+
+For those who are curious about the security of Microsoft SEAL, please
+refer to [HomomorphicEncryption.org](http://homomorphicencryption.org/)
 
 CommonJS
 ```
@@ -55,8 +69,10 @@ CommonJS
   // Security is by default 128 bits, but can be changed to 192 or 256 bits again 
   // at the cost of more CPU/memory.
   //
-  // (HomomorphicEncryption.org)[http://homomorphicencryption.org/]
-  //
+  // The computation level and security settings that you choose 
+  // here limit the total number of elements in an array as well
+  // as their min/max values.
+  
   const parms = Crypt.createParams({computationLevel: 'low', security: 128})
   
   // BFV schemeType allows for pure Integer arithmetic
@@ -95,10 +111,17 @@ CommonJS
   const cipherText = Crypt.encrypt({value, type: 'int32'})
   
   // You can save the cipherText for later as a base64 string
-  const savedCipher = cipherText.save()
-
+  const savedRawCipher = oldCipherText.save()
+  
   // And reload it later using the helper
-  const oldCipher = Crypt.reviveCipher({encoded: savedCipher})
+  const cipherText = Crypt.reviveCipher({encoded: savedRawCipher})
+  
+  // But you will need to reinitialize some values. It would be best
+  // to also serialize this data in combination witht the raw cipherText
+  // so that you may retrieve all the related information in one go.
+  cipherText.setSchemeType({scheme: 'BFV'})
+  cipherText.setVectorSize({size: oldCipherText.getVectorSize()})
+  cipherText.setVectorType({type: 'int32'})
 
   // Send the encrypted data to a 3rd party for 
   // homomorphic operations. But we need more
