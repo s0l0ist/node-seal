@@ -1,8 +1,15 @@
 {
   "name": "node-seal",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "Port of Microsoft SEAL to Javascript",
-  "keywords": ["homomorphic", "encryption","microsoft", "seal", "web assembly"],
+  "keywords": [
+    "homomorphic",
+    "encryption",
+    "microsoft",
+    "seal",
+    "web assembly",
+    "fhe"
+  ],
   "main": "dist/seal.node.js",
   "library": "src/main.js",
   "module": "src/main.js",

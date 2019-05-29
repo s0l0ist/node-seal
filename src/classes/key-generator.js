@@ -13,18 +13,16 @@ export class KeyGenerator {
     if (this._instance) {
       delete this._instance
     }
-    if (!secretKey && !publicKey) {
-      this._instance = new this._KeyGenerator(context)
+
+    if (secretKey && publicKey) {
+      this._instance = new this._KeyGenerator(context, secretKey, publicKey)
       return
     }
     if (secretKey && !publicKey) {
       this._instance = new this._KeyGenerator(context, secretKey)
       return
     }
-    if (secretKey && publicKey) {
-      this._instance = new this._KeyGenerator(context, secretKey, publicKey)
-      return
-    }
+    this._instance = new this._KeyGenerator(context)
   }
 
   inject({instance}) {
