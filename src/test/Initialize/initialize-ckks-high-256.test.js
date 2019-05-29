@@ -8,7 +8,7 @@ describe('Initializing library for CKKS Scheme', () => {
         polyDegree: 16384,
         coeffModulus: 16384,
         plainModulus: 786433,
-        scale: Math.pow(2, 383),
+        scale: Math.pow(2, 183),
         security: 256
       })
       Crypt.initialize({...parms, schemeType: 'CKKS'})

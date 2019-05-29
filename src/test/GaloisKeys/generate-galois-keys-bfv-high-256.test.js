@@ -8,7 +8,7 @@ describe('Generate GaloisKeys BFV Scheme', () => {
         polyDegree: 16384,
         coeffModulus: 16384,
         plainModulus: 786433,
-        scale: Math.pow(2, 383),
+        scale: Math.pow(2, 183),
         security: 256
       })
       Crypt.initialize({...parms, schemeType: 'BFV'})
@@ -23,6 +23,15 @@ describe('Generate GaloisKeys BFV Scheme', () => {
       const spyGenGaloisKeys = jest.spyOn(Crypt, 'genGaloisKeys')
       Crypt.genGaloisKeys()
       expect(spyGenGaloisKeys).toHaveBeenCalled()
+
+      // Save / Load keys
+      const spySaveGaloisKeys = jest.spyOn(Crypt, 'saveGaloisKeys')
+      const galoisKeys = Crypt.saveGaloisKeys()
+      expect(spySaveGaloisKeys).toHaveBeenCalled()
+
+      const spyLoadGaloisKeys = jest.spyOn(Crypt, 'loadGaloisKeys')
+      Crypt.loadGaloisKeys({encoded: galoisKeys})
+      expect(spyLoadGaloisKeys).toHaveBeenCalled()
     })
   })
 })

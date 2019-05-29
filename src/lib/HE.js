@@ -107,6 +107,46 @@ export class HE {
   }
 
   /**
+   * Set's the CKKS scale global to the maximum value by default
+   *
+   * The values change depending on the
+   * computationLevel and security context
+   *
+   * @param computationLevel
+   * @param security
+   * @returns {number}
+   * @private
+   */
+  _setScale({computationLevel, security}) {
+    switch (computationLevel) {
+      case 'low':
+        switch (security) {
+          case 128: return Math.pow(2, 55) // max 109 - 54
+          case 192: return Math.pow(2, 21) // max 75 - 54
+          case 256: return Math.pow(2, 4) // max 58 - 54
+          default: break;
+        }
+        break;
+      case 'medium':
+        switch (security) {
+          case 128: return Math.pow(2, 164) // max 218 - 54
+          case 192: return Math.pow(2, 98) // max 152 - 54
+          case 256: return Math.pow(2, 64) // max 118 - 54
+          default: break;
+        }
+        break;
+      case 'high':
+        switch (security) {
+          case 128: return Math.pow(2, 384) // max 438 - 54
+          case 192: return Math.pow(2, 246) // max 300 - 54
+          case 256: return Math.pow(2, 183) // max 237 - 54
+          default: break;
+        }
+        break;
+      default: break;
+    }
+  }
+  /**
    * Create a good set of default parameters for the encryption library.
    *
    * The `scale` parameter is only used for the CKKS scheme.
@@ -115,14 +155,14 @@ export class HE {
    * @param security
    * @returns {{plainModulus: number, scale: number, coeffModulus: number, polyDegree: number}}
    */
-  createParams({computationLevel = 'low', security = 128, } = {}) {
+  createParams({computationLevel = 'low', security = 128} = {}) {
     switch (computationLevel.toLowerCase()) {
       case 'low':
         return {
           polyDegree: 4096,
           coeffModulus: 4096,
           plainModulus: 786433,
-          scale: Math.pow(2, 54), // max 109 - 55
+          scale: this._setScale({computationLevel, security}),
           security
         }
       case 'medium':
@@ -130,7 +170,7 @@ export class HE {
           polyDegree: 8192,
           coeffModulus: 8192,
           plainModulus: 786433,
-          scale: Math.pow(2, 163), // max 218 - 55
+          scale: this._setScale({computationLevel, security}),
           security
         }
       case 'high':
@@ -138,7 +178,7 @@ export class HE {
           polyDegree: 16384,
           coeffModulus: 16384,
           plainModulus: 786433,
-          scale: Math.pow(2, 383), // max 438 - 55
+          scale: this._setScale({computationLevel, security}),
           security
         }
       default:
@@ -146,7 +186,7 @@ export class HE {
           polyDegree: 4096,
           coeffModulus: 4096,
           plainModulus: 786433,
-          scale: Math.pow(2, 54), // max 109 - 55
+          scale: this._setScale({computationLevel, security}),
           security
         }
     }
