@@ -8,7 +8,7 @@ describe('Initializing library for BFV Scheme', () => {
         polyDegree: 16384,
         coeffModulus: 16384,
         plainModulus: 786433,
-        scale: Math.pow(2, 383),
+        scale: Math.pow(2, 384),
         security: 128
       })
       Crypt.initialize({...parms, schemeType: 'BFV'})

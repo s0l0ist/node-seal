@@ -1,4 +1,4 @@
-describe('Encrypt CKKS', () => {
+describe.skip('Encrypt CKKS', () => {
 
   describe('Double', () => {
     test('Valid range', async () => {

@@ -8,7 +8,7 @@ describe('Generate RelinKeys CKKS Scheme', () => {
         polyDegree: 16384,
         coeffModulus: 16384,
         plainModulus: 786433,
-        scale: Math.pow(2, 383),
+        scale: Math.pow(2, 384),
         security: 128
       })
       Crypt.initialize({...parms, schemeType: 'CKKS'})
@@ -23,6 +23,15 @@ describe('Generate RelinKeys CKKS Scheme', () => {
       const spyGenRelinKeys = jest.spyOn(Crypt, 'genRelinKeys')
       Crypt.genRelinKeys()
       expect(spyGenRelinKeys).toHaveBeenCalled()
+
+      // Save / Load keys
+      const spySaveRelinKeys = jest.spyOn(Crypt, 'saveRelinKeys')
+      const relinKeys = Crypt.saveRelinKeys()
+      expect(spySaveRelinKeys).toHaveBeenCalled()
+
+      const spyLoadRelinKeys = jest.spyOn(Crypt, 'loadRelinKeys')
+      Crypt.loadRelinKeys({encoded: relinKeys})
+      expect(spyLoadRelinKeys).toHaveBeenCalled()
     })
   })
 })

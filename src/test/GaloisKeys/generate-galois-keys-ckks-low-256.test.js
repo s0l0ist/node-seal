@@ -8,7 +8,7 @@ describe('Generate GaloisKeys CKKS Scheme', () => {
         polyDegree: 4096,
         coeffModulus: 4096,
         plainModulus: 786433,
-        scale: Math.pow(2, 54),
+        scale: Math.pow(2, 4),
         security: 256
       })
       Crypt.initialize({...parms, schemeType: 'CKKS'})
@@ -23,6 +23,15 @@ describe('Generate GaloisKeys CKKS Scheme', () => {
       const spyGenGaloisKeys = jest.spyOn(Crypt, 'genGaloisKeys')
       Crypt.genGaloisKeys()
       expect(spyGenGaloisKeys).toHaveBeenCalled()
+
+      // Save / Load keys
+      const spySaveGaloisKeys = jest.spyOn(Crypt, 'saveGaloisKeys')
+      const galoisKeys = Crypt.saveGaloisKeys()
+      expect(spySaveGaloisKeys).toHaveBeenCalled()
+
+      const spyLoadGaloisKeys = jest.spyOn(Crypt, 'loadGaloisKeys')
+      Crypt.loadGaloisKeys({encoded: galoisKeys})
+      expect(spyLoadGaloisKeys).toHaveBeenCalled()
     })
   })
 })

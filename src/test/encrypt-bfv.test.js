@@ -1,4 +1,4 @@
-describe('Encrypt BFV', () => {
+describe.skip('Encrypt BFV', () => {
 
   describe('Int32', () => {
     test('Valid range', async () => {

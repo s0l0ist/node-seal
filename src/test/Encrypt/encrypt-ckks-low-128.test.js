@@ -8,7 +8,7 @@ describe('Encryption on CKKS Scheme', () => {
         polyDegree: 4096,
         coeffModulus: 4096,
         plainModulus: 786433,
-        scale: Math.pow(2, 54),
+        scale: Math.pow(2, 55),
         security: 128
       })
       Crypt.initialize({...parms, schemeType: 'CKKS'})
