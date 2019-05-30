@@ -34,6 +34,7 @@ export const Seal = (async () => {
     DefaultParams: new Class.DefaultParams({library: Library.instance}),
     EncryptionParameters: new Class.EncryptionParameters({library: Library.instance}),
     Encryptor: new Class.Encryptor({library: Library.instance}),
+    Evaluator: new Class.Evaluator({library: Library.instance}),
     GaloisKeys: Class.GaloisKeys,
     IntegerEncoder: new Class.IntegerEncoder({library: Library.instance}),
     KeyGenerator: new Class.KeyGenerator({library: Library.instance}),
