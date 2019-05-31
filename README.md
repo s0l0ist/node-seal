@@ -122,9 +122,8 @@ Steps:
 2. Create encryption parameters and initialize the context 
    (sets the library to work in a given constraint of parameters)
 3. Create or load previously generated public/secret keys
-4. Create some data to encrypt and save, send it to a 3rd party for evaluation, or evaluate locally
-5. Perform homomorphic evaluations on encrypted data
-6. Decrypt the encrypted cipher result
+4. Create some data to encrypt. Save it, send it to a 3rd party for evaluation, or evaluate locally
+5. Decrypt the encrypted cipher result
 
 ## Example
 
@@ -207,10 +206,6 @@ CommonJS
   // metadata of the cipherText to help  
   // facilitate homomorphic operations involving
   // optional matrix rotations, etc.
-  //
-  // At this time, homomorphic evaluations are not performed
-  // in javascript although there are plans to build this feature
-  // in the near future.
   const cipherObject = {
     cipherText: cipherText.save(), // gets the base64 string representation of the cipher
     schemeType: cipherText.getSchemeType(),
