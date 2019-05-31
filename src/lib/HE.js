@@ -723,7 +723,7 @@ export class HE {
 
   /**
    * Negate a cipher
-   * @param {CipherText} a
+   * @param {CipherText} cipherText
    * @returns {CipherText} destination
    */
   negate({cipherText}) {
@@ -802,13 +802,34 @@ export class HE {
 
   /**
    * Square a cipher
-   * @param {CipherText} a
+   * @param {CipherText} cipherText
    * @returns {CipherText} destination
    */
   square({cipherText}) {
 
     const destination = new this._CipherText({library: this._Library.instance})
     this._Evaluator.square({encrypted: cipherText.instance, destination: destination.instance})
+
+    // Set the parameters based off of cipher 'a'
+    destination.setVectorSize({size: cipherText.getVectorSize()})
+    destination.setVectorType({type: cipherText.getVectorType()})
+    destination.setSchemeType({scheme: cipherText.getSchemeType()})
+    return destination
+  }
+
+  /**
+   * Relinearize a cipher
+   * @param {CipherText} cipherText
+   * @param {RelinKeys?} relinKeys - Defaults to internal RelinKeys
+   * @returns {CipherText} destination
+   */
+  relinearize({cipherText, relinKeys = this.relinKeys}) {
+    if (!relinKeys) {
+      throw new Error('No relinKeys were generated! Run `Crypt.genRelinKeys()` before calling this function.')
+    }
+
+    const destination = new this._CipherText({library: this._Library.instance})
+    this._Evaluator.relinearize({encrypted: cipherText.instance, relinKeys: relinKeys.instance, destination: destination.instance})
 
     // Set the parameters based off of cipher 'a'
     destination.setVectorSize({size: cipherText.getVectorSize()})
