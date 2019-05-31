@@ -104,8 +104,7 @@ There are several __Keys__ in SEAL:
 - `RelinKeys` used to extend the number of homomorphic evaluations on a given cipher
 - `GaloisKeys` used to perform matrix rotations on a cipher
 
-Currently, this library only supports the generation of `RelinKeys` and `GaloisKeys`. 
-At this time, the idea is to generate these keys and share them with a 3rd party where
+You may generate and share `RelinKeys` and `GaloisKeys` with a 3rd party where
 they could be used in an untrusted execution environment. You may also share the `PublicKey`
 as the name implies. This allows 3rd parties to perform homomorphic evaluations on the
 ciphers that were encrypted by the `SecretKey`. Never share your `SecretKey` unless you _want_
