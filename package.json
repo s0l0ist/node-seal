@@ -1,7 +1,7 @@
 {
   "name": "node-seal",
-  "version": "1.0.20",
-  "description": "Port of Microsoft SEAL to Javascript",
+  "version": "1.0.21",
+  "description": "Microsoft SEAL in Javascript",
   "keywords": [
     "homomorphic",
     "encryption",
@@ -11,11 +11,13 @@
     "fhe"
   ],
   "main": "dist/seal.node.js",
+  "browser": "dist/seal.js",
   "library": "src/main.js",
   "module": "src/main.js",
   "license": "MIT",
   "scripts": {
-    "start": "webpack-dev-server --open",
+    "start": "webpack-dev-server",
+    "build": "NODE_ENV=production webpack",
     "test": "node --max-old-space-size=4096 `which jest`",
     "test:encrypt": "node --max-old-space-size=4096 `which jest` --testPathIgnorePatterns=\"^((?!encrypt-).)*$\"",
     "test:encrypt:low": "node --max-old-space-size=4096 `which jest` --testPathIgnorePatterns=\"^((?!encrypt-).)*$\" \"^((?!low).)*$\"",
@@ -40,9 +42,7 @@
     "test:low": "node --max-old-space-size=4096 `which jest` --testPathIgnorePatterns=\"^((?!low).)*$\"",
     "test:medium": "node --max-old-space-size=4096 `which jest` --testPathIgnorePatterns=\"^((?!medium).)*$\"",
     "test:high": "node --max-old-space-size=4096 `which jest` --testPathIgnorePatterns=\"^((?!high).)*$\"",
-    "coverage": "node --max-old-space-size=4096 `which jest` --collectCoverageFrom=src/lib/**.js --coverage src/test",
-    "build": "webpack",
-    "package": "yarn build && yarn test && npm publish"
+    "coverage": "node --max-old-space-size=4096 `which jest` --collectCoverageFrom=src/lib/**.js --coverage src/test"
   },
   "devDependencies": {
     "esm": "^3.2.25",

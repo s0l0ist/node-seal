@@ -1,10 +1,19 @@
 const path = require('path')
 const nodeExternals = require('webpack-node-externals')
 
+const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development'
+
 const commonConfig = {
-  mode: 'production',
+  mode: mode,
   context: path.resolve(__dirname, '.'),
-  devtool: 'source-map',
+  devtool: mode === 'development' ? 'source-map' : 'nosources-source-map',
+  devServer: {
+    compress: false,
+    publicPath: '/dist/',
+    port: 9000,
+    watchContentBase: true,
+    open: true,
+  },
   module: {
     rules: [
       {
