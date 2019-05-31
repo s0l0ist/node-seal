@@ -1,6 +1,6 @@
 {
   "name": "node-seal",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "Port of Microsoft SEAL to Javascript",
   "keywords": [
     "homomorphic",
