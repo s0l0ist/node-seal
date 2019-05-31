@@ -75,12 +75,6 @@ Limitations:
   results. __Why?__ For users who want to get started with both Scheme Types 
   with some small test data before optimizing.
   
-- Homomorphic evaluations are not yet supported in this library. __Why?__ We're focused
-  on allowing client side to perform encryption and allowing 3rd parties 
-  (with much more CPU horse power and RAM) to perform evaluations. We have plans
-  to implement evaluations on the client in the future. __What 3rd party can process this 
-  data?__ None out of the box.
-  
 - While initializing the library asynchronous, the core is synchronous and will block the main 
  thread. For now, we advise to put this library in a NodeJS `child_process` or browser 
  `Web Workers` and writing the necessary adapter logic.
@@ -97,7 +91,7 @@ refer to [HomomorphicEncryption.org](http://homomorphicencryption.org/)
 
 There are two __Scheme Types__ that SEAL supports:
 - `BFV` operates on Int32/UInt32
-- `CKKS` operates on JS Float (Number.MAX_SAFE_INTEGER to Number.MAX_SAFE_INTEGER)
+- `CKKS` operates on JS Float (Number.MIN_SAFE_INTEGER to Number.MAX_SAFE_INTEGER)
 
 `BFV` is used to encrypt/decrypt on real integers whereas `CKKS` is used for floats.
 However, the main difference really is in how `CKKS` delivers an _approximate_ result 
@@ -121,17 +115,16 @@ others to decrypt the data.
 Microsoft SEAL is not a fully homomorphic encryption library and as such, encrypted ciphers 
 have a limit on the total number of evaluations performed before decryption fails. When designing a 
 leveled homomorphic algorithm, you can test the limits to see where decryption fails and where
-you can increase the `computationLevel` or manually tweak the parameters. Unfortunately, 
-you cannot perform any evaluations with this library at this time, but it is in future plans.
+you can increase the `computationLevel` or manually tweak the parameters.
 
 Steps:
 1. Import the library
 2. Create encryption parameters and initialize the context 
    (sets the library to work in a given constraint of parameters)
 3. Create or load previously generated public/secret keys
-4. Create some data to encrypt and save or send it to a 3rd party for evaluation. Optionally send the 
-   `RelinKeys` and `GaloisKeys` as well (although these are much larger).
-5. Receive the cipher result and decrypt
+4. Create some data to encrypt and save, send it to a 3rd party for evaluation, or evaluate locally
+5. Perform homomorphic evaluations on encrypted data
+6. Decrypt the encrypted cipher result
 
 ## Example
 
@@ -144,6 +137,8 @@ CommonJS
   // because of how chrome limits the size of synchronously
   // loaded WASM files. Therefore, loading must be done 
   // asynchronously.
+
+  // If loading in the browser, this line is not needed.
   const { Seal } = require('node-seal')
   const Crypt = await Seal
   
@@ -181,20 +176,12 @@ CommonJS
   const step = parms.plainModulus / parms.polyDegree
   
   // Could be a regular JS array or a TypedArray
-  // `const value = Int32Array.from...`
-  const value = Array.from({length: parms.polyDegree}).map(
-  (x, i) =>  {
-    if (i >= (parms.polyDegree / 2)) {
-      return Math.floor((parms.plainModulus - (step * i)))
-    }
-    return  Math.ceil(-(step + (step * i)))
-  })
+  const value = Int32Array.from([1, 2, 3])
   
   // Encrypt the data
-  // We auto detect the 'type' for JS Arrays, but if the hint is specified
-  // it will speed up encryption slightly.
+  // We auto detect the 'type' for JS Arrays, but if the hint is specified we will convert it
   // TypedArrays will set the type automatically.
-  const oldCipherText = Crypt.encrypt({value, type: 'int32'})
+  const oldCipherText = Crypt.encrypt({value})
   
   // You can save the cipherText for later as a base64 string
   const savedRawCipher = oldCipherText.save()
@@ -202,12 +189,18 @@ CommonJS
   // And reload it later using the helper
   const cipherText = Crypt.reviveCipher({encoded: savedRawCipher})
   
+  // Createt a copy to sum later
+  const cipherText2 = Crypt.reviveCipher({encoded: savedRawCipher})
+  
   // But you will need to reinitialize some values. It would be best
   // to also serialize this data in combination with the raw cipherText
   // so that you may retrieve all the related information in one go.
-  cipherText.setSchemeType({scheme: 'BFV'})
+  cipherText.setSchemeType({scheme: oldCipherText.getSchemeType()})
   cipherText.setVectorSize({size: oldCipherText.getVectorSize()})
-  cipherText.setVectorType({type: 'int32'})
+  cipherText.setVectorType({type: oldCipherText.getVectorType()})
+  cipherText2.setSchemeType({scheme: oldCipherText.getSchemeType()})
+  cipherText2.setVectorSize({size: oldCipherText.getVectorSize()})
+  cipherText2.setVectorType({type: oldCipherText.getVectorType()})
 
   // Send the encrypted data to a 3rd party for 
   // homomorphic operations. But we need more
@@ -227,11 +220,13 @@ CommonJS
     }
   }
   
-  // Receive the encrypted result back.
-  // ...
+  const resultCipher = Crypt.add({a: cipherText, b: cipherText2})
   
   // Decrypt the result which returns a TypedArray
-  const int32Array = Crypt.decrypt({cipherText})
+  const resultInt32Array = Crypt.decrypt({cipherText: resultCipher})
+  
+  console.log('resultInt32Array', resultInt32Array)
+  // resultInt32Array Int32Array(3) [2, 4, 6]
   
 })()
 

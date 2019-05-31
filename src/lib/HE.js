@@ -17,6 +17,7 @@ export class HE {
     this._DefaultParams = options.DefaultParams
     this._EncryptionParameters = options.EncryptionParameters
     this._Encryptor = options.Encryptor
+    this._Evaluator = options.Evaluator
     this._IntegerEncoder = options.IntegerEncoder
     this._KeyGenerator = options.KeyGenerator
     this._Library = options.Library
@@ -92,7 +93,7 @@ export class HE {
    * @param type
    * @returns {*}
    */
-  printMatrix({vector, rowSize, type = 'int32'}) {
+  printMatrix({vector, rowSize = this._BatchEncoder.slotCount() / 2, type = 'int32'}) {
     return this._Vector.printMatrix({vector, rowSize, type})
   }
 
@@ -193,13 +194,17 @@ export class HE {
   }
 
   /**
-   * Initialized the given context
+   * Initialize the given Context and Evaluator
    * @private
    */
   _initContext() {
     this._Context.initialize({
       encryptionParams: this._EncryptionParameters.instance,
       expandModChain: true
+    })
+
+    this._Evaluator.initialize({
+      context: this._Context.instance
     })
   }
 
@@ -442,14 +447,12 @@ export class HE {
 
     const plainText = new this._PlainText({library: this._Library.instance})
 
-    // console.log('encoding...')
     this._BatchEncoder.encode({vector, plainText: plainText.instance, type})
-    // console.log('encoding...done!')
 
     const cipherText = new this._CipherText({library: this._Library.instance})
-    // console.log('encrypting...')
     this._Encryptor.encrypt({plainText: plainText.instance, cipherText: cipherText.instance})
-    // console.log('encrypting...done!')
+
+    // this.printMatrix({vector, rowSize: vector.size() / 2, type: cipherText.getVectorType()})
 
     // Store the vector size so that we may filter the array upon decryption
     cipherText.setVectorSize({size: vector.size()})
@@ -508,7 +511,7 @@ export class HE {
     // Set a few attributes on the
     cipherText.setVectorSize({size: vector.size()})
     cipherText.setVectorType({type})
-    cipherText.setSchemeType({scheme: 'BFV'})
+    cipherText.setSchemeType({scheme: 'CKKS'})
     return cipherText
   }
 
@@ -563,7 +566,7 @@ export class HE {
     if (!detectedType) {
       detectedType = 'double' // by default
 
-      if (array.every(x => Number.isInteger(x) && x >= -(Math.pow(2, 31) - 1) && x <= (Math.pow(2, 31) - 1))) {
+      if (array.every(x => Number.isInteger(x) && x >= -(Math.pow(2, 31)) && x <= (Math.pow(2, 31) - 1))) {
         // Convert to TypedArray
         array = Int32Array.from(array)
         detectedType = 'int32'
@@ -574,6 +577,16 @@ export class HE {
         array = Uint32Array.from(array)
         detectedType = 'uint32'
       }
+    }
+
+    /**
+     * If we had an integer passed in with a hint, construct typed array
+     */
+    if (typeof(value) === 'number' && detectedType && detectedType === 'int32' ) {
+      array = Int32Array.from(array)
+    }
+    if (typeof(value) === 'number' && detectedType && detectedType === 'uint32' ) {
+      array = Uint32Array.from(array)
     }
 
     /**
@@ -597,7 +610,7 @@ export class HE {
   /**
    * Decrypt a ciphertext using the BFV scheme
    * @param cipherText
-   * @returns {Int32Array|Uint32Array|BigInt64Array|BigUint64Array|Float64Array|Array}
+   * @returns {Int32Array|Uint32Array|Float64Array|Array}
    * @private
    */
   _decryptBFV({cipherText}) {
@@ -613,16 +626,23 @@ export class HE {
     // We trim back the vector to the original size that was recorded before encryption was performed
     vector.resize(cipherText.getVectorSize(), 0)
 
-    // this.printVector({vector, type: cipherText.getVectorType()})
-    // this.printMatrix({vector, rowSize: this._BatchEncoder.slotCount() / 2, type: cipherText.getVectorType()})
+    // this.printVector({vector})
+    // this.printMatrix({vector, rowSize: vector.size() / 2, type: cipherText.getVectorType()})
 
-    return this._vecToArray({vector, type: cipherText.getVectorType()})
+    const array = this._vecToArray({vector, type: cipherText.getVectorType()})
+
+    switch (cipherText.getVectorType()) {
+      case 'int32': return Int32Array.from(array)
+      case 'uint32': return Uint32Array.from(array)
+      case 'double': return Float64Array.from(array)
+      default: return array
+    }
   }
 
   /**
    * Decrypt a ciphertext using the CKKS scheme
    * @param cipherText
-   * @returns {Int32Array|Uint32Array|BigInt64Array|BigUint64Array|Float64Array|Array}
+   * @returns {Int32Array|Uint32Array|Float64Array|Array}
    * @private
    */
   _decryptCKKS({cipherText}) {
@@ -638,14 +658,21 @@ export class HE {
 
     // this.printVector({vector, type: cipherText.getVectorType()})
 
-    return this._vecToArray({vector, type: cipherText.getVectorType()})
+    const array = this._vecToArray({vector, type: cipherText.getVectorType()})
+
+    switch (cipherText.getVectorType()) {
+      case 'int32': return Int32Array.from(array)
+      case 'uint32': return Uint32Array.from(array)
+      case 'double': return Float64Array.from(array)
+      default: return array
+    }
   }
 
   /**
    * Copy a vector's data into a Typed or regular JS array
    * @param vector
    * @param type
-   * @returns {Int32Array|Uint32Array|BigInt64Array|BigUint64Array|Float64Array|Array}
+   * @returns {Int32Array|Uint32Array|Float64Array|Array}
    * @private
    */
   _vecToArray({vector, type}) {
@@ -664,20 +691,6 @@ export class HE {
           uint32Array[i] = vector.get(i)
         }
         return uint32Array
-      case 'int64':
-        const int64Array = new BigInt64Array(vector.size())
-        // retrieve value from the vector
-        for (let i = 0; i < vector.size(); i++) {
-          int64Array[i] = vector.get(i)
-        }
-        return int64Array
-      case 'uint64':
-        const uint64Array = new BigUint64Array(vector.size())
-        // retrieve value from the vector
-        for (let i = 0; i < vector.size(); i++) {
-          uint64Array[i] = vector.get(i)
-        }
-        return uint64Array
       case 'double':
         const float64Array = new Float64Array(vector.size())
         // retrieve value from the vector
@@ -697,7 +710,7 @@ export class HE {
   /**
    * Decrypt a given ciphertext
    * @param cipherText
-   * @returns {Int32Array|Uint32Array|BigInt64Array|BigUint64Array|Float64Array|Array}
+   * @returns {Int32Array|Uint32Array|Float64Array|Array}
    */
   decrypt({cipherText}) {
     switch (this._schemeType) {
@@ -705,6 +718,103 @@ export class HE {
       case 'CKKS': return this._decryptCKKS({cipherText})
       default: return this._decryptBFV({cipherText})
     }
+  }
+
+
+  /**
+   * Negate a cipher
+   * @param {CipherText} a
+   * @returns {CipherText} destination
+   */
+  negate({cipherText}) {
+    const destination = new this._CipherText({library: this._Library.instance})
+    this._Evaluator.add({encrypted: cipherText.instance, destination: destination.instance})
+
+    // Set the parameters based off of cipher 'a'
+    destination.setVectorSize({size: cipherText.getVectorSize()})
+    destination.setVectorType({type: cipherText.getVectorType()})
+    destination.setSchemeType({scheme: cipherText.getSchemeType()})
+    return destination
+  }
+
+  /**
+   * Add's cipher B to cipher A
+   * @param {CipherText} a
+   * @param {CipherText} b
+   * @returns {CipherText} destination
+   */
+  add({a, b}) {
+    if (a.getSchemeType() !== b.getSchemeType()) {
+      throw new Error('Ciphers must have the same SchemeType!')
+    }
+
+    const destination = new this._CipherText({library: this._Library.instance})
+    this._Evaluator.add({a: a.instance, b: b.instance, destination: destination.instance})
+
+    // Set the parameters based off of cipher 'a'
+    destination.setVectorSize({size: a.getVectorSize()})
+    destination.setVectorType({type: a.getVectorType()})
+    destination.setSchemeType({scheme: a.getSchemeType()})
+    return destination
+  }
+
+  /**
+   * Subtract cipher B from cipher A
+   * @param {CipherText} a
+   * @param {CipherText} b
+   * @returns {CipherText} destination
+   */
+  sub({a, b}) {
+    if (a.getSchemeType() !== b.getSchemeType()) {
+      throw new Error('Ciphers must have the same SchemeType!')
+    }
+
+    const destination = new this._CipherText({library: this._Library.instance})
+    this._Evaluator.sub({a: a.instance, b: b.instance, destination: destination.instance})
+
+    // Set the parameters based off of cipher 'a'
+    destination.setVectorSize({size: a.getVectorSize()})
+    destination.setVectorType({type: a.getVectorType()})
+    destination.setSchemeType({scheme: a.getSchemeType()})
+    return destination
+  }
+
+  /**
+   * Multiply cipher A by cipher B
+   * @param {CipherText} a
+   * @param {CipherText} b
+   * @returns {CipherText} destination
+   */
+  multiply({a, b}) {
+    if (a.getSchemeType() !== b.getSchemeType()) {
+      throw new Error('Ciphers must have the same SchemeType!')
+    }
+
+    const destination = new this._CipherText({library: this._Library.instance})
+    this._Evaluator.multiply({a: a.instance, b: b.instance, destination: destination.instance})
+
+    // Set the parameters based off of cipher 'a'
+    destination.setVectorSize({size: a.getVectorSize()})
+    destination.setVectorType({type: a.getVectorType()})
+    destination.setSchemeType({scheme: a.getSchemeType()})
+    return destination
+  }
+
+  /**
+   * Square a cipher
+   * @param {CipherText} a
+   * @returns {CipherText} destination
+   */
+  square({cipherText}) {
+
+    const destination = new this._CipherText({library: this._Library.instance})
+    this._Evaluator.square({encrypted: cipherText.instance, destination: destination.instance})
+
+    // Set the parameters based off of cipher 'a'
+    destination.setVectorSize({size: cipherText.getVectorSize()})
+    destination.setVectorType({type: cipherText.getVectorType()})
+    destination.setSchemeType({scheme: cipherText.getSchemeType()})
+    return destination
   }
 
   /**
@@ -802,7 +912,7 @@ export class HE {
   }
 
   /**
-   * Helpter to revitalize a cipherText from a base64 encoded cipherText
+   * Helper to revitalize a cipherText from a base64 encoded cipherText
    * @param encoded
    * @returns {*|CipherText}
    */
