@@ -161,6 +161,9 @@ CommonJS
   // Generate public and secret keys
   Crypt.genKeys()
   
+  // Optionally, create RelinKeys
+  Crypt.genRelinKeys()
+  
   // Save the keys so we don't have to generate them again
   // They will be base64 strings
   const publicKey = Crypt.savePublicKey()
@@ -216,9 +219,14 @@ CommonJS
   }
   
   const resultCipher = Crypt.add({a: cipherText, b: cipherText2})
+  // Attempt decryption now, or after relinearization
+  // const resultInt32Array = Crypt.decrypt({cipherText: resultCipher})
+
+  // (Optional) Relinearize the cipher
+  const relinearizedCipher = Crypt.relinearize({cipherText: resultCipher})
   
   // Decrypt the result which returns a TypedArray
-  const resultInt32Array = Crypt.decrypt({cipherText: resultCipher})
+  const resultInt32Array = Crypt.decrypt({cipherText: relinearizedCipher})
   
   console.log('resultInt32Array', resultInt32Array)
   // resultInt32Array Int32Array(3) [2, 4, 6]
