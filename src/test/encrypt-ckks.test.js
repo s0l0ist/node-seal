@@ -1,5 +1,4 @@
 describe.skip('Encrypt CKKS', () => {
-
   describe('Double', () => {
     test('Valid range', async () => {
       const { Seal } = require('../index.js')
@@ -7,13 +6,13 @@ describe.skip('Encrypt CKKS', () => {
 
       // Create parameters
       const parms = Crypt.createParams({computationLevel: 'low'})
-      expect(parms).toEqual({
-        polyDegree: 4096,
-        coeffModulus: 4096,
-        plainModulus: 786433,
-        scale: Math.pow(2, 54),
-        security: 128
-      })
+      // expect(parms).toEqual({
+      //   polyDegree: 4096,
+      //   coeffModulus: 4096,
+      //   plainModulus: 786433,
+      //   scale: Math.pow(2, 54),
+      //   security: 128
+      // })
 
       // Initialize
       Crypt.initialize({...parms, schemeType: 'CKKS'})
@@ -25,10 +24,16 @@ describe.skip('Encrypt CKKS', () => {
       expect(spy).toHaveBeenCalled()
 
       // Create data to be encrypted
-      const step = Math.pow(2, 53) / (parms.polyDegree / 2)
-      const value = Float64Array.from({length: parms.polyDegree / 2})
-        .map((x, i) =>  Math.floor(( i * step)))
+      const arraySize = parms.polyDegree / 2
+      const step = Number.MAX_SAFE_INTEGER / arraySize // (2^53 - 1) / (polyDegree / 2)
 
+      const value = Float64Array.from({length: arraySize})
+        .map( (x, i) =>  {
+          if (i >= (arraySize / 2)) {
+            return (Number.MAX_SAFE_INTEGER ) - (step * i)
+          }
+          return - (step * i)
+        })
 
       // Encrypt
       const cipherText = Crypt.encrypt({value, type: 'double'})
