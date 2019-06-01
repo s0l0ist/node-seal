@@ -421,14 +421,14 @@ export class HE {
      * Each element in the array should not be larger than half of the plainModulus
      *
      * For int32, the limit is -1/2 * `plainModulus` <-> +1/2 * `plainModulus`
-     * for uint32, the limit is 0 <-> `plainModulus`
+     * for uint32, the limit is 0 <-> `plainModulus - 1`
      */
     const isNotValid = value.some(el => {
       if (type === 'int32') {
         return (Math.abs(el) > Math.floor(this._plainModulus / 2))
       }
       if (type === 'uint32') {
-        return (el < 0 || el > this._plainModulus)
+        return (el < 0 || el > this._plainModulus - 1)
       }
       return false
     })
@@ -438,7 +438,7 @@ export class HE {
         throw new Error(`Array element out of range: -1/2 * 'plainModulus' (${this._plainModulus}) <-> +1/2 * 'plainModulus' (${this._plainModulus})`)
       }
       if (type === 'uint32') {
-        throw new Error(`Array element out of range: 0 <-> 'plainModulus' (${this._plainModulus})`)
+        throw new Error(`Array element out of range: 0 <-> 'plainModulus' - 1 (${this._plainModulus} - 1)`)
       }
     }
 
