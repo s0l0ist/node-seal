@@ -52,13 +52,9 @@ Limitations:
   We can control NodeJS heap size, but not inside a user's browser. 
   
   Saving keys is very memory intensive especially for `computationLevel`s above low. 
-  This is because there's currently no way (that we have found) to use streams 
-  across JS and WASM, so the strings have to be buffered completely in RAM and 
+  This is because there's currently no way (that we have found) to use io streams 
+  across JS and Web Assembly code, so the strings have to be buffered completely in RAM and 
   they can be very, very large. This holds especially true for `GaloisKeys`.
-  
-- Using this library in client frontend maybe difficult to integrate.
-  If you use webpack, it will need to be tweaked. 
-  Please refer to the webpack configuration in this library.
   
 - Performance is less than the C++ native library despite being converted to Web Assembly. 
   This is mainly due to poorly optimized SIMD, random number generator, 
@@ -68,16 +64,12 @@ Limitations:
 - By default, we encrypt/decrypt arrays (typed) of data. If you're encrypting a single
   integer (Int32/UInt32) you will receive back a TypedArray of length 1 containing the 
   decrypted result. We do this because we _want_ to have batching mode enabled for both 
-  `BFV` and `CKKS` schemes.
+  `BFV` and `CKKS` schemes by default.
   
 - If you specify a JS Array with JS Numbers and the elements are greater than the bounds 
   of an Int32/UInt32, the data will be treated as a C++ 'double' and may cause undesirable
   results. __Why?__ For users who want to get started with both Scheme Types 
-  with some small test data before optimizing.
-  
-- While initializing the library asynchronous, the core is synchronous and will block the main 
- thread. For now, we advise to put this library in a NodeJS `child_process` or browser 
- `Web Workers` and writing the necessary adapter logic.
+  with some small test data without needing to think about TypedArrays.
 
 # Usage
 
@@ -124,43 +116,343 @@ Steps:
 4. Create some data to encrypt. Save it, send it to a 3rd party for evaluation, or evaluate locally
 5. Decrypt the encrypted cipher result
 
-## Example
+## How to use
 
-CommonJS
+### Import / require the library
+
+Due to limitations with how the WASM file is loaded, 
+we need to await on the main library in order to have
+a fully instanciated instance. This limitation mostly
+because of how chrome limits the size of synchronously
+loaded WASM files. Therefore, loading must be done 
+asynchronously.
+
 ```
 (async () => {
+
   // Due to limitations with how the WASM file is loaded, 
   // we need to await on the main library in order to have
   // a fully instanciated instance. This limitation mostly
   // because of how chrome limits the size of synchronously
   // loaded WASM files. Therefore, loading must be done 
   // asynchronously.
-
-  // If loading in the browser, this line is not needed.
+  
   const { Seal } = require('node-seal')
   const Crypt = await Seal
   
-  // There are 3 different computationLevel's that have been predefined
-  // for ease of use. 'low', 'medium', and 'high'. The computation levels
-  // allow for more homomorphic operations __on__ encrypted cipherText's
-  // at the cost of more CPU/memory.
-  //
-  // Security is by default 128 bits, but can be changed to 192 or 256 bits again 
-  // at the cost of more CPU/memory.
-  //
-  // The computation level and security settings that you choose 
-  // here limit the total number of elements in an array as well
-  // as their min/max values.
+})()
+```
+
+### Creating parameters
+
+There are 3 different computationLevel's that have been predefined
+for ease of use. `low`, `medium`, and `high`. The computation levels
+allow for more homomorphic operations __on__ encrypted cipherText's
+at the cost of more CPU/memory.
+
+Security is by default `128` bits, but can be changed to `192` or `256` bits again 
+at the cost of more CPU/memory.
+
+The computation level and security settings that you choose 
+here limit the total number of elements in an array as well
+as their min/max values.
+
+You're free to use this helper to auto generate parameters used to initialize 
+SEAL. These can be manually overridden.
+
+```
+const parms = Crypt.createParams({computationLevel: 'low', security: 128})
+```
+
+### Initialize Seal
+
+SEAL supports two encryption schemes, `BFV` and `CKKS`. Depending on the type of
+data you wish to encrypt, select the appropriate scheme.
+
+`BFV` operates on Int32/UInt32
+`CKKS` operates on JS Float (Number.MIN_SAFE_INTEGER to Number.MAX_SAFE_INTEGER)
+
+```
+  Crypt.initialize({...parms, schemeType: 'BFV'})
+  
+  // - or - 
+  
+  Crypt.initialize({...parms, schemeType: 'CKKS'})
+```
+
+### Generate Keys
+
+#### Public / Secret Keys
+
+Can be generated, saved to a base64 string, or loaded from a base64 string
+
+```
+  Crypt.genKeys()
+  
+  // Save the keys
+  const publicKey = Crypt.savePublicKey()
+  const secretKey = Crypt.saveSecretKey()
+  
+  // You can skip `Crypt.genKeys()` by loading them instead 
+  Crypt.loadPublicKey({encoded: publicKey})
+  Crypt.loadSecretKey({encoded: secretKey})
+
+```
+
+#### Relin Keys
+
+Can be generated, saved to a base64 string, or loaded from a base64 string
+
+```
+  Crypt.genRelinKeys()
+  
+  // Save the keys
+  const relinKeys = Crypt.saveRelinKeys()
+  
+  // You can skip `Crypt.genRelinKeys()` by loading them instead 
+  Crypt.loadRelinKeys({encoded: relinKeys})
+```
+
+#### Galois Keys
+
+Can be generated, saved to a base64 string, or loaded from a base64 string.
+Please note generating Galois keys can take a long time and the output is very large.
+
+```
+  Crypt.genGaloisKeys()
+  
+  // Save the keys
+  const galoisKeys = Crypt.saveGaloisKeys()
+  
+  // You can skip `Crypt.genGaloisKeys()` by loading them instead 
+  Crypt.loadGaloisKeys({encoded: galoisKeys})
+```
+
+### Creating data to encrypt
+
+Creating values can be a bit tricky. SEAL has limitations on the length
+of the array __and__ a limit on the minimum and maximum values of each
+array element depending on the Encryption Parameters and Scheme Type used
+to initialize the library.
+
+
+
+For `BFV`:
+ 
+Max array length = `polyDegree`.
+
+We have two types __Int32__ and __UInt32__ with the following restrictions:
+
+
+* Int32, valid range is from `-1/2 * plainModulus` to `1/2 * plainModulus`
+* UInt32, valid range is from `0` to `plainModulus - 1`
+
+For `CKKS`:
+
+Max array length = `polyDegree / 2`.
+
+There is only one type, __Double__ with the following restrictions:
+
+* A JS Number between -2^53 <-> +2^53
+
+`BFV` Example Data
+```
+/*
+  Create an array of max length `polyDegree` with elements that
+  are in the valid range.
+ 
+  Create data to be encrypted (connect the dots). Saw tooth about the x-axis.
+ 
+   |            .             |   <- (Max value) Y = + 1/2 (plainModulus)
+   |                   .      |
+   |. _______________________.|   <- Y = 0
+   |      .                   |
+   |            .             |   <- (Min value) Y =  - 1/2 (plainModulus)
+   ^.           ^.            ^.
+     `-> X = 0    `-> X = 2048  `-> X = 4095 (max length, `polyDegree`)
+ 
+*/
+const step = parms.plainModulus / parms.polyDegree // ~192.00024
+const value = Int32Array.from({length: parms.polyDegree}).map(
+ (x, i) =>  {
+   if (i >= (parms.polyDegree / 2)) {
+     return Math.floor((parms.plainModulus - (step * i)))
+   }
+   return  Math.ceil(-(step + (step * i)))
+ })
+})
+```
+
+`CKKS` Example Data
+```
+/*
+  Create an array of max length `polyDegree` with elements that
+  are in the valid range.
+ 
+  Create data to be encrypted (connect the dots). Saw tooth about the x-axis.
+ 
+   |            .             |   <- (Max value) Y = (2^53 - 1)
+   |                   .      |
+   |.________________________.|   <- Y = 0
+   |      .                   |
+   |            .             |   <- (Min value) Y = -(2^53 - 1)
+   ^.           ^.            ^.
+     `-> X = 0    `-> X = 1024  `-> X = 2048 (max length, `polyDegree` / 2)
+ 
+*/
+
+// Create data to be encrypted
+const arraySize = parms.polyDegree / 2
+const step = Number.MAX_SAFE_INTEGER / arraySize // (2^53 - 1) / (polyDegree / 2)
+
+const value = Float64Array.from({length: arraySize})
+  .map( (x, i) =>  {
+    if (i >= (arraySize / 2)) {
+      return Number.MAX_SAFE_INTEGER - (step * i)
+    }
+    return -(step * i)
+})
+```
+
+### Encrypt data
+
+Encryption is easily performed by passing the `value` (in shorthand notation)
+to the `encrypt` function.
+
+There are helper methods to save and revitalize a cipher. When reviving a cipher, there
+will need to be additional attributes set on the instance using the `set...` functions.
+This is to ensure decryption will go smoothly.
+
+```
+
+const oldCipherText = Crypt.encrypt({value: Int32Array.from([1,2,3]})
+
+  
+// You can save the oldCipherText as a base64 string
+const base64Cipher = oldCipherText.save()
+
+// Revive a cipher from a cipherText base64 string
+const previousCipherText = Crypt.reviveCipher({encoded: base64Cipher})
+
+// But you will need to reinitialize some values. It would be best
+// to also serialize this data in combination with the raw cipherText
+// so that you may retrieve all the related information in one go.
+
+previousCipherText.setSchemeType({scheme: oldCipherText.getSchemeType()})
+previousCipherText.setVectorSize({size: oldCipherText.getVectorSize()})
+previousCipherText.setVectorType({type: oldCipherText.getVectorType()})
+```
+
+### Decrypt data
+
+Decryption is performed similarly to encryption. The returned Array is a type
+of TypedArray that was originally encrypted. 
+
+```
+const cipherText = Crypt.encrypt({value: Int32Array.from([1,2,3]})
+
+const decryptedResult = Crypt.decrypt({cipherText})
+
+console.log(decryptedResult)
+// Int32Array(3) [1, 2, 3]
+
+```
+# Evaluations on encrypted data
+
+
+### Add
+
+Adding two ciphers results in another cipher.
+```
+
+// Create two cipherTexts from a `value` array
+const cipherText = Crypt.encrypt({value: Uint32Array.from([1,2,3]})
+const cipherText2 = Crypt.encrypt({value: Uint32Array.from([1,2,3]})
+
+const resultCipher = Crypt.add({a: cipherText, b: cipherText2})
+const resultInt32Array = Crypt.decrypt({cipherText: resultCipher})
+
+console.log(resultInt32Array)
+// Uint32Array(3) [2, 4, 6]
+
+```
+
+### Subtract
+
+Subtracting two ciphers results in another cipher.
+```
+
+// Create two cipherTexts from a `value` array
+const cipherText = Crypt.encrypt({value: Uint32Array.from([5,5,5]})
+const cipherText2 = Crypt.encrypt({value: Uint32Array.from([1,2,3]})
+
+const resultCipher = Crypt.sub({a: cipherText, b: cipherText2})
+const resultUInt32Array = Crypt.decrypt({cipherText: resultCipher})
+
+console.log(resultUInt32Array)
+// Uint32Array(3) [4, 3, 2]
+
+```
+
+### Multiply
+
+Multiplying two ciphers results in another cipher.
+```
+
+// Create two cipherTexts from a `value` array
+const cipherText = Crypt.encrypt({value: Int32Array.from([1,2,3]})
+const cipherText2 = Crypt.encrypt({value: Int32Array.from([1,2,3]})
+
+const resultCipher = Crypt.multiply({a: cipherText, b: cipherText2})
+const resultInt32Array = Crypt.decrypt({cipherText: resultCipher})
+
+console.log(resultInt32Array)
+// Int32Array(3) [1, 4, 9]
+
+```
+
+### Relinearize
+
+Relinearization is needed to help extend the number of evaluations on a cipherText. Too many
+evaluations will not decrypt correctly. This method is most useful after multiplication.
+
+```
+
+// Create two cipherTexts from a `value` array
+const cipherText = Crypt.encrypt({value: Int32Array.from([1,2,3]})
+const cipherText2 = Crypt.encrypt({value: Int32Array.from([1,2,3]})
+
+const resultCipher = Crypt.multiply({a: cipherText, b: cipherText2})
+// Attempt decryption now, or after relinearization
+// const resultInt32Array = Crypt.decrypt({cipherText: resultCipher})
+
+// (Optional) Relinearize the cipher
+const relinearizedCipher = Crypt.relinearize({cipherText: resultCipher})
+const resultInt32Array = Crypt.decrypt({cipherText: relinearizedCipher})
+
+console.log('resultInt32Array', resultInt32Array)
+// Int32Array(3) [1, 4, 9]
+
+```
+
+## Full Example
+
+CommonJS
+```
+(async () => {
+
+  // If running in a browser, skip this `require` statement.
+  const { Seal } = require('node-seal')
+  const Crypt = await Seal
   
   const parms = Crypt.createParams({computationLevel: 'low', security: 128})
   
-  // BFV schemeType allows for pure Integer arithmetic
   Crypt.initialize({...parms, schemeType: 'BFV'})
   
   // Generate public and secret keys
   Crypt.genKeys()
   
-  // Optionally, create RelinKeys
+  // Create RelinKeys
   Crypt.genRelinKeys()
   
   // Save the keys so we don't have to generate them again
@@ -172,11 +464,10 @@ CommonJS
   Crypt.loadPublicKey({encoded: publicKey})
   Crypt.loadSecretKey({encoded: secretKey})
   
-  // Create some values in an array. Note the limitations of the array 
-  // size, and value size
+  // Create sample data for `BFV`
   const step = parms.plainModulus / parms.polyDegree
   
-  // Could be a regular JS array or a TypedArray
+  // Could be a regular JS array or a TypedArray. TypedArrays are the preferred way.
   const value = Int32Array.from([1, 2, 3])
   
   // Encrypt the data
@@ -199,6 +490,7 @@ CommonJS
   cipherText.setSchemeType({scheme: oldCipherText.getSchemeType()})
   cipherText.setVectorSize({size: oldCipherText.getVectorSize()})
   cipherText.setVectorType({type: oldCipherText.getVectorType()})
+  
   cipherText2.setSchemeType({scheme: oldCipherText.getSchemeType()})
   cipherText2.setVectorSize({size: oldCipherText.getVectorSize()})
   cipherText2.setVectorType({type: oldCipherText.getVectorType()})

@@ -412,7 +412,7 @@ export class HE {
   _encryptBFV({value, type}) {
 
     if (value.length > this._polyDegree) {
-      throw new Error(`Input array is too large for the 'polyDegree' specified ${this._polyDegree}`)
+      throw new Error(`Input array is too large for the 'polyDegree' specified (${this._polyDegree})`)
     }
 
     const vector = this.vecFromArray({array: [], type})
@@ -470,8 +470,8 @@ export class HE {
    */
   _encryptCKKS({value, type}) {
 
-    if (value.length > this._polyDegree) {
-      throw new Error(`Input array is too large for the 'polyDegree' specified ${this._polyDegree}`)
+    if (value.length > this._polyDegree / 2) {
+      throw new Error(`Input array is too large for the 1/2 'polyDegree' specified (1/2 * ${this._polyDegree})`)
     }
 
     const vector = this.vecFromArray({array: [], type})
