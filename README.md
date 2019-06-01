@@ -170,6 +170,7 @@ SEAL supports two encryption schemes, `BFV` and `CKKS`. Depending on the type of
 data you wish to encrypt, select the appropriate scheme.
 
 `BFV` operates on Int32/UInt32
+
 `CKKS` operates on JS Float (Number.MIN_SAFE_INTEGER to Number.MAX_SAFE_INTEGER)
 
 ```
@@ -247,14 +248,6 @@ We have two types __Int32__ and __UInt32__ with the following restrictions:
 * Int32, valid range is from `-1/2 * plainModulus` to `1/2 * plainModulus`
 * UInt32, valid range is from `0` to `plainModulus - 1`
 
-For `CKKS`:
-
-Max array length = `polyDegree / 2`.
-
-There is only one type, __Double__ with the following restrictions:
-
-* A JS Number between -2^53 <-> +2^53
-
 `BFV` Example Data
 ```
 /*
@@ -282,6 +275,14 @@ const value = Int32Array.from({length: parms.polyDegree}).map(
  })
 })
 ```
+
+For `CKKS`:
+
+Max array length = `polyDegree / 2`.
+
+There is only one type, __Double__ with the following restrictions:
+
+* A JS Number between -(2^53 - 1) <-> + (2^53 - 1)
 
 `CKKS` Example Data
 ```
@@ -316,8 +317,8 @@ const value = Float64Array.from({length: arraySize})
 
 ### Encrypt data
 
-Encryption is easily performed by passing the `value` (in shorthand notation)
-to the `encrypt` function.
+Encryption is easily performed by passing an array to the `value` parameter
+of the `encrypt` function.
 
 There are helper methods to save and revitalize a cipher. When reviving a cipher, there
 will need to be additional attributes set on the instance using the `set...` functions.
@@ -332,15 +333,15 @@ const oldCipherText = Crypt.encrypt({value: Int32Array.from([1,2,3]})
 const base64Cipher = oldCipherText.save()
 
 // Revive a cipher from a cipherText base64 string
-const previousCipherText = Crypt.reviveCipher({encoded: base64Cipher})
+const revivedCipherText = Crypt.reviveCipher({encoded: base64Cipher})
 
 // But you will need to reinitialize some values. It would be best
 // to also serialize this data in combination with the raw cipherText
 // so that you may retrieve all the related information in one go.
 
-previousCipherText.setSchemeType({scheme: oldCipherText.getSchemeType()})
-previousCipherText.setVectorSize({size: oldCipherText.getVectorSize()})
-previousCipherText.setVectorType({type: oldCipherText.getVectorType()})
+revivedCipherText.setSchemeType({scheme: oldCipherText.getSchemeType()})
+revivedCipherText.setVectorSize({size: oldCipherText.getVectorSize()})
+revivedCipherText.setVectorType({type: oldCipherText.getVectorType()})
 ```
 
 ### Decrypt data
@@ -414,7 +415,8 @@ console.log(resultInt32Array)
 ### Relinearize
 
 Relinearization is needed to help extend the number of evaluations on a cipherText. Too many
-evaluations will not decrypt correctly. This method is most useful after multiplication.
+evaluations will not decrypt correctly. This method is most useful after multiplication, but it 
+is *not* the same as bootstrapping.
 
 ```
 
