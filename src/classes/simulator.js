@@ -1,81 +1,149 @@
+/**
+ * This class is used strictly to test how encryption should work at the bit level.
+ *
+ * We emulate the restrictions of SEAL and translate them into a dynamic adder which
+ * performs simple arithmetic on a size restriction (max, min values)
+ */
+
 class Simulator {
-  constructor({maxValue, minValue}) {
+  /**
+   * Create an instance with a maxValue and signed vs unsigned
+   *
+   * @param maxValue
+   * @param signed
+   */
+  constructor({maxValue, signed = true}) {
     this._maxValue = maxValue
-    this._minValue = minValue
-
-    this._adder = this.createAdder()
+    this._signed = signed
   }
 
-  and(a,b){
-    return (a && b) + 0
-  }
-  or(a,b){
-    return (a || b) + 0
-  }
-  xor(a,b){
-
-    if (this.and(a,b)) {return false + 0}
-    if (this.or(a,b)) {return true + 0}
-    return false + 0
-  }
-
-  fullAdder(a,b,c){
-    return {
-      c:this.or(this.and(this.xor(a,b),c), this.and(a,b)),  // C is the carry
-      s:this.xor(this.xor(a,b),c)         // S is the sum
-    }
-  }
-
-  pad(s, size) {
-    while (s.length < (size || 2)) {s = '0' + s}
+  /**
+   * Pad a string to a given size
+   *
+   * @param s
+   * @param size
+   * @param direction
+   * @param value - '0' or '1' to pad with
+   * @private
+   * @returns {*}
+   */
+  _pad(s, size, direction ='left', value = '0') {
+    while (s.length < (size || 2)) {s = direction === 'left' ? value + s : s + value}
     return s
   }
-  onesComp(value) {
+
+  /**
+   * Invert bits of a number
+   *
+   * @param value
+   * @private
+   * @returns {number}
+   */
+  _onesComp(value) {
     return ~value & (Math.pow(2, Math.floor(Math.log2(value))) - 1)
   }
 
-  getBits() {
-    return Math.ceil(Math.log2(this._maxValue))
-  }
-  getMask(value = null){
-    return this.onesComp(1 << this.getBits())
-  }
-
-  convertNumberToBinaryStringArray(value) {
-    return this.pad(((value >>> 0) & this.getMask()).toString(2), this.getBits()).split('').map(x => parseInt(x, 10))
-  }
-
-  convertNumberToBinaryString(value) {
-    return this.pad(((value >>> 0) & this.getMask()).toString(2), this.getBits())
-  }
-
-  createAdder() {
-    let adder = Array.from({length: this.getBits()})
-
-    /**
-     * Add numbers A + B, get binary string
-     *
-     * @returns {string} binary string
-     */
-    return (numberA, numberB, c) => {
-      const a = this.convertNumberToBinaryStringArray(numberA)
-      const b = this.convertNumberToBinaryStringArray(numberB)
-      for (let i = 0; i < this.getBits(); i++) {
-        if (i === 0) {
-          adder[i] = this.fullAdder(a[this.getBits() - 1], b[this.getBits() - 1], c)
-        } else {
-          adder[i] = this.fullAdder(a[this.getBits() - 1 - i], b[this.getBits() - 1 - i], adder[i-1].c)
-        }
-      }
-      return {
-        s: adder.slice().reverse().map((x) => x.s).join(''),
-        c: adder[this.getBits() - 1].c
-      }
+  /**
+   * Get the bit representation of Maximum supported value
+   *
+   * @private
+   * @returns {number}
+   */
+  _getBits() {
+    if (this._signed) {
+      return Math.floor(Math.log2(this._maxValue))
     }
+    return Math.floor(Math.log2(this._maxValue)) - 1
   }
 
+  /**
+   * Get a bit mask for the number of bits supported
+   *
+   * @returns {number}
+   */
+  getMask(){
+    return this._onesComp(1 << this._getBits())
+  }
+
+  /**
+   * Convert a JS number to a binary representation as a string
+   *
+   * @param value
+   * @returns {*}
+   */
+  convertNumberToBinaryString(value) {
+    return this._pad(((value >>> 0) & this.getMask()).toString(2), this._getBits())
+  }
+
+  /**
+   * Convert a binary string to a JS number
+   * @param string
+   */
+  // TODO: finish this
+  // convertBinaryStringToNumber(string) {
+  //   const strArray = string.split('')
+  //
+  //   if (strArray[0] === '1') {
+  //     return parseInt(this._pad(string, this._getBits() + 1, 'left', '1'), 2)
+  //   }
+  //   return parseInt(this._pad(string, this._getBits() + 1, 'left', '0'), 2)
+  // }
+
+  /**
+   * Performs a signed addition of two numbers
+   * @param a
+   * @param b
+   * @returns {string}
+   * @private
+   */
+  _addSigned(a, b) {
+    const tempResult = a + b
+    const convertedNumber = (tempResult >>> 0) & this.getMask()
+
+    // If there's an overflow, determine how to calculate the result
+    if (tempResult > this._maxValue) {
+      return this.convertNumberToBinaryString(convertedNumber - 1)
+    }
+    if (tempResult < -this._maxValue) {
+      return this.convertNumberToBinaryString(convertedNumber + 1)
+    }
+    // Otherwise, return the normal addition
+    return this.convertNumberToBinaryString(convertedNumber)
+  }
+
+  /**
+   * Performs an unsigned addition of two numbers
+   * @param a
+   * @param b
+   * @returns {string}
+   * @private
+   */
+  _addUnsigned(a, b) {
+    const tempResult = a + b
+
+    // If there's an overflow, determine how to calculate the result
+    if (tempResult > this._maxValue) {
+      const convertedNumber = (tempResult >>> 0) & this.getMask()
+      return this.convertNumberToBinaryString(convertedNumber - 1)
+    }
+    if (tempResult < 0) {
+      const convertedNumber = (tempResult >>> 0) & this.getMask()
+      return this.convertNumberToBinaryString(convertedNumber + 1)
+    }
+    // Otherwise, return the normal addition
+    return this.convertNumberToBinaryString(tempResult)
+  }
+  /**
+   * Perform the addition of two JS Numbers and returns the binary string result
+   * @param a
+   * @param b
+   * @returns {string}
+   */
   add(a, b) {
-    return this._adder(a, b, 0)
+    switch(this._signed) {
+      case true: return this._addSigned(a, b)
+      case false: return this._addUnsigned(a, b)
+    }
   }
 }
 
