@@ -120,18 +120,17 @@ class Simulator {
    */
   _addUnsigned(a, b) {
     const tempResult = a + b
+    const convertedNumber = (tempResult >>> 0) & this.getMask()
 
     // If there's an overflow, determine how to calculate the result
     if (tempResult > this._maxValue) {
-      const convertedNumber = (tempResult >>> 0) & this.getMask()
       return this.convertNumberToBinaryString(convertedNumber - 1)
     }
     if (tempResult < 0) {
-      const convertedNumber = (tempResult >>> 0) & this.getMask()
       return this.convertNumberToBinaryString(convertedNumber + 1)
     }
     // Otherwise, return the normal addition
-    return this.convertNumberToBinaryString(tempResult)
+    return this.convertNumberToBinaryString(convertedNumber)
   }
   /**
    * Perform the addition of two JS Numbers and returns the binary string result
@@ -143,6 +142,121 @@ class Simulator {
     switch(this._signed) {
       case true: return this._addSigned(a, b)
       case false: return this._addUnsigned(a, b)
+    }
+  }
+
+
+  /**
+   * Performs a signed subtraction of two numbers
+   * @param a
+   * @param b
+   * @returns {string}
+   * @private
+   */
+  _subSigned(a, b) {
+    const tempResult = a - b
+    const convertedNumber = (tempResult >>> 0) & this.getMask()
+
+    // If there's an overflow, determine how to calculate the result
+    if (tempResult > this._maxValue) {
+      return this.convertNumberToBinaryString(convertedNumber - 1)
+    }
+    if (tempResult < -this._maxValue) {
+      return this.convertNumberToBinaryString(convertedNumber + 1)
+    }
+    // Otherwise, return the normal addition
+    return this.convertNumberToBinaryString(convertedNumber)
+  }
+
+  /**
+   * Performs an unsigned subtraction of two numbers
+   * @param a
+   * @param b
+   * @returns {string}
+   * @private
+   */
+  _subUnsigned(a, b) {
+    const tempResult = a - b
+    const convertedNumber = (tempResult >>> 0) & this.getMask()
+
+    // If there's an overflow, determine how to calculate the result
+    if (tempResult > this._maxValue) {
+      return this.convertNumberToBinaryString(convertedNumber - 1)
+    }
+    if (tempResult < 0) {
+      return this.convertNumberToBinaryString(convertedNumber + 1)
+    }
+    // Otherwise, return the normal addition
+    return this.convertNumberToBinaryString(convertedNumber)
+  }
+  /**
+   * Perform the addition of two JS Numbers and returns the binary string result
+   * @param a
+   * @param b
+   * @returns {string}
+   */
+  sub(a, b) {
+    switch(this._signed) {
+      case true: return this._subSigned(a, b)
+      case false: return this._subUnsigned(a, b)
+    }
+  }
+
+  /**
+   * Performs a signed multiplication of two numbers
+   * @param a
+   * @param b
+   * @returns {string}
+   * @private
+   */
+  _multiplySigned(a, b) {
+    const tempResult = a * b
+    const convertedNumber = (tempResult >>> 0) & this.getMask()
+
+    const overlap = Math.floor(this._maxValue / tempResult) || 1
+
+    // If there's an overflow, determine how to calculate the result
+    if (tempResult > this._maxValue) {
+      return this.convertNumberToBinaryString(convertedNumber - (overlap || 1))
+    }
+    if (tempResult < -this._maxValue) {
+      return this.convertNumberToBinaryString(convertedNumber + (overlap || 1))
+    }
+    // Otherwise, return the normal addition
+    return this.convertNumberToBinaryString(convertedNumber)
+  }
+
+  /**
+   * Performs an unsigned multiplication of two numbers
+   * @param a
+   * @param b
+   * @returns {string}
+   * @private
+   */
+  _multiplyUnsigned(a, b) {
+    const tempResult = a * b
+    const convertedNumber = (tempResult >>> 0) & this.getMask()
+
+    // If there's an overflow, determine how to calculate the result
+    if (tempResult > this._maxValue) {
+      return this.convertNumberToBinaryString(convertedNumber - 1)
+    }
+    if (tempResult < 0) {
+      return this.convertNumberToBinaryString(convertedNumber + 1)
+    }
+    // Otherwise, return the normal addition
+    return this.convertNumberToBinaryString(convertedNumber)
+  }
+  /**
+   * Perform the addition of two JS Numbers and returns the binary string result
+   * @param a
+   * @param b
+   * @returns {string}
+   */
+  multiply(a, b) {
+    switch(this._signed) {
+      case true: return this._multiplySigned(a, b)
+      case false: return this._multiplyUnsigned(a, b)
     }
   }
 }

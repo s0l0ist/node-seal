@@ -287,7 +287,7 @@ There is only one type, __Double__ with the following restrictions:
 `CKKS` Example Data
 ```
 /*
-  Create an array of max length `polyDegree` with elements that
+  Create an array of max length `polyDegree / 2` with elements that
   are in the valid range.
  
   Create data to be encrypted (connect the dots). Saw tooth about the x-axis.

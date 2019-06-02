@@ -1,7 +1,7 @@
 describe('Evaluation on BFV Scheme', () => {
   describe('computationLevel low', () => {
     describe('128-bit security', () => {
-      test('add signed', async () => {
+      test.skip('multiply signed', async () => {
         const {Seal} = require('../../../index.js')
         const Crypt = await Seal
         const parms = Crypt.createParams({computationLevel: 'low', security: 128})
@@ -37,7 +37,7 @@ describe('Evaluation on BFV Scheme', () => {
         expect(cipherText2).toBeInstanceOf(Crypt._CipherText)
 
         // Evaluate
-        const resultCipher = Crypt.add({a: cipherText, b: cipherText2})
+        const resultCipher = Crypt.multiply({a: cipherText, b: cipherText2})
 
         // Decrypt
         const decryptedResult = Crypt.decrypt({cipherText: resultCipher})
@@ -54,7 +54,7 @@ describe('Evaluation on BFV Scheme', () => {
         // because JS doesn't know how to treat the 19-bit sign bit.
         const plainResStrings = Array.from({length: value.length})
         value.forEach((x,i) => {
-          plainResStrings[i] = sim.add(x, x)
+          plainResStrings[i] = sim.multiply(x, x)
         })
 
         // Convert decrypted results to new array of binary strings
@@ -65,7 +65,7 @@ describe('Evaluation on BFV Scheme', () => {
         expect(decryptedResStrings).toEqual(plainResStrings)
       })
 
-      test('add unsigned', async () => {
+      test.skip('multiply unsigned', async () => {
         const {Seal} = require('../../../index.js')
         const Crypt = await Seal
 
@@ -99,7 +99,7 @@ describe('Evaluation on BFV Scheme', () => {
         expect(cipherText2).toBeInstanceOf(Crypt._CipherText)
 
         // Evaluate
-        const resultCipher = Crypt.add({a: cipherText, b: cipherText2})
+        const resultCipher = Crypt.multiply({a: cipherText, b: cipherText2})
 
         // Decrypt
         const decryptedResult = Crypt.decrypt({cipherText: resultCipher})
@@ -115,7 +115,7 @@ describe('Evaluation on BFV Scheme', () => {
         // because JS doesn't know how to treat the 19-bit sign bit.
         const plainResStrings = Array.from({length: value.length})
         value.forEach((x,i) => {
-          plainResStrings[i] = sim.add(x, x)
+          plainResStrings[i] = sim.multiply(x, x)
         })
 
         // Create an array of binary strings from the decrypted result
