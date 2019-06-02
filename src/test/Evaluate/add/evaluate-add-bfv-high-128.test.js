@@ -1,15 +1,15 @@
 describe('Evaluation on BFV Scheme', () => {
-  describe('computationLevel low', () => {
+  describe('computationLevel high', () => {
     describe('128-bit security', () => {
       test('add signed', async () => {
         const {Seal} = require('../../../index.js')
         const Crypt = await Seal
-        const parms = Crypt.createParams({computationLevel: 'low', security: 128})
+        const parms = Crypt.createParams({computationLevel: 'high', security: 128})
         expect(parms).toEqual({
-          polyDegree: 4096,
-          coeffModulus: 4096,
+          polyDegree: 16384,
+          coeffModulus: 16384,
           plainModulus: 786433,
-          scale: Math.pow(2, 55),
+          scale: Math.pow(2, 384),
           security: 128
         })
         Crypt.initialize({...parms, schemeType: 'BFV'})
@@ -69,12 +69,12 @@ describe('Evaluation on BFV Scheme', () => {
         const {Seal} = require('../../../index.js')
         const Crypt = await Seal
 
-        const parms = Crypt.createParams({computationLevel: 'low', security: 128})
+        const parms = Crypt.createParams({computationLevel: 'high', security: 128})
         expect(parms).toEqual({
-          polyDegree: 4096,
-          coeffModulus: 4096,
+          polyDegree: 16384,
+          coeffModulus: 16384,
           plainModulus: 786433,
-          scale: Math.pow(2, 55),
+          scale: Math.pow(2, 384),
           security: 128
         })
         Crypt.initialize({...parms, schemeType: 'BFV'})

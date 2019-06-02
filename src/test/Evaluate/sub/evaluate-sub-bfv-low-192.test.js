@@ -1,16 +1,16 @@
 describe('Evaluation on BFV Scheme', () => {
   describe('computationLevel low', () => {
-    describe('128-bit security', () => {
-      test('add signed', async () => {
+    describe('192-bit security', () => {
+      test('sub signed', async () => {
         const {Seal} = require('../../../index.js')
         const Crypt = await Seal
-        const parms = Crypt.createParams({computationLevel: 'low', security: 128})
+        const parms = Crypt.createParams({computationLevel: 'low', security: 192})
         expect(parms).toEqual({
           polyDegree: 4096,
           coeffModulus: 4096,
           plainModulus: 786433,
-          scale: Math.pow(2, 55),
-          security: 128
+          scale: Math.pow(2, 21),
+          security: 192
         })
         Crypt.initialize({...parms, schemeType: 'BFV'})
         expect(Crypt._Context.parametersSet()).toBe(true)
@@ -37,7 +37,7 @@ describe('Evaluation on BFV Scheme', () => {
         expect(cipherText2).toBeInstanceOf(Crypt._CipherText)
 
         // Evaluate
-        const resultCipher = Crypt.add({a: cipherText, b: cipherText2})
+        const resultCipher = Crypt.sub({a: cipherText, b: cipherText2})
 
         // Decrypt
         const decryptedResult = Crypt.decrypt({cipherText: resultCipher})
@@ -54,7 +54,7 @@ describe('Evaluation on BFV Scheme', () => {
         // because JS doesn't know how to treat the 19-bit sign bit.
         const plainResStrings = Array.from({length: value.length})
         value.forEach((x,i) => {
-          plainResStrings[i] = sim.add(x, x)
+          plainResStrings[i] = sim.sub(x, x)
         })
 
         // Convert decrypted results to new array of binary strings
@@ -65,17 +65,17 @@ describe('Evaluation on BFV Scheme', () => {
         expect(decryptedResStrings).toEqual(plainResStrings)
       })
 
-      test('add unsigned', async () => {
+      test('sub unsigned', async () => {
         const {Seal} = require('../../../index.js')
         const Crypt = await Seal
 
-        const parms = Crypt.createParams({computationLevel: 'low', security: 128})
+        const parms = Crypt.createParams({computationLevel: 'low', security: 192})
         expect(parms).toEqual({
           polyDegree: 4096,
           coeffModulus: 4096,
           plainModulus: 786433,
-          scale: Math.pow(2, 55),
-          security: 128
+          scale: Math.pow(2, 21),
+          security: 192
         })
         Crypt.initialize({...parms, schemeType: 'BFV'})
         expect(Crypt._Context.parametersSet()).toBe(true)
@@ -99,7 +99,7 @@ describe('Evaluation on BFV Scheme', () => {
         expect(cipherText2).toBeInstanceOf(Crypt._CipherText)
 
         // Evaluate
-        const resultCipher = Crypt.add({a: cipherText, b: cipherText2})
+        const resultCipher = Crypt.sub({a: cipherText, b: cipherText2})
 
         // Decrypt
         const decryptedResult = Crypt.decrypt({cipherText: resultCipher})
@@ -115,7 +115,7 @@ describe('Evaluation on BFV Scheme', () => {
         // because JS doesn't know how to treat the 19-bit sign bit.
         const plainResStrings = Array.from({length: value.length})
         value.forEach((x,i) => {
-          plainResStrings[i] = sim.add(x, x)
+          plainResStrings[i] = sim.sub(x, x)
         })
 
         // Create an array of binary strings from the decrypted result
