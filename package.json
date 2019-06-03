@@ -46,7 +46,9 @@
     "test:low": "node --max-old-space-size=4096 `which jest` --testPathIgnorePatterns=\"^((?!low).)*$\"",
     "test:medium": "node --max-old-space-size=4096 `which jest` --testPathIgnorePatterns=\"^((?!medium).)*$\"",
     "test:high": "node --max-old-space-size=4096 `which jest` --testPathIgnorePatterns=\"^((?!high).)*$\"",
-    "coverage": "node --max-old-space-size=4096 `which jest` --collectCoverageFrom=src/lib/**.js --coverage src/test"
+    "coverage": "node --max-old-space-size=4096 `which jest` --collectCoverageFrom=src/lib/**.js --coverage src/test",
+    "em:update":  "cd ./submodules/emsdk && git pull && ./submodules/emsdk/emsdk install latest && ./submodules/emsdk/emsdk activate latest && cd ../../",
+    "em:source":  "source ./submodules/emsdk/emsdk_env.sh"
   },
   "devDependencies": {
     "esm": "^3.2.25",

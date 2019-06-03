@@ -1,3 +1,6 @@
 [submodule "submodules/SEAL"]
 	path = submodules/SEAL
 	url = git@github.com:nickangelou/SEAL.git
+[submodule "submodules/emsdk"]
+	path = submodules/emsdk
+	url = git@github.com:nickangelou/emsdk.git
