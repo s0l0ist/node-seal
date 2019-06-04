@@ -2,7 +2,7 @@ describe('Creating Encryption Parameters', () => {
 
   describe('computationLevel low', () => {
     test('128-bit security', async () => {
-      const { Seal } = require('../../src')
+      const {Seal} = require('../../index.js')
       const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'low', security: 128})
       expect(parms).toEqual({
@@ -14,7 +14,7 @@ describe('Creating Encryption Parameters', () => {
       })
     })
     test('192-bit security', async () => {
-      const { Seal } = require('../../src')
+      const {Seal} = require('../../index.js')
       const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'low', security: 192})
       expect(parms).toEqual({
@@ -26,7 +26,7 @@ describe('Creating Encryption Parameters', () => {
       })
     })
     test('256-bit security', async () => {
-      const { Seal } = require('../../src')
+      const {Seal} = require('../../index.js')
       const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'low', security: 256})
       expect(parms).toEqual({
@@ -41,7 +41,7 @@ describe('Creating Encryption Parameters', () => {
 
   describe('computationLevel medium', () => {
     test('128-bit security', async () => {
-      const { Seal } = require('../../src')
+      const {Seal} = require('../../index.js')
       const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'medium', security: 128})
       expect(parms).toEqual({
@@ -53,7 +53,7 @@ describe('Creating Encryption Parameters', () => {
       })
     })
     test('192-bit security', async () => {
-      const { Seal } = require('../../src')
+      const {Seal} = require('../../index.js')
       const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'medium', security: 192})
       expect(parms).toEqual({
@@ -65,7 +65,7 @@ describe('Creating Encryption Parameters', () => {
       })
     })
     test('256-bit security', async () => {
-      const { Seal } = require('../../src')
+      const {Seal} = require('../../index.js')
       const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'medium', security: 256})
       expect(parms).toEqual({
@@ -80,7 +80,7 @@ describe('Creating Encryption Parameters', () => {
 
   describe('computationLevel high', () => {
     test('128-bit security', async () => {
-      const { Seal } = require('../../src')
+      const {Seal} = require('../../index.js')
       const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'high', security: 128})
       expect(parms).toEqual({
@@ -92,7 +92,7 @@ describe('Creating Encryption Parameters', () => {
       })
     })
     test('192-bit security', async () => {
-      const { Seal } = require('../../src')
+      const {Seal} = require('../../index.js')
       const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'high', security: 192})
       expect(parms).toEqual({
@@ -104,7 +104,7 @@ describe('Creating Encryption Parameters', () => {
       })
     })
     test('256-bit security', async () => {
-      const { Seal } = require('../../src')
+      const {Seal} = require('../../index.js')
       const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'high', security: 256})
       expect(parms).toEqual({
