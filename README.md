@@ -5,10 +5,6 @@ This is a library wrapper for the Web Assembly port of the C++ Microsoft SEAL li
 It contains high level functions to make using this library easy. There are default parameters
 which can be customized and overridden for advanced use cases.
 
-Source will be posted on a public repository in the future with 
-plans on also releasing the C++ fork from Microsoft SEAL to generate
-the Web Assembly.
-
 # Microsoft SEAL
 
 Microsoft SEAL is an easy-to-use homomorphic encryption library developed by researchers in 
