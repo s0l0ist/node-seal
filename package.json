@@ -6,6 +6,11 @@
     "type" : "git",
     "url" : "https://github.com/nickangelou/node-seal"
   },
+  "author": { 
+    "name" : "Nick Angelou",
+    "email" : "nick.angelou@sectify.com",
+    "url" : "https://iaccelerator.com"
+  },
   "keywords": [
     "homomorphic",
     "encryption",
