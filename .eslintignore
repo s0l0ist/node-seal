@@ -1,0 +1,4 @@
+/src/bin/*.js
+/src/test/*
+webpack.config.js
+
