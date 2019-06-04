@@ -2,7 +2,7 @@ describe('Evaluation on BFV Scheme', () => {
   describe('computationLevel medium', () => {
     describe('128-bit security', () => {
       test.skip('multiply signed', async () => {
-        const {Seal} = require('../../../index.js')
+        const {Seal} = require('../../../src')
         const Crypt = await Seal
         const parms = Crypt.createParams({computationLevel: 'medium', security: 128})
         expect(parms).toEqual({
@@ -44,7 +44,7 @@ describe('Evaluation on BFV Scheme', () => {
         expect(decryptedResult).toBeInstanceOf(Int32Array)
 
         /* Signed test max values are (+- 1/2 * plainModulus) */
-        const Simulator = require('../../../classes/simulator')
+        const Simulator = require('../../../src/classes/simulator')
         const sim = new Simulator({maxValue: Math.floor(parms.plainModulus / 2), signed: true})
         expect(sim).toBeInstanceOf(Simulator)
 
@@ -66,7 +66,7 @@ describe('Evaluation on BFV Scheme', () => {
       })
 
       test.skip('multiply unsigned', async () => {
-        const {Seal} = require('../../../index.js')
+        const {Seal} = require('../../../src')
         const Crypt = await Seal
 
         const parms = Crypt.createParams({computationLevel: 'medium', security: 128})
@@ -106,7 +106,7 @@ describe('Evaluation on BFV Scheme', () => {
         expect(decryptedResult).toBeInstanceOf(Uint32Array)
 
         /* Unsigned test max values are (0 to `plainModulus - 1`) */
-        const Simulator = require('../../../classes/simulator')
+        const Simulator = require('../../../src/classes/simulator')
         const sim = new Simulator({maxValue: Math.floor(parms.plainModulus), signed: false})
 
         // Create an array of binary strings. We use binary comparison because the values computed

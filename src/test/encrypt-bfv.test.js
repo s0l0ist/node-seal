@@ -2,7 +2,7 @@ describe.skip('Encrypt BFV', () => {
 
   describe('Int32', () => {
     test('Valid range', async () => {
-      const { Seal } = require('../index.js')
+      const { Seal } = require('../src')
       const Crypt = await Seal
 
       // Create parameters
@@ -40,7 +40,7 @@ describe.skip('Encrypt BFV', () => {
     })
 
     test('Invalid range', async () => {
-      const { Seal } = require('../index.js')
+      const { Seal } = require('../src')
       const Crypt = await Seal
 
       // Create parameters
@@ -81,7 +81,7 @@ describe.skip('Encrypt BFV', () => {
 
   describe('UInt32', () => {
     test('Valid range', async () => {
-      const { Seal } = require('../index.js')
+      const { Seal } = require('../src')
       const Crypt = await Seal
 
       // Create parameters
@@ -114,7 +114,7 @@ describe.skip('Encrypt BFV', () => {
     })
 
     test('Invalid range', async () => {
-      const { Seal } = require('../index.js')
+      const { Seal } = require('../src')
       const Crypt = await Seal
 
       // Create parameters

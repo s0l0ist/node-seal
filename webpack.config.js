@@ -17,7 +17,7 @@ const commonConfig = {
   module: {
     rules: [
       {
-        test: /a\.out\.wasm$/,
+        test: /seal\.wasm$/,
         type: 'javascript/auto',
         loader: 'file-loader',
         options: {
@@ -44,7 +44,7 @@ const serverConfig = {...commonConfig,
   module: {
     rules: [
       {
-        test: /a\.out\.wasm$/,
+        test: /seal\.wasm$/,
         type: 'javascript/auto',
         loader: 'file-loader',
         options: {

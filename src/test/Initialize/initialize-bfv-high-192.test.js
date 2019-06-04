@@ -1,7 +1,7 @@
 describe('Initializing library for BFV Scheme', () => {
   describe('computationLevel high', () => {
     test('192-bit security', async () => {
-      const {Seal} = require('../../index.js')
+      const {Seal} = require('../../index')
       const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'high', security: 192})
       expect(parms).toEqual({

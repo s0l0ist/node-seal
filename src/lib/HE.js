@@ -678,6 +678,7 @@ export class HE {
   _vecToArray({vector, type}) {
     switch (type) {
       case 'int32':
+        // eslint-disable-next-line no-case-declarations
         const int32Array = new Int32Array(vector.size())
         // retrieve value from the vector
         for (let i = 0; i < vector.size(); i++) {
@@ -685,6 +686,7 @@ export class HE {
         }
         return int32Array
       case 'uint32':
+        // eslint-disable-next-line no-case-declarations
         const uint32Array = new Uint32Array(vector.size())
         // retrieve value from the vector
         for (let i = 0; i < vector.size(); i++) {
@@ -692,6 +694,7 @@ export class HE {
         }
         return uint32Array
       case 'double':
+        // eslint-disable-next-line no-case-declarations
         const float64Array = new Float64Array(vector.size())
         // retrieve value from the vector
         for (let i = 0; i < vector.size(); i++) {
@@ -699,6 +702,7 @@ export class HE {
         }
         return float64Array
       default:
+        // eslint-disable-next-line no-case-declarations
         const array = []
         for (let i = 0; i < vector.size(); i++) {
           array[i] = vector.get(i)

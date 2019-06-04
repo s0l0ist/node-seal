@@ -1,7 +1,7 @@
 describe.skip('Encrypt CKKS', () => {
   describe('Double', () => {
     test('Valid range', async () => {
-      const { Seal } = require('../index.js')
+      const { Seal } = require('../src')
       const Crypt = await Seal
 
       // Create parameters
@@ -41,7 +41,7 @@ describe.skip('Encrypt CKKS', () => {
     })
 
     test('Invalid range', async () => {
-      const { Seal } = require('../index.js')
+      const { Seal } = require('../src')
       const Crypt = await Seal
 
       // Create parameters
