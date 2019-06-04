@@ -1,5 +1,5 @@
-import source from '../bin/a.out.js'
-import sourceWasm from '../bin/a.out'
+import source from '../bin/seal.js'
+import sourceWasm from '../bin/seal'
 
 import { HE } from './HE'
 import * as Class from '../classes'

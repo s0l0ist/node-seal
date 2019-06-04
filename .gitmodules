@@ -4,3 +4,4 @@
 [submodule "submodules/emsdk"]
 	path = submodules/emsdk
 	url = git@github.com:nickangelou/emsdk.git
+        ignore = dirty
