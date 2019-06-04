@@ -48,7 +48,7 @@ refer to [HomomorphicEncryption.org](http://homomorphicencryption.org/)
 
 # Examples
 
-Check out this simple example below or for a more in-depth example, look [here](docs/CAVEATS.md).
+Check out this simple example below or for a more in-depth example, look [here](docs/FULL-EXAMPLE.md).
 
 ## Simple Example
 
