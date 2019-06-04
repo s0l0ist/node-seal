@@ -1,6 +1,6 @@
 {
   "name": "node-seal",
-  "version": "1.0.23",
+  "version": "1.0.24",
   "description": "Microsoft SEAL in Javascript",
   "repository": {
     "type" : "git",
@@ -56,13 +56,13 @@
     "test:medium": "node --max-old-space-size=4096 `which jest` --testPathIgnorePatterns=\"^((?!medium).)*$\"",
     "test:high": "node --max-old-space-size=4096 `which jest` --testPathIgnorePatterns=\"^((?!high).)*$\"",
     "coverage": "node --max-old-space-size=4096 `which jest` --collectCoverageFrom=src/lib/**.js --coverage src/test",
-    "submodule:update": "git submodule update --init --recursive",
-    "em:update":  "cd submodules/emsdk/ && ./emsdk update-tags && cd ../../",
-    "em:init":  "cd submodules/emsdk/ && ./emsdk install sdk-1.38.30-64bit && ./emsdk activate sdk-1.38.30-64bit && cd ../../",
-    "seal:clean": "rm -rf ./src/bin/* && cd ./submodules/SEAL/native rm -rf ./bin/* && rm -rf ./lib/*  && rm -rf ./src/CMakeFiles && rm -rf ./src/CMakeCache.txt && cd ../../../",
-    "seal:cmake":  "source ./submodules/emsdk/emsdk_env.sh && cd ./submodules/SEAL/native/src/ && emcmake cmake -DSEAL_LIB_BUILD_TYPE=Shared -DSEAL_USE_CXX17=ON -DCMAKE_BUILD_TYPE=Debug . && cd ../../../",
-    "seal:make":  "source ./submodules/emsdk/emsdk_env.sh && cd ./submodules/SEAL/native/src/ && emmake make -j`python -c 'import multiprocessing as mp; print(mp.cpu_count())'` && cd ../../../",
-    "seal:build":  "source ./submodules/emsdk/emsdk_env.sh && cd ./submodules/SEAL/native/lib/ && em++ -Wall -Os --bind -o seal.js libseal.so -s DISABLE_EXCEPTION_CATCHING=0 -s ALLOW_MEMORY_GROWTH=1 -s EXPORT_ES6=1 -s MODULARIZE=1 --closure 1 -s \"BINARYEN_TRAP_MODE='clamp'\" -s SINGLE_FILE=1 && cp seal* ../../../../src/bin/ && cd ../../../"
+    "submodule:update": "bash scripts/submodule-update.sh",
+    "em:update":  "bash scripts/em-update.sh",
+    "em:init":  "bash scripts/em-init.sh",
+    "seal:clean": "bash scripts/seal-clean.sh",
+    "seal:cmake":  "bash scripts/seal-cmake.sh",
+    "seal:make":  "bash scripts/seal-make.sh",
+    "seal:build":  "bash scripts/seal-build.sh"
   },
   "devDependencies": {
     "esm": "^3.2.25",

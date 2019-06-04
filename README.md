@@ -106,7 +106,7 @@ evaluation, and then decrypting the result. This example works in browsers as we
   const cipherText_b = Crypt.encrypt({value: Int32Array.from([1, 2, 3])})
   
   /* 
-    Perform an `Evaluation` (homomorphic addition)
+    Perform an `Evaluation` (ex homomorphic addition)
     We show 3 methods:
     1. `add`
     2. `sub`
