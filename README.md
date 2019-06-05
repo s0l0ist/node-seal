@@ -162,7 +162,7 @@ The repository contains a couple of submodules:
 
 To begin development, first clone the repository and related submodules
 ```
-git clone --recursive https://github.com/nickangelou/node-seal.git
+git clone --recursive https://github.com/morfix-io/node-seal.git
 
 cd node-seal
 
