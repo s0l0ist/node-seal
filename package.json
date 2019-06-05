@@ -4,7 +4,7 @@
   "description": "Microsoft SEAL in Javascript",
   "repository": {
     "type" : "git",
-    "url" : "https://github.com/nickangelou/node-seal"
+    "url" : "https://github.com/morfix-io/node-seal"
   },
   "author": { 
     "name" : "Nick Angelou",
