@@ -1,4 +1,4 @@
-# node-seal
+D# node-seal
 
 This is a library wrapper for the Web Assembly port of the C++ Microsoft SEAL library.
 
@@ -27,7 +27,7 @@ npm install node-seal
 
 yarn:
 ```
-yarn install node-seal
+yarn add node-seal
 ```
 
 At this time, the library is not available on a CDN. This is a TODO.
