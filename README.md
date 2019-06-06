@@ -1,4 +1,4 @@
-D# node-seal
+# node-seal
 
 This is a library wrapper for the Web Assembly port of the C++ Microsoft SEAL library.
 
