@@ -13,15 +13,18 @@ export class HE {
     this._BatchEncoder = options.BatchEncoder
     this._CKKSEncoder = options.CKKSEncoder
     this._Context = options.Context
+    this._CoeffModulus = options.CoeffModulus
     this._Decryptor = options.Decryptor
-    this._DefaultParams = options.DefaultParams
+    // this._DefaultParams = options.DefaultParams
     this._EncryptionParameters = options.EncryptionParameters
     this._Encryptor = options.Encryptor
     this._Evaluator = options.Evaluator
     this._IntegerEncoder = options.IntegerEncoder
     this._KeyGenerator = options.KeyGenerator
     this._Library = options.Library
+    this._PlainModulus = options.PlainModulus
     this._SchemeType = options.SchemeType
+    this._SecurityLevel = options.SecurityLevel
     this._SmallModulus = options.SmallModulus
     this._Vector = options.Vector
 
@@ -197,10 +200,11 @@ export class HE {
    * Initialize the given Context and Evaluator
    * @private
    */
-  _initContext() {
+  _initContext({securityLevel}) {
     this._Context.initialize({
       encryptionParams: this._EncryptionParameters.instance,
-      expandModChain: true
+      expandModChain: true,
+      securityLevel: securityLevel
     })
 
     this._Evaluator.initialize({
@@ -225,33 +229,39 @@ export class HE {
         this._EncryptionParameters.initialize({
           schemeType: this._SchemeType.BFV,
           polyDegree: polyDegree,
-          coeffModulus: this._DefaultParams.coeffModulus128({value: coeffModulus}),
+          coeffModulus: this._CoeffModulus.BFVDefault({polyModulusDegree: polyDegree, securityLevel: this._SecurityLevel.tc128 }),
           plainModulus: this._SmallModulus.instance
-        }); break;
+        });
+        this._initContext({securityLevel: this._SecurityLevel.tc128})
+        break;
       case 192:
         this._EncryptionParameters.initialize({
           schemeType: this._SchemeType.BFV,
           polyDegree: polyDegree,
-          coeffModulus: this._DefaultParams.coeffModulus192({value: coeffModulus}),
+          coeffModulus: this._CoeffModulus.BFVDefault({polyModulusDegree: polyDegree, securityLevel: this._SecurityLevel.tc192 }),
           plainModulus: this._SmallModulus.instance
-        }); break;
+        });
+        this._initContext({securityLevel: this._SecurityLevel.tc192})
+        break;
       case 256:
         this._EncryptionParameters.initialize({
           schemeType: this._SchemeType.BFV,
           polyDegree: polyDegree,
-          coeffModulus: this._DefaultParams.coeffModulus256({value: coeffModulus}),
+          coeffModulus: this._CoeffModulus.BFVDefault({polyModulusDegree: polyDegree, securityLevel: this._SecurityLevel.tc256 }),
           plainModulus: this._SmallModulus.instance
-        }); break;
+        });
+        this._initContext({securityLevel: this._SecurityLevel.tc256})
+        break;
       default:
         this._EncryptionParameters.initialize({
           schemeType: this._SchemeType.BFV,
           polyDegree: polyDegree,
-          coeffModulus: this._DefaultParams.coeffModulus128({value: coeffModulus}),
+          coeffModulus: this._CoeffModulus.BFVDefault({polyModulusDegree: polyDegree, securityLevel: this._SecurityLevel.tc128 }),
           plainModulus: this._SmallModulus.instance
-        }); break;
+        });
+        this._initContext({securityLevel: this._SecurityLevel.tc128})
+        break;
     }
-
-    this._initContext()
 
     this._IntegerEncoder.initialize({
       context: this._Context.instance
@@ -362,11 +372,8 @@ export class HE {
 
   /**
    * Generate the Relinearization Keys to help lower noise after homomorphic operations
-   *
-   * @param decompositionBitCount
-   * @param size - number of relin keys to generate
    */
-  genRelinKeys({decompositionBitCount = this._DefaultParams.dbcMax(), size = 1} = {}) {
+  genRelinKeys() {
     this._KeyGenerator.initialize({
       context: this._Context.instance,
       secretKey: this.secretKey ? this.secretKey.instance : null,
@@ -378,15 +385,14 @@ export class HE {
     }
     this.relinKeys = new this._RelinKeys({library: this._Library.instance})
     this.relinKeys.inject({
-      instance: this._KeyGenerator.genRelinKeys({decompositionBitCount, size})
+      instance: this._KeyGenerator.genRelinKeys()
     })
   }
 
   /**
    * Generate the Galois Keys to perform matrix rotations for vectorized data
-   * @param decompositionBitCount
    */
-  genGaloisKeys({decompositionBitCount = this._DefaultParams.dbcMax()} = {}) {
+  genGaloisKeys() {
     this._KeyGenerator.initialize({
       context: this._Context.instance,
       secretKey: this.secretKey ? this.secretKey.instance : null,
@@ -398,7 +404,7 @@ export class HE {
     }
     this.galoisKeys = new this._GaloisKeys({library: this._Library.instance})
     this.galoisKeys.inject({
-      instance: this._KeyGenerator.genGaloisKeys({decompositionBitCount})
+      instance: this._KeyGenerator.genGaloisKeys()
     })
   }
 

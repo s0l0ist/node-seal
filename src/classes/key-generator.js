@@ -40,11 +40,11 @@ export class KeyGenerator {
     return this._instance.getSecretKey()
   }
 
-  genRelinKeys({decompositionBitCount, size}) {
-    return this._instance.createRelinKeys(decompositionBitCount, size)
+  genRelinKeys() {
+    return this._instance.createRelinKeys()
   }
 
-  genGaloisKeys({decompositionBitCount}) {
-    return this._instance.createGaloisKeys(decompositionBitCount)
+  genGaloisKeys() {
+    return this._instance.createGaloisKeys()
   }
 }
