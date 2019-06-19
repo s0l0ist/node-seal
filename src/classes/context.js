@@ -11,11 +11,11 @@ export class Context {
   }
   //expandModChain Determines whether the modulus switching chain
   //         should be created
-  initialize({encryptionParams, expandModChain}) {
+  initialize({encryptionParams, expandModChain, securityLevel}) {
     if (this._instance) {
       delete this._instance
     }
-    this._instance = new this._SEALContext(encryptionParams, expandModChain)
+    this._instance = new this._SEALContext(encryptionParams, expandModChain, securityLevel)
   }
 
   inject({instance}) {

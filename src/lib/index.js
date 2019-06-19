@@ -30,8 +30,8 @@ export const Seal = (async () => {
     CipherText: Class.CipherText,
     CKKSEncoder: new Class.CKKSEncoder({library: Library.instance}),
     Context: new Class.Context({library: Library.instance}),
+    CoeffModulus: new Class.CoeffModulus({library: Library.instance}),
     Decryptor: new Class.Decryptor({library: Library.instance}),
-    DefaultParams: new Class.DefaultParams({library: Library.instance}),
     EncryptionParameters: new Class.EncryptionParameters({library: Library.instance}),
     Encryptor: new Class.Encryptor({library: Library.instance}),
     Evaluator: new Class.Evaluator({library: Library.instance}),
@@ -39,11 +39,13 @@ export const Seal = (async () => {
     IntegerEncoder: new Class.IntegerEncoder({library: Library.instance}),
     KeyGenerator: new Class.KeyGenerator({library: Library.instance}),
     Library: Library,
+    PlainModulus: new Class.PlainModulus({library: Library.instance}),
     PlainText: Class.PlainText,
     PublicKey: Class.PublicKey,
     RelinKeys: Class.RelinKeys,
     SchemeType: new Class.SchemeType({library: Library.instance}),
     SecretKey: Class.SecretKey,
+    SecurityLevel: new Class.SecurityLevel({library: Library.instance}),
     SmallModulus: new Class.SmallModulus({library: Library.instance}),
     Vector: new Class.Vector({library: Library.instance})
   }
