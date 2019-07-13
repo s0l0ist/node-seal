@@ -1,24 +1,16 @@
 export class CKKSEncoder {
-  constructor({library}) {
-    this._library = library
+  constructor({library, context}) {
     this._CKKSEncoder = library.CKKSEncoder
+    this._MemoryPoolHandle = library.MemoryPoolHandle
 
-    // Static Methods
-    this._MemoryPoolHandleGlobal = library.MemoryPoolHandle.MemoryPoolHandleGlobal
-    this._MemoryPoolHandleThreadLocal = library.MemoryPoolHandle.MemoryPoolHandleThreadLocal
+    // Static methods
+    this._MemoryPoolHandleGlobal = this._MemoryPoolHandle.MemoryPoolHandleGlobal
 
-    this._instance = null
+    this._instance = new this._CKKSEncoder(context.instance)
   }
 
   get instance() {
     return this._instance
-  }
-
-  initialize({context}) {
-    if (this._instance) {
-      delete this._instance
-    }
-    this._instance = new this._CKKSEncoder(context)
   }
 
   inject({instance}) {
@@ -28,34 +20,49 @@ export class CKKSEncoder {
     this._instance = instance
   }
 
-  _encodeVectorDouble({vector, scale, plainText}) {
-    return this._instance.encodeVectorDouble(vector, scale, plainText, this._MemoryPoolHandleGlobal())
-  }
-  _encodeVectorComplexDouble({vector, scale, plainText}) {
-    return this._instance.encodeVectorComplexDouble(vector, scale, plainText, this._MemoryPoolHandleGlobal())
-  }
-
-  _decodeVectorDouble({plainText, vector}) {
-    return this._instance.decodeVectorDouble(plainText, vector, this._MemoryPoolHandleGlobal())
-  }
-  _decodeVectorComplexDouble({plainText, vector}) {
-    return this._instance.decodeVectorComplexDouble(plainText, vector)
+  /**
+   * Encodes a vector of type double to a given plainText
+   *
+   * @param vector
+   * @param scale
+   * @param plainText
+   * @param {optional} pool
+   */
+  encodeVectorDouble({vector, scale, plainText, pool = this._MemoryPoolHandleGlobal()}) {
+    this._instance.encodeVectorDouble(vector.instance, scale, plainText.instance, pool)
   }
 
-
-  encode({vector, scale, plainText, type}) {
-    switch(type) {
-      case 'double': return this._encodeVectorDouble({vector, scale, plainText})
-      case 'complexDouble': return this._encodeVectorComplexDouble({plainText, scale, vector})
-      default: return this._encodeVectorDouble({vector, scale, plainText})
-    }
+  /**
+   * Encodes a vector of type complex double to a given plainText
+   *
+   * @param vector
+   * @param scale
+   * @param plainText
+   * @param {optional} pool
+   */
+  encodeVectorComplexDouble({vector, scale, plainText, pool = this._MemoryPoolHandleGlobal()}) {
+    this._instance.encodeVectorComplexDouble(vector.instance, scale, plainText.instance, pool)
   }
 
-  decode({plainText, vector, type}) {
-    switch(type) {
-      case 'double': return this._decodeVectorDouble({plainText, vector})
-      case 'complexDouble': return this._decodeVectorComplexDouble({plainText, vector})
-      default: return this._decodeVectorDouble({plainText, vector})
-    }
+  /**
+   * Decodes a double vector to a given plainText
+   *
+   * @param plainText
+   * @param vector
+   * @param {optional} pool
+   */
+  decodeVectorDouble({plainText, vector, pool = this._MemoryPoolHandleGlobal()}) {
+    this._instance.decodeVectorDouble(plainText.instance, vector.instance, pool)
+  }
+
+  /**
+   * Decodes a complex double vector to a given plainText
+   *
+   * @param plainText
+   * @param vector
+   * @param {optional} pool
+   */
+  decodeVectorComplexDouble({plainText, vector, pool = this._MemoryPoolHandleGlobal()}) {
+    this._instance.decodeVectorComplexDouble(plainText.instance, vector.instance, pool)
   }
 }

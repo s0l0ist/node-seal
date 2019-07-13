@@ -1,24 +1,17 @@
 export class Encryptor {
-  constructor({library}) {
-    this._library = library
+  constructor({library, context, publicKey}) {
     this._Encryptor = library.Encryptor
+    this._BatchEncoder = library.BatchEncoder
+    this._MemoryPoolHandle = library.MemoryPoolHandle
 
-    // Static Methods
-    this._MemoryPoolHandleGlobal = library.MemoryPoolHandle.MemoryPoolHandleGlobal
-    this._MemoryPoolHandleThreadLocal = library.MemoryPoolHandle.MemoryPoolHandleThreadLocal
+    // Static methods
+    this._MemoryPoolHandleGlobal = this._MemoryPoolHandle.MemoryPoolHandleGlobal
 
-    this._instance = null
+    this._instance = new this._Encryptor(context.instance, publicKey.instance)
   }
 
   get instance() {
     return this._instance
-  }
-
-  initialize({context, publicKey}) {
-    if (this._instance) {
-      delete this._instance
-    }
-    this._instance = new this._Encryptor(context, publicKey)
   }
 
   inject({instance}) {
@@ -28,7 +21,16 @@ export class Encryptor {
     this._instance = instance
   }
 
-  encrypt({plainText, cipherText}) {
-    this._instance.encrypt(plainText, cipherText, this._MemoryPoolHandleGlobal())
+  /**
+   * Encrypts a plaintext and stores the result in the destination parameter.
+   * Dynamic memory allocations in the process are allocated from the memory
+   * pool pointed to by the given MemoryPoolHandle.
+   *
+   * @param plainText
+   * @param cipherText
+   * @param pool
+   */
+  encrypt({plainText, cipherText, pool = this._MemoryPoolHandleGlobal()}) {
+    this._instance.encrypt(plainText.instance, cipherText.instance, pool)
   }
 }

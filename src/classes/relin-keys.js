@@ -14,11 +14,22 @@ export class RelinKeys {
     this._instance = instance
   }
 
+  /**
+   * Save the RelinKeys to a base64 string
+   *
+   * @returns {string}
+   */
   save() {
     return this._instance.saveToString()
   }
 
+  /**
+   * Load a set of RelinKeys from a base64 string
+   *
+   * @param context
+   * @param encoded
+   */
   load({context, encoded}) {
-    this._instance.loadFromString(context, encoded)
+    this._instance.loadFromString(context.instance, encoded)
   }
 }
