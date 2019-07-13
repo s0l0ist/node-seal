@@ -1,7 +1,8 @@
 import source from '../bin/seal.js'
 import sourceWasm from '../bin/seal'
 
-import { HE } from './HE'
+import {SEAL} from './Seal'
+import {MORFIX} from './Morfix'
 import * as Class from '../classes'
 
 export const Seal = (async () => {
@@ -25,31 +26,54 @@ export const Seal = (async () => {
    * different encryption parameters, thus ensuring they are
    * operating in the same context.
    */
-  const methods = {
-    BatchEncoder: new Class.BatchEncoder({library: Library.instance}),
+  const options = {
+    BatchEncoder: Class.BatchEncoder,
     CipherText: Class.CipherText,
-    CKKSEncoder: new Class.CKKSEncoder({library: Library.instance}),
-    Context: new Class.Context({library: Library.instance}),
-    Decryptor: new Class.Decryptor({library: Library.instance}),
-    DefaultParams: new Class.DefaultParams({library: Library.instance}),
-    EncryptionParameters: new Class.EncryptionParameters({library: Library.instance}),
-    Encryptor: new Class.Encryptor({library: Library.instance}),
-    Evaluator: new Class.Evaluator({library: Library.instance}),
+    CKKSEncoder: Class.CKKSEncoder,
+    Context: Class.Context,
+    CoeffModulus: Class.CoeffModulus,
+    Decryptor: Class.Decryptor,
+    EncryptionParameters: Class.EncryptionParameters,
+    Encryptor: Class.Encryptor,
+    Evaluator: Class.Evaluator,
     GaloisKeys: Class.GaloisKeys,
-    IntegerEncoder: new Class.IntegerEncoder({library: Library.instance}),
-    KeyGenerator: new Class.KeyGenerator({library: Library.instance}),
+    IntegerEncoder: Class.IntegerEncoder,
+    KeyGenerator: Class.KeyGenerator,
     Library: Library,
+    MemoryPool: Class.MemoryPool,
+    PlainModulus: Class.PlainModulus,
     PlainText: Class.PlainText,
     PublicKey: Class.PublicKey,
     RelinKeys: Class.RelinKeys,
-    SchemeType: new Class.SchemeType({library: Library.instance}),
+    SchemeType: Class.SchemeType,
     SecretKey: Class.SecretKey,
-    SmallModulus: new Class.SmallModulus({library: Library.instance}),
-    Vector: new Class.Vector({library: Library.instance})
+    SecurityLevel: Class.SecurityLevel,
+    SmallModulus: Class.SmallModulus,
+    Vector: Class.Vector,
+
+    // BatchEncoder: new Class.BatchEncoder({library: Library.instance}),
+    // CipherText: Class.CipherText,
+    // CKKSEncoder: new Class.CKKSEncoder({library: Library.instance}),
+    // Context: new Class.Context({library: Library.instance}),
+    // CoeffModulus: new Class.CoeffModulus({library: Library.instance}),
+    // Decryptor: new Class.Decryptor({library: Library.instance}),
+    // EncryptionParameters: new Class.EncryptionParameters({library: Library.instance}),
+    // Encryptor: new Class.Encryptor({library: Library.instance}),
+    // Evaluator: new Class.Evaluator({library: Library.instance}),
+    // GaloisKeys: Class.GaloisKeys,
+    // IntegerEncoder: new Class.IntegerEncoder({library: Library.instance}),
+    // KeyGenerator: new Class.KeyGenerator({library: Library.instance}),
+    // Library: Library,
+    // PlainModulus: new Class.PlainModulus({library: Library.instance}),
+    // PlainText: Class.PlainText,
+    // PublicKey: Class.PublicKey,
+    // RelinKeys: Class.RelinKeys,
+    // SchemeType: new Class.SchemeType({library: Library.instance}),
+    // SecretKey: Class.SecretKey,
+    // SecurityLevel: new Class.SecurityLevel({library: Library.instance}),
+    // SmallModulus: Class.SmallModulus,
+    // Vector: new Class.Vector({library: Library.instance})
   }
 
-  /**
-   * Finally, return an instance of the Homomorphic Encryption library
-   */
-  return new HE({options: methods})
+  return new MORFIX({options})
 })()

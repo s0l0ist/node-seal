@@ -4,15 +4,9 @@ describe('Generate GaloisKeys CKKS Scheme', () => {
       const {Seal} = require('../../index.js')
       const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'low', security: 128})
-      expect(parms).toEqual({
-        polyDegree: 4096,
-        coeffModulus: 4096,
-        plainModulus: 786433,
-        scale: Math.pow(2, 55),
-        security: 128
-      })
+
       Crypt.initialize({...parms, schemeType: 'CKKS'})
-      expect(Crypt._Context.parametersSet()).toBe(true)
+      expect(Crypt.__Context.parametersSet()).toBe(true)
 
       // Gen Galois Keys
       const spyGenGaloisKeys = jest.spyOn(Crypt, 'genGaloisKeys')
