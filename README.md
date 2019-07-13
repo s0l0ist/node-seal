@@ -5,7 +5,7 @@ A zero-dependency Web Assembly port of the C++ Microsoft SEAL library.
 It contains high level functions to make using this library easy. There are default parameters
 which can be customized and overridden for advanced use cases.
 
-It also exposes a lower level API to mimic the C++/.NET calls from Microsoft SEAL.
+It also exposes a lower level API to be close to the C++/C# calls from Microsoft SEAL.
 
 **Now supporting Microsoft SEAL 3.3**
 
@@ -34,8 +34,6 @@ yarn:
 yarn add node-seal
 ```
 
-At this time, the library is not available on a CDN. This is a TODO.
-
 # Usage
 
 There are a lot of assumptions made to help ease the burden of learning 
@@ -49,6 +47,8 @@ refer to [HomomorphicEncryption.org](http://homomorphicencryption.org/)
 # Examples
 
 Check out this simple example below or for a more in-depth example, look [here](docs/FULL-EXAMPLE.md).
+
+For low level API examples, please check the 'manual-...' tests [here](src/test).
 
 ## Simple Example
 
