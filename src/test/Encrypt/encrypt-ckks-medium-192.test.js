@@ -4,15 +4,9 @@ describe('Encryption on CKKS Scheme', () => {
       const {Seal} = require('../../index.js')
       const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'medium', security: 192})
-      expect(parms).toEqual({
-        polyDegree: 8192,
-        coeffModulus: 8192,
-        plainModulus: 786433,
-        scale: Math.pow(2, 98),
-        security: 192
-      })
+
       Crypt.initialize({...parms, schemeType: 'CKKS'})
-      expect(Crypt._Context.parametersSet()).toBe(true)
+      expect(Crypt.__Context.parametersSet()).toBe(true)
 
       // Gen Keys
       const spyGenKeys = jest.spyOn(Crypt, 'genKeys')
@@ -20,22 +14,21 @@ describe('Encryption on CKKS Scheme', () => {
       expect(spyGenKeys).toHaveBeenCalled()
 
       // Create data to be encrypted
-      const step = Math.pow(2, 53) / (parms.polyDegree / 2)
-      const value = Float64Array.from({length: parms.polyDegree / 2})
-        .map((x, i) =>  Math.floor(( i * step)))
+      const step = Math.pow(2, 32) / (parms.polyModulusDegree / 2)
+      const array = Float64Array.from({length: parms.polyModulusDegree / 2})
+        .map((x, i) =>  (i * step))
 
       // Encrypt
-      const cipherText = Crypt.encrypt({value, type: 'double'})
+      const cipherText = Crypt.encrypt({array})
       expect(cipherText).toBeInstanceOf(Crypt._CipherText)
 
       // Decrypt
       const decryptedArray = Crypt.decrypt({cipherText})
       expect(decryptedArray).toBeInstanceOf(Float64Array)
 
-
-      // Hacks to get quick approximate values.
-      const approxValues = value.map(x => Math.round(x / 10))
-      const approxDecrypted = value.map(x => Math.round(x / 10))
+      // Hacks to get quick approximate values. Convert ±0 to 0 by adding 0.
+      const approxValues = array.map(x => 0 + Math.round(x))
+      const approxDecrypted = decryptedArray.map(x => 0 + Math.round(x))
 
       expect(approxDecrypted).toEqual(approxValues)
     })
