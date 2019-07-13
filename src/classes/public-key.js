@@ -14,11 +14,22 @@ export class PublicKey {
     this._instance = instance
   }
 
+  /**
+   * Save the publicKey to a base64 string
+   *
+   * @returns {string}
+   */
   save() {
     return this._instance.saveToString()
   }
 
+  /**
+   * Load a publicKey from a base64 string
+   *
+   * @param context
+   * @param encoded
+   */
   load({context, encoded}) {
-    this._instance.loadFromString(context, encoded)
+    this._instance.loadFromString(context.instance, encoded)
   }
 }

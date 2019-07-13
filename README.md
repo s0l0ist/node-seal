@@ -1,9 +1,13 @@
 # node-seal
 
-This is a library wrapper for the Web Assembly port of the C++ Microsoft SEAL library.
+A zero-dependency Web Assembly port of the C++ Microsoft SEAL library.
 
 It contains high level functions to make using this library easy. There are default parameters
 which can be customized and overridden for advanced use cases.
+
+It also exposes a lower level API to be close to the C++/C# calls from Microsoft SEAL.
+
+**Now supporting Microsoft SEAL 3.3**
 
 # Microsoft SEAL
 
@@ -30,8 +34,6 @@ yarn:
 yarn add node-seal
 ```
 
-At this time, the library is not available on a CDN. This is a TODO.
-
 # Usage
 
 There are a lot of assumptions made to help ease the burden of learning 
@@ -45,6 +47,8 @@ refer to [HomomorphicEncryption.org](http://homomorphicencryption.org/)
 # Examples
 
 Check out this simple example below or for a more in-depth example, look [here](docs/FULL-EXAMPLE.md).
+
+For low level API examples, please check the 'manual-...' tests [here](src/test).
 
 ## Simple Example
 
@@ -68,7 +72,7 @@ evaluation, and then decrypting the result. This example works in browsers as we
   // If in a browser, skip this next line
   const { Seal } = require('node-seal')
   
-  const Crypt = await Seal
+  const Morfix = await Seal
   
   /*
     Create our parameters with the helper function.
@@ -81,48 +85,48 @@ evaluation, and then decrypting the result. This example works in browsers as we
     For a list of available settings, please review the full-example in 
     this repository.  
   */
-  const parms = Crypt.createParams({computationLevel: 'low', security: 128})
+  const parms = Morfix.createParams({computationLevel: 'low', security: 128})
   
   /*
     We are initializing the library with the parameters generated above and 
     finally initializign the library to compute over signed or unsigned Integer
     arithmetic (Int32Array / Uint32Array). 
   */
-  Crypt.initialize({...parms, schemeType: 'BFV'})
+  Morfix.initialize({...parms, schemeType: 'BFV'})
   
   /*
     This function generates and sets the public and secret keys internally.
     Both keys have helper methods to save to a base64 string and reinitialize
     them from these strings. These strings can be very large.
   */
-  Crypt.genKeys()
+  Morfix.genKeys()
    
 
   /* 
     Encrypt some data. We are using TypedArrays for consistency. Here, we
     are using Int32Arrays, but could easily switch to UintArray32.
   */
-  const cipherText_a = Crypt.encrypt({value: Int32Array.from([4, 5, 6])})
-  const cipherText_b = Crypt.encrypt({value: Int32Array.from([1, 2, 3])})
+  const cipherText_a = Morfix.encrypt({value: Int32Array.from([4, 5, 6])})
+  const cipherText_b = Morfix.encrypt({value: Int32Array.from([1, 2, 3])})
   
   /* 
     Perform an `Evaluation` (ex homomorphic addition)
-    We show 3 methods:
+    We show 3 methods, but there are more available:
     1. `add`
     2. `sub`
     3. `multiply`
   */
-  const sumCipher = Crypt.add({a: cipherText_a, b: cipherText_b})
-  const subCipher = Crypt.sub({a: cipherText_a, b: cipherText_b})
-  const productCipher = Crypt.multiply({a: cipherText_a, b: cipherText_b})
+  const sumCipher = Morfix.add({a: cipherText_a, b: cipherText_b})
+  const subCipher = Morfix.sub({a: cipherText_a, b: cipherText_b})
+  const productCipher = Morfix.multiply({a: cipherText_a, b: cipherText_b})
   
 
   /*
     Decrypt the cipher text results
   */
-  const decryptedSum = Crypt.decrypt({cipherText: sumCipher})
-  const decryptedSub = Crypt.decrypt({cipherText: subCipher})
-  const decryptedMultiply = Crypt.decrypt({cipherText: productCipher})
+  const decryptedSum = Morfix.decrypt({cipherText: sumCipher})
+  const decryptedSub = Morfix.decrypt({cipherText: subCipher})
+  const decryptedMultiply = Morfix.decrypt({cipherText: productCipher})
   
   console.log('decryptedSum', decryptedSum)
   // decryptedSum Int32Array(3) [5, 7, 9]

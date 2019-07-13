@@ -1,28 +1,34 @@
+import { PublicKey } from './public-key'
+import { SecretKey } from './secret-key'
+import { RelinKeys } from './relin-keys'
+import { GaloisKeys } from './galois-keys'
+
 export class KeyGenerator {
-  constructor({library}) {
+  constructor({library, context, secretKey = null, publicKey = null}) {
+
+    // Ref to main lib
     this._library = library
+
+    // Library constructors
+    this._GaloisKeys = library.GaloisKeys
+    this._RelinKeys = library.RelinKeys
+    this._PublicKey = library.PublicKey
+    this._SecretKey = library.SecretKey
     this._KeyGenerator = library.KeyGenerator
-    this._instance = null
+
+    if (secretKey && publicKey) {
+      this._instance = new this._KeyGenerator(context.instance, secretKey.instance, publicKey.instance)
+      return
+    }
+    if (secretKey && !publicKey) {
+      this._instance = new this._KeyGenerator(context.instance, secretKey.instance)
+      return
+    }
+    this._instance = new this._KeyGenerator(context.instance)
   }
 
   get instance() {
     return this._instance
-  }
-
-  initialize({context, secretKey = null, publicKey = null}) {
-    if (this._instance) {
-      delete this._instance
-    }
-
-    if (secretKey && publicKey) {
-      this._instance = new this._KeyGenerator(context, secretKey, publicKey)
-      return
-    }
-    if (secretKey && !publicKey) {
-      this._instance = new this._KeyGenerator(context, secretKey)
-      return
-    }
-    this._instance = new this._KeyGenerator(context)
   }
 
   inject({instance}) {
@@ -32,19 +38,51 @@ export class KeyGenerator {
     this._instance = instance
   }
 
+  /**
+   * Return the generated PublicKey
+   *
+   * @returns {PublicKey}
+   */
   getPublicKey() {
-    return this._instance.getPublicKey()
-
+    const instance = this._instance.getPublicKey()
+    const key = new PublicKey({library: this._library})
+    key.inject({instance})
+    return key
   }
+
+  /**
+   * Return the generated SecretKey
+   *
+   * @returns {SecretKey}
+   */
   getSecretKey() {
-    return this._instance.getSecretKey()
+    const instance = this._instance.getSecretKey()
+    const key = new SecretKey({library: this._library})
+    key.inject({instance})
+    return key
   }
 
-  genRelinKeys({decompositionBitCount, size}) {
-    return this._instance.createRelinKeys(decompositionBitCount, size)
+  /**
+   * Generate and return a set of RelinKeys
+   *
+   * @returns {RelinKeys}
+   */
+  genRelinKeys() {
+    const instance = this._instance.createRelinKeys()
+    const key = new RelinKeys({library: this._library})
+    key.inject({instance})
+    return key
   }
 
-  genGaloisKeys({decompositionBitCount}) {
-    return this._instance.createGaloisKeys(decompositionBitCount)
+  /**
+   * Generate and return a set of GaloisKeys
+   *
+   * @returns {GaloisKeys}
+   */
+  genGaloisKeys() {
+    const instance = this._instance.createGaloisKeys()
+    const key = new GaloisKeys({library: this._library})
+    key.inject({instance})
+    return key
   }
 }

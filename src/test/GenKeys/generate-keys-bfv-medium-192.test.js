@@ -4,15 +4,9 @@ describe('Generate Keys BFV Scheme', () => {
       const {Seal} = require('../../index.js')
       const Crypt = await Seal
       const parms = Crypt.createParams({computationLevel: 'medium', security: 192})
-      expect(parms).toEqual({
-        polyDegree: 8192,
-        coeffModulus: 8192,
-        plainModulus: 786433,
-        scale: Math.pow(2, 98),
-        security: 192
-      })
+
       Crypt.initialize({...parms, schemeType: 'BFV'})
-      expect(Crypt._Context.parametersSet()).toBe(true)
+      expect(Crypt.__Context.parametersSet()).toBe(true)
 
       // Gen Keys
       const spyGenKeys = jest.spyOn(Crypt, 'genKeys')
