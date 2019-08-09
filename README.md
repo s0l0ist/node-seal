@@ -7,7 +7,7 @@ which can be customized and overridden for advanced use cases.
 
 It also exposes a lower level API to be close to the C++/C# calls from Microsoft SEAL.
 
-**Now supporting Microsoft SEAL 3.3**
+**Now supporting Microsoft SEAL 3.3.1**
 
 # Microsoft SEAL
 
