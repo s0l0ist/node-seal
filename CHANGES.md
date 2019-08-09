@@ -1,5 +1,9 @@
 # List of Changes
 
+## Version 2.0.1
+
+Microsoft SEAL patch 3.3.1
+
 ## Version 2.0.0
 
 ### Features
