@@ -39,10 +39,10 @@ yarn add node-seal
 There are a lot of assumptions made to help ease the burden of learning 
 SEAL all at once. You can refer to the sample code below.
 
+[Checkout the basics](docs/USAGE.md)
+
 For those who are curious about the security of Microsoft SEAL, please
 refer to [HomomorphicEncryption.org](http://homomorphicencryption.org/)
-
-[Checkout the basics](docs/USAGE.md)
 
 # Examples
 
