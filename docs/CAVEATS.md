@@ -6,9 +6,10 @@ C++ to Javascript.
 
 Limitations:
 
-- Dealing with 2^53 numbers (not true 64 bit). 
-  JS Arrays may infer the wrong type definition for the elements inside.
-  For consistent results, use a TypedArray.
+- Dealing with 2^53 numbers (not true 64 bit). Spoiler: Don't exceede ±2^53.
+  `BFV` users will inherently adhere to these limitations due to the Int32/UInt32 TypedArrays.
+  `CKKS` users will need to keep this in mind even though one of the primary benefits of using
+  `CKKS` was to remove the bounds on the initial values to be encrypted.
   
 - Generating large keys and saving them in the browser could be problematic.
   We can control NodeJS heap size, but not inside a user's browser. 
@@ -16,19 +17,10 @@ Limitations:
   Saving keys is very memory intensive especially for `computationLevel`s above low. 
   This is because there's currently no way (that we have found) to use io streams 
   across JS and Web Assembly code, so the strings have to be buffered completely in RAM and 
-  they can be very, very large. This holds especially true for `GaloisKeys`.
+  they can be very, very large. This holds especially true for `GaloisKeys` where you may hit
+  JS max string limits (256MB).
   
 - Performance is less than the C++ native library despite being converted to Web Assembly. 
   This is mainly due to poorly optimized SIMD, random number generator, 
   slow memory allocations, etc. We have not benchmarked them directly, but the slowdown
   is noticeable.
-  
-- By default, we encrypt/decrypt arrays (typed) of data. If you're encrypting a single
-  integer (Int32/UInt32) you will receive back a TypedArray of length 1 containing the 
-  decrypted result. We do this because we _want_ to have batching mode enabled for both 
-  `BFV` and `CKKS` schemes by default.
-  
-- If you specify a JS Array with JS Numbers and the elements are greater than the bounds 
-  of an Int32/UInt32, the data will be treated as a C++ 'double' and may cause undesirable
-  results. __Why?__ For users who want to get started with both Scheme Types 
-  with some small test data without needing to think about TypedArrays.
