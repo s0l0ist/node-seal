@@ -158,4 +158,4 @@ their max / min values.
 
 # Contributing
 
-See [Contrib.md](CONTRIB.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md).
