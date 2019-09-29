@@ -84,7 +84,7 @@ export class MORFIX extends SEAL {
    * Return a security type based on the specified bit level of security
    *
    * @param security
-   * @returns {SecurityLevel}
+   * @returns {SecurityType}
    * @private
    */
   _getSecurityLevel({security}) {
@@ -133,17 +133,20 @@ export class MORFIX extends SEAL {
    *
    * The `scale` parameter is only used for the CKKS scheme.
    *
-   * @param computationLevel
-   * @param security
-   * @param plainModulusBitSize
+   * @param {object} options
+   * @param {string} options.computationLevel - Quick start helper to generate parameters
+   * @param {number} options.security - Security level in Bits
+   * @param {number} options.plainModulusBitSize - Plain Modulus size (BFV)
+   * @param {number} options.polyModulusDegree - Poly Modulus Degree size in bits
+   * @param {number} options.scale - Scale integer for encode/decode. Used in quick start.
    *
-   * @returns {{securityLevel: number, plainModulus: null|SmallModulus, scale: number, polyModulusDegree: number}}
+   * @returns {{securityLevel: SecurityLevel, plainModulus: SmallModulus, scale: number, polyModulusDegree: number}}
    */
-  createParams({computationLevel = 'low', security = 128, plainModulusBitSize = 20} = {}) {
+  createParams({computationLevel = 'low', security = 128, plainModulusBitSize = 20, polyModulusDegree, scale} = {}) {
     return {
-      polyModulusDegree: this._getPolyModulusDegree({computationLevel}),
-      plainModulus: this._getPlainModulus({polyModulusDegree: this._getPolyModulusDegree({computationLevel}), bitSize: plainModulusBitSize}),
-      scale: this._getScale({polyModulusDegree: this._getPolyModulusDegree({computationLevel}), securityLevel: this._getSecurityLevel({security})}),
+      polyModulusDegree: polyModulusDegree || this._getPolyModulusDegree({computationLevel}),
+      plainModulus: this._getPlainModulus({polyModulusDegree: polyModulusDegree || this._getPolyModulusDegree({computationLevel}), bitSize: plainModulusBitSize}),
+      scale: scale || this._getScale({polyModulusDegree: polyModulusDegree || this._getPolyModulusDegree({computationLevel}), securityLevel: this._getSecurityLevel({security})}),
       securityLevel: this._getSecurityLevel({security})
     }
   }
@@ -152,11 +155,11 @@ export class MORFIX extends SEAL {
    * Initialize the given Context and Evaluator
    * @private
    */
-  _initContext({securityLevel}) {
+  _initContext({securityLevel, expandModChain}) {
 
     this.__Context = this.Context({
       encryptionParams: this.__EncryptionParameters,
-      expandModChain: true,
+      expandModChain,
       securityLevel
     })
 
@@ -172,9 +175,10 @@ export class MORFIX extends SEAL {
    * @param polyModulusDegree
    * @param plainModulus
    * @param securityLevel
+   * @param expandModChain
    * @private
    */
-  _initBFV({polyModulusDegree, plainModulus, securityLevel}) {
+  _initBFV({polyModulusDegree, plainModulus, securityLevel, expandModChain}) {
     // const sm = new this.SmallModulus({library: this.Library})
     // sm.setValue({value: plainModulus})
 
@@ -185,7 +189,7 @@ export class MORFIX extends SEAL {
     this.__EncryptionParameters.setCoeffModulus({coeffModulus: this.CoeffModulus.BFVDefault({polyModulusDegree, securityLevel})})
     this.__EncryptionParameters.setPlainModulus({plainModulus})
 
-    this._initContext({securityLevel})
+    this._initContext({securityLevel, expandModChain})
 
     this.__IntegerEncoder = this.IntegerEncoder({
       context: this.__Context
@@ -261,7 +265,9 @@ export class MORFIX extends SEAL {
   /**
    * Create a vector of SmallModulus for the coefficients
    *
-   * The sum of the vectors should not exceed CoeffModulus::MaxBitCount
+   * The sum of the vectors should not exceed CoeffModulus::MaxBitCount. We've pre-selected
+   * the bit sizes arbitrarily for convenience. Manual optimization is possible and there are trade offs
+   * for selecting a specific sequence of bit sizes.
    *
    * @param polyModulusDegree
    * @param securityLevel
@@ -329,9 +335,10 @@ export class MORFIX extends SEAL {
    * Initialize the CKKS parameters for the library
    * @param polyModulusDegree
    * @param securityLevel
+   * @param expandModChain
    * @private
    */
-  _initCKKS({polyModulusDegree, securityLevel}) {
+  _initCKKS({polyModulusDegree, securityLevel, expandModChain}) {
 
     this.__EncryptionParameters = this.EncryptionParameters({
       schemeType: this.SchemeType.CKKS,
@@ -339,13 +346,12 @@ export class MORFIX extends SEAL {
     this.__EncryptionParameters.setPolyModulusDegree({polyModulusDegree})
     this.__EncryptionParameters.setCoeffModulus({coeffModulus: this.CoeffModulus.Create({polyModulusDegree, bitSizes: this._createCoeffVector({polyModulusDegree, securityLevel})})})
 
-    this._initContext({securityLevel})
+    this._initContext({securityLevel, expandModChain})
 
     this.__CKKSEncoder = this.CKKSEncoder({
       context: this.__Context
     })
   }
-
 
   /**
    * Initialize the encryption library
@@ -355,17 +361,19 @@ export class MORFIX extends SEAL {
    * @param plainModulus
    * @param security
    * @param scale
+   * @param expandModChain
    */
-  initialize({schemeType, polyModulusDegree, plainModulus, scale, securityLevel}) {
+  initialize({schemeType, polyModulusDegree, plainModulus, scale, securityLevel, expandModChain = true}) {
     this._schemeType = schemeType
     this._polyModulusDegree = polyModulusDegree
     this._plainModulus = plainModulus
     this._scale = scale
     this._securityLevel = securityLevel
+    this._expandModChain = expandModChain
 
     switch (schemeType) {
-      case 'BFV': this._initBFV({polyModulusDegree, plainModulus, securityLevel}); break;
-      case 'CKKS': this._initCKKS({polyModulusDegree, securityLevel}); break;
+      case 'BFV': this._initBFV({polyModulusDegree, plainModulus, securityLevel, expandModChain}); break;
+      case 'CKKS': this._initCKKS({polyModulusDegree, securityLevel, expandModChain}); break;
       default: throw new Error('Invalid `schemeType`!')
     }
   }

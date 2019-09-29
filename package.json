@@ -1,6 +1,6 @@
 {
   "name": "node-seal",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Microsoft SEAL in Javascript",
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
     "build": "NODE_ENV=production webpack",
     "test": "node --max-old-space-size=4096 `which jest`",
     "test:encrypt": "node --max-old-space-size=4096 `which jest` --testPathIgnorePatterns=\"^((?!encrypt-).)*$\"",
+    "test:exception": "node --max-old-space-size=4096 `which jest` --testPathIgnorePatterns=\"^((?!exception-).)*$\"",
     "test:encrypt:low": "node --max-old-space-size=4096 `which jest` --testPathIgnorePatterns=\"^((?!encrypt-).)*$\" \"^((?!low).)*$\"",
     "test:encrypt:medium": "node --max-old-space-size=4096 `which jest` --testPathIgnorePatterns=\"^((?!encrypt-).)*$\" \"^((?!medium).)*$\"",
     "test:encrypt:high": "node --max-old-space-size=4096 `which jest` --testPathIgnorePatterns=\"^((?!encrypt-).)*$\" \"^((?!high).)*$\"",
