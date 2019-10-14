@@ -661,7 +661,7 @@ export class MORFIX extends SEAL {
    */
   negate({cipherText}) {
     const destination = this.CipherText()
-    this.__Evaluator.add({encrypted: cipherText, destination: destination})
+    this.__Evaluator.negate({encrypted: cipherText, destination: destination})
 
     // Set the parameters based off of cipher 'a'
     destination.setVectorSize({size: cipherText.getVectorSize()})
