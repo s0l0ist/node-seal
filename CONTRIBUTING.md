@@ -2,6 +2,23 @@
 
 We welcome help on this project, but please create all PRs with feature branches onto Master.
 
+### Requirements
+#### Cmake > 3.12
+
+Download latest stable cmake from:
+https://cmake.org/download/
+
+Install:
+
+```
+cd ./cmake-3.15.4
+./bootstrap
+make -j4
+sudo make install
+```
+
+### Development
+
 The repository contains a couple of submodules:
 - [Emscripten SDK](https://github.com/emscripten-core/emsdk)
 - [Microsoft SEAL](https://github.com/microsoft/SEAL)
