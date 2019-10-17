@@ -2,12 +2,12 @@
 
 A zero-dependency Web Assembly port of the C++ [Microsoft SEAL](https://github.com/microsoft/SEAL) library.
 
+**Now supporting Microsoft SEAL 3.4.1**
+
 It contains high level functions to make using this library easy. There are default parameters
 which can be customized and overridden for advanced use cases.
 
 It also exposes a lower level API to be close to the C++/C# calls from Microsoft SEAL.
-
-**Now supporting Microsoft SEAL 3.3.2**
 
 # Microsoft SEAL
 
@@ -106,8 +106,8 @@ evaluation, and then decrypting the result. This example works in browsers as we
     Encrypt some data. We are using TypedArrays for consistency. Here, we
     are using Int32Arrays, but could easily switch to UintArray32.
   */
-  const cipherText_a = Morfix.encrypt({value: Int32Array.from([4, 5, 6])})
-  const cipherText_b = Morfix.encrypt({value: Int32Array.from([1, 2, 3])})
+  const cipherText_a = Morfix.encrypt({array: Int32Array.from([4, 5, 6])})
+  const cipherText_b = Morfix.encrypt({array: Int32Array.from([1, 2, 3])})
   
   /* 
     Perform an `Evaluation` (ex homomorphic addition)
