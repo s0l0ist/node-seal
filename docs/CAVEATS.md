@@ -19,8 +19,3 @@ Limitations:
   across JS and Web Assembly code, so the strings have to be buffered completely in RAM and 
   they can be very, very large. This holds especially true for `GaloisKeys` where you may hit
   JS max string limits (256MB).
-  
-- Performance is less than the C++ native library despite being converted to Web Assembly. 
-  This is mainly due to poorly optimized SIMD, random number generator, 
-  slow memory allocations, etc. We have not benchmarked them directly, but the slowdown
-  is noticeable.
