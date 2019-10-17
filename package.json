@@ -64,18 +64,15 @@
     "seal:clean": "bash scripts/seal-clean.sh",
     "seal:cmake": "bash scripts/seal-cmake.sh",
     "seal:make": "bash scripts/seal-make.sh",
-    "seal:build": "bash scripts/seal-build.sh",
-    "zlib:clean": "bash scripts/zlib-clean.sh",
-    "zlib:cmake": "bash scripts/zlib-cmake.sh",
-    "zlib:make": "bash scripts/zlib-make.sh"
+    "seal:build": "bash scripts/seal-build.sh"
   },
   "devDependencies": {
     "esm": "^3.2.25",
-    "file-loader": "^4.0.0",
-    "jest": "^24.8.0",
-    "webpack": "4.35.3",
-    "webpack-cli": "3.3.5",
-    "webpack-dev-server": "3.7.2",
+    "file-loader": "4.2.0",
+    "jest": "24.9.0",
+    "webpack": "4.41.2",
+    "webpack-cli": "3.3.9",
+    "webpack-dev-server": "3.8.2",
     "webpack-node-externals": "^1.7.2"
   },
   "browserslist": [

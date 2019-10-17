@@ -106,8 +106,8 @@ evaluation, and then decrypting the result. This example works in browsers as we
     Encrypt some data. We are using TypedArrays for consistency. Here, we
     are using Int32Arrays, but could easily switch to UintArray32.
   */
-  const cipherText_a = Morfix.encrypt({value: Int32Array.from([4, 5, 6])})
-  const cipherText_b = Morfix.encrypt({value: Int32Array.from([1, 2, 3])})
+  const cipherText_a = Morfix.encrypt({array: Int32Array.from([4, 5, 6])})
+  const cipherText_b = Morfix.encrypt({array: Int32Array.from([1, 2, 3])})
   
   /* 
     Perform an `Evaluation` (ex homomorphic addition)
