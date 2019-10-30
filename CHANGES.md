@@ -1,8 +1,7 @@
 # List of Changes
 
-See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md) for more on each SEAL version
- change. Bugs and internal optimizations are mostly incorporated in the `node-seal` release, new features may lag behind
-  unless specified here in this page.
+See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
+for more details on each SEAL version change.
 
 ## Version 2.1.3
 
