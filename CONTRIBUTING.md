@@ -53,7 +53,7 @@ yarn seal:build     # Will compile the Web Assembly file from the shared library
 ```
 
 All test should pass when making contributions to the Web Assembly module. 
-**Note**: this could take up to 30 minutes and is very CPU/memory intensive.
+**Note**: this could take up to 5 minutes and is very CPU/memory intensive.
 
 ```
 yarn test
