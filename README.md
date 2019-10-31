@@ -2,7 +2,7 @@
 
 A zero-dependency Web Assembly port of the C++ [Microsoft SEAL](https://github.com/microsoft/SEAL) library.
 
-**Now supporting Microsoft SEAL 3.4.3**
+**Now supporting Microsoft SEAL 3.4.4**
 
 It contains high level functions to make using this library easy. There are default parameters
 which can be customized and overridden for advanced use cases.
