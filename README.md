@@ -11,16 +11,19 @@ It also exposes a lower level API to be close to the C++ calls from Microsoft SE
 
 # Microsoft SEAL
 
-Microsoft SEAL is an easy-to-use homomorphic encryption library developed by researchers in 
-the Cryptography Research group at Microsoft Research. Microsoft SEAL is written in modern 
-standard C++ and has no external dependencies, making it easy to compile and run in many 
-different environments.
+Microsoft SEAL is an easy-to-use open-source ([MIT licensed](LICENSE)) homomorphic
+encryption library developed by the Cryptography and Privacy Research group at
+Microsoft. Microsoft SEAL is written in modern standard C++ and has no external
+dependencies, making it easy to compile and run in many different environments.
+For more information about the Microsoft SEAL project, see
+[sealcrypto.org](https://www.microsoft.com/en-us/research/project/microsoft-seal).
 
-For more information about the Microsoft SEAL project, see [http://sealcrypto.org](https://www.microsoft.com/en-us/research/project/microsoft-seal).
+This document pertains to Microsoft SEAL version 3.4. Users of previous versions
+of the library should look at the [list of changes](https://github.com/microsoft/SEAL/blob/master/Changes.md).
 
 # License
 
-Microsoft SEAL (and `node-seal`) are licensed under the MIT license.
+[MIT license](LICENSE)
 
 # Installation
 
@@ -70,7 +73,9 @@ evaluation, and then decrypting the result. This example works in browsers as we
     decrypt data.
   */
   // If in a browser, skip this next line
+  // import { Seal } from 'node-seal'
   const { Seal } = require('node-seal')
+
   
   const Morfix = await Seal
   
@@ -101,7 +106,6 @@ evaluation, and then decrypting the result. This example works in browsers as we
   */
   Morfix.genKeys()
    
-
   /* 
     Encrypt some data. We are using TypedArrays for consistency. Here, we
     are using Int32Arrays, but could easily switch to UintArray32.
