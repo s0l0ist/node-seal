@@ -36,6 +36,7 @@ export const Seal = (async () => {
     EncryptionParameters: Class.EncryptionParameters,
     Encryptor: Class.Encryptor,
     Evaluator: Class.Evaluator,
+    Exception: Class.Exception,
     GaloisKeys: Class.GaloisKeys,
     IntegerEncoder: Class.IntegerEncoder,
     KeyGenerator: Class.KeyGenerator,
