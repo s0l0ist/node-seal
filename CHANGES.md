@@ -3,6 +3,10 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 2.1.5
+
+Added an Exception class to retrieve the human readable exception string thrown from emscripen.
+
 ## Version 2.1.4
 
 Microsoft SEAL 3.4.4

@@ -9,6 +9,7 @@ export class SEAL {
     this._EncryptionParameters = options.EncryptionParameters
     this._Encryptor = options.Encryptor
     this._Evaluator = options.Evaluator
+    // this._Exception = options.Exception
     this._GaloisKeys = options.GaloisKeys
     this._IntegerEncoder = options.IntegerEncoder
     this._KeyGenerator = options.KeyGenerator
@@ -26,6 +27,7 @@ export class SEAL {
 
     // Singletons
     this._CoeffModulus = new options.CoeffModulus({library: this._Library.instance})
+    this._Exception = new options.Exception({library: this._Library.instance})
     this._MemoryPool = new options.MemoryPool({library: this._Library.instance})
     this._PlainModulus = new options.PlainModulus({library: this._Library.instance})
     this._SecurityLevel = new options.SecurityLevel({library: this._Library.instance})
@@ -130,6 +132,16 @@ export class SEAL {
    */
   Evaluator({context}) {
     return new this._Evaluator({library: this._Library.instance, context})
+  }
+
+  /**
+   * Get the Exception singleton instance
+   *
+   * @returns {Exception}
+   * @constructor
+   */
+  get Exception() {
+    return this._Exception
   }
 
   /**

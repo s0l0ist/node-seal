@@ -49,7 +49,7 @@ export class Library {
       }
 
       // wait a bit and check again
-      await this._timeout(1000)
+      await this._timeout(125)
 
       return await check()
     }
