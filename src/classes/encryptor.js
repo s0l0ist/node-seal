@@ -16,7 +16,8 @@ export class Encryptor {
 
   inject({instance}) {
     if (this._instance) {
-      delete this._instance
+      this._instance.delete()
+      this._instance = null
     }
     this._instance = instance
   }
