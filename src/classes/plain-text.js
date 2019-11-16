@@ -16,6 +16,23 @@ export class PlainText {
   }
 
   /**
+   Allocates enough memory to accommodate the backing array of the current
+   plaintext and copies it over to the new location. This function is meant
+   to reduce the memory use of the plaintext to smallest possible and can be
+   particularly important after modulus switching.
+   */
+  shrinkToFit() {
+    return this._instance.shrinkToFit()
+  }
+
+  /**
+   Sets the plaintext polynomial to zero.
+   */
+  setZero ()  {
+    return this._instance.setZero()
+  }
+
+  /**
    Returns whether the current plaintext polynomial has all zero coefficients.
    */
   isZero() {
