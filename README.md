@@ -147,7 +147,7 @@ evaluation, and then decrypting the result. This example works in browsers as we
 
 # Changes
 
-[See the version changes](Changes.md)
+[See the version changes](CHANGES.md)
 
 # Testing
 
