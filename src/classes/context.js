@@ -66,9 +66,8 @@ export class Context {
   }
 
   /**
-   * Returns whether the encryption parameters are valid.
-   *
-   * @returns {boolean}
+   * If the encryption parameters are set in a way that is considered valid by
+   * Microsoft SEAL, the variable parameters_set is set to true.
    */
   parametersSet() {
     return this._instance.parametersSet()

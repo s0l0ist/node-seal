@@ -41,6 +41,15 @@ export class CipherText {
   }
 
   /**
+   Returns the capacity of the allocation. This means the largest size
+   of the ciphertext that can be stored in the current allocation with
+   the current encryption parameters.
+   */
+  sizeCapacity() {
+    return this._instance.sizeCapacity()
+  }
+
+  /**
    * Check whether the current ciphertext is transparent, i.e. does not require
    * a secret key to decrypt. In typical security models such transparent
    * ciphertexts would not be considered to be valid. Starting from the second

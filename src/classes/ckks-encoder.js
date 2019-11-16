@@ -41,9 +41,9 @@ export class CKKSEncoder {
    * @param plainText
    * @param {optional} pool
    */
-  encodeVectorComplexDouble({vector, scale, plainText, pool = this._MemoryPoolHandleGlobal()}) {
-    this._instance.encodeVectorComplexDouble(vector.instance, scale, plainText.instance, pool)
-  }
+  // encodeVectorComplexDouble({vector, scale, plainText, pool = this._MemoryPoolHandleGlobal()}) {
+  //   this._instance.encodeVectorComplexDouble(vector.instance, scale, plainText.instance, pool)
+  // }
 
   /**
    * Decodes a double vector to a given plainText
@@ -63,7 +63,15 @@ export class CKKSEncoder {
    * @param vector
    * @param {optional} pool
    */
-  decodeVectorComplexDouble({plainText, vector, pool = this._MemoryPoolHandleGlobal()}) {
-    this._instance.decodeVectorComplexDouble(plainText.instance, vector.instance, pool)
+  // decodeVectorComplexDouble({plainText, vector, pool = this._MemoryPoolHandleGlobal()}) {
+  //   this._instance.decodeVectorComplexDouble(plainText.instance, vector.instance, pool)
+  // }
+
+  /**
+   * Returns the total number of CKKS slots available to hold data
+   * @returns {number}
+   */
+  slotCount() {
+    return this._instance.slotCount()
   }
 }
