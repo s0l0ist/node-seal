@@ -3,11 +3,19 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
-## Version 2.1.6
+## Version 2.1.7
 
-Bugfix:
- - `delete` method to prevent memory leak when objects are created with `inject` methods.
+Refactor:
+ - Conversion from JS TypedArrays and C++ Vectors (and vice versa) are now an order of magnitude faster
+ - Added `shrinkToFit` and `setZero` to PlainText
+ - Removed unused methods for the encoders which we do not support now (Int64, etc)
+ - Added `sizeCapacity` method to CipherText
+
+## Version 2.1.6
  
+ Bugfix:
+  - `delete` method to prevent memory leak when objects are created with `inject` methods.
+  
 ## Version 2.1.5
 
 Added an Exception class to retrieve the human readable exception string thrown from emscripen.

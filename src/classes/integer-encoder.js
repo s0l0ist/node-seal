@@ -30,9 +30,9 @@ export class IntegerEncoder {
    *
    * @param value
    */
-  encodeInt64({value}) {
-    this._instance.encodeInt64(value)
-  }
+  // encodeInt64({value}) {
+  //   this._instance.encodeInt64(value)
+  // }
 
   /**
    * Encode an UInt32 value
@@ -48,18 +48,18 @@ export class IntegerEncoder {
    *
    * @param value
    */
-  encodeUInt64({value}) {
-    this._instance.encodeUInt64(value)
-  }
+  // encodeUInt64({value}) {
+  //   this._instance.encodeUInt64(value)
+  // }
 
   /**
    * Encode an BigInt value
    *
    * @param value
    */
-  encodeBigInt({value}) {
-    this._instance.encodeBigInt(value)
-  }
+  // encodeBigInt({value}) {
+  //   this._instance.encodeBigInt(value)
+  // }
 
   /**
    * Decode an Int32 value
@@ -75,9 +75,9 @@ export class IntegerEncoder {
    *
    * @param value
    */
-  decodeInt64({plainText}) {
-    this._instance.decodeInt64(plainText.instance)
-  }
+  // decodeInt64({plainText}) {
+  //   this._instance.decodeInt64(plainText.instance)
+  // }
 
   /**
    * Decode an UInt32 value
@@ -93,16 +93,16 @@ export class IntegerEncoder {
    *
    * @param value
    */
-  decodeUInt64({plainText}) {
-    this._instance.decodeUInt64(plainText.instance)
-  }
+  // decodeUInt64({plainText}) {
+  //   this._instance.decodeUInt64(plainText.instance)
+  // }
 
   /**
    * Decode an BigInt value
    *
    * @param value
    */
-  decodeBigInt({plainText}) {
-    this._instance.decodeBigInt(plainText.instance)
-  }
+  // decodeBigInt({plainText}) {
+  //   this._instance.decodeBigInt(plainText.instance)
+  // }
 }

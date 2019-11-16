@@ -145,6 +145,10 @@ evaluation, and then decrypting the result. This example works in browsers as we
 
 ```
 
+# Changes
+
+[See the version changes](Changes.md)
+
 # Testing
 
 You can find the list of tests in `package.json`. They can be useful to see different
