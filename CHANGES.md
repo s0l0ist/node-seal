@@ -3,6 +3,12 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 2.1.9
+
+Refactor:
+ - Renamed emscripten binding method to reflect previous change for the Exponentiate method that uses cast uint32_t
+ - Fixed a bug when passing in more than 2 parameters to `cipherTransformToNtt`
+
 ## Version 2.1.8
 
 Refactor:
