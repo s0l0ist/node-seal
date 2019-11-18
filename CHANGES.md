@@ -3,6 +3,12 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 2.1.8
+
+Refactor:
+ - Exponentiate method accepts an `exponent` as a uint32_t which is then cast to a uint64_t to be compatible
+  with the native implementation. Reasonable exponentiations shouldn't exceede 2^32 in realistic use-cases.
+
 ## Version 2.1.7
 
 Refactor:
