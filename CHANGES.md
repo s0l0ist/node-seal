@@ -3,6 +3,16 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 2.1.11
+
+Refactor:
+ - Moved all emscripten dependent code that was added to Microsoft SEAL to bindings.cpp. This cleans up the codebase and
+  leaves the SEAL library left untouched for future upstream merges.
+  
+Fix:
+ - Encryption Parameters loading/saving methods are now instance methods instead of static. Should not affect any
+  users since we use an adapter class.
+ 
 ## Version 2.1.10
 
 Chore:

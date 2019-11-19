@@ -2,10 +2,6 @@ export class EncryptionParameters {
   constructor({library, schemeType}) {
     this._EncryptionParameters = library.EncryptionParameters
 
-    // Static methods
-    this._createFromString = library.EncryptionParameters.createFromString
-    this._saveToString = library.EncryptionParameters.saveToString
-
     this._instance = new this._EncryptionParameters(schemeType)
   }
 
@@ -100,18 +96,19 @@ export class EncryptionParameters {
   }
 
   /**
-   * Save the encryption parameters as a base64 string
+   * Save the Encryption Parameters to a base64 string
    * @returns {string}
    */
   save() {
-    this._saveToString(this.instance)
+    return this._instance.saveToString()
   }
 
   /**
-   * Load the encryption parameters from a base64 string
+   * Load the Encryption Parameters from a base64 string
+   * @param context
    * @param encoded
    */
   load({encoded}) {
-    this.inject({instance: this._createFromString(encoded)})
+    this._instance.loadFromString(encoded)
   }
 }
