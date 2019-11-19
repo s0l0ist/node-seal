@@ -275,8 +275,8 @@ export class Evaluator {
    * @param parmsId
    * @param destinationNtt
    */
-  cipherTransformToNtt({encrypted, parmsId, destinationNtt}) {
-    this._instance.cipherTransformToNtt(encrypted.instance, parmsId, destinationNtt.instance)
+  cipherTransformToNtt({encrypted, destinationNtt}) {
+    this._instance.cipherTransformToNtt(encrypted.instance, destinationNtt.instance)
   }
 
   /**
