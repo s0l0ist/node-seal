@@ -9,13 +9,13 @@ describe('Manual encryption on BFV Scheme', () => {
       })
 
       parms.setPolyModulusDegree({
-        polyModulusDegree: 4096
+        polyModulusDegree: 8192
       })
 
       // Create a suitable vector of CoeffModulus primes (we use default set)
       parms.setCoeffModulus({
         coeffModulus: Morfix.CoeffModulus.BFVDefault({
-          polyModulusDegree: 4096,
+          polyModulusDegree: 8192,
           securityLevel: Morfix.SecurityLevel.tc128
         })
       })
@@ -23,7 +23,7 @@ describe('Manual encryption on BFV Scheme', () => {
       // Set the PlainModulus to a prime of bitSize 20.
       parms.setPlainModulus({
         plainModulus: Morfix.PlainModulus.Batching({
-          polyModulusDegree: 4096, bitSize: 20
+          polyModulusDegree: 8192, bitSize: 20
         })
       })
 
