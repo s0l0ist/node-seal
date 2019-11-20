@@ -1,7 +1,6 @@
 import source from '../bin/seal.js'
 import sourceWasm from '../bin/seal'
 
-import {SEAL} from './Seal'
 import {MORFIX} from './Morfix'
 import * as Class from '../classes'
 
