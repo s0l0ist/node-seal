@@ -1,7 +1,6 @@
 import source from '../bin/seal.js'
 import sourceWasm from '../bin/seal'
 
-import {SEAL} from './Seal'
 import {MORFIX} from './Morfix'
 import * as Class from '../classes'
 
@@ -12,8 +11,8 @@ export const Seal = (async () => {
    * This file is loaded asynchronously and therefore we must wait
    * until it has fully initialized before calling any other methods.
    */
-  const Library = new Class.Library({source, sourceWasm})
-  await Library.initialize()
+  const Library = new Class.Library()
+  await Library.initialize({source, sourceWasm})
 
   /**
    * Now, we can instantiate everything else we need.
