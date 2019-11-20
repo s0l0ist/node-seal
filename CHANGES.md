@@ -3,6 +3,16 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 2.1.12
+
+Refactor:
+ - Library initialization is now slightly faster as it is done on callback instead of a timer checking a ready state
+ 
+Chore:
+ - Updated emsdk toolchain to be on the latest version
+ - Build scripts now build a static SEAL library which is then converted to JS
+ - Build scripts now include an additional argument to remove `import.meta.url` from the output build from webpack
+ 
 ## Version 2.1.11
 
 Refactor:
