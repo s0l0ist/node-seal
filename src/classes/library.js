@@ -1,60 +1,43 @@
-import { resolve } from 'path'
+import pathlib from 'path'
 
 export class Library {
-  constructor({source, sourceWasm}) {
+  constructor() {
     this._module = null
-    this._ready = false
-
-    const module = source({
-      locateFile(path) {
-        // for jest
-        if (process.env.NODE_ENV !== 'production') {
-          return resolve(__dirname, '../bin', path)
-        }
-
-        if(path.endsWith('.wasm')) {
-          return sourceWasm
-        }
-        return path
-      }
-    })
-
-    // Set the callback handle
-    module.onRuntimeInitialized = () => {
-      this._module = module
-      this._ready = true
-    }
+    this._timeout = null
   }
 
   get instance() {
     return this._module
   }
 
-  _timeout(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-  async initialize() {
+  async initialize({source, sourceWasm}) {
+    return await new Promise((resolve, reject) => {
+      // If we tell emscripten to build both js and wasm, this code is needed
+      // Right now, we use single file js where the wasm is a base64 string so
+      // this code block doesn't execute.
+      const module = source({
+        locateFile(path) {
+          // for jest
+          if (process.env.NODE_ENV !== 'production') {
+            return pathlib.resolve(__dirname, '../bin', path)
+          }
 
-    let counter = 0
+          if(path.endsWith('.wasm')) {
+            return sourceWasm
+          }
+          return path
+        }
+      })
 
-    const check = async () => {
+      this._timeout = setTimeout(() => {
+        reject()
+      }, 10000)
 
-      counter += 1
-      if (counter >= 10) {
-        throw new Error('Timeout exceeded!')
+      module.onRuntimeInitialized = () => {
+        clearTimeout(this._timeout)
+        this._module = module
+        resolve()
       }
-
-      if (this._ready === true) {
-        return
-      }
-
-      // wait a bit and check again
-      await this._timeout(125)
-
-      return await check()
-    }
-
-    // start checking the ready status.
-    return await check()
+    })
   }
 }
