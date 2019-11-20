@@ -11,8 +11,8 @@ export const Seal = (async () => {
    * This file is loaded asynchronously and therefore we must wait
    * until it has fully initialized before calling any other methods.
    */
-  const Library = new Class.Library({source, sourceWasm})
-  await Library.initialize()
+  const Library = new Class.Library()
+  await Library.initialize({source, sourceWasm})
 
   /**
    * Now, we can instantiate everything else we need.
