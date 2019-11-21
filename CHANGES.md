@@ -3,6 +3,12 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 2.1.13
+
+Feat:
+ - Upgraded emscripten to LLVM backend
+ - Code size is now ~10% smaller
+ 
 ## Version 2.1.12
 
 Refactor:

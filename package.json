@@ -1,6 +1,6 @@
 {
   "name": "node-seal",
-  "version": "2.1.12",
+  "version": "2.1.13",
   "description": "Microsoft SEAL in Javascript",
   "repository": {
     "type": "git",
@@ -68,11 +68,11 @@
   },
   "devDependencies": {
     "esm": "^3.2.25",
-    "file-loader": "4.2.0",
+    "file-loader": "4.3.0",
     "jest": "24.9.0",
     "webpack": "4.41.2",
-    "webpack-cli": "3.3.9",
-    "webpack-dev-server": "3.8.2",
+    "webpack-cli": "3.3.10",
+    "webpack-dev-server": "3.9.0",
     "webpack-node-externals": "^1.7.2"
   },
   "browserslist": [
