@@ -1,6 +1,6 @@
 {
   "name": "node-seal",
-  "version": "2.1.13",
+  "version": "2.1.14",
   "description": "Microsoft SEAL in Javascript",
   "repository": {
     "type": "git",
@@ -8,8 +8,8 @@
   },
   "author": {
     "name": "Nick Angelou",
-    "email": "nick.angelou@sectify.com",
-    "url": "https://iaccelerator.com"
+    "email": "info@morfix.io",
+    "url": "https://morfix.io"
   },
   "keywords": [
     "homomorphic",
