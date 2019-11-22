@@ -9,6 +9,21 @@ which can be customized and overridden for advanced use cases.
 
 It also exposes a lower level API to be close to the C++ calls from Microsoft SEAL.
 
+# Demo
+We've built a sandbox for users to experiment and learn how to use Microsoft SEAL showcasing
+ [node-seal](https://github.com/morfix-io/node-seal).
+
+Visit the [Sandbox!](https://morfix.io)
+
+Not all functionality is implemented. For example:
+ - No Integer Encoder is present - Almost everything can be implemented with the Batch Encoder.
+ - Generating and attempting to download Galois Keys at PolyModulus Degree of `16384` will result in a crash due to
+  the browser running out of memory and the page will need to be refreshed
+ - Saving keys:
+     - We save them in a similar format as an SSH key for readability
+    - It is base64 for demonstration purposes. There is no program to directly read in the file, instead you could
+     extract the base64 and use it manually in `node-seal`.
+
 # Microsoft SEAL
 
 Microsoft SEAL is an easy-to-use open-source ([MIT licensed](LICENSE)) homomorphic
