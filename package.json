@@ -8,16 +8,20 @@
   },
   "author": {
     "name": "Nick Angelou",
-    "email": "info@morfix.io",
+    "email": "accounts@morfix.io",
     "url": "https://morfix.io"
   },
   "keywords": [
     "homomorphic",
     "encryption",
+    "homomorphic-encryption",
     "microsoft",
     "seal",
     "web assembly",
-    "fhe"
+    "fhe",
+    "crypto",
+    "cryptography",
+    "cryptosystem"
   ],
   "main": "dist/seal.node.js",
   "browser": "dist/seal.js",
