@@ -3,6 +3,12 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 2.1.14
+
+Microsoft SEAL 3.4.5
+
+No updates to core library functionality.
+
 ## Version 2.1.13
 
 Feat:
