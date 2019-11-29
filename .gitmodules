@@ -4,3 +4,6 @@
 [submodule "submodules/emsdk"]
 	path = submodules/emsdk
 	url = https://github.com/morfix-io/emsdk.git
+[submodule "submodules/zlib"]
+	path = submodules/zlib
+	url = https://github.com/morfix-io/zlib.git
