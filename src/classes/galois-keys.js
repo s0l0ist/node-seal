@@ -1,6 +1,7 @@
 export class GaloisKeys {
   constructor({library}) {
     this._instance = new library.GaloisKeys()
+    this._ComprModeType = library.ComprModeType
   }
 
   get instance() {
@@ -20,8 +21,8 @@ export class GaloisKeys {
    *
    * @returns {string}
    */
-  save() {
-    return this._instance.saveToString()
+  save({ compression = this._ComprModeType.deflate } = {}) {
+    return this._instance.saveToString(compression)
   }
 
   /**

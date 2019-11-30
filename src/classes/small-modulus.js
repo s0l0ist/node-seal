@@ -2,6 +2,7 @@ export class SmallModulus {
   constructor({library}) {
     this._library = library
     this._SmallModulus = library.SmallModulus
+    this._ComprModeType = library.ComprModeType
 
     // Static methods
     this._saveToString = library.SmallModulus.saveToString
@@ -66,7 +67,7 @@ export class SmallModulus {
    *
    * @returns {*}
    */
-  save() {
-    return this._saveToString()
+  save({ compression = this._ComprModeType.deflate } = {}) {
+    return this._saveToString(compression)
   }
 }

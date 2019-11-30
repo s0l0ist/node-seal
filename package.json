@@ -68,7 +68,10 @@
     "seal:clean": "bash scripts/seal-clean.sh",
     "seal:cmake": "bash scripts/seal-cmake.sh",
     "seal:make": "bash scripts/seal-make.sh",
-    "seal:build": "bash scripts/seal-build.sh"
+    "seal:build": "bash scripts/seal-build.sh",
+    "zlib:clean": "bash scripts/zlib-clean.sh",
+    "zlib:cmake": "bash scripts/zlib-cmake.sh",
+    "zlib:make": "bash scripts/zlib-make.sh"
   },
   "devDependencies": {
     "esm": "^3.2.25",
