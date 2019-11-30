@@ -3,6 +3,12 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 2.2.1
+
+Feat:
+ - Compiled with intrinsics (wasm_simd128.h)
+ - Code execution should be faster (no benchmarks, yet)
+
 ## Version 2.2.0
 
 Microsoft SEAL 3.4.5
