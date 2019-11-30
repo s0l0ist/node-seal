@@ -4,6 +4,7 @@ export class SEAL {
     this._CipherText = options.CipherText
     this._CKKSEncoder = options.CKKSEncoder
     // this._CoeffModulus = options.CoeffModulus
+    // this._ComprModeType = options.ComprModeType
     this._Context = options.Context
     this._Decryptor = options.Decryptor
     this._EncryptionParameters = options.EncryptionParameters
@@ -27,6 +28,7 @@ export class SEAL {
 
     // Singletons
     this._CoeffModulus = new options.CoeffModulus({library: this._Library.instance})
+    this._ComprModeType = new options.ComprModeType({library: this._Library.instance})
     this._Exception = new options.Exception({library: this._Library.instance})
     this._MemoryPool = new options.MemoryPool({library: this._Library.instance})
     this._PlainModulus = new options.PlainModulus({library: this._Library.instance})
@@ -73,6 +75,16 @@ export class SEAL {
    */
   get CoeffModulus() {
     return this._CoeffModulus
+  }
+
+  /**
+   * Get the ComprModeType singleton instance
+   *
+   * @returns {ComprModeType}
+   * @constructor
+   */
+  get ComprModeType() {
+    return this._ComprModeType
   }
 
   /**

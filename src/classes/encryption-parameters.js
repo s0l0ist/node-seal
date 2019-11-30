@@ -1,6 +1,7 @@
 export class EncryptionParameters {
   constructor({library, schemeType}) {
     this._EncryptionParameters = library.EncryptionParameters
+    this._ComprModeType = library.ComprModeType
 
     this._instance = new this._EncryptionParameters(schemeType)
   }
@@ -99,8 +100,8 @@ export class EncryptionParameters {
    * Save the Encryption Parameters to a base64 string
    * @returns {string}
    */
-  save() {
-    return this._instance.saveToString()
+  save({ compression = this._ComprModeType.deflate } = {}) {
+    return this._instance.saveToString(compression)
   }
 
   /**

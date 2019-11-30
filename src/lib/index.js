@@ -29,6 +29,7 @@ export const Seal = (async () => {
     BatchEncoder: Class.BatchEncoder,
     CipherText: Class.CipherText,
     CKKSEncoder: Class.CKKSEncoder,
+    ComprModeType: Class.ComprModeType,
     Context: Class.Context,
     CoeffModulus: Class.CoeffModulus,
     Decryptor: Class.Decryptor,
