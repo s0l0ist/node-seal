@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-cd ./submodules/zlib && emcmake cmake -DCMAKE_BUILD_TYPE=Release . && cd ../../../
+source ./submodules/emsdk/emsdk_env.sh && cd ./submodules/zlib && emcmake cmake -DCMAKE_BUILD_TYPE=Release . && cd ../../../
