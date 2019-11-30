@@ -3,13 +3,13 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
-## Version 2.1.15
+## Version 2.2.0
 
 Microsoft SEAL 3.4.5
 
 Feat:
-- Supporting [zlib](https://github.com/madler/zlib) - `deflate` is by default enabled.
-- SecretKeys will be saved with `no` compression. This can be overridden.
+ - Supporting [zlib](https://github.com/madler/zlib) - `deflate` is by default enabled.
+ - SecretKeys will be saved with no compression for security. This can be overridden.
 
 ## Version 2.1.14
 
