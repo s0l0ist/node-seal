@@ -3,11 +3,17 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 2.2.2
+
+Feat:
+ - Replaced the previous base64 implementation
+ - Saving/loading from strings is now much faster
+
 ## Version 2.2.1
 
 Feat:
  - Compiled with intrinsics (wasm_simd128.h)
- - Code execution should be faster (no benchmarks, yet)
+ - Code execution should be noticeably faster (no benchmarks, yet)
 
 ## Version 2.2.0
 
