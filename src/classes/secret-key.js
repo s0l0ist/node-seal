@@ -1,6 +1,7 @@
 export class SecretKey {
   constructor({library}) {
     this._instance = new library.SecretKey()
+    this._ComprModeType = library.ComprModeType
   }
 
   get instance() {
@@ -18,10 +19,12 @@ export class SecretKey {
   /**
    * Save the SecretKey to a base64 string
    *
+   * By default, we don't use compression on the SecretKey
+   *
    * @returns {string}
    */
-  save() {
-    return this._instance.saveToString()
+  save({ compression = this._ComprModeType.none } = {}) {
+    return this._instance.saveToString(compression)
   }
 
   /**

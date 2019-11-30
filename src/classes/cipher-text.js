@@ -1,6 +1,7 @@
 export class CipherText {
   constructor({library}) {
     this._instance = new library.Ciphertext()
+    this._ComprModeType = library.ComprModeType
   }
 
   get instance() {
@@ -103,8 +104,8 @@ export class CipherText {
    * Save a cipherText to a base64 string
    * @returns {string}
    */
-  save() {
-    return this._instance.saveToString()
+  save({ compression = this._ComprModeType.deflate } = {}) {
+    return this._instance.saveToString(compression)
   }
 
   /**
