@@ -13,14 +13,14 @@ describe('Generate GaloisKeys BFV Scheme', () => {
       Crypt.genGaloisKeys()
       expect(spyGenGaloisKeys).toHaveBeenCalled()
 
-      // // Save / Load keys
-      // const spySaveGaloisKeys = jest.spyOn(Crypt, 'saveGaloisKeys')
-      // const galoisKeys = Crypt.saveGaloisKeys()
-      // expect(spySaveGaloisKeys).toHaveBeenCalled()
-      //
-      // const spyLoadGaloisKeys = jest.spyOn(Crypt, 'loadGaloisKeys')
-      // Crypt.loadGaloisKeys({encoded: galoisKeys})
-      // expect(spyLoadGaloisKeys).toHaveBeenCalled()
+      // Save / Load keys
+      const spySaveGaloisKeys = jest.spyOn(Crypt, 'saveGaloisKeys')
+      const galoisKeys = Crypt.saveGaloisKeys()
+      expect(spySaveGaloisKeys).toHaveBeenCalled()
+
+      const spyLoadGaloisKeys = jest.spyOn(Crypt, 'loadGaloisKeys')
+      Crypt.loadGaloisKeys({encoded: galoisKeys})
+      expect(spyLoadGaloisKeys).toHaveBeenCalled()
     })
   })
 })

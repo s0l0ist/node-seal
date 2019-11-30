@@ -1,6 +1,7 @@
 export class PublicKey {
   constructor({library}) {
     this._instance = new library.PublicKey()
+    this._ComprModeType = library.ComprModeType
   }
 
   get instance() {
@@ -20,8 +21,8 @@ export class PublicKey {
    *
    * @returns {string}
    */
-  save() {
-    return this._instance.saveToString()
+  save({ compression = this._ComprModeType.deflate } = {}) {
+    return this._instance.saveToString(compression)
   }
 
   /**

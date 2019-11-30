@@ -43,17 +43,24 @@ yarn em:update      # Updates the tag information
 yarn em:init        # Sets up the working toolchain
 ```
 
-Next, configure the Microsoft SEAL build settings:
+Next, compile zlib:
+```
+yarn zlib:clean     # When you want to remove all artifacts
+yarn zlib:cmake     # Do this once
+yarn zlib:make      # Will begin building the zlib static library
+```
+
+Finally, configure the Microsoft SEAL build settings:
 
 ```
 yarn seal:clean     # When you want to remove all artifacts
 yarn seal:cmake     # Do this once
-yarn seal:make      # Will begin building the SEAL shared library
+yarn seal:make      # Will begin building the SEAL static library
 yarn seal:build     # Will compile the Web Assembly file from the shared library
 ```
 
 All test should pass when making contributions to the Web Assembly module. 
-**Note**: this could take up to 5 minutes and is very CPU/memory intensive.
+**Note**: this could a few minutes and is very CPU/memory intensive.
 
 ```
 yarn test
