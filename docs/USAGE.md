@@ -287,7 +287,7 @@ console.log(decryptedResult)
 ```
 # Evaluations on encrypted data
 
-For a full list of methods, please take a look at [/src/classes/evaluator](../src/classes/evaluator.js)
+For a full list of methods, please take a look at [/src/classes/evaluator](../src/components/evaluator.js)
 
 ### Add
 

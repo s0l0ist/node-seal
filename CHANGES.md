@@ -3,6 +3,22 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 3.0.0
+
+Feat: 
+ - All functions will throw nicely. Previously, if the WASM threw an exception you had to
+   manually invoke `Seal.Exception.getHuman()` to obtain the human readable string. This is
+   now done automatically.
+   
+Refactor:
+ - Library is now written with no `classes` - now using functional composition, making it much easier
+   to extend in the future.
+ - All tests use the low level API and can now be viewed as examples.
+
+Breaking:
+ - Morfix high level APIs are no longer present as they would fail upon more complex
+   functions and ultimately, didn't ease the burden of learning SEAL.
+
 ## Version 2.2.2
 
 Feat:
