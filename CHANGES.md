@@ -17,7 +17,7 @@ Refactor:
 
 Breaking:
  - Morfix high level APIs are no longer present as they would fail upon more complex
-   functions and ultimately, didn't ease the burden of learning SEAL.
+   functions and ultimately because they didn't ease the burden of learning SEAL.
 
 ## Version 2.2.2
 
