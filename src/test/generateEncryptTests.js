@@ -29,7 +29,17 @@ const genTests = (verb) => {
           const folderName = `${verb}`
           const fileName = `${verb}-scheme_${SCHEME_TYPES[schemeType]}-poly_${POLYMODULUS_DEGREES[polyModDeg]}-sec_${SECURITY_LEVELS[secLevel]}-type_${TYPES[type]}.test.js`
           const code = []
-          code.push(`describe('${verb} on ${schemeType}', () => {
+
+          // Skip certain generated tests that are known to fail
+          let skip = false
+          if (
+            // Fails because there's only 1 coeffModulus
+            POLYMODULUS_DEGREES[polyModDeg] === POLYMODULUS_DEGREES.BITS_4096 && SECURITY_LEVELS[secLevel] === SECURITY_LEVELS.BITS_256
+          ) {
+            skip = true
+          }
+
+          code.push(`describe${skip ? '.skip': ''}('${verb} on ${schemeType}', () => {
   describe('polyModulusDegree ${POLYMODULUS_DEGREES[polyModDeg]}', () => {
     test('${SECURITY_LEVELS[secLevel]}-bit security', async () => {
       const { Seal } = require('../../index.js')
