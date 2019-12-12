@@ -1,88 +1,112 @@
 # Full Example
 
-CommonJS
+CommonJS (but also works with `import`)
 ```
 (async () => {
+  // ES6 or CommonJS
+  // import { Seal } from 'node-seal'
+  // const { Seal } = require('node-seal')
 
-  // If running in a browser, skip this `require` statement.
+  // Using CommonJS for RunKit
   const { Seal } = require('node-seal')
+
   const Morfix = await Seal
-  
-  const parms = Morfix.createParams({computationLevel: 'low', security: 128})
-  
-  Morfix.initialize({...parms, schemeType: 'BFV'})
-  
-  // Generate public and secret keys
-  Morfix.genKeys()
-  
-  // Create RelinKeys
-  Morfix.genRelinKeys()
-  
-  // Save the keys so we don't have to generate them again
-  // They will be base64 strings
-  const publicKey = Morfix.savePublicKey()
-  const secretKey = Morfix.saveSecretKey()
-  
-  // You can skip `Morfix.genKeys()` by loading them instead 
-  Morfix.loadPublicKey({encoded: publicKey})
-  Morfix.loadSecretKey({encoded: secretKey})
-  
-  // Create sample data for `BFV`
-  const step = parms.plainModulus / parms.polyModulusDegree
-  
-  const array = Int32Array.from([1, 2, 3])
-  
-  // Encrypt the data
-  const oldCipherText = Morfix.encrypt({array})
-  
-  // You can save the cipherText for later as a base64 string
-  const savedRawCipher = oldCipherText.save()
-  
-  // And reload it later using the helper
-  const cipherText = Morfix.loadCipher({encoded: savedRawCipher})
-  
-  // Createt a copy to sum later
-  const cipherText2 = Morfix.loadCipher({encoded: savedRawCipher})
-  
-  // But you will need to reinitialize some values. 
-  // You should also store  this data in combination with the raw cipherText
-  // so that you may retrieve all the related information in one go.
-  cipherText.setSchemeType({scheme: oldCipherText.getSchemeType()})
-  cipherText.setVectorSize({size: oldCipherText.getVectorSize()})
-  cipherText.setVectorType({type: oldCipherText.getVectorType()})
-  
-  cipherText2.setSchemeType({scheme: oldCipherText.getSchemeType()})
-  cipherText2.setVectorSize({size: oldCipherText.getVectorSize()})
-  cipherText2.setVectorType({type: oldCipherText.getVectorType()})
 
-  // Send the encrypted data to a 3rd party for 
-  // homomorphic operations. But we need more
-  // metadata of the cipherText to help  
-  // facilitate homomorphic operations involving
-  // optional matrix rotations, etc.
-  //
-  // const cipherObject = {
-  //   cipherText: cipherText.save(), // gets the base64 string representation of the cipher
-  //   schemeType: cipherText.getSchemeType(),
-  //   vector: {
-  //     size: cipherText.getVectorSize(),
-  //     type: cipherText.getVectorType(),
-  //   }
-  // }
-  
-  const resultCipher = Morfix.multiply({a: cipherText, b: cipherText2})
-  // Attempt decryption now, or after relinearization
-  // const resultInt32Array = Morfix.decrypt({cipherText: resultCipher})
+  const parms = Morfix.EncryptionParameters({
+    schemeType: Morfix.SchemeType.BFV
+  })
 
-  // (Optional) Relinearize the cipher
-  const relinearizedCipher = Morfix.relinearize({cipherText: resultCipher})
-  
-  // Decrypt the result which returns a TypedArray
-  const resultInt32Array = Morfix.decrypt({cipherText: relinearizedCipher})
-  
-  console.log('resultInt32Array', resultInt32Array)
-  // resultInt32Array Int32Array(3) [1, 4, 9]
-  
+  parms.setPolyModulusDegree({
+    polyModulusDegree: 4096
+  })
+
+  // Create a suitable vector of CoeffModulus primes
+  parms.setCoeffModulus({
+    coeffModulus: Morfix.CoeffModulus.Create({
+      polyModulusDegree: 4096,
+      bitSizes: Morfix.Vector({array: new Int32Array([36,36,37]) }),
+      securityLevel: Morfix.SecurityLevel.tc128
+    })
+  })
+
+  // Set the PlainModulus to a prime of bitSize 20.
+  parms.setPlainModulus({
+    plainModulus: Morfix.PlainModulus.Batching({
+      polyModulusDegree: 4096,
+      bitSize: 20
+    })
+  })
+
+  const context = Morfix.Context({
+    encryptionParams: parms,
+    expandModChain: true,
+    securityLevel: Morfix.SecurityLevel.tc128
+  })
+
+  if (!context.parametersSet()) {
+    throw new Error('Could not set the parameters in the given context. Please try different encryption parameters.')
+  }
+
+  const encoder = Morfix.BatchEncoder({
+    context: context
+  })
+
+  const keyGenerator = Morfix.KeyGenerator({
+    context: context
+  })
+
+  const publicKey = keyGenerator.getPublicKey()
+  const secretKey = keyGenerator.getSecretKey()
+  const encryptor = Morfix.Encryptor({
+    context: context,
+    publicKey: publicKey
+  })
+  const decryptor = Morfix.Decryptor({
+    context: context,
+    secretKey: secretKey
+  })
+
+  // Create data to be encrypted
+  const array = Int32Array.from({
+    length: 4096
+  }).map((x, i) =>  i)
+
+  // Convert data to a c++ 'vector'
+  const vector = Morfix.Vector({array})
+
+  // Create a plainText variable and encode the vector to it
+  const plainText = Morfix.PlainText()
+
+  encoder.encodeVectorInt32({
+    vector: vector,
+    plainText: plainText
+  })
+
+  // Create a cipherText variable and encrypt the plainText to it
+  const cipherText = Morfix.CipherText()
+  encryptor.encrypt({
+    plainText: plainText,
+    cipherText: cipherText
+  })
+
+  // Create a new plainText variable to store the decrypted cipherText
+  const decryptedPlainText = Morfix.PlainText()
+  decryptor.decrypt({
+    cipherText: cipherText,
+    plainText: decryptedPlainText
+  })
+
+  // Create a c++ vector to store the decoded result
+  const decodeVector = Morfix.Vector({array: new Int32Array() })
+
+  // Decode the plaintext to the c++ vector
+  encoder.decodeVectorInt32({
+    plainText: decryptedPlainText,
+    vector: decodeVector
+  })
+
+  // Convert the vector to a JS array
+  const decryptedArray = decodeVector.toArray()
+  console.log('decryptedArray', decryptedArray)
 })()
-
 ```
