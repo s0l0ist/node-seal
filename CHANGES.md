@@ -9,9 +9,10 @@ Feat:
  - All functions will throw nicely. Previously, if the WASM threw an exception you had to
    manually invoke `Seal.Exception.getHuman()` to obtain the human readable string. This is
    now done automatically.
+ - Slight reduction in code size due to the major refactoring.
    
 Refactor:
- - Library is now written with no `classes` - now using functional composition, making it much easier
+ - Library is now written with no `classes` - now using object composition, making it much easier
    to extend in the future.
  - All tests use the low level API and can now be viewed as examples.
 
