@@ -142,7 +142,7 @@ other instances which execute within the same **context** as the encryption para
     })
 
     // Helper to check if the Context was created successfully
-    if (!context.parametersSet()) {
+    if (!context.parametersSet) {
       throw new Error('Could not set the parameters in the given context. Please try different encryption parameters.')
     }
 ```
