@@ -26,7 +26,7 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
       }
       return vec
     } catch (e) {
-      throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
     }
   }
 
@@ -76,7 +76,7 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
           default: throw new Error('Unsupported matrix type!')
         }
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -97,7 +97,7 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
           default: throw new Error('Unsupported vector type!')
         }
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -122,7 +122,7 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
       try {
         return _instance.get(index)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -135,7 +135,7 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
       try {
         _instance.resize(size, fill)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -157,7 +157,7 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
         }
         return arr
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     }
   }

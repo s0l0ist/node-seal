@@ -18,7 +18,7 @@ export const PlainModulus = ({library}) => {
       try {
         return _Batching(polyModulusDegree, bitSize)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -35,7 +35,7 @@ export const PlainModulus = ({library}) => {
       try {
         return _BatchingVector(polyModulusDegree, bitSizes.instance)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     }
   }
