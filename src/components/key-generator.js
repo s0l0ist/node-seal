@@ -5,17 +5,21 @@ import { GaloisKeys } from './galois-keys'
 
 export const KeyGenerator = ({library, context, secretKey = null, publicKey = null}) => {
 
-  const constructInstance = (secretKey, publicKey) => {
-    if (secretKey && publicKey) {
-      return new library.KeyGenerator(context.instance, secretKey.instance, publicKey.instance)
-    }
-    if (secretKey && !publicKey) {
-      return new library.KeyGenerator(context.instance, secretKey.instance)
-    }
-    return new library.KeyGenerator(context.instance)
-  }
-
+  const _getException = library.getException
   const _library = library
+  const constructInstance = (secretKey, publicKey) => {
+    try {
+      if (secretKey && publicKey) {
+        return new library.KeyGenerator(context.instance, secretKey.instance, publicKey.instance)
+      }
+      if (secretKey && !publicKey) {
+        return new library.KeyGenerator(context.instance, secretKey.instance)
+      }
+      return new library.KeyGenerator(context.instance)
+    } catch (e) {
+      throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+    }
+  }
   let _instance = constructInstance(secretKey, publicKey)
 
   return {
@@ -36,10 +40,14 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
      * @returns {SecretKey}
      */
     getSecretKey() {
-      const instance = _instance.getSecretKey()
-      const key = SecretKey({library: _library})
-      key.inject({instance})
-      return key
+      try {
+        const instance = _instance.getSecretKey()
+        const key = SecretKey({library: _library})
+        key.inject({instance})
+        return key
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -48,10 +56,14 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
      * @returns {PublicKey}
      */
     getPublicKey() {
-      const instance = _instance.getPublicKey()
-      const key = PublicKey({library: _library})
-      key.inject({instance})
-      return key
+      try {
+        const instance = _instance.getPublicKey()
+        const key = PublicKey({library: _library})
+        key.inject({instance})
+        return key
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -60,10 +72,14 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
      * @returns {RelinKeys}
      */
     genRelinKeys() {
-      const instance = _instance.createRelinKeys()
-      const key = RelinKeys({library: _library})
-      key.inject({instance})
-      return key
+      try {
+        const instance = _instance.createRelinKeys()
+        const key = RelinKeys({library: _library})
+        key.inject({instance})
+        return key
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -72,10 +88,14 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
      * @returns {GaloisKeys}
      */
     genGaloisKeys() {
-      const instance = _instance.createGaloisKeys()
-      const key = GaloisKeys({library: _library})
-      key.inject({instance})
-      return key
+      try {
+        const instance = _instance.createGaloisKeys()
+        const key = GaloisKeys({library: _library})
+        key.inject({instance})
+        return key
+      } catch (e) {
+        throw new Error(_getException({pointer: e}))
+      }
     }
   }
 }

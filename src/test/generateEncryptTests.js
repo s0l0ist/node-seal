@@ -95,7 +95,7 @@ const genTests = (verb) => {
         securityLevel: ${SECURITY_LEVELS_CONSTRUCTOR[SECURITY_LEVELS[secLevel]]}
       })
 
-      expect(context.parametersSet()).toBe(true)
+      expect(context.parametersSet).toBe(true)
 
       const encoder = ${ENCODERS_CONSTRUCTOR[SCHEME_TYPES[schemeType]]}({
         context: context

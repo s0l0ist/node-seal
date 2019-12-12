@@ -34,13 +34,13 @@ describe.skip('galoiskey on BFV', () => {
         securityLevel: Morfix.SecurityLevel.tc256
       })
 
-      expect(context.parametersSet()).toBe(true)
+      expect(context.parametersSet).toBe(true)
 
       const keyGenerator = Morfix.KeyGenerator({
         context: context
       })
       
-      expect(context.parametersSet()).toBe(true)
+      expect(context.parametersSet).toBe(true)
 
       const spyGenGaloisKeys = jest.spyOn(keyGenerator, 'genGaloisKeys')
       const galoisKeys = keyGenerator.genGaloisKeys()

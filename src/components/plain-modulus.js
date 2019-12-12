@@ -1,5 +1,6 @@
 export const PlainModulus = ({library}) => {
 
+  const _getException = library.getException
   const _Batching = library.PlainModulus.Batching
   const _BatchingVector = library.PlainModulus.BatchingVector
 
@@ -14,7 +15,11 @@ export const PlainModulus = ({library}) => {
      * @returns {SmallModulus}
      */
     Batching({polyModulusDegree, bitSize}) {
-      return _Batching(polyModulusDegree, bitSize)
+      try {
+        return _Batching(polyModulusDegree, bitSize)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -27,7 +32,11 @@ export const PlainModulus = ({library}) => {
      * @returns {vector<SmallModulus>}
      */
     BatchingVector({polyModulusDegree, bitSizes}) {
-      return _BatchingVector(polyModulusDegree, bitSizes.instance)
+      try {
+        return _BatchingVector(polyModulusDegree, bitSizes.instance)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     }
   }
 }

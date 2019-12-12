@@ -34,13 +34,13 @@ describe('keypair on BFV', () => {
         securityLevel: Morfix.SecurityLevel.tc192
       })
 
-      expect(context.parametersSet()).toBe(true)
+      expect(context.parametersSet).toBe(true)
 
       const keyGenerator = Morfix.KeyGenerator({
         context: context
       })
       
-      expect(context.parametersSet()).toBe(true)
+      expect(context.parametersSet).toBe(true)
 
       const spyGetSecretKey = jest.spyOn(keyGenerator, 'getSecretKey')
       const secretKey = keyGenerator.getSecretKey()

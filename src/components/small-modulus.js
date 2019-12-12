@@ -1,5 +1,6 @@
 export const SmallModulus = ({library}) => {
 
+  const _getException = library.getException
   const _saveToString = library.SmallModulus.saveToString
   // const _createFromString = library.SmallModulus.createFromString
   const _ComprModeType = library.ComprModeType
@@ -23,7 +24,11 @@ export const SmallModulus = ({library}) => {
      * @param value
      */
     setValue({value}) {
-      _instance.loadFromString(value + '')
+      try {
+        _instance.loadFromString(value + '')
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -32,28 +37,28 @@ export const SmallModulus = ({library}) => {
      It's a string because JS does not support uint64
      data type very well
      */
-    value() {
+    get value() {
       return _instance.Value()
     },
 
     /**
      Returns the significant bit count of the value of the current SmallModulus.
      */
-    bitCount() {
+    get bitCount() {
       return _instance.bitCount()
     },
 
     /**
      Returns whether the value of the current SmallModulus is zero.
      */
-    isZero() {
+    get isZero() {
       return _instance.isZero()
     },
 
     /**
      Returns whether the value of the current SmallModulus is a prime number.
      */
-    isPrime() {
+    get isPrime() {
       return _instance.isPrime()
     },
 
@@ -63,7 +68,11 @@ export const SmallModulus = ({library}) => {
      * @returns {*}
      */
     save({ compression = _ComprModeType.deflate } = {}) {
-      return _saveToString(compression)
+      try {
+        return _saveToString(compression)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     }
   }
 }

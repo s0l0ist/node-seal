@@ -34,7 +34,7 @@ describe('encrypt on BFV', () => {
         securityLevel: Morfix.SecurityLevel.tc192
       })
 
-      expect(context.parametersSet()).toBe(true)
+      expect(context.parametersSet).toBe(true)
 
       const encoder = Morfix.BatchEncoder({
         context: context

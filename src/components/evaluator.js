@@ -1,5 +1,6 @@
 export const Evaluator = ({library, context}) => {
 
+  const _getException = library.getException
   const _MemoryPoolHandleGlobal = library.MemoryPoolHandle.MemoryPoolHandleGlobal
   let _instance = new library.Evaluator(context.instance)
 
@@ -15,10 +16,6 @@ export const Evaluator = ({library, context}) => {
       _instance = instance
     },
 
-    get _MemoryPoolHandleGlobal() {
-      return this._MemoryPoolHandle.MemoryPoolHandleGlobal()
-    },
-
     /**
      * Negates a ciphertext and stores the result in the destination parameter.
      *
@@ -26,7 +23,11 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      */
     negate({encrypted, destination}) {
-      _instance.negate(encrypted.instance, destination.instance)
+      try {
+        _instance.negate(encrypted.instance, destination.instance)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -38,7 +39,11 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      */
     add({a, b, destination}) {
-      _instance.add(a.instance, b.instance, destination.instance)
+      try {
+        _instance.add(a.instance, b.instance, destination.instance)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -51,7 +56,11 @@ export const Evaluator = ({library, context}) => {
      * @returns {*}
      */
     sub({a, b, destination}) {
-      return _instance.sub(a.instance, b.instance, destination.instance)
+      try {
+        _instance.sub(a.instance, b.instance, destination.instance)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -66,7 +75,11 @@ export const Evaluator = ({library, context}) => {
      * @param {optional} pool
      */
     multiply({a, b, destination, pool = _MemoryPoolHandleGlobal()}) {
-      _instance.multiply(a.instance, b.instance, destination.instance, pool)
+      try {
+        _instance.multiply(a.instance, b.instance, destination.instance, pool)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -80,7 +93,11 @@ export const Evaluator = ({library, context}) => {
      * @param {optional} pool
      */
     square({encrypted, destination, pool = _MemoryPoolHandleGlobal()}) {
-      _instance.square(encrypted.instance, destination.instance, pool)
+      try {
+        _instance.square(encrypted.instance, destination.instance, pool)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -96,7 +113,11 @@ export const Evaluator = ({library, context}) => {
      * @param {optional} pool
      */
     relinearize({encrypted, relinKeys, destination, pool = _MemoryPoolHandleGlobal()}) {
-      _instance.relinearize(encrypted.instance, relinKeys.instance, destination.instance, pool)
+      try {
+        _instance.relinearize(encrypted.instance, relinKeys.instance, destination.instance, pool)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -110,7 +131,11 @@ export const Evaluator = ({library, context}) => {
      * @param {optional} pool
      */
     cipherModSwitchToNext({encrypted, destination, pool = _MemoryPoolHandleGlobal()}) {
-      _instance.cipherModSwitchToNext(encrypted.instance, destination.instance, pool)
+      try {
+        _instance.cipherModSwitchToNext(encrypted.instance, destination.instance, pool)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -125,7 +150,11 @@ export const Evaluator = ({library, context}) => {
      * @param {optional} pool
      */
     cipherModSwitchTo({encrypted, parmsId, destination, pool = _MemoryPoolHandleGlobal()}) {
-      _instance.cipherModSwitchTo(encrypted.instance, parmsId, destination.instance, pool)
+      try {
+        _instance.cipherModSwitchTo(encrypted.instance, parmsId, destination.instance, pool)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -136,7 +165,11 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      */
     plainModSwitchToNext({plain, destination}) {
-      _instance.plainModSwitchToNext(plain.instance, destination.instance)
+      try {
+        _instance.plainModSwitchToNext(plain.instance, destination.instance)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -149,7 +182,11 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      */
     plainModSwitchTo({plain, parmsId, destination}) {
-      _instance.plainModSwitchTo(plain.instance, parmsId, destination.instance)
+      try {
+        _instance.plainModSwitchTo(plain.instance, parmsId, destination.instance)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -164,7 +201,11 @@ export const Evaluator = ({library, context}) => {
      * @param {optional} pool
      */
     rescaleToNext({encrypted, destination, pool = _MemoryPoolHandleGlobal()}) {
-      _instance.rescaleToNext(encrypted.instance, destination.instance, pool)
+      try {
+        _instance.rescaleToNext(encrypted.instance, destination.instance, pool)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -180,7 +221,11 @@ export const Evaluator = ({library, context}) => {
      * @param {optional} pool
      */
     rescaleTo({encrypted, parmsId, destination, pool = _MemoryPoolHandleGlobal()}) {
-      _instance.rescaleTo(encrypted.instance, parmsId, destination.instance, pool)
+      try {
+        _instance.rescaleTo(encrypted.instance, parmsId, destination.instance, pool)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -198,7 +243,11 @@ export const Evaluator = ({library, context}) => {
      * @param {optional} pool
      */
     exponentiate({encrypted, exponent, relinKeys, destination, pool = _MemoryPoolHandleGlobal()}) {
-      _instance.exponentiate(encrypted.instance, exponent, relinKeys.instance, destination.instance, pool)
+      try {
+        _instance.exponentiate(encrypted.instance, exponent, relinKeys.instance, destination.instance, pool)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -211,7 +260,11 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      */
     addPlain({encrypted, plain, destination}) {
-      _instance.addPlain(encrypted.instance, plain.instance, destination.instance)
+      try {
+        _instance.addPlain(encrypted.instance, plain.instance, destination.instance)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -224,7 +277,11 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      */
     subPlain({encrypted, plain, destination}) {
-      _instance.subPlain(encrypted.instance, plain.instance, destination.instance)
+      try {
+        _instance.subPlain(encrypted.instance, plain.instance, destination.instance)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -240,7 +297,11 @@ export const Evaluator = ({library, context}) => {
      * @param {optional} pool
      */
     multiplyPlain({encrypted, plain, destination, pool = _MemoryPoolHandleGlobal()}) {
-      _instance.multiplyPlain(encrypted.instance, plain.instance, destination.instance, pool)
+      try {
+        _instance.multiplyPlain(encrypted.instance, plain.instance, destination.instance, pool)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -262,7 +323,11 @@ export const Evaluator = ({library, context}) => {
      * @param {optional} pool
      */
     plainTransformToNtt({plain, parmsId, destinationNtt, pool = _MemoryPoolHandleGlobal()}) {
-      _instance.plainTransformToNtt(plain.instance, parmsId, destinationNtt.instance, pool)
+      try {
+        _instance.plainTransformToNtt(plain.instance, parmsId, destinationNtt.instance, pool)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -275,7 +340,11 @@ export const Evaluator = ({library, context}) => {
      * @param destinationNtt
      */
     cipherTransformToNtt({encrypted, destinationNtt}) {
-      _instance.cipherTransformToNtt(encrypted.instance, destinationNtt.instance)
+      try {
+        _instance.cipherTransformToNtt(encrypted.instance, destinationNtt.instance)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -287,7 +356,11 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      */
     cipherTransformFromNtt({encryptedNtt, destination}) {
-      _instance.cipherTransformFromNtt(encryptedNtt.instance, destination.instance)
+      try {
+        _instance.cipherTransformFromNtt(encryptedNtt.instance, destination.instance)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -313,7 +386,11 @@ export const Evaluator = ({library, context}) => {
      * @param {optional} pool
      */
     applyGalois({encrypted, galoisElt, galoisKeys, destination, pool = _MemoryPoolHandleGlobal()}) {
-      _instance.applyGalois(encrypted.instance, galoisElt, galoisKeys.instance, destination.instance, pool)
+      try {
+        _instance.applyGalois(encrypted.instance, galoisElt, galoisKeys.instance, destination.instance, pool)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -333,7 +410,11 @@ export const Evaluator = ({library, context}) => {
      * @param {optional} pool
      */
     rotateRows({encrypted, steps, galoisKeys, destination, pool = _MemoryPoolHandleGlobal()}) {
-      _instance.rotateRows(encrypted.instance, steps, galoisKeys.instance, destination.instance, pool)
+      try {
+        _instance.rotateRows(encrypted.instance, steps, galoisKeys.instance, destination.instance, pool)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -351,7 +432,11 @@ export const Evaluator = ({library, context}) => {
      * @param {optional} pool
      */
     rotateColumns({encrypted, galoisKeys, destination, pool = _MemoryPoolHandleGlobal()}) {
-      _instance.rotateColumns(encrypted.instance, galoisKeys.instance, destination.instance, pool)
+      try {
+        _instance.rotateColumns(encrypted.instance, galoisKeys.instance, destination.instance, pool)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -370,7 +455,11 @@ export const Evaluator = ({library, context}) => {
      * @param {optional} pool
      */
     rotateVector({encrypted, steps, galoisKeys, destination, pool = _MemoryPoolHandleGlobal()}) {
-      _instance.rotateVector(encrypted.instance, steps, galoisKeys.instance, destination.instance, pool)
+      try {
+        _instance.rotateVector(encrypted.instance, steps, galoisKeys.instance, destination.instance, pool)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -386,7 +475,11 @@ export const Evaluator = ({library, context}) => {
      * @param {optional} pool
      */
     complexConjugate({encrypted, galoisKeys, destination, pool = _MemoryPoolHandleGlobal()}) {
-      _instance.complexConjugate(encrypted.instance, galoisKeys.instance, destination.instance, pool)
+      try {
+        _instance.complexConjugate(encrypted.instance, galoisKeys.instance, destination.instance, pool)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     }
   }
 }

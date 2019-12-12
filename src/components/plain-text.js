@@ -1,5 +1,6 @@
 export const PlainText = ({library}) => {
 
+  const _getException = library.getException
   const _ComprModeType = library.ComprModeType
   let _instance = new library.Plaintext()
 
@@ -22,48 +23,56 @@ export const PlainText = ({library}) => {
      particularly important after modulus switching.
      */
     shrinkToFit() {
-      return _instance.shrinkToFit()
+      try {
+        return _instance.shrinkToFit()
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
      Sets the plaintext polynomial to zero.
      */
-    setZero ()  {
-      return _instance.setZero()
+    setZero()  {
+      try {
+        return _instance.setZero()
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
      Returns whether the current plaintext polynomial has all zero coefficients.
      */
-    isZero() {
+    get isZero() {
       return _instance.isZero()
     },
 
     /**
      Returns the capacity of the current allocation.
      */
-    capacity() {
+    get capacity() {
       return _instance.capacity()
     },
 
     /**
      Returns the coefficient count of the current plaintext polynomial.
      */
-    coeffCount() {
+    get coeffCount() {
       return _instance.coeffCount()
     },
 
     /**
      Returns the significant coefficient count of the current plaintext polynomial.
      */
-    significantCoeffCount() {
+    get significantCoeffCount() {
       return _instance.significantCoeffCount()
     },
 
     /**
      Returns the non-zero coefficient count of the current plaintext polynomial.
      */
-    nonzeroCoeffCount() {
+    get nonzeroCoeffCount() {
       return _instance.nonzeroCoeffCount()
     },
 
@@ -88,13 +97,17 @@ export const PlainText = ({library}) => {
      @throws std::invalid_argument if the plaintext is in NTT transformed form
      */
     toPolynomial() {
-      return _instance.toPolynomial()
+      try {
+        return _instance.toPolynomial()
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
      Returns whether the plaintext is in NTT form.
      */
-    isNttForm() {
+    get isNttForm() {
       return _instance.isNttForm()
     },
 
@@ -105,7 +118,7 @@ export const PlainText = ({library}) => {
      @see EncryptionParameters for more information about parms_id.
      */
     // TODO: Binding type is not defined
-    parmsId() {
+    get parmsId() {
       return _instance.parmsId()
     },
 
@@ -114,14 +127,14 @@ export const PlainText = ({library}) => {
      encryption scheme. The user should have little or no reason to ever change
      the scale by hand.
      */
-    scale() {
+    get scale() {
       return _instance.scale()
     },
 
     /**
      Returns the currently used MemoryPoolHandle.
      */
-    pool() {
+    get pool() {
       return _instance.pool()
     },
 
@@ -130,7 +143,11 @@ export const PlainText = ({library}) => {
      * @returns {string}
      */
     save({ compression = _ComprModeType.deflate } = {}) {
-      return _instance.saveToString(compression)
+      try {
+        return _instance.saveToString(compression)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -139,7 +156,11 @@ export const PlainText = ({library}) => {
      * @param encoded
      */
     load({context, encoded}) {
-      _instance.loadFromString(context.instance, encoded)
+      try {
+        _instance.loadFromString(context.instance, encoded)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     }
   }
 }
