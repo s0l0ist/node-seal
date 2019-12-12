@@ -4,8 +4,7 @@ A zero-dependency Web Assembly port of the C++ [Microsoft SEAL](https://github.c
 
 **Now supporting Microsoft SEAL 3.4.5**
 
-It contains high level functions to make using this library easy. However, we highly encourage you to use the 
-lower level API which is very close to the C++ calls from Microsoft SEAL.
+It contains a low level API which is very close to the C++ calls from Microsoft SEAL.
 
 # Demo
 ### Go to [morfix.io/sandbox](https://morfix.io/sandbox)
