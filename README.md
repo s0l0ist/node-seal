@@ -1,3 +1,5 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/morfix-io/node-seal/badge)](https://www.codefactor.io/repository/github/morfix-io/node-seal)
+[![DeepScan grade](https://deepscan.io/api/teams/6431/projects/8438/branches/100710/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=6431&pid=8438&bid=100710)
 # node-seal
 
 A zero-dependency Web Assembly port of the C++ [Microsoft SEAL](https://github.com/microsoft/SEAL) library.
