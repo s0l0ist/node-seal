@@ -6,6 +6,7 @@
     "type": "git",
     "url": "https://github.com/morfix-io/node-seal"
   },
+  "homepage": "https://morfix.io/sandbox",
   "author": {
     "name": "Nick Angelou",
     "email": "accounts@morfix.io",
