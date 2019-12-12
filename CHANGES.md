@@ -6,39 +6,39 @@ for more details on each SEAL version change.
 ## Version 3.0.0
 
 Feat: 
- - All functions will throw nicely. Previously, if the WASM threw an exception you had to
+- All functions will throw nicely. Previously, if the WASM threw an exception you had to
    manually invoke `Seal.Exception.getHuman()` to obtain the human readable string. This is
    now done automatically.
- - Slight reduction in code size due to the major refactoring.
+- Slight reduction in code size due to the major refactoring.
    
 Refactor:
- - Library is now written with no `classes` - now using object composition, making it much easier
+- Library is now written with no `classes` - now using object composition, making it much easier
    to extend in the future.
- - All tests use the low level API and can now be viewed as examples.
+- All tests use the low level API and can now be viewed as examples.
 
 Breaking:
- - Morfix high level APIs are no longer present as they would fail upon more complex
+- Morfix high level APIs are no longer present as they would fail upon more complex
    functions and ultimately because they didn't ease the burden of learning SEAL.
 
 ## Version 2.2.2
 
 Feat:
- - Replaced the previous base64 implementation
- - Saving/loading from strings is now much faster
+- Replaced the previous base64 implementation
+- Saving/loading from strings is now much faster
 
 ## Version 2.2.1
 
 Feat:
- - Compiled with intrinsics (wasm_simd128.h)
- - Code execution should be noticeably faster (no benchmarks, yet)
+- Compiled with intrinsics (wasm_simd128.h)
+- Code execution should be noticeably faster (no benchmarks, yet)
 
 ## Version 2.2.0
 
 Microsoft SEAL 3.4.5
 
 Feat:
- - Supporting [zlib](https://github.com/madler/zlib) - `deflate` is by default enabled.
- - SecretKeys will be saved with no compression for security. This can be overridden.
+- Supporting [zlib](https://github.com/madler/zlib) - `deflate` is by default enabled.
+- SecretKeys will be saved with no compression for security. This can be overridden.
 
 ## Version 2.1.14
 
@@ -49,53 +49,53 @@ No updates to core library functionality.
 ## Version 2.1.13
 
 Feat:
- - Upgraded emscripten to LLVM backend
- - Code size is now ~10% smaller
+- Upgraded emscripten to LLVM backend
+- Code size is now ~10% smaller
  
 ## Version 2.1.12
 
 Refactor:
- - Library initialization is now slightly faster as it is done on callback instead of a timer checking a ready state
+- Library initialization is now slightly faster as it is done on callback instead of a timer checking a ready state
  
 Chore:
- - Updated emsdk toolchain to be on the latest version
- - Build scripts now build a static SEAL library which is then converted to JS
- - Build scripts now include an additional argument to remove `import.meta.url` from the output build from webpack
+- Updated emsdk toolchain to be on the latest version
+- Build scripts now build a static SEAL library which is then converted to JS
+- Build scripts now include an additional argument to remove `import.meta.url` from the output build from webpack
  
 ## Version 2.1.11
 
 Refactor:
- - Moved all emscripten dependent code that was added to Microsoft SEAL to bindings.cpp. This cleans up the codebase and
+- Moved all emscripten dependent code that was added to Microsoft SEAL to bindings.cpp. This cleans up the codebase and
   leaves the SEAL library left untouched for future upstream merges.
   
 Fix:
- - Encryption Parameters loading/saving methods are now instance methods instead of static. Should not affect any
+- Encryption Parameters loading/saving methods are now instance methods instead of static. Should not affect any
   users since we use an adapter class.
  
 ## Version 2.1.10
 
 Chore:
- - removed unused code that we aren't supporting for now (int64, complex double, etc)
+- removed unused code that we aren't supporting for now (int64, complex double, etc)
 
 ## Version 2.1.9
 
 Refactor:
- - Renamed emscripten binding method to reflect previous change for the Exponentiate method that uses cast uint32_t
- - Fixed a bug when passing in more than 2 parameters to `cipherTransformToNtt`
+- Renamed emscripten binding method to reflect previous change for the Exponentiate method that uses cast uint32_t
+- Fixed a bug when passing in more than 2 parameters to `cipherTransformToNtt`
 
 ## Version 2.1.8
 
 Refactor:
- - Exponentiate method accepts an `exponent` as a uint32_t which is then cast to a uint64_t to be compatible
+- Exponentiate method accepts an `exponent` as a uint32_t which is then cast to a uint64_t to be compatible
   with the native implementation. Reasonable exponentiations shouldn't exceede 2^32 in realistic use-cases.
 
 ## Version 2.1.7
 
 Refactor:
- - Conversion from JS TypedArrays and C++ Vectors (and vice versa) are now an order of magnitude faster
- - Added `shrinkToFit` and `setZero` to PlainText
- - Removed unused methods for the encoders which we do not support now (Int64, etc)
- - Added `sizeCapacity` method to CipherText
+- Conversion from JS TypedArrays and C++ Vectors (and vice versa) are now an order of magnitude faster
+- Added `shrinkToFit` and `setZero` to PlainText
+- Removed unused methods for the encoders which we do not support now (Int64, etc)
+- Added `sizeCapacity` method to CipherText
 
 ## Version 2.1.6
  
