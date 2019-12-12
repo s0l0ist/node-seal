@@ -2,7 +2,12 @@ export const GaloisKeys = ({library}) => {
 
   const _getException = library.getException
   const _ComprModeType = library.ComprModeType
-  let _instance = new library.GaloisKeys()
+  let _instance = null
+  try {
+    _instance = new library.GaloisKeys()
+  } catch (e) {
+    throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+  }
 
   return {
     get instance() {

@@ -2,7 +2,12 @@ export const Encryptor = ({library, context, publicKey}) => {
 
   const _getException = library.getException
   const _MemoryPoolHandleGlobal = library.MemoryPoolHandle.MemoryPoolHandleGlobal
-  let _instance = new library.Encryptor(context.instance, publicKey.instance)
+  let _instance = null
+  try {
+    _instance = new library.Encryptor(context.instance, publicKey.instance)
+  } catch (e) {
+    throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+  }
 
   return {
     get instance() {

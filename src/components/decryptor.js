@@ -1,7 +1,12 @@
 export const Decryptor = ({library, context, secretKey}) => {
 
   const _getException = library.getException
-  let _instance = new library.Decryptor(context.instance, secretKey.instance)
+  let _instance = null
+  try {
+    _instance = new library.Decryptor(context.instance, secretKey.instance)
+  } catch (e) {
+    throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+  }
 
   return {
     get instance() {
