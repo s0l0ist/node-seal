@@ -26,7 +26,7 @@ export const PlainText = ({library}) => {
       try {
         return _instance.shrinkToFit()
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -37,7 +37,7 @@ export const PlainText = ({library}) => {
       try {
         return _instance.setZero()
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -100,7 +100,7 @@ export const PlainText = ({library}) => {
       try {
         return _instance.toPolynomial()
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -146,7 +146,7 @@ export const PlainText = ({library}) => {
       try {
         return _instance.saveToString(compression)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -159,7 +159,7 @@ export const PlainText = ({library}) => {
       try {
         _instance.loadFromString(context.instance, encoded)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     }
   }

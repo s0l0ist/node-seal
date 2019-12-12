@@ -23,7 +23,7 @@ export const Context = ({library, encryptionParams, expandModChain, securityLeve
       try {
         _printContext(_instance)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -39,7 +39,7 @@ export const Context = ({library, encryptionParams, expandModChain, securityLeve
       try {
         return _instance.getContextData(parmsId)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 

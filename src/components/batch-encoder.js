@@ -35,7 +35,7 @@ export const BatchEncoder = ({library, context}) => {
       try {
         _instance.encodeVectorInt32(vector.instance, plainText.instance)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -58,7 +58,7 @@ export const BatchEncoder = ({library, context}) => {
       try {
         _instance.encodeVectorUInt32(vector.instance, plainText.instance)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -78,7 +78,7 @@ export const BatchEncoder = ({library, context}) => {
       try {
         _instance.decodeVectorInt32(plainText.instance, vector.instance, pool)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -98,7 +98,7 @@ export const BatchEncoder = ({library, context}) => {
       try {
         _instance.decodeVectorUInt32(plainText.instance, vector.instance, pool)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 

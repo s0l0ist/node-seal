@@ -30,7 +30,7 @@ export const EncryptionParameters = ({library, schemeType}) => {
       try {
         _instance.setPolyModulusDegree(polyModulusDegree)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -49,7 +49,7 @@ export const EncryptionParameters = ({library, schemeType}) => {
       try {
         _instance.setCoeffModulus(coeffModulus)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -68,7 +68,7 @@ export const EncryptionParameters = ({library, schemeType}) => {
       try {
         _instance.setPlainModulus(plainModulus)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -114,7 +114,7 @@ export const EncryptionParameters = ({library, schemeType}) => {
       try {
         return _instance.saveToString(compression)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -127,7 +127,7 @@ export const EncryptionParameters = ({library, schemeType}) => {
       try {
         _instance.loadFromString(encoded)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     }
   }

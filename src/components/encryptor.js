@@ -29,7 +29,7 @@ export const Encryptor = ({library, context, publicKey}) => {
       try {
         _instance.encrypt(plainText.instance, cipherText.instance, pool)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     }
   }

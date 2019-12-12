@@ -17,7 +17,7 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
       }
       return new library.KeyGenerator(context.instance)
     } catch (e) {
-      throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
     }
   }
   let _instance = constructInstance(secretKey, publicKey)
@@ -46,7 +46,7 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
         key.inject({instance})
         return key
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -62,7 +62,7 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
         key.inject({instance})
         return key
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -78,7 +78,7 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
         key.inject({instance})
         return key
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 

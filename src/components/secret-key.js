@@ -27,7 +27,7 @@ export const SecretKey = ({library}) => {
       try {
         return _instance.saveToString(compression)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -41,7 +41,7 @@ export const SecretKey = ({library}) => {
       try {
         _instance.loadFromString(context.instance, encoded)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     }
   }

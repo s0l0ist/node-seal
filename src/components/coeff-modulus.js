@@ -17,7 +17,7 @@ export const CoeffModulus = ({library}) => {
       try {
         return _MaxBitCount(polyModulusDegree, securityLevel)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -32,7 +32,7 @@ export const CoeffModulus = ({library}) => {
       try {
         return _BFVDefault(polyModulusDegree, securityLevel)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -47,7 +47,7 @@ export const CoeffModulus = ({library}) => {
       try {
         return _Create(polyModulusDegree, bitSizes.instance)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     }
   }

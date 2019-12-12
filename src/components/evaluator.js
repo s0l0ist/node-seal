@@ -26,7 +26,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.negate(encrypted.instance, destination.instance)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -42,7 +42,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.add(a.instance, b.instance, destination.instance)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -59,7 +59,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.sub(a.instance, b.instance, destination.instance)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -78,7 +78,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.multiply(a.instance, b.instance, destination.instance, pool)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -96,7 +96,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.square(encrypted.instance, destination.instance, pool)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -116,7 +116,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.relinearize(encrypted.instance, relinKeys.instance, destination.instance, pool)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -134,7 +134,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.cipherModSwitchToNext(encrypted.instance, destination.instance, pool)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -153,7 +153,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.cipherModSwitchTo(encrypted.instance, parmsId, destination.instance, pool)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -168,7 +168,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.plainModSwitchToNext(plain.instance, destination.instance)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -185,7 +185,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.plainModSwitchTo(plain.instance, parmsId, destination.instance)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -204,7 +204,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.rescaleToNext(encrypted.instance, destination.instance, pool)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -224,7 +224,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.rescaleTo(encrypted.instance, parmsId, destination.instance, pool)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -246,7 +246,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.exponentiate(encrypted.instance, exponent, relinKeys.instance, destination.instance, pool)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -263,7 +263,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.addPlain(encrypted.instance, plain.instance, destination.instance)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -280,7 +280,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.subPlain(encrypted.instance, plain.instance, destination.instance)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -300,7 +300,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.multiplyPlain(encrypted.instance, plain.instance, destination.instance, pool)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -326,7 +326,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.plainTransformToNtt(plain.instance, parmsId, destinationNtt.instance, pool)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -343,7 +343,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.cipherTransformToNtt(encrypted.instance, destinationNtt.instance)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -359,7 +359,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.cipherTransformFromNtt(encryptedNtt.instance, destination.instance)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -389,7 +389,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.applyGalois(encrypted.instance, galoisElt, galoisKeys.instance, destination.instance, pool)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -413,7 +413,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.rotateRows(encrypted.instance, steps, galoisKeys.instance, destination.instance, pool)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -435,7 +435,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.rotateColumns(encrypted.instance, galoisKeys.instance, destination.instance, pool)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -458,7 +458,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.rotateVector(encrypted.instance, steps, galoisKeys.instance, destination.instance, pool)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
@@ -478,7 +478,7 @@ export const Evaluator = ({library, context}) => {
       try {
         _instance.complexConjugate(encrypted.instance, galoisKeys.instance, destination.instance, pool)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     }
   }
