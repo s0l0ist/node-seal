@@ -15,11 +15,8 @@ This sandbox was built for users to experiment and learn how to use Microsoft SE
  
 Not all functionality is implemented. For example:
  - No Integer Encoder is present - Almost everything can be implemented with the Batch Encoder.
- - Generating and attempting to download Relin/Galois Keys at PolyModulus Degree of `16384` with `128` security will
+ - Generating and attempting to download Galois Keys at PolyModulus Degree of `16384` with `128` security will
   result in a crash due to the browser running out of memory and the page will need to be refreshed.
- - Downloading/Uploading files
-    - You may now export all keys and variables you have created in the browser!
-    - All objects will be serialized to a similar format as an SSH key for readability
 
 # Microsoft SEAL
 
