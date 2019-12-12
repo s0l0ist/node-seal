@@ -40,8 +40,6 @@ describe('keypair on BFV', () => {
         context: context
       })
       
-      expect(context.parametersSet).toBe(true)
-
       const spyGetSecretKey = jest.spyOn(keyGenerator, 'getSecretKey')
       const secretKey = keyGenerator.getSecretKey()
       expect(spyGetSecretKey).toHaveBeenCalled()

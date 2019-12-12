@@ -92,8 +92,6 @@ const genTests = (verb) => {
         context: context
       })
       
-      expect(context.parametersSet).toBe(true)
-
       const spyGenGaloisKeys = jest.spyOn(keyGenerator, 'genGaloisKeys')
       const galoisKeys = keyGenerator.genGaloisKeys()
       expect(spyGenGaloisKeys).toHaveBeenCalled()
