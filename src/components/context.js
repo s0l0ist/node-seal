@@ -2,7 +2,12 @@ export const Context = ({library, encryptionParams, expandModChain, securityLeve
 
   const _getException = library.getException
   const _printContext = library.printContext
-  let _instance = new library.SEALContext(encryptionParams.instance, expandModChain, securityLevel)
+  let _instance = null
+  try {
+    _instance = new library.SEALContext(encryptionParams.instance, expandModChain, securityLevel)
+  } catch (e) {
+    throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+  }
 
   return {
     get instance() {

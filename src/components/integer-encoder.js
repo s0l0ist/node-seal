@@ -1,7 +1,12 @@
 export const IntegerEncoder = ({library, context}) => {
 
   const _getException = library.getException
-  let _instance = new library.IntegerEncoder(context.instance)
+  let _instance = null
+  try {
+    _instance = new library.IntegerEncoder(context.instance)
+  } catch (e) {
+    throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+  }
 
   return {
     get instance() {

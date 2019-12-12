@@ -4,7 +4,12 @@ export const SmallModulus = ({library}) => {
   const _saveToString = library.SmallModulus.saveToString
   // const _createFromString = library.SmallModulus.createFromString
   const _ComprModeType = library.ComprModeType
-  let _instance = new library.SmallModulus()
+  let _instance = null
+  try {
+    _instance = new library.SmallModulus()
+  } catch (e) {
+    throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+  }
 
   return {
     get instance() {
