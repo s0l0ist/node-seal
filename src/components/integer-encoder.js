@@ -1,5 +1,6 @@
 export const IntegerEncoder = ({library, context}) => {
 
+  const _getException = library.getException
   let _instance = new library.IntegerEncoder(context.instance)
 
   return {
@@ -20,7 +21,11 @@ export const IntegerEncoder = ({library, context}) => {
      * @param value
      */
     encodeInt32({value}) {
-      _instance.encodeInt32(value)
+      try {
+        _instance.encodeInt32(value)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -29,7 +34,11 @@ export const IntegerEncoder = ({library, context}) => {
      * @param value
      */
     encodeUInt32({value}) {
-      _instance.encodeUInt32(value)
+      try {
+        _instance.encodeUInt32(value)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
     /**
      * Decode an Int32 value
@@ -37,7 +46,11 @@ export const IntegerEncoder = ({library, context}) => {
      * @param value
      */
     decodeInt32({plainText}) {
-      _instance.decodeInt32(plainText.instance)
+      try {
+        _instance.decodeInt32(plainText.instance)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -46,7 +59,11 @@ export const IntegerEncoder = ({library, context}) => {
      * @param value
      */
     decodeUInt32({plainText}) {
-      _instance.decodeUInt32(plainText.instance)
+      try {
+        _instance.decodeUInt32(plainText.instance)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     }
   }
 }

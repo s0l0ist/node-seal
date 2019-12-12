@@ -26,13 +26,13 @@ describe.skip('relinkey on CKKS', () => {
         securityLevel: Morfix.SecurityLevel.tc256
       })
 
-      expect(context.parametersSet()).toBe(true)
+      expect(context.parametersSet).toBe(true)
 
       const keyGenerator = Morfix.KeyGenerator({
         context: context
       })
       
-      expect(context.parametersSet()).toBe(true)
+      expect(context.parametersSet).toBe(true)
 
       const spyGenRelinKeys = jest.spyOn(keyGenerator, 'genRelinKeys')
       const relinKeys = keyGenerator.genRelinKeys()

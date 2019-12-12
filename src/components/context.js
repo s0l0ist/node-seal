@@ -1,5 +1,6 @@
 export const Context = ({library, encryptionParams, expandModChain, securityLevel}) => {
 
+  const _getException = library.getException
   const _printContext = library.printContext
   let _instance = new library.SEALContext(encryptionParams.instance, expandModChain, securityLevel)
 
@@ -19,7 +20,11 @@ export const Context = ({library, encryptionParams, expandModChain, securityLeve
      * Prints the context parameters to STDOUT (console.log)
      */
     print() {
-      _printContext(_instance)
+      try {
+        _printContext(_instance)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -31,7 +36,11 @@ export const Context = ({library, encryptionParams, expandModChain, securityLeve
      * @returns ContextData
      */
     getContextData({parmsId}) {
-      return _instance.getContextData(parmsId)
+      try {
+        return _instance.getContextData(parmsId)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -40,7 +49,7 @@ export const Context = ({library, encryptionParams, expandModChain, securityLeve
      *
      * @returns ContextData
      */
-    keyContextData() {
+    get keyContextData() {
       return _instance.keyContextData()
     },
 
@@ -50,7 +59,7 @@ export const Context = ({library, encryptionParams, expandModChain, securityLeve
      *
      * @returns ContextData
      */
-    firstContextData() {
+    get firstContextData() {
       return _instance.firstContextData()
     },
 
@@ -60,7 +69,7 @@ export const Context = ({library, encryptionParams, expandModChain, securityLeve
      *
      * @returns ContextData
      */
-    lastContextData() {
+    get lastContextData() {
       return _instance.lastContextData()
     },
 
@@ -68,7 +77,7 @@ export const Context = ({library, encryptionParams, expandModChain, securityLeve
      * If the encryption parameters are set in a way that is considered valid by
      * Microsoft SEAL, the variable parameters_set is set to true.
      */
-    parametersSet() {
+    get parametersSet() {
       return _instance.parametersSet()
     },
 
@@ -78,7 +87,7 @@ export const Context = ({library, encryptionParams, expandModChain, securityLeve
      *
      * @returns parmsIdType
      */
-    keyParmsId() {
+    get keyParmsId() {
       return _instance.keyParmsId()
     },
 
@@ -88,7 +97,7 @@ export const Context = ({library, encryptionParams, expandModChain, securityLeve
      *
      * @returns parmsIdType
      */
-    firstParmsId() {
+    get firstParmsId() {
       return _instance.firstParmsId()
     },
 
@@ -98,7 +107,7 @@ export const Context = ({library, encryptionParams, expandModChain, securityLeve
      *
      * @returns parmsIdType
      */
-    lastParmsId() {
+    get lastParmsId() {
       return _instance.lastParmsId()
     },
 
@@ -111,7 +120,7 @@ export const Context = ({library, encryptionParams, expandModChain, securityLeve
      *
      * @returns {boolean}
      */
-    usingKeyswitching() {
+    get usingKeyswitching() {
       return _instance.usingKeyswitching()
     }
   }

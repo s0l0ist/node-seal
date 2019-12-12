@@ -1,5 +1,6 @@
 export const PublicKey = ({library}) => {
 
+  const _getException = library.getException
   const _ComprModeType = library.ComprModeType
   let _instance = new library.PublicKey()
 
@@ -21,7 +22,11 @@ export const PublicKey = ({library}) => {
      * @returns {string}
      */
     save({compression = _ComprModeType.deflate} = {}) {
-      return _instance.saveToString(compression)
+      try {
+        return _instance.saveToString(compression)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -31,7 +36,11 @@ export const PublicKey = ({library}) => {
      * @param encoded
      */
     load({context, encoded}) {
-      _instance.loadFromString(context.instance, encoded)
+      try {
+        _instance.loadFromString(context.instance, encoded)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     }
   }
 }

@@ -1,5 +1,6 @@
 export const Decryptor = ({library, context, secretKey}) => {
 
+  const _getException = library.getException
   let _instance = new library.Decryptor(context.instance, secretKey.instance)
 
   return {
@@ -21,7 +22,11 @@ export const Decryptor = ({library, context, secretKey}) => {
      * @param plainText
      */
     decrypt({cipherText, plainText}) {
-      _instance.decrypt(cipherText.instance, plainText.instance)
+      try {
+        _instance.decrypt(cipherText.instance, plainText.instance)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -45,7 +50,11 @@ export const Decryptor = ({library, context, secretKey}) => {
      * @returns {number}
      */
     invariantNoiseBudget({cipherText}) {
-      return _instance.invariantNoiseBudget(cipherText.instance)
+      try {
+        return _instance.invariantNoiseBudget(cipherText.instance)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     }
   }
 }

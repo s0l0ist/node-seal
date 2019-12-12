@@ -1,5 +1,6 @@
 export const EncryptionParameters = ({library, schemeType}) => {
 
+  const _getException = library.getException
   const _ComprModeType = library.ComprModeType
   let _instance = new library.EncryptionParameters(schemeType)
 
@@ -26,7 +27,11 @@ export const EncryptionParameters = ({library, schemeType}) => {
      * @param polyModulusDegree
      */
     setPolyModulusDegree({polyModulusDegree}) {
-      _instance.setPolyModulusDegree(polyModulusDegree)
+      try {
+        _instance.setPolyModulusDegree(polyModulusDegree)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -41,7 +46,11 @@ export const EncryptionParameters = ({library, schemeType}) => {
      * @param coeffModulus
      */
     setCoeffModulus({coeffModulus}) {
-      _instance.setCoeffModulus(coeffModulus)
+      try {
+        _instance.setCoeffModulus(coeffModulus)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -56,7 +65,11 @@ export const EncryptionParameters = ({library, schemeType}) => {
      * @param {SmallModulus} plainModulus
      */
     setPlainModulus({plainModulus}) {
-      _instance.setPlainModulus(plainModulus)
+      try {
+        _instance.setPlainModulus(plainModulus)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -98,7 +111,11 @@ export const EncryptionParameters = ({library, schemeType}) => {
      * @returns {string}
      */
     save({compression = _ComprModeType.deflate} = {}) {
-      return _instance.saveToString(compression)
+      try {
+        return _instance.saveToString(compression)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -107,7 +124,11 @@ export const EncryptionParameters = ({library, schemeType}) => {
      * @param encoded
      */
     load({encoded}) {
-      _instance.loadFromString(encoded)
+      try {
+        _instance.loadFromString(encoded)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     }
   }
 }

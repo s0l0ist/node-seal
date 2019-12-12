@@ -1,5 +1,6 @@
 export const CKKSEncoder = ({library, context}) => {
 
+  const _getException = library.getException
   const _MemoryPoolHandleGlobal = library.MemoryPoolHandle.MemoryPoolHandleGlobal
   let _instance = new library.CKKSEncoder(context.instance)
 
@@ -24,7 +25,11 @@ export const CKKSEncoder = ({library, context}) => {
      * @param {optional} pool
      */
     encodeVectorDouble({vector, scale, plainText, pool = _MemoryPoolHandleGlobal()}) {
-      _instance.encodeVectorDouble(vector.instance, scale, plainText.instance, pool)
+      try {
+        _instance.encodeVectorDouble(vector.instance, scale, plainText.instance, pool)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -35,7 +40,11 @@ export const CKKSEncoder = ({library, context}) => {
      * @param {optional} pool
      */
     decodeVectorDouble({plainText, vector, pool = _MemoryPoolHandleGlobal()}) {
-      _instance.decodeVectorDouble(plainText.instance, vector.instance, pool)
+      try {
+        _instance.decodeVectorDouble(plainText.instance, vector.instance, pool)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**

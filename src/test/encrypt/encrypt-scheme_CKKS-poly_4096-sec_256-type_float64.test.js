@@ -26,7 +26,7 @@ describe.skip('encrypt on CKKS', () => {
         securityLevel: Morfix.SecurityLevel.tc256
       })
 
-      expect(context.parametersSet()).toBe(true)
+      expect(context.parametersSet).toBe(true)
 
       const encoder = Morfix.CKKSEncoder({
         context: context

@@ -1,5 +1,6 @@
 export const BatchEncoder = ({library, context}) => {
 
+  const _getException = library.getException
   const _MemoryPoolHandleGlobal = library.MemoryPoolHandle.MemoryPoolHandleGlobal
   let _instance = new library.BatchEncoder(context.instance)
 
@@ -31,7 +32,11 @@ export const BatchEncoder = ({library, context}) => {
      * @param plainText
      */
     encodeVectorInt32({vector, plainText}) {
-      _instance.encodeVectorInt32(vector.instance, plainText.instance)
+      try {
+        _instance.encodeVectorInt32(vector.instance, plainText.instance)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -50,7 +55,11 @@ export const BatchEncoder = ({library, context}) => {
      * @param plainText
      */
     encodeVectorUInt32({vector, plainText}) {
-      _instance.encodeVectorUInt32(vector.instance, plainText.instance)
+      try {
+        _instance.encodeVectorUInt32(vector.instance, plainText.instance)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -66,7 +75,11 @@ export const BatchEncoder = ({library, context}) => {
      * @param {optional} pool
      */
     decodeVectorInt32({plainText, vector, pool = _MemoryPoolHandleGlobal()}) {
-      _instance.decodeVectorInt32(plainText.instance, vector.instance, pool)
+      try {
+        _instance.decodeVectorInt32(plainText.instance, vector.instance, pool)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
@@ -82,14 +95,18 @@ export const BatchEncoder = ({library, context}) => {
      * @param {optional} pool
      */
     decodeVectorUInt32({plainText, vector, pool = _MemoryPoolHandleGlobal()}) {
-      _instance.decodeVectorUInt32(plainText.instance, vector.instance, pool)
+      try {
+        _instance.decodeVectorUInt32(plainText.instance, vector.instance, pool)
+      } catch (e) {
+        throw new Error(typeof e === 'number' ? _getException({ pointer: e }) : e instanceof Error ? e.message : e)
+      }
     },
 
     /**
      * Returns the total number of batching slots available to hold data
      * @returns {number}
      */
-    slotCount() {
+    get slotCount() {
       return _instance.slotCount()
     }
   }
