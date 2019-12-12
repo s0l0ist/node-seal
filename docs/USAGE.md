@@ -8,9 +8,9 @@ There are two __Scheme Types__ that SEAL supports:
 However, there are additional differences. `CKKS` delivers an _approximate_ result 
 back to you. Ex. A decrypted `CKKS` cipher may be a few decimals off depending on 
 several factors. If 100% accuracy is needed, use `BFV`. However, `BFV` is limited by the
-minimum and maximum values depending on the encryption parameters whereas `CKKS` is typically
-not limited in min/max values (other than +- 2^53 due to JS Numbers not representing
-true 64 bit values)
+minimum and maximum values depending on the encryption parameters whereas in `CKKS` the min/max
+values maybe higher (given the appropriate encryption parameters and `scale`) but are
+other wise +- 2^53 due to JS Numbers not representing true 64 bit values
 
 There are several __Keys__ in SEAL:
 - `PublicKey` used to encrypt data
@@ -29,99 +29,167 @@ Microsoft SEAL is not a fully homomorphic encryption library and as such, encryp
 have a limit on the total number of evaluations performed before decryption fails, thus 
 limiting the circuit depth of a homomorphic function. When designing a 
 leveled homomorphic algorithm, you can test the limits to see where decryption fails and where
-you can increase the `computationLevel` or use the raw SEAL api to further fine tune the parameters.
-
-# Usage
-
-Steps:
-1. Import the library
-2. Create encryption parameters and initialize the context 
-   (sets the library to work in a given constraint of parameters)
-3. Create or load previously generated public/secret keys
-4. Create some data to encrypt. Save it, send it to a 3rd party for evaluation, or evaluate locally
-5. Decrypt the encrypted cipher result
+you can increase the `polyModulusDegree` or other encryption parameters to further fine tune the parameters.
 
 ### Import / require the library
 
 Due to limitations with how the WASM file is loaded, 
 we need to await on the main library in order to have
-a fully instanciated instance. This limitation mostly
+a fully instantiated instance. This limitation mostly
 because of how chrome limits the size of synchronously
 loaded WASM files. Therefore, loading must be done 
 asynchronously.
 
 ```
-(async () => {
-
-  // Due to limitations with how the WASM file is loaded, 
-  // we need to await on the main library in order to have
-  // a fully instanciated instance. This limitation mostly
-  // because of how chrome limits the size of synchronously
-  // loaded WASM files. Therefore, loading must be done 
-  // asynchronously.
-  
-  // If you're using a tool to bundle, such as webpack, you may omit 
-  // the `require` line for testing inside a browser.
-  const { Seal } = require('node-seal')
-  const Morfix = await Seal
-  
-})()
+    // ES6 import
+    // import { Seal } from 'node-seal'
+    const { Seal } = require('node-seal')
+    const Morfix = await Seal
 ```
 
-### Creating parameters
+### Encryption Parameters
 
-There are 3 different computationLevel's that have been predefined
-for ease of use. `low`, `medium`, and `high`. The computation levels
-allow for more homomorphic operations __on__ encrypted cipherText's
-at the cost of more CPU/memory.
+Setting up a set of encryption parameters is the first step.
 
-Security is by default `128` bits, but can be changed to `192` or `256` bits again 
-at the cost of more CPU/memory.
-
-The computation level and security settings that you choose 
-here limit the total number of elements in an array as well
-as their min/max values.
-
-You're free to use this helper to auto generate parameters used to initialize 
-SEAL. These can be manually created using the low level APIs as well.
+There are two `SchemeTypes`:
+```
+    Morfix.SchemeType.BFV
+    Morfix.SchemeType.CKKS
+```
+A security level determines the bit level security of the encrypted data. 
+There are 3 modes you should be primarily concerned with:
 
 ```
-const parms = Morfix.createParams({computationLevel: 'low', security: 128})
+    Morfix.SchemeType.none // Use unless you know what you're doing
+    Morfix.SchemeType.tc128
+    Morfix.SchemeType.tc192
+    Morfix.SchemeType.tc256
+``` 
+
+PolyModulusDegree needs to be a power of 2. We've set up initial helpers on the demo to create the following:
+```
+    1024 Bits,
+    2048 Bits,
+    4096 Bits,
+    8192 Bits,
+    16384 Bits,
+    32768 Bits,
+    etc...
 ```
 
-### Initialize Seal
+CoeffModulus need to be set by a string of integers representing the bit-sizes of each prime number. We've 
+auto generated a list of bit-lengths in the demo, but they can easily be overridden manually.
 
-SEAL supports two encryption schemes, `BFV` and `CKKS`. Depending on the type of
-data you wish to encrypt, select the appropriate scheme.
+A PlainModulus is only used for the `BFV` scheme and is not needed for `CKKS` we arbitrarily set this value to `20`
+as it works for most of the encryption parameters; however, advanced users should tweak this value.
 
-`BFV` operates on Int32/UInt32
-
-`CKKS` operates on JS Float (Number.MIN_SAFE_INTEGER to Number.MAX_SAFE_INTEGER)
-
+Example:
 ```
-  Morfix.initialize({...parms, schemeType: 'BFV'})
-  
-  // - or - 
-  
-  Morfix.initialize({...parms, schemeType: 'CKKS'})
+    ////////////////////////
+    // Encryption Parameters
+    ////////////////////////
+    
+    // Create a new EncryptionParameters
+    const encParms = Morfix.EncryptionParameters({
+      schemeType: Morfix.SchemeType.BFV
+    })
+
+    // Assign Poly Modulus Degree
+    encParms.setPolyModulusDegree({
+      polyModulusDegree: 4096
+    })
+
+    // Create a C++ vector from JS string of integers representing bit-lengths of primes
+    const bitSizesVector = Morfix.Vector({
+      array: new Int32Array([36,36,37])
+    })
+
+    // Create a suitable set of CoeffModulus primes from the vector
+    const coeffModulusVector = Morfix.CoeffModulus.Create({
+      polyModulusDegree: 4096,
+      bitSizes: bitSizesVector,
+      securityLevel: Morfix.SecurityLevel.tc128
+    })
+
+    // Assign Coefficient Modulus
+    encParms.setCoeffModulus({
+      coeffModulus: coeffModulusVector
+    })
+    
+    // Assign a PlainModulus (only for BFV scheme type)
+    encParms.setPlainModulus({
+      plainModulus: Morfix.PlainModulus.Batching({
+        polyModulusDegree: 4096,
+        bitSize: 20,
+      })
+    })
 ```
 
+### Context
+
+After encryption parameters are created, we need to use them to create a Context. A Context is used to create all
+other instances which execute within the same **context** as the encryption parameters we specify.
+```
+    ////////////////////////
+    // Context
+    ////////////////////////
+    
+    // Create a new Context
+    const context = Morfix.Context({
+      encryptionParams: encParms,
+      expandModChain: true,
+      securityLevel: Morfix.SecurityLevel.tc128 // Enforces we will be operating in 128-bit security context
+    })
+
+    // Helper to check if the Context was created successfully
+    if (!context.parametersSet()) {
+      throw new Error('Could not set the parameters in the given context. Please try different encryption parameters.')
+    }
+```
 ### Generate Keys
 
-#### Public / Secret Keys
-
-Can be generated, saved to a base64 string, or loaded from a base64 string
+A KeyGenerator is used to create all the keys necessary for encryption and decryption.
 
 ```
-  Morfix.genKeys()
-  
-  // Save the keys
-  const publicKey = Morfix.savePublicKey()
-  const secretKey = Morfix.saveSecretKey()
-  
-  // You can skip `Morfix.genKeys()` by loading them instead 
-  Morfix.loadPublicKey({encoded: publicKey})
-  Morfix.loadSecretKey({encoded: secretKey})
+    ////////////////////////
+    // Keys
+    ////////////////////////
+    
+    // Create a new KeyGenerator (creates a new keypair)
+    const keyGenerator = Morfix.KeyGenerator({ 
+      context
+    })
+
+    // A KeyGenerator can also be instantiated with existing keys. This allows you to generate
+    // new Relin/Galois keys with a previously generated SecretKey.
+
+    // Uploading a SecretKey: first, create an Empty SecretKey to load
+    const UploadedSecretKey = Morfix.SecretKey()
+
+    // Load from the base64 encoded string
+    UploadedSecretKey.load({ context, encoded: <(base64 string from the saved key)> })
+    
+    // Create a new KeyGenerator (use uploaded secretKey)
+    const keyGenerator = Morfix.KeyGenerator({ 
+      context,
+      secretKey: UploadedSecretKey
+    })
+
+    // Similarly, you may also create a KeyGenerator with a PublicKey. However, the benefit is purley to
+    // save time by not generating a new PublicKey
+    
+    // Uploading a PublicKey: first, create an Empty PublicKey to load
+    const UploadedPublicKey = Morfix.PublicKey()
+
+    // Load from the base64 encoded string
+    UploadedPublicKey.load({ context, encoded: <(base64 string from the saved key)> })
+    
+    // Create a new KeyGenerator (use both uploaded keys)
+    const keyGenerator = Morfix.KeyGenerator({ 
+      context,
+      secretKey: UploadedSecretKey,
+      publicKey: UploadedPublicKey
+    })
 
 ```
 
@@ -130,13 +198,19 @@ Can be generated, saved to a base64 string, or loaded from a base64 string
 Can be generated, saved to a base64 string, or loaded from a base64 string
 
 ```
-  Morfix.genRelinKeys()
+    // Create a new KeyGenerator (creates a new keypair)
+    const keyGenerator = Morfix.KeyGenerator({ 
+      context
+    })
   
-  // Save the keys
-  const relinKeys = Morfix.saveRelinKeys()
+    // Create the RelinKey from the KeyGenerator
+    const relinKey = keyGenerator.genRelinKeys()
   
-  // You can skip `Morfix.genRelinKeys()` by loading them instead 
-  Morfix.loadRelinKeys({encoded: relinKeys})
+    // Uploading a RelinKey: first, create an empty RelinKey to load
+    const uploadedRelinKey = Morfix.RelinKey()
+
+    // Load from the base64 encoded string
+    uploadedRelinKey.load({ context, encoded: <(base64 string from the saved key)> })
 ```
 
 #### Galois Keys
@@ -145,222 +219,124 @@ Can be generated, saved to a base64 string, or loaded from a base64 string.
 Please note generating Galois keys can take a long time and the output is **very** large.
 
 ```
-  Morfix.genGaloisKeys()
+    // Create a new KeyGenerator (creates a new keypair)
+    const keyGenerator = Morfix.KeyGenerator({ 
+      context
+    })
   
-  // Save the keys
-  const galoisKeys = Morfix.saveGaloisKeys()
+    // Create the GaloisKey from the KeyGenerator
+    const galoisKey = keyGenerator.genGaloisKeys()
   
-  // You can skip `Morfix.genGaloisKeys()` by loading them instead 
-  Morfix.loadGaloisKeys({encoded: galoisKeys})
+    // Uploading a GaloisKey: first, create an empty GaloisKey to load
+    const uploadedGaloisKey = Morfix.GaloisKey()
+
+    // Load from the base64 encoded string
+    uploadedGaloisKey.load({ context, encoded: <(base64 string from the saved key)> })
 ```
 
-### Creating data to encrypt
+### Variables
 
-Creating values can be a bit tricky. SEAL has limitations on the length
-of the array __and__ a limit on the minimum and maximum values of each
-array element depending on the Encryption Parameters and Scheme Type used
-to initialize the library. There is also no way to detect an overflow during
-homomorphic evaluations, but you may attempt to increase the `plainModulus` 
-value. This comes with its own caveats as well, larger `plainModulus` allows
-higher values to be encrypted, but increases the noise budget which lowers the
-amount of homomorphic evaluations that can also be performed.
-
-For `BFV`:
- 
-Max array length = `polyModulusDegree`.
-
-We have two types __Int32__ and __UInt32__ with the following restrictions:
-
-
-* Int32, valid range is from `-1/2 * plainModulus` to `1/2 * plainModulus`
-* UInt32, valid range is from `0` to `plainModulus - 1`
-
-`BFV` Example Data
-```
-/*
-  Create an array of max length `polyModulusDegree` with elements that
-  are in the valid range.
- 
-  Create data to be encrypted (connect the dots). Saw tooth about the x-axis.
- 
-   |            .             |   <- (Max value) Y = + 1/2 (plainModulus)
-   |                   .      |
-   |. _______________________.|   <- Y = 0
-   |      .                   |
-   |            .             |   <- (Min value) Y =  - 1/2 (plainModulus)
-   ^.           ^.            ^.
-     `-> X = 0    `-> X = 2048  `-> X = 4095 (max length, `polyModulusDegree`)
- 
-*/
-const step = parms.plainModulus / parms.polyModulusDegree // ~192.00024
-const array = Int32Array.from({length: parms.polyModulusDegree}).map(
- (x, i) =>  {
-   if (i >= (parms.polyModulusDegree / 2)) {
-     return Math.floor((parms.plainModulus - (step * i)))
-   }
-   return  Math.ceil(-(step + (step * i)))
- })
-})
-```
-
-For `CKKS`:
-
-Max array length = `polyModulusDegree / 2`.
-
-There is only one type, __Double__ with the following restrictions:
-
-* A JS Number between -(2^53 - 1) <-> + (2^53 - 1)
-
-`CKKS` Example Data
-```
-/*
-  Create an array of max length `polyModulusDegree / 2` with elements that
-  are in the valid range.
- 
-  Create data to be encrypted (connect the dots). Saw tooth about the x-axis.
- 
-   |            .             |   <- (Max value) Y = (2^53 - 1)
-   |                   .      |
-   |.________________________.|   <- Y = 0
-   |      .                   |
-   |            .             |   <- (Min value) Y = -(2^53 - 1)
-   ^.           ^.            ^.
-     `-> X = 0    `-> X = 1024  `-> X = 2048 (max length, `polyModulusDegree` / 2)
- 
-*/
-
-// Create data to be encrypted
-const arraySize = parms.polyModulusDegree / 2
-const step = Number.MAX_SAFE_INTEGER / arraySize // (2^53 - 1) / (polyModulusDegree / 2)
-
-const array = Float64Array.from({length: arraySize})
-  .map( (x, i) =>  {
-    if (i >= (arraySize / 2)) {
-      return Number.MAX_SAFE_INTEGER - (step * i)
-    }
-    return -(step * i)
-})
-```
-
-### Encrypt data
-
-Encryption is easily performed by passing an array to the `array` parameter
-of the `encrypt` function.
-
-There are helper methods to save and revitalize a cipher. When reviving a cipher, there
-will need to be additional attributes set on the instance using the `set...` functions.
-This is to ensure decryption will go smoothly.
+Variables hold data we are manipulating. PlainTexts store encoded values of the human readable data that we
+ provide. CipherTexts store encrypted values of the encoded PlainText.
 
 ```
+    ////////////////////////
+    // Variables
+    ////////////////////////
 
-const oldCipherText = Morfix.encrypt({array: Int32Array.from([1,2,3]})
+    // Creating PlainText(s) 
+    const plainA = Morfix.PlainText()
+    const plainB = Morfix.PlainText()
+    
+    // Creating CipherText(s) 
+    const cipherA = Morfix.CipherText()
+    const cipherB = Morfix.CipherText()
 
-  
-// You can save the oldCipherText as a base64 string
-const base64Cipher = oldCipherText.save()
+    // Saving / Loading
+    const plainAbase64 = plainA.save() // Saves as a base64 string
+    const uploadedPlain = Morfix.PlainText()
+    uploadedPlain.load({ context, encoded: <(base64 string from the saved variable)> })
 
-// Revive a cipher from a cipherText base64 string
-const revivedCipherText = Morfix.loadCipher({encoded: base64Cipher})
-
-// But you will need to reinitialize some values. It would be best
-// to also serialize this data in combination with the raw cipherText
-// so that you may retrieve all the related information in one go.
-
-revivedCipherText.setSchemeType({scheme: oldCipherText.getSchemeType()})
-revivedCipherText.setVectorSize({size: oldCipherText.getVectorSize()})
-revivedCipherText.setVectorType({type: oldCipherText.getVectorType()})
+    const cipherAbase64 = cipherA.save() // Saves as a base64 string
+    const uploadedCipher = Morfix.CipherText()
+    uploadedCipher.load({ context, encoded: <(base64 string from the saved variable)> })
 ```
 
-### Decrypt data
+### Instances
 
-Decryption is performed similarly to encryption. The returned Array is a type
-of TypedArray that was originally encrypted. 
-
-```
-const cipherText = Morfix.encrypt({array: Int32Array.from([1,2,3]})
-
-const decryptedResult = Morfix.decrypt({cipherText})
-
-console.log(decryptedResult)
-// Int32Array(3) [1, 2, 3]
+To perform homomorphic evaluations, we need to construct a few helpers:
 
 ```
-# Evaluations on encrypted data
+    ////////////////////////
+    // Instances
+    ////////////////////////
+    
+    // Create an Evaluator which will allow HE functions to execute
+    const evaluator = Morfix.Evaluator({ context })
+    
+    // Create a BatchEncoder (only BFV SchemeType)
+    const encoder = Morfix.BatchEncoder({ context })
 
-For a full list of methods, please take a look at [/src/classes/evaluator](../src/classes/evaluator.js)
-
-### Add
-
-Adding two ciphers results in another cipher.
+    // Or a CKKSEncoder (only CKKS SchemeType)
+    // const encoder = Morfix.CKKSEncoder({ context })
+    
+    // Create an Encryptor to encrypt PlainTexts
+    const encryptor = Morfix.Encryptor({
+      context,
+      publicKey
+    })
+    
+    // Create a Decryptor to decrypt CipherTexts
+    const decryptor = Morfix.Decryptor({
+      context,
+      secretKey
+    })
 ```
 
-// Create two cipherTexts from an `array`
-const cipherText = Morfix.encrypt({array: Uint32Array.from([1,2,3]})
-const cipherText2 = Morfix.encrypt({array: Uint32Array.from([1,2,3]})
+### Functions
 
-const resultCipher = Morfix.add({a: cipherText, b: cipherText2})
-const resultInt32Array = Morfix.decrypt({cipherText: resultCipher})
-
-console.log(resultInt32Array)
-// Uint32Array(3) [2, 4, 6]
+Now, we're ready for performing HE operations! You will notice the usage of `Vector` which comes from C++. For the sake
+of simplicity, you can think of them like arrays, but we need to convert JS TypedArrays to C++ Vectors using
+ `Morfix.Vector({ array: <typed array of values> })`
 
 ```
+    ////////////////////////
+    // Homomorphic Functions
+    ////////////////////////
+    
+    // Encode data to a PlainText
+    batchEncoder.encodeVectorInt32({
+      vector: Morfix.Vector({ array: new Int32Array([1,2,3]) }),
+      plainText: plainA
+    })
+    
+    // Encrypt a PlainText
+    encryptor.encrypt({
+      plainText: plainA,
+      cipherText: cipherA
+    })    
+    
+    // Add CipherText B to CipherText A and store the sum in a destination CipherText
+    evaluator.add({
+      a: cipherA,
+      b: cipherA,
+      destination: cipherB
+    })    
+    
+    // Decrypt a CipherText
+    decryptor.decrypt({
+      cipherText: cipherB,
+      plainText: plainB
+    })    
+    
+    // Decode data from a PlainText
+    // Create a vector to store the decoded PlainText
+    const destinationVector_plainB = Morfix.Vector({ array: new Int32Array() })
 
-### Subtract
-
-Subtracting two ciphers results in another cipher.
-```
-
-// Create two cipherTexts from an `array`
-const cipherText = Morfix.encrypt({array: Uint32Array.from([5,5,5]})
-const cipherText2 = Morfix.encrypt({array: Uint32Array.from([1,2,3]})
-
-const resultCipher = Morfix.sub({a: cipherText, b: cipherText2})
-const resultUInt32Array = Morfix.decrypt({cipherText: resultCipher})
-
-console.log(resultUInt32Array)
-// Uint32Array(3) [4, 3, 2]
-
-```
-
-### Multiply
-
-Multiplying two ciphers results in another cipher.
-```
-
-// Create two cipherTexts from an `array`
-const cipherText = Morfix.encrypt({array: Int32Array.from([1,2,3]})
-const cipherText2 = Morfix.encrypt({array: Int32Array.from([1,2,3]})
-
-const resultCipher = Morfix.multiply({a: cipherText, b: cipherText2})
-const resultInt32Array = Morfix.decrypt({cipherText: resultCipher})
-
-console.log(resultInt32Array)
-// Int32Array(3) [1, 4, 9]
-
-```
-
-### Relinearize
-
-Relinearization is needed to help extend the number of evaluations on a cipherText. Too many
-evaluations will not decrypt correctly. This method is most useful after multiplication, but it 
-is *not* the same as bootstrapping and you will eventually hit a limit before this fails to decrypt.
-
-```
-
-// Create two cipherTexts from an `array`
-const cipherText = Morfix.encrypt({array: Int32Array.from([1,2,3]})
-const cipherText2 = Morfix.encrypt({array: Int32Array.from([1,2,3]})
-
-const resultCipher = Morfix.multiply({a: cipherText, b: cipherText2})
-// Attempt decryption now, or after relinearization
-// const resultInt32Array = Morfix.decrypt({cipherText: resultCipher})
-
-// (Optional) Relinearize the cipher
-const relinearizedCipher = Morfix.relinearize({cipherText: resultCipher})
-const resultInt32Array = Morfix.decrypt({cipherText: relinearizedCipher})
-
-console.log('resultInt32Array', resultInt32Array)
-// Int32Array(3) [1, 4, 9]
-
+    batchEncoder.decodeVectorInt32({
+      plainText: plainB,
+      vector: destinationVector_plainB
+    })
+    
+    console.log('decoded', destinationVector_plainB.toArray() )
 ```
