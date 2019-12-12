@@ -1,7 +1,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/morfix-io/node-seal/badge)](https://www.codefactor.io/repository/github/morfix-io/node-seal)
 [![DeepScan grade](https://deepscan.io/api/teams/6431/projects/8438/branches/100710/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=6431&pid=8438&bid=100710)
-# node-seal
-
+# Homomorphic Encryption in Javascript for Node.js or the browser
+## node-seal
 A zero-dependency Web Assembly port of the C++ [Microsoft SEAL](https://github.com/microsoft/SEAL) library.
 
 **Now supporting Microsoft SEAL 3.4.5**
@@ -15,8 +15,8 @@ This sandbox was built for users to experiment and learn how to use Microsoft SE
  [node-seal](https://github.com/morfix-io/node-seal) inside a WebWorker.
  
 Not all functionality is implemented. For example:
- - No Integer Encoder is present - Almost everything can be implemented with the Batch Encoder.
- - Generating and attempting to download Galois Keys at PolyModulus Degree of `16384` with `128` security will
+- No Integer Encoder is present. Almost everything can be implemented using the Batch Encoder.
+- Generating and attempting to download Galois Keys at PolyModulus Degree of `16384` with `128` security will
   result in a crash due to the browser running out of memory and the page will need to be refreshed.
 
 # Microsoft SEAL
@@ -58,7 +58,7 @@ refer to [HomomorphicEncryption.org](http://homomorphicencryption.org/)
 
 Check out the [Sandbox](https://morfix.io/sandbox) to run HE functions and even generate working code!
 
-If you'd rather read an example then take a look [here](docs/FULL-EXAMPLE.md).
+If you'd rather read an example, take a look [here](docs/FULL-EXAMPLE.md).
 
 For more exhaustive examples, view the tests [here](src/test).
 
@@ -73,7 +73,6 @@ SEAL library itself demands some constraints on the size of arrays as well as
 their max / min values.
 
 [See limitations](docs/CAVEATS.md)
-
 
 # Contributing
 
