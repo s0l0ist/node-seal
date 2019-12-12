@@ -94,7 +94,7 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
         key.inject({instance})
         return key
       } catch (e) {
-        throw new Error(_getException({pointer: e}))
+        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     }
   }
