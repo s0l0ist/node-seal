@@ -1,6 +1,6 @@
 {
   "name": "node-seal",
-  "version": "2.2.2",
+  "version": "3.0.0",
   "description": "Microsoft SEAL in Javascript",
   "repository": {
     "type": "git",
