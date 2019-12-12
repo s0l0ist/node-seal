@@ -92,8 +92,6 @@ const genTests = (verb) => {
         context: context
       })
       
-      expect(context.parametersSet).toBe(true)
-
       const spyGenRelinKeys = jest.spyOn(keyGenerator, 'genRelinKeys')
       const relinKeys = keyGenerator.genRelinKeys()
       expect(spyGenRelinKeys).toHaveBeenCalled()
