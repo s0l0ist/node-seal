@@ -35,7 +35,6 @@ const serverConfig = {...commonConfig,
   output: {
     filename: '[name].node.js',
     path: path.resolve(__dirname, 'dist'),
-    // library: 'Seal',
     libraryTarget: 'umd',
     globalObject: `(typeof self !== 'undefined' ? self : this)`,
     umdNamedDefine: true
