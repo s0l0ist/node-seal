@@ -17,7 +17,7 @@ const commonConfig = {
   module: {
     rules: [
       {
-        test: /a\.out\.wasm$/,
+        test: /seal\.wasm$/,
         type: 'javascript/auto',
         loader: 'file-loader',
         options: {
@@ -35,7 +35,6 @@ const serverConfig = {...commonConfig,
   output: {
     filename: '[name].node.js',
     path: path.resolve(__dirname, 'dist'),
-    // library: 'Seal',
     libraryTarget: 'umd',
     globalObject: `(typeof self !== 'undefined' ? self : this)`,
     umdNamedDefine: true
@@ -44,7 +43,7 @@ const serverConfig = {...commonConfig,
   module: {
     rules: [
       {
-        test: /a\.out\.wasm$/,
+        test: /seal\.wasm$/,
         type: 'javascript/auto',
         loader: 'file-loader',
         options: {
@@ -63,7 +62,6 @@ const clientConfig = {...commonConfig,
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
-    // library: 'Seal',
     libraryTarget: 'umd',
     globalObject: `(typeof self !== 'undefined' ? self : this)`,
     umdNamedDefine: true

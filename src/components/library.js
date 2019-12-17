@@ -7,7 +7,7 @@ export const Library = () => {
 
   return {
     get instance() {
-      return this._module
+      return _module
     },
     initialize: async function ({source, sourceWasm}) {
       return await new Promise((resolve, reject) => {
@@ -28,13 +28,13 @@ export const Library = () => {
           }
         })
 
-        this._timeout = setTimeout(() => {
+        _timeout = setTimeout(() => {
           reject()
         }, 10000)
 
         module.onRuntimeInitialized = () => {
-          clearTimeout(this._timeout)
-          this._module = module
+          clearTimeout(_timeout)
+          _module = module
           resolve()
         }
       })
