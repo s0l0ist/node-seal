@@ -21,7 +21,7 @@ const Morfix = await Seal
 Creating encryption parameters is the first step, but can have 
 drastic affects on the performance of your application as well as
 impose some limitations. There is no generic rule for creating a set
-of parameters for an application, but is a methodology behind optimization.
+of parameters for an application, but there is a methodology behind optimization.
 
 * Determine the scheme type the application requires.
 * Start with a 128 bit security context. Higher bit-strength options are available,
