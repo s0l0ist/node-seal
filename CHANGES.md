@@ -6,7 +6,9 @@ for more details on each SEAL version change.
 ## Version 3.0.1
 
 Chore:
-- Removed unnecessary files from the packed distribution. Size is now ~1/20th.
+- Removed unnecessary files from the packed distribution. 
+  Size is now ~2MB for both Node.js and browser versions 
+  instead of ~20MB.
 
 Docs:
 - Updated documentation
