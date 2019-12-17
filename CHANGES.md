@@ -5,10 +5,13 @@ for more details on each SEAL version change.
 
 ## Version 3.0.1
 
+No updates to core library functionality.
+
 Chore:
 - Removed unnecessary files from the packed distribution. 
   Size is now ~2MB for both Node.js and browser versions 
   instead of ~20MB.
+- Removed use of 'new' keyword for all objects.
 
 Docs:
 - Updated documentation
