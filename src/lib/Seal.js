@@ -157,7 +157,7 @@ export const SEAL = ({options}) => {
      * @constructor
      */
     GaloisKeys() {
-      return new _GaloisKeys({library: _Library.instance})
+      return _GaloisKeys({library: _Library.instance})
     },
 
     /**
@@ -222,7 +222,7 @@ export const SEAL = ({options}) => {
      * @constructor
      */
     PublicKey() {
-      return new _PublicKey({library: _Library.instance})
+      return _PublicKey({library: _Library.instance})
     },
 
     /**
@@ -232,7 +232,7 @@ export const SEAL = ({options}) => {
      * @constructor
      */
     RelinKeys() {
-      return new _RelinKeys({library: _Library.instance})
+      return _RelinKeys({library: _Library.instance})
     },
 
     /**
@@ -252,7 +252,7 @@ export const SEAL = ({options}) => {
      * @constructor
      */
     SecretKey() {
-      return new _SecretKey({library: _Library.instance})
+      return _SecretKey({library: _Library.instance})
     },
 
     /**

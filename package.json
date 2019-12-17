@@ -1,6 +1,6 @@
 {
   "name": "node-seal",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Microsoft SEAL in Javascript",
   "repository": {
     "type": "git",
@@ -25,9 +25,12 @@
     "cryptosystem"
   ],
   "main": "dist/seal.node.js",
+  "module": "dist/seal.node.js",
   "browser": "dist/seal.js",
-  "library": "src/main.js",
-  "module": "src/main.js",
+  "files": [
+    "dist/seal.node.js",
+    "dist/seal.js"
+  ],
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server",
