@@ -1,6 +1,11 @@
 import { Exception } from './exception'
 import { MemoryPoolHandle } from './memory-pool-handle'
 
+/**
+ * Encryptor
+ * @typedef {Object} Encryptor
+ * @constructor
+ */
 export const Encryptor = ({ library, context, publicKey }) => {
   const _Exception = Exception({ library })
   const _MemoryPoolHandle = MemoryPoolHandle({ library })
@@ -23,6 +28,7 @@ export const Encryptor = ({ library, context, publicKey }) => {
     /**
      * Get the underlying wasm instance
      * @returns {instance} wasm instance
+     * @private
      */
     get instance() {
       return _instance
@@ -30,7 +36,9 @@ export const Encryptor = ({ library, context, publicKey }) => {
 
     /**
      * Inject this object with a raw wasm instance
-     * @param {instance} instance - wasm instance
+     * @param {Object} options Options
+     * @param {instance} options.instance - wasm instance
+     * @private
      */
     inject({ instance }) {
       if (_instance) {
@@ -44,10 +52,10 @@ export const Encryptor = ({ library, context, publicKey }) => {
      * Encrypts a plaintext and stores the result in the destination parameter.
      * Dynamic memory allocations in the process are allocated from the memory
      * pool pointed to by the given MemoryPoolHandle.
-     *
-     * @param {PlainText} plainText - PlainText to encrypt
-     * @param {CipherText} cipherText - CipherText destination to store the result
-     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global] - Memory pool pointer
+     * @param {Object} options Options
+     * @param {PlainText} options.plainText - PlainText to encrypt
+     * @param {CipherText} options.cipherText - CipherText destination to store the result
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] - Memory pool pointer
      */
     encrypt({ plainText, cipherText, pool = _MemoryPoolHandle.global }) {
       try {

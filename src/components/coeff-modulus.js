@@ -1,16 +1,25 @@
 import { Exception } from './exception'
 
+/**
+ * CoeffModulus
+ * @typedef {Object} CoeffModulus
+ * @constructor
+ */
 export const CoeffModulus = ({ library }) => {
   const _Exception = Exception({ library })
   const _MaxBitCount = library.CoeffModulus.MaxBitCount
   const _BFVDefault = library.CoeffModulus.BFVDefault
   const _Create = library.CoeffModulus.Create
 
+  /**
+   * CoeffModulus
+   */
   return {
     /**
      * Returns the Maximum Bit Count for the specified polyModulusDegree and securityLevel
-     * @param {number} polyModulusDegree - degree of the polynomial modulus
-     * @param {SecurityLevel} securityLevel - Security Level
+     * @param {Object} options Options
+     * @param {number} options.polyModulusDegree - degree of the polynomial modulus
+     * @param {SecurityLevel} options.securityLevel - Security Level
      * @returns {number} - Maximum bit count
      */
     MaxBitCount({ polyModulusDegree, securityLevel }) {
@@ -30,8 +39,9 @@ export const CoeffModulus = ({ library }) => {
 
     /**
      * Returns a default vector of primes for the BFV CoeffModulus parameter
-     * @param {number} polyModulusDegree - degree of the polynomial modulus
-     * @param {SecurityLevel} securityLevel - Security Level
+     * @param {Object} options Options
+     * @param {number} options.polyModulusDegree - degree of the polynomial modulus
+     * @param {SecurityLevel} options.securityLevel - Security Level
      * @returns {Vector} - Vector containing SmallModulus primes
      */
     BFVDefault({ polyModulusDegree, securityLevel }) {
@@ -50,9 +60,10 @@ export const CoeffModulus = ({ library }) => {
     },
 
     /**
-     * Create a vector of primes for a given polyModulusDegree and bitSizes
-     * @param {number} polyModulusDegree - degree of the polynomial modulus
-     * @param {Vector} bitSizes - Vector containing int32 values representing bit-sizes of primes
+     * Creates a vector of primes for a given polyModulusDegree and bitSizes
+     * @param {Object} options Options
+     * @param {number} options.polyModulusDegree - degree of the polynomial modulus
+     * @param {Vector} options.bitSizes - Vector containing int32 values representing bit-sizes of primes
      * @returns {Vector} - Vector containing SmallModulus primes
      */
     Create({ polyModulusDegree, bitSizes }) {

@@ -1,5 +1,10 @@
 import { Exception } from './exception'
 
+/**
+ * IntegerEncoder
+ * @typedef {Object} IntegerEncoder
+ * @constructor
+ */
 export const IntegerEncoder = ({ library, context }) => {
   const _Exception = Exception({ library })
   let _instance = null
@@ -20,6 +25,7 @@ export const IntegerEncoder = ({ library, context }) => {
     /**
      * Get the underlying wasm instance
      * @returns {instance} wasm instance
+     * @private
      */
     get instance() {
       return _instance
@@ -27,7 +33,9 @@ export const IntegerEncoder = ({ library, context }) => {
 
     /**
      * Inject this object with a raw wasm instance
-     * @param {instance} instance - wasm instance
+     * @param {Object} options Options
+     * @param {instance} options.instance - wasm instance
+     * @private
      */
     inject({ instance }) {
       if (_instance) {
@@ -38,9 +46,10 @@ export const IntegerEncoder = ({ library, context }) => {
     },
 
     /**
-     * Encode an Int32 value
-     * @param {number} value - Integer to encode
-     * @param {PlainText} destination - Plaintext to store the encoded data
+     * Encode an Int32 value to a PlainText
+     * @param {Object} options Options
+     * @param {number} options.value - Integer to encode
+     * @param {PlainText} options.destination - Plaintext to store the encoded data
      */
     encodeInt32({ value, destination }) {
       try {
@@ -58,9 +67,10 @@ export const IntegerEncoder = ({ library, context }) => {
     },
 
     /**
-     * Encode an UInt32 value
-     * @param {number} value - Unsigned integer to encode
-     * @param {PlainText} destination - Plaintext to store the encoded data
+     * Encode an UInt32 value to a PlainText
+     * @param {Object} options Options
+     * @param {number} options.value - Unsigned integer to encode
+     * @param {PlainText} options.destination - Plaintext to store the encoded data
      */
     encodeUInt32({ value, destination }) {
       try {
@@ -77,8 +87,9 @@ export const IntegerEncoder = ({ library, context }) => {
       }
     },
     /**
-     * Decode an Int32 value
-     * @param {PlainText} plainText - Plaintext to decode
+     * Decode an Int32 value from a PlainText
+     * @param {Object} options Options
+     * @param {PlainText} options.plainText - Plaintext to decode
      * @returns {number} - Int32 value
      */
     decodeInt32({ plainText }) {
@@ -97,8 +108,9 @@ export const IntegerEncoder = ({ library, context }) => {
     },
 
     /**
-     * Decode an UInt32 value
-     * @param {PlainText} plainText - Plaintext to decode
+     * Decode an UInt32 value from a PlainText
+     * @param {Object} options Options
+     * @param {PlainText} options.plainText - Plaintext to decode
      * @returns {number} - Uint32 value
      */
     decodeUInt32({ plainText }) {

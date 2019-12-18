@@ -1,3 +1,8 @@
+/**
+ * MemoryPoolHandle
+ * @typedef {Object} MemoryPoolHandle
+ * @constructor
+ */
 export const MemoryPoolHandle = ({ library }) => {
   const _global = library.MemoryPoolHandle.MemoryPoolHandleGlobal
   const _threadLocal = library.MemoryPoolHandle.MemoryPoolHandleThreadLocal

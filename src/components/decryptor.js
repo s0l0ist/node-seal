@@ -1,5 +1,10 @@
 import { Exception } from './exception'
 
+/**
+ * Decryptor
+ * @typedef {Object} Decryptor
+ * @constructor
+ */
 export const Decryptor = ({ library, context, secretKey }) => {
   const _Exception = Exception({ library })
   let _instance = null
@@ -20,6 +25,7 @@ export const Decryptor = ({ library, context, secretKey }) => {
     /**
      * Get the underlying wasm instance
      * @returns {instance} wasm instance
+     * @private
      */
     get instance() {
       return _instance
@@ -27,7 +33,9 @@ export const Decryptor = ({ library, context, secretKey }) => {
 
     /**
      * Inject this object with a raw wasm instance
-     * @param {instance} instance - wasm instance
+     * @param {Object} options Options
+     * @param {instance} options.instance - wasm instance
+     * @private
      */
     inject({ instance }) {
       if (_instance) {
@@ -39,8 +47,9 @@ export const Decryptor = ({ library, context, secretKey }) => {
 
     /**
      * Decrypts a Ciphertext and stores the result in the destination parameter.
-     * @param {CipherText} cipherText - CipherText to decrypt
-     * @param {PlainText} plainText - PlainText destination to store the result
+     * @param {Object} options Options
+     * @param {CipherText} options.cipherText - CipherText to decrypt
+     * @param {PlainText} options.plainText - PlainText destination to store the result
      */
     decrypt({ cipherText, plainText }) {
       try {
@@ -73,7 +82,8 @@ export const Decryptor = ({ library, context, secretKey }) => {
      * value, which depends on the encryption parameters, and decreases when
      * computations are performed. When the budget reaches zero, the ciphertext
      * becomes too noisy to decrypt correctly.
-     * @param {CipherText} cipherText - CipherText to measure
+     * @param {Object} options Options
+     * @param {CipherText} options.cipherText - CipherText to measure
      * @returns {number} - invariant noise budget (in bits)
      */
     invariantNoiseBudget({ cipherText }) {

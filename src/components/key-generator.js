@@ -4,6 +4,11 @@ import { SecretKey } from './secret-key'
 import { RelinKeys } from './relin-keys'
 import { GaloisKeys } from './galois-keys'
 
+/**
+ * KeyGenerator
+ * @typedef {Object} KeyGenerator
+ * @constructor
+ */
 export const KeyGenerator = ({
   library,
   context,
@@ -42,6 +47,7 @@ export const KeyGenerator = ({
     /**
      * Get the underlying wasm instance
      * @returns {instance} wasm instance
+     * @private
      */
     get instance() {
       return _instance
@@ -49,7 +55,9 @@ export const KeyGenerator = ({
 
     /**
      * Inject this object with a raw wasm instance
-     * @param {instance} instance - wasm instance
+     * @param {Object} options Options
+     * @param {instance} options.instance - wasm instance
+     * @private
      */
     inject({ instance }) {
       if (_instance) {

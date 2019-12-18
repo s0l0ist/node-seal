@@ -1,6 +1,11 @@
 import { Exception } from './exception'
 import { MemoryPoolHandle } from './memory-pool-handle'
 
+/**
+ * CKKSEncoder
+ * @typedef {Object} CKKSEncoder
+ * @constructor
+ */
 export const CKKSEncoder = ({ library, context }) => {
   const _Exception = Exception({ library })
   const _MemoryPoolHandle = MemoryPoolHandle({ library })
@@ -22,6 +27,7 @@ export const CKKSEncoder = ({ library, context }) => {
     /**
      * Get the underlying wasm instance
      * @returns {instance} wasm instance
+     * @private
      */
     get instance() {
       return _instance
@@ -29,7 +35,9 @@ export const CKKSEncoder = ({ library, context }) => {
 
     /**
      * Inject this object with a raw wasm instance
-     * @param {instance} instance - wasm instance
+     * @param {Object} options Options
+     * @param {instance} options.instance - wasm instance
+     * @private
      */
     inject({ instance }) {
       if (_instance) {
@@ -41,11 +49,11 @@ export const CKKSEncoder = ({ library, context }) => {
 
     /**
      * Encodes a vector of type double to a given plainText
-     *
-     * @param {Vector} vector - Data to encode
-     * @param {number} scale - Scaling parameter defining encoding precision
-     * @param {PlainText} plainText - Destination to store the encoded result
-     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global]
+     * @param {Object} options Options
+     * @param {Vector} options.vector - Data to encode
+     * @param {number} options.scale - Scaling parameter defining encoding precision
+     * @param {PlainText} options.plainText - Destination to store the encoded result
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global]
      */
     encodeVectorDouble({
       vector,
@@ -74,10 +82,10 @@ export const CKKSEncoder = ({ library, context }) => {
 
     /**
      * Decodes a double vector to a given plainText
-     *
-     * @param {PlainText} plainText - Data to decode
-     * @param {Vector} vector - Destination to store the decoded result
-     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global]
+     * @param {Object} options Options
+     * @param {PlainText} options.plainText - Data to decode
+     * @param {Vector} options.vector - Destination to store the decoded result
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global]
      */
     decodeVectorDouble({ plainText, vector, pool = _MemoryPoolHandle.global }) {
       try {

@@ -1,3 +1,8 @@
+/**
+ * Exception
+ * @typedef {Object} Exception
+ * @constructor
+ */
 export const Exception = ({ library }) => {
   const _getException = library.getException
 
@@ -5,7 +10,8 @@ export const Exception = ({ library }) => {
     /**
      * Returns the human readable exception string from
      * an emscripten exception pointer
-     * @param {number} pointer - The integer pointer thrown from emscripten
+     * @param {Object} options Options
+     * @param {number} options.pointer - The integer pointer thrown from emscripten
      * @returns {string} - Human readable exception message
      */
     getHuman({ pointer }) {
