@@ -38,7 +38,7 @@ export const SmallModulus = ({ library }) => {
     /**
      * Inject this object with a raw wasm instance
      * @param {Object} options Options
-     * @param {instance} options.instance - wasm instance
+     * @param {instance} options.instance wasm instance
      * @private
      */
     inject({ instance }) {
@@ -51,7 +51,7 @@ export const SmallModulus = ({ library }) => {
 
     /**
      * Loads a SmallModulus from a string representing an uint64 value.
-     * @param {string} value - string representation of a uint64 value
+     * @param {string} value string representation of a uint64 value
      */
     setValue({ value }) {
       try {
@@ -81,7 +81,7 @@ export const SmallModulus = ({ library }) => {
 
     /**
      * Returns the significant bit count of the value of the current SmallModulus.
-     * @returns {number} - significant bit count of the value of the current SmallModulus
+     * @returns {number} significant bit count of the value of the current SmallModulus
      */
     get bitCount() {
       return _instance.bitCount()
@@ -89,7 +89,7 @@ export const SmallModulus = ({ library }) => {
 
     /**
      * Returns whether the value of the current SmallModulus is zero.
-     * @returns {boolean} - value of the current SmallModulus is zero
+     * @returns {boolean} value of the current SmallModulus is zero
      */
     get isZero() {
       return _instance.isZero()
@@ -97,7 +97,7 @@ export const SmallModulus = ({ library }) => {
 
     /**
      * Returns whether the value of the current SmallModulus is a prime number.
-     * @returns {boolean} - value of the current SmallModulus is a prime number
+     * @returns {boolean} value of the current SmallModulus is a prime number
      */
     get isPrime() {
       return _instance.isPrime()
@@ -106,8 +106,8 @@ export const SmallModulus = ({ library }) => {
     /**
      * Save the SmallModulus as a base64 string
      * @param {Object} options Options
-     * @param {ComprModeType} [options.compression=ComprModeType.deflate] - activate compression
-     * @returns {string} - base64 encoded string
+     * @param {ComprModeType} [options.compression=ComprModeType.deflate] activate compression
+     * @returns {string} base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
       try {

@@ -18,9 +18,9 @@ export const CoeffModulus = ({ library }) => {
     /**
      * Returns the Maximum Bit Count for the specified polyModulusDegree and securityLevel
      * @param {Object} options Options
-     * @param {number} options.polyModulusDegree - degree of the polynomial modulus
-     * @param {SecurityLevel} options.securityLevel - Security Level
-     * @returns {number} - Maximum bit count
+     * @param {number} options.polyModulusDegree degree of the polynomial modulus
+     * @param {SecurityLevel} options.securityLevel Security Level
+     * @returns {number} Maximum bit count
      */
     MaxBitCount({ polyModulusDegree, securityLevel }) {
       try {
@@ -40,9 +40,9 @@ export const CoeffModulus = ({ library }) => {
     /**
      * Returns a default vector of primes for the BFV CoeffModulus parameter
      * @param {Object} options Options
-     * @param {number} options.polyModulusDegree - degree of the polynomial modulus
-     * @param {SecurityLevel} options.securityLevel - Security Level
-     * @returns {Vector} - Vector containing SmallModulus primes
+     * @param {number} options.polyModulusDegree degree of the polynomial modulus
+     * @param {SecurityLevel} options.securityLevel Security Level
+     * @returns {Vector} Vector containing SmallModulus primes
      */
     BFVDefault({ polyModulusDegree, securityLevel }) {
       try {
@@ -62,9 +62,9 @@ export const CoeffModulus = ({ library }) => {
     /**
      * Creates a vector of primes for a given polyModulusDegree and bitSizes
      * @param {Object} options Options
-     * @param {number} options.polyModulusDegree - degree of the polynomial modulus
-     * @param {Vector} options.bitSizes - Vector containing int32 values representing bit-sizes of primes
-     * @returns {Vector} - Vector containing SmallModulus primes
+     * @param {number} options.polyModulusDegree degree of the polynomial modulus
+     * @param {Vector} options.bitSizes Vector containing int32 values representing bit-sizes of primes
+     * @returns {Vector} Vector containing SmallModulus primes
      */
     Create({ polyModulusDegree, bitSizes }) {
       try {

@@ -36,7 +36,7 @@ export const SecretKey = ({ library }) => {
     /**
      * Inject this object with a raw wasm instance
      * @param {Object} options Options
-     * @param {instance} options.instance - wasm instance
+     * @param {instance} options.instance wasm instance
      * @private
      */
     inject({ instance }) {
@@ -50,8 +50,8 @@ export const SecretKey = ({ library }) => {
     /**
      * Save the Encryption Parameters to a base64 string
      * @param {Object} options Options
-     * @param {ComprModeType} [options.compression=ComprModeType.none] - activate compression
-     * @returns {string} - base64 encoded string
+     * @param {ComprModeType} [options.compression=ComprModeType.none] activate compression
+     * @returns {string} base64 encoded string
      */
     save({ compression = _ComprModeType.none } = {}) {
       try {
@@ -72,7 +72,7 @@ export const SecretKey = ({ library }) => {
      * Load a SecretKey from a base64 string
      * @param {Object} options Options
      * @param {Context} options.context Encryption context to enforce
-     * @param {string} options.encoded - base64 encoded string
+     * @param {string} options.encoded base64 encoded string
      */
     load({ context, encoded }) {
       try {

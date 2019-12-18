@@ -36,7 +36,7 @@ export const PlainText = ({ library }) => {
     /**
      * Inject this object with a raw wasm instance
      * @param {Object} options Options
-     * @param {instance} options.instance - wasm instance
+     * @param {instance} options.instance wasm instance
      * @private
      */
     inject({ instance }) {
@@ -88,7 +88,7 @@ export const PlainText = ({ library }) => {
 
     /**
      * Returns whether the current plaintext polynomial has all zero coefficients.
-     * @returns {boolean} - plaintext polynomial has all zero coefficients
+     * @returns {boolean} plaintext polynomial has all zero coefficients
      */
     get isZero() {
       return _instance.isZero()
@@ -96,7 +96,7 @@ export const PlainText = ({ library }) => {
 
     /**
      * Returns the capacity of the current allocation.
-     * @returns {number} - capacity of the current allocation
+     * @returns {number} capacity of the current allocation
      */
     get capacity() {
       return _instance.capacity()
@@ -104,7 +104,7 @@ export const PlainText = ({ library }) => {
 
     /**
      * Returns the coefficient count of the current plaintext polynomial.
-     * @returns {number} - coefficient count of the current plaintext polynomial
+     * @returns {number} coefficient count of the current plaintext polynomial
      */
     get coeffCount() {
       return _instance.coeffCount()
@@ -112,7 +112,7 @@ export const PlainText = ({ library }) => {
 
     /**
      * Returns the significant coefficient count of the current plaintext polynomial.
-     * @returns {number} - significant coefficient count of the current plaintext polynomial
+     * @returns {number} significant coefficient count of the current plaintext polynomial
      */
     get significantCoeffCount() {
       return _instance.significantCoeffCount()
@@ -120,7 +120,7 @@ export const PlainText = ({ library }) => {
 
     /**
      * Returns the non-zero coefficient count of the current plaintext polynomial.
-     * @returns {number} - non-zero coefficient count of the current plaintext polynomial
+     * @returns {number} non-zero coefficient count of the current plaintext polynomial
      */
     get nonzeroCoeffCount() {
       return _instance.nonzeroCoeffCount()
@@ -145,7 +145,7 @@ export const PlainText = ({ library }) => {
      * 9. If the polynomial is exactly 0, the string "0" is returned
      *
      * @throws std::invalid_argument if the plaintext is in NTT transformed form
-     * @returns {string} - Polynomial string
+     * @returns {string} Polynomial string
      */
     toPolynomial() {
       try {
@@ -164,7 +164,7 @@ export const PlainText = ({ library }) => {
 
     /**
      * Returns whether the plaintext is in NTT form.
-     * @returns {boolean} - plaintext is in NTT form
+     * @returns {boolean} plaintext is in NTT form
      */
     get isNttForm() {
       return _instance.isNttForm()
@@ -175,7 +175,7 @@ export const PlainText = ({ library }) => {
      * plaintext polynomial is in NTT form.
      *
      * @see EncryptionParameters for more information about parms_id.
-     * @returns {*} - parmsId pointer
+     * @returns {*} parmsId pointer
      */
     get parmsId() {
       return _instance.parmsId()
@@ -185,7 +185,7 @@ export const PlainText = ({ library }) => {
      * Returns a reference to the scale. This is only needed when using the CKKS
      * encryption scheme. The user should have little or no reason to ever change
      * the scale by hand.
-     * @returns {*} - reference to the scale
+     * @returns {*} reference to the scale
      */
     get scale() {
       return _instance.scale()
@@ -193,7 +193,7 @@ export const PlainText = ({ library }) => {
 
     /**
      * Returns the currently used MemoryPoolHandle.
-     * @returns {MemoryPoolHandle} - Pointer to the current memory pool handle
+     * @returns {MemoryPoolHandle} Pointer to the current memory pool handle
      */
     get pool() {
       return _instance.pool()
@@ -202,8 +202,8 @@ export const PlainText = ({ library }) => {
     /**
      * Save the PlainText to a base64 string
      * @param {Object} options Options
-     * @param {ComprModeType} [options.compression=ComprModeType.deflate] - activate compression
-     * @returns {string} - base64 encoded string
+     * @param {ComprModeType} [options.compression=ComprModeType.deflate] activate compression
+     * @returns {string} base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
       try {
@@ -224,7 +224,7 @@ export const PlainText = ({ library }) => {
      * Load a PlainText from a base64 string
      * @param {Object} options Options
      * @param {Context} options.context Encryption context to enforce
-     * @param {string} options.encoded - base64 encoded string
+     * @param {string} options.encoded base64 encoded string
      */
     load({ context, encoded }) {
       try {

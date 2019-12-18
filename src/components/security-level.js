@@ -12,7 +12,7 @@ export const SecurityLevel = ({ library }) => {
   return {
     /**
      * Returns the 'none' security level
-     * @returns {SecurityLevel.none} - none security level
+     * @returns {SecurityLevel.none} none security level
      */
     get none() {
       return _none
@@ -20,7 +20,7 @@ export const SecurityLevel = ({ library }) => {
 
     /**
      * Returns the '128' security level
-     * @returns {SecurityLevel.tc128} - 128 bit security level
+     * @returns {SecurityLevel.tc128} 128 bit security level
      */
     get tc128() {
       return _tc128
@@ -28,7 +28,7 @@ export const SecurityLevel = ({ library }) => {
 
     /**
      * Returns the '192' security level
-     * @returns {SecurityLevel.tc192} - 192 bit security level
+     * @returns {SecurityLevel.tc192} 192 bit security level
      */
     get tc192() {
       return _tc192
@@ -36,7 +36,7 @@ export const SecurityLevel = ({ library }) => {
 
     /**
      * Returns the '256' security level
-     * @returns {SecurityLevel.tc256} - 256 bit security level
+     * @returns {SecurityLevel.tc256} 256 bit security level
      */
     get tc256() {
       return _tc256

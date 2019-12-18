@@ -44,7 +44,7 @@ export const Context = ({
     /**
      * Inject this object with a raw wasm instance
      * @param {Object} options Options
-     * @param {instance} options.instance - wasm instance
+     * @param {instance} options.instance wasm instance
      * @private
      */
     inject({ instance }) {
@@ -78,8 +78,8 @@ export const Context = ({
      * parmsId. If parameters with the given parmsId are not found then the
      * function returns nullptr.
      * @param {Object} options Options
-     * @param {*} options.parmsId - specific id to return contextdata for
-     * @returns {*} - contextData corresponding to encryption parameters
+     * @param {*} options.parmsId specific id to return contextdata for
+     * @returns {*} contextData corresponding to encryption parameters
      */
     getContextData({ parmsId }) {
       try {
@@ -98,7 +98,7 @@ export const Context = ({
 
     /**
      * Returns the ContextData corresponding to encryption parameters that are used for keys.
-     * @returns {*} - contextData corresponding to encryption parameters that are used for keys.
+     * @returns {*} contextData corresponding to encryption parameters that are used for keys.
      */
     get keyContextData() {
       return _instance.keyContextData()
@@ -106,7 +106,7 @@ export const Context = ({
 
     /**
      * Returns the ContextData corresponding to the first encryption parameters that are used for data.
-     * @returns {*} - contextData corresponding to the first encryption parameters that are used for data
+     * @returns {*} contextData corresponding to the first encryption parameters that are used for data
      */
     get firstContextData() {
       return _instance.firstContextData()
@@ -114,7 +114,7 @@ export const Context = ({
 
     /**
      * Returns the ContextData corresponding to the last encryption parameters that are used for data.
-     * @returns {*} - contextData corresponding to the last encryption parameters that are used for data
+     * @returns {*} contextData corresponding to the last encryption parameters that are used for data
      */
     get lastContextData() {
       return _instance.lastContextData()
@@ -123,7 +123,7 @@ export const Context = ({
     /**
      * If the encryption parameters are set in a way that is considered valid by
      * Microsoft SEAL, the variable parameters_set is set to true.
-     * @returns {boolean} - are encryption parameters set in a way that is considered valid
+     * @returns {boolean} are encryption parameters set in a way that is considered valid
      */
     get parametersSet() {
       return _instance.parametersSet()
@@ -131,7 +131,7 @@ export const Context = ({
 
     /**
      * Returns a parmsIdType corresponding to the set of encryption parameters that are used for keys.
-     * @returns {*} - parmsIdType corresponding to the set of encryption parameters that are used for keys
+     * @returns {*} parmsIdType corresponding to the set of encryption parameters that are used for keys
      */
     get keyParmsId() {
       return _instance.keyParmsId()
@@ -139,7 +139,7 @@ export const Context = ({
 
     /**
      * Returns a parmsIdType corresponding to the first encryption parameters that are used for data.
-     * @returns {*} - parmsIdType corresponding to the first encryption parameters that are used for data
+     * @returns {*} parmsIdType corresponding to the first encryption parameters that are used for data
      */
     get firstParmsId() {
       return _instance.firstParmsId()
@@ -147,7 +147,7 @@ export const Context = ({
 
     /**
      * Returns a parmsIdType corresponding to the last encryption parameters that are used for data.
-     * @returns {*} - parmsIdType corresponding to the last encryption parameters that are used for data
+     * @returns {*} parmsIdType corresponding to the last encryption parameters that are used for data
      */
     get lastParmsId() {
       return _instance.lastParmsId()
@@ -159,7 +159,7 @@ export const Context = ({
      * Evaluator.applyGalois, and all rotation and conjugation operations. For
      * keyswitching to be available, the coefficient modulus parameter must consist
      * of at least two prime number factors.
-     * @returns {boolean} - coefficient modulus supports keyswitching
+     * @returns {boolean} coefficient modulus supports keyswitching
      */
     get usingKeyswitching() {
       return _instance.usingKeyswitching()

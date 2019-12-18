@@ -64,7 +64,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
     /**
      * Inject this object with a raw wasm instance
      * @param {Object} options Options
-     * @param {instance} options.instance - wasm instance
+     * @param {instance} options.instance wasm instance
      * @private
      */
     inject({ instance }) {
@@ -77,7 +77,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
 
     /**
      * Return the vector type
-     * @returns {Int32ArrayConstructor|Uint32ArrayConstructor|Float64ArrayConstructor} - Constructor used to create the vector
+     * @returns {Int32ArrayConstructor|Uint32ArrayConstructor|Float64ArrayConstructor} Constructor used to create the vector
      */
     get type() {
       return _type
@@ -85,7 +85,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
 
     /**
      * Return the vector size
-     * @returns {number} - number of elements in the vector
+     * @returns {number} number of elements in the vector
      */
     get size() {
       return _instance.size()
@@ -160,8 +160,8 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
     /**
      * Convert a typed array to a vector.
      * @param {Object} options Options
-     * @param {Int32Array|Uint32Array|Float64Array} options.array - Array of data to save to a Vector
-     * @returns {Vector} - Vector whos contents are of the same type as the array passed in.
+     * @param {Int32Array|Uint32Array|Float64Array} options.array Array of data to save to a Vector
+     * @returns {Vector} Vector whos contents are of the same type as the array passed in.
      */
     fromArray({ array }) {
       _fromArray({ array })
@@ -170,8 +170,8 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
     /**
      * Get a value pointed to by the specified index
      * @param {Object} options Options
-     * @param {number} options.index - Vector index
-     * @returns {number} - value in the Vector pointed to by the index
+     * @param {number} options.index Vector index
+     * @returns {number} value in the Vector pointed to by the index
      */
     getValue({ index }) {
       try {
@@ -191,8 +191,8 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
     /**
      * Resizes a vector to the given size
      * @param {Object} options Options
-     * @param {number} options.size - number of elements to resize
-     * @param {number} options.fill - data to fill the vector with
+     * @param {number} options.size number of elements to resize
+     * @param {number} options.fill data to fill the vector with
      */
     resize({ size, fill }) {
       try {
@@ -211,7 +211,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
 
     /**
      * Copy a vector's data into a Typed Array
-     * @returns {Int32Array|Uint32Array|Float64Array} - Typed Array containing values from the Vector
+     * @returns {Int32Array|Uint32Array|Float64Array} Typed Array containing values from the Vector
      */
     toArray() {
       try {

@@ -10,7 +10,7 @@ export const MemoryPoolHandle = ({ library }) => {
   return {
     /**
      * Returns a MemoryPoolHandle pointing to the global memory pool.
-     * @returns {MemoryPoolHandle} - pointer to the global memory pool
+     * @returns {MemoryPoolHandle} pointer to the global memory pool
      */
     get global() {
       return _global()
@@ -18,7 +18,7 @@ export const MemoryPoolHandle = ({ library }) => {
 
     /**
      * Returns a MemoryPoolHandle pointing to the thread-local memory pool.
-     * @returns {MemoryPoolHandle} - pointer to the thread-local memory pool
+     * @returns {MemoryPoolHandle} pointer to the thread-local memory pool
      */
     get threadLocal() {
       return _threadLocal()

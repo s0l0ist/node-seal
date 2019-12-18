@@ -15,9 +15,9 @@ export const PlainModulus = ({ library }) => {
      * Creates a prime number SmallModulus for use as plainModulus encryption
      * parameter that supports batching with a given polyModulusDegree.
      * @param {Object} options Options
-     * @param {number} options.polyModulusDegree - degree of the polynomial modulus
-     * @param {number} options.bitSize - Bit size of the prime
-     * @returns {SmallModulus} - prime number
+     * @param {number} options.polyModulusDegree degree of the polynomial modulus
+     * @param {number} options.bitSize Bit size of the prime
+     * @returns {SmallModulus} prime number
      */
     Batching({ polyModulusDegree, bitSize }) {
       try {
@@ -39,9 +39,9 @@ export const PlainModulus = ({ library }) => {
      * plainModulus encryption parameters, each supporting batching with a given
      * polyModulusDegree.
      * @param {Object} options Options
-     * @param {number} options.polyModulusDegree - degree of the polynomial modulus
-     * @param {Vector} options.bitSizes - Vector containing int32 values representing bit-sizes of primes
-     * @returns {Vector} - Vector of SmallModulus
+     * @param {number} options.polyModulusDegree degree of the polynomial modulus
+     * @param {Vector} options.bitSizes Vector containing int32 values representing bit-sizes of primes
+     * @returns {Vector} Vector of SmallModulus
      */
     BatchingVector({ polyModulusDegree, bitSizes }) {
       try {

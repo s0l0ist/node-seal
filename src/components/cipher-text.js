@@ -36,7 +36,7 @@ export const CipherText = ({ library }) => {
     /**
      * Inject this object with a raw wasm instance
      * @param {Object} options Options
-     * @param {instance} options.instance - wasm instance
+     * @param {instance} options.instance wasm instance
      * @private
      */
     inject({ instance }) {
@@ -51,7 +51,7 @@ export const CipherText = ({ library }) => {
      * Returns the number of primes in the coefficient modulus of the
      * associated encryption parameters. This directly affects the
      * allocation size of the ciphertext.
-     * @returns {number} - number of primes in the coefficient modulus
+     * @returns {number} number of primes in the coefficient modulus
      */
     get coeffModCount() {
       return _instance.coeffModCount()
@@ -61,7 +61,7 @@ export const CipherText = ({ library }) => {
      * Returns the degree of the polynomial modulus of the associated
      * encryption parameters. This directly affects the allocation size
      * of the ciphertext.
-     * @returns {number} - degree of the polynomial modulus
+     * @returns {number} degree of the polynomial modulus
      */
     get polyModulusDegree() {
       return _instance.polyModulusDegree()
@@ -69,7 +69,7 @@ export const CipherText = ({ library }) => {
 
     /**
      * Returns the size of the ciphertext.
-     * @returns {number} - size of the ciphertext
+     * @returns {number} size of the ciphertext
      */
     get size() {
       return _instance.size()
@@ -79,7 +79,7 @@ export const CipherText = ({ library }) => {
      * Returns the capacity of the allocation. This means the largest size
      * of the ciphertext that can be stored in the current allocation with
      * the current encryption parameters.
-     * @returns {number} - capacity of the allocation
+     * @returns {number} capacity of the allocation
      */
     get sizeCapacity() {
       return _instance.sizeCapacity()
@@ -91,7 +91,7 @@ export const CipherText = ({ library }) => {
      * ciphertexts would not be considered to be valid. Starting from the second
      * polynomial in the current ciphertext, this function returns true if all
      * following coefficients are identically zero. Otherwise, returns false.
-     * @returns {boolean} - ciphertext is transparent
+     * @returns {boolean} ciphertext is transparent
      */
     get isTransparent() {
       return _instance.isTransparent()
@@ -99,7 +99,7 @@ export const CipherText = ({ library }) => {
 
     /**
      * Returns whether the ciphertext is in NTT form.
-     * @returns {boolean} - ciphertext is in NTT form
+     * @returns {boolean} ciphertext is in NTT form
      */
     get isNttForm() {
       return _instance.isNttForm()
@@ -108,7 +108,7 @@ export const CipherText = ({ library }) => {
     /**
      * Returns a reference to parmsId.
      * @see EncryptionParameters for more information about parmsId.
-     * @returns {pointer} - pointer to the parmsId
+     * @returns {pointer} pointer to the parmsId
      */
     get parmsId() {
       return _instance.parmsId()
@@ -118,7 +118,7 @@ export const CipherText = ({ library }) => {
      * Returns a reference to the scale. This is only needed when using the
      * CKKS encryption scheme. The user should have little or no reason to ever
      * change the scale by hand.
-     * @returns {pointer} - pointer to the scale
+     * @returns {pointer} pointer to the scale
      */
     get scale() {
       return _instance.scale()
@@ -126,7 +126,7 @@ export const CipherText = ({ library }) => {
 
     /**
      * Returns the currently used MemoryPoolHandle.
-     * @returns {pointer} - pointer to the MemoryPoolHandle
+     * @returns {pointer} pointer to the MemoryPoolHandle
      */
     get pool() {
       return _instance.pool()
@@ -135,8 +135,8 @@ export const CipherText = ({ library }) => {
     /**
      * Save a cipherText to a base64 string
      * @param {Object} options Options
-     * @param {ComprModeType} [options.compression=ComprModeType.deflate] - activate compression
-     * @returns {string} - base64 encoded string
+     * @param {ComprModeType} [options.compression=ComprModeType.deflate] activate compression
+     * @returns {string} base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
       try {
@@ -157,7 +157,7 @@ export const CipherText = ({ library }) => {
      * Load a cipherText from a base64 string
      * @param {Object} options Options
      * @param {Context} options.context Encryption context to enforce
-     * @param {string} options.encoded - base64 encoded string
+     * @param {string} options.encoded base64 encoded string
      */
     load({ context, encoded }) {
       try {

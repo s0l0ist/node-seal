@@ -36,7 +36,7 @@ export const CKKSEncoder = ({ library, context }) => {
     /**
      * Inject this object with a raw wasm instance
      * @param {Object} options Options
-     * @param {instance} options.instance - wasm instance
+     * @param {instance} options.instance wasm instance
      * @private
      */
     inject({ instance }) {
@@ -50,9 +50,9 @@ export const CKKSEncoder = ({ library, context }) => {
     /**
      * Encodes a vector of type double to a given plainText
      * @param {Object} options Options
-     * @param {Vector} options.vector - Data to encode
-     * @param {number} options.scale - Scaling parameter defining encoding precision
-     * @param {PlainText} options.plainText - Destination to store the encoded result
+     * @param {Vector} options.vector Data to encode
+     * @param {number} options.scale Scaling parameter defining encoding precision
+     * @param {PlainText} options.plainText Destination to store the encoded result
      * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global]
      */
     encodeVectorDouble({
@@ -83,8 +83,8 @@ export const CKKSEncoder = ({ library, context }) => {
     /**
      * Decodes a double vector to a given plainText
      * @param {Object} options Options
-     * @param {PlainText} options.plainText - Data to decode
-     * @param {Vector} options.vector - Destination to store the decoded result
+     * @param {PlainText} options.plainText Data to decode
+     * @param {Vector} options.vector Destination to store the decoded result
      * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global]
      */
     decodeVectorDouble({ plainText, vector, pool = _MemoryPoolHandle.global }) {
@@ -104,7 +104,7 @@ export const CKKSEncoder = ({ library, context }) => {
 
     /**
      * Returns the total number of CKKS slots available to hold data
-     * @returns {number} - Number of CKKS slots available
+     * @returns {number} Number of CKKS slots available
      */
     get slotCount() {
       return _instance.slotCount()

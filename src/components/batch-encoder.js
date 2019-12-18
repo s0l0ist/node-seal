@@ -36,7 +36,7 @@ export const BatchEncoder = ({ library, context }) => {
     /**
      * Inject this object with a raw wasm instance
      * @param {Object} options Options
-     * @param {instance} options.instance - wasm instance
+     * @param {instance} options.instance wasm instance
      * @private
      */
     inject({ instance }) {
@@ -59,8 +59,8 @@ export const BatchEncoder = ({ library, context }) => {
      * If the destination plaintext overlaps the input values in memory, the behavior of
      * this function is undefined.
      * @param {Object} options Options
-     * @param {Vector} options.vector - Data to encode
-     * @param {PlainText} options.plainText - Destination to store the encoded result
+     * @param {Vector} options.vector Data to encode
+     * @param {PlainText} options.plainText Destination to store the encoded result
      */
     encodeVectorInt32({ vector, plainText }) {
       try {
@@ -89,8 +89,8 @@ export const BatchEncoder = ({ library, context }) => {
      * If the destination plaintext overlaps the input values in memory, the behavior of
      * this function is undefined.
      * @param {Object} options Options
-     * @param {Vector} options.vector - Data to encode
-     * @param {PlainText} options.plainText - Destination to store the encoded result
+     * @param {Vector} options.vector Data to encode
+     * @param {PlainText} options.plainText Destination to store the encoded result
      */
     encodeVectorUInt32({ vector, plainText }) {
       try {
@@ -115,8 +115,8 @@ export const BatchEncoder = ({ library, context }) => {
      * for the encryption parameters. Dynamic memory allocations in the process are
      * allocated from the memory pool pointed to by the given MemoryPoolHandle.
      * @param {Object} options Options
-     * @param {PlainText} options.plainText - Data to decode
-     * @param {Vector} options.vector - Destination to store the decoded result
+     * @param {PlainText} options.plainText Data to decode
+     * @param {Vector} options.vector Destination to store the decoded result
      * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global]
      */
     decodeVectorInt32({ plainText, vector, pool = _MemoryPoolHandle.global }) {
@@ -142,8 +142,8 @@ export const BatchEncoder = ({ library, context }) => {
      * for the encryption parameters. Dynamic memory allocations in the process are
      * allocated from the memory pool pointed to by the given MemoryPoolHandle.
      * @param {Object} options Options
-     * @param {PlainText} options.plainText - Data to decode
-     * @param {Vector} options.vector - Destination to store the decoded result
+     * @param {PlainText} options.plainText Data to decode
+     * @param {Vector} options.vector Destination to store the decoded result
      * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global]
      */
     decodeVectorUInt32({ plainText, vector, pool = _MemoryPoolHandle.global }) {
@@ -163,7 +163,7 @@ export const BatchEncoder = ({ library, context }) => {
 
     /**
      * Returns the total number of batching slots available to hold data
-     * @returns {number} - Number of batching slots available to hold data
+     * @returns {number} Number of batching slots available to hold data
      */
     get slotCount() {
       return _instance.slotCount()

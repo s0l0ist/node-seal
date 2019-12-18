@@ -36,7 +36,7 @@ export const RelinKeys = ({ library }) => {
     /**
      * Inject this object with a raw wasm instance
      * @param {Object} options Options
-     * @param {instance} options.instance - wasm instance
+     * @param {instance} options.instance wasm instance
      * @private
      */
     inject({ instance }) {
@@ -50,8 +50,8 @@ export const RelinKeys = ({ library }) => {
     /**
      * Save the RelinKeys to a base64 string
      * @param {Object} options Options
-     * @param {ComprModeType} [options.compression=ComprModeType.deflate] - activate compression
-     * @returns {string} - base64 encoded string
+     * @param {ComprModeType} [options.compression=ComprModeType.deflate] activate compression
+     * @returns {string} base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
       try {
@@ -72,7 +72,7 @@ export const RelinKeys = ({ library }) => {
      * Load a set of RelinKeys from a base64 string
      * @param {Object} options Options
      * @param {Context} options.context Encryption context to enforce
-     * @param {string} options.encoded - base64 encoded string
+     * @param {string} options.encoded base64 encoded string
      */
     load({ context, encoded }) {
       try {
