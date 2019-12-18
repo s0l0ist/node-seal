@@ -6,6 +6,7 @@ export const CipherText = ({library}) => {
   try {
     _instance = new library.Ciphertext()
   } catch (e) {
+    // eslint-disable-next-line no-nested-ternary
     throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
   }
 
@@ -114,6 +115,7 @@ export const CipherText = ({library}) => {
       try {
         return _instance.saveToString(compression)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -127,6 +129,7 @@ export const CipherText = ({library}) => {
       try {
         _instance.loadFromString(context.instance, encoded)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     }

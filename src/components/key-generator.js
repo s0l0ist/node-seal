@@ -17,6 +17,7 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
       }
       return new library.KeyGenerator(context.instance)
     } catch (e) {
+      // eslint-disable-next-line no-nested-ternary
       throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
     }
   }
@@ -46,6 +47,7 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
         key.inject({instance})
         return key
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -62,6 +64,7 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
         key.inject({instance})
         return key
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -78,6 +81,7 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
         key.inject({instance})
         return key
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -94,6 +98,7 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
         key.inject({instance})
         return key
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     }

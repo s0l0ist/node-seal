@@ -5,6 +5,7 @@ export const Decryptor = ({library, context, secretKey}) => {
   try {
     _instance = new library.Decryptor(context.instance, secretKey.instance)
   } catch (e) {
+    // eslint-disable-next-line no-nested-ternary
     throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
   }
 
@@ -30,6 +31,7 @@ export const Decryptor = ({library, context, secretKey}) => {
       try {
         _instance.decrypt(cipherText.instance, plainText.instance)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -58,6 +60,7 @@ export const Decryptor = ({library, context, secretKey}) => {
       try {
         return _instance.invariantNoiseBudget(cipherText.instance)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     }

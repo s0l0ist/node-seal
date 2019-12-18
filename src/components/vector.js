@@ -26,6 +26,7 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
       }
       return vec
     } catch (e) {
+      // eslint-disable-next-line no-nested-ternary
       throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
     }
   }
@@ -68,7 +69,7 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
      *
      * @param rowSize
      */
-    printMatrix({rowSize = size / 2} = {}) {
+    printMatrix({rowSize}) {
       try {
         switch (_type) {
           case Int32Array: _printMatrixInt32(_instance, rowSize); break;
@@ -76,6 +77,7 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
           default: throw new Error('Unsupported matrix type!')
         }
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -97,6 +99,7 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
           default: throw new Error('Unsupported vector type!')
         }
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -122,6 +125,7 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
       try {
         return _instance.get(index)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -135,6 +139,7 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
       try {
         _instance.resize(size, fill)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -157,6 +162,7 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
         }
         return arr
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     }

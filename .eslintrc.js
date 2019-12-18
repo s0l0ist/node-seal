@@ -298,5 +298,8 @@ module.exports = {
             "error",
             "never"
         ]
-    }
+    },
+    "plugins": [
+        "jsdoc"
+    ]
 };

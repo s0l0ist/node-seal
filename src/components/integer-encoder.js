@@ -5,6 +5,7 @@ export const IntegerEncoder = ({library, context}) => {
   try {
     _instance = new library.IntegerEncoder(context.instance)
   } catch (e) {
+    // eslint-disable-next-line no-nested-ternary
     throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
   }
 
@@ -29,6 +30,7 @@ export const IntegerEncoder = ({library, context}) => {
       try {
         _instance.encodeInt32(value)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -42,6 +44,7 @@ export const IntegerEncoder = ({library, context}) => {
       try {
         _instance.encodeUInt32(value)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -54,6 +57,7 @@ export const IntegerEncoder = ({library, context}) => {
       try {
         _instance.decodeInt32(plainText.instance)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -67,6 +71,7 @@ export const IntegerEncoder = ({library, context}) => {
       try {
         _instance.decodeUInt32(plainText.instance)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     }
