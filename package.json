@@ -35,6 +35,9 @@
   "scripts": {
     "start": "webpack-dev-server",
     "eslint-check": "eslint --print-config ./src/main.js | eslint-config-prettier-check",
+    "docs": "npm run docs:md && npm run docs:html",
+    "docs:md": "doxdox 'src/**/*.js' --layout markdown --output docs/DOCUMENTATION.md",
+    "docs:html": "doxdox 'src/**/*.js' --layout bootstrap --output docs/index.html",
     "build": "eslint ./src && NODE_ENV=production webpack",
     "test": "node --max-old-space-size=4096 `which jest`",
     "test:bfv": "node --max-old-space-size=4096 `which jest` --testPathIgnorePatterns=\"^((?!scheme_BFV).)*$\"",
