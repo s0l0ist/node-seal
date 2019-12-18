@@ -5,5 +5,3 @@
 /src/bin/*.js
 /src/test/*
 /submodules/*
-webpack.config.js
-

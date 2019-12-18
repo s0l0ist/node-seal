@@ -25,9 +25,18 @@ export const Context = ({
   }
 
   return {
+    /**
+     * Get the underlying wasm instance
+     * @returns {instance}
+     */
     get instance() {
       return _instance
     },
+
+    /**
+     * Inject this object with a raw wasm instance
+     * @param instance
+     */
     inject({ instance }) {
       if (_instance) {
         _instance.delete()

@@ -17,9 +17,18 @@ export const CKKSEncoder = ({ library, context }) => {
   }
 
   return {
+    /**
+     * Get the underlying wasm instance
+     * @returns {instance}
+     */
     get instance() {
       return _instance
     },
+
+    /**
+     * Inject this object with a raw wasm instance
+     * @param instance
+     */
     inject({ instance }) {
       if (_instance) {
         _instance.delete()
@@ -34,7 +43,7 @@ export const CKKSEncoder = ({ library, context }) => {
      * @param vector
      * @param scale
      * @param plainText
-     * @param {optional} pool
+     * @param [pool=MemoryPoolHandleGlobal]
      */
     encodeVectorDouble({
       vector,
@@ -66,7 +75,7 @@ export const CKKSEncoder = ({ library, context }) => {
      *
      * @param plainText
      * @param vector
-     * @param {optional} pool
+     * @param [pool=MemoryPoolHandleGlobal]
      */
     decodeVectorDouble({
       plainText,
