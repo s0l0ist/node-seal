@@ -1,5 +1,10 @@
 import { Exception } from './exception'
 
+/**
+ * Context
+ * @typedef {Object} Context
+ * @constructor
+ */
 export const Context = ({
   library,
   encryptionParams,
@@ -30,6 +35,7 @@ export const Context = ({
     /**
      * Get the underlying wasm instance
      * @returns {instance} wasm instance
+     * @private
      */
     get instance() {
       return _instance
@@ -37,7 +43,9 @@ export const Context = ({
 
     /**
      * Inject this object with a raw wasm instance
-     * @param {instance} instance - wasm instance
+     * @param {Object} options Options
+     * @param {instance} options.instance - wasm instance
+     * @private
      */
     inject({ instance }) {
       if (_instance) {
@@ -69,7 +77,8 @@ export const Context = ({
      * Returns the ContextData corresponding to encryption parameters with a given
      * parmsId. If parameters with the given parmsId are not found then the
      * function returns nullptr.
-     * @param {*} parmsId - specific id to return contextdata for
+     * @param {Object} options Options
+     * @param {*} options.parmsId - specific id to return contextdata for
      * @returns {*} - contextData corresponding to encryption parameters
      */
     getContextData({ parmsId }) {
@@ -88,8 +97,7 @@ export const Context = ({
     },
 
     /**
-     * Returns the ContextData corresponding to encryption parameters that are
-     * used for keys.
+     * Returns the ContextData corresponding to encryption parameters that are used for keys.
      * @returns {*} - contextData corresponding to encryption parameters that are used for keys.
      */
     get keyContextData() {
@@ -97,8 +105,7 @@ export const Context = ({
     },
 
     /**
-     * Returns the ContextData corresponding to the first encryption parameters
-     * that are used for data.
+     * Returns the ContextData corresponding to the first encryption parameters that are used for data.
      * @returns {*} - contextData corresponding to the first encryption parameters that are used for data
      */
     get firstContextData() {
@@ -106,8 +113,7 @@ export const Context = ({
     },
 
     /**
-     * Returns the ContextData corresponding to the last encryption parameters
-     * that are used for data.
+     * Returns the ContextData corresponding to the last encryption parameters that are used for data.
      * @returns {*} - contextData corresponding to the last encryption parameters that are used for data
      */
     get lastContextData() {
@@ -124,8 +130,7 @@ export const Context = ({
     },
 
     /**
-     * Returns a parmsIdType corresponding to the set of encryption parameters
-     * that are used for keys.
+     * Returns a parmsIdType corresponding to the set of encryption parameters that are used for keys.
      * @returns {*} - parmsIdType corresponding to the set of encryption parameters that are used for keys
      */
     get keyParmsId() {
@@ -133,8 +138,7 @@ export const Context = ({
     },
 
     /**
-     * Returns a parmsIdType corresponding to the first encryption parameters
-     * that are used for data.
+     * Returns a parmsIdType corresponding to the first encryption parameters that are used for data.
      * @returns {*} - parmsIdType corresponding to the first encryption parameters that are used for data
      */
     get firstParmsId() {
@@ -142,8 +146,7 @@ export const Context = ({
     },
 
     /**
-     * Returns a parmsIdType corresponding to the last encryption parameters
-     * that are used for data.
+     * Returns a parmsIdType corresponding to the last encryption parameters that are used for data.
      * @returns {*} - parmsIdType corresponding to the last encryption parameters that are used for data
      */
     get lastParmsId() {

@@ -1,3 +1,8 @@
+/**
+ * ComprModeType
+ * @typedef {Object} ComprModeType
+ * @constructor
+ */
 export const ComprModeType = ({ library }) => {
   const _none = library.ComprModeType.none
   const _deflate = library.ComprModeType.deflate
@@ -5,7 +10,7 @@ export const ComprModeType = ({ library }) => {
   return {
     /**
      * Return the `none` Compression Mode Type
-     * @returns {ComprModeType} - enum for this type
+     * @returns {ComprModeType.none} Compression mode 'none'
      */
     get none() {
       return _none
@@ -13,7 +18,7 @@ export const ComprModeType = ({ library }) => {
 
     /**
      * Return the `deflate` Compression Mode Type
-     * @returns {ComprModeType} - enum for this type
+     * @returns {ComprModeType.deflate} Compression mode 'deflate'
      */
     get deflate() {
       return _deflate

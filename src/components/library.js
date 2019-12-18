@@ -1,18 +1,28 @@
 import pathlib from 'path'
 
+/**
+ * Library
+ * @typedef {Object} Library
+ * @constructor
+ */
 export const Library = () => {
   let _module = null
   let _timeout = null
 
   return {
+    /**
+     * Get the underlying wasm instance
+     * @returns {instance} wasm instance
+     * @private
+     */
     get instance() {
       return _module
     },
     /**
      * Initialize the library
-     *
-     * @param {*} source - Source library
-     * @param {*} sourceWasm - Source WASM file
+     * @param {Object} options Options
+     * @param {*} options.source - Source library
+     * @param {*} options.sourceWasm - Source WASM file
      * @returns {Promise<null>}
      */
     initialize: async ({ source, sourceWasm }) => {

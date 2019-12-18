@@ -1,5 +1,10 @@
 import { Exception } from './exception'
 
+/**
+ * PlainModulus
+ * @typedef {Object} PlainModulus
+ * @constructor
+ */
 export const PlainModulus = ({ library }) => {
   const _Exception = Exception({ library })
   const _Batching = library.PlainModulus.Batching
@@ -9,8 +14,9 @@ export const PlainModulus = ({ library }) => {
     /**
      * Creates a prime number SmallModulus for use as plainModulus encryption
      * parameter that supports batching with a given polyModulusDegree.
-     * @param {number} polyModulusDegree - degree of the polynomial modulus
-     * @param {number} bitSize - Bit size of the prime
+     * @param {Object} options Options
+     * @param {number} options.polyModulusDegree - degree of the polynomial modulus
+     * @param {number} options.bitSize - Bit size of the prime
      * @returns {SmallModulus} - prime number
      */
     Batching({ polyModulusDegree, bitSize }) {
@@ -32,8 +38,9 @@ export const PlainModulus = ({ library }) => {
      * Creates several prime number SmallModulus elements that can be used as
      * plainModulus encryption parameters, each supporting batching with a given
      * polyModulusDegree.
-     * @param {number} polyModulusDegree - degree of the polynomial modulus
-     * @param {Vector} bitSizes - Vector containing int32 values representing bit-sizes of primes
+     * @param {Object} options Options
+     * @param {number} options.polyModulusDegree - degree of the polynomial modulus
+     * @param {Vector} options.bitSizes - Vector containing int32 values representing bit-sizes of primes
      * @returns {Vector} - Vector of SmallModulus
      */
     BatchingVector({ polyModulusDegree, bitSizes }) {

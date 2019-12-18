@@ -1,5 +1,10 @@
 import { Exception } from './exception'
 
+/**
+ * Vector
+ * @typedef {Object} Vector
+ * @constructor
+ */
 export const Vector = ({ library, array = new Int32Array(0) }) => {
   const _Exception = Exception({ library })
   const _vecFromArrayInt32 = library.vecFromArrayInt32
@@ -50,6 +55,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
     /**
      * Get the underlying wasm instance
      * @returns {instance} wasm instance
+     * @private
      */
     get instance() {
       return _instance
@@ -57,7 +63,9 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
 
     /**
      * Inject this object with a raw wasm instance
-     * @param {instance} instance - wasm instance
+     * @param {Object} options Options
+     * @param {instance} options.instance - wasm instance
+     * @private
      */
     inject({ instance }) {
       if (_instance) {
@@ -87,8 +95,8 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      * Prints a matrix to the console
      *
      * This method is mainly used for debugging this library
-     *
-     * @param {number} rowSize
+     * @param {Object} options Options
+     * @param {number} options.rowSize
      */
     printMatrix({ rowSize }) {
       try {
@@ -118,9 +126,9 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      * Prints a vector to the console
      *
      * This method is mainly used for debugging this library
-     *
-     * @param {number} printSize
-     * @param {number} precision
+     * @param {Object} options Options
+     * @param {number} [options.printSize=4]
+     * @param {number} [options.precision=5]
      */
     printVector({ printSize = 4, precision = 5 } = {}) {
       try {
@@ -151,8 +159,8 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
 
     /**
      * Convert a typed array to a vector.
-     *
-     * @param {Int32Array|Uint32Array|Float64Array} array - Array of data to save to a Vector
+     * @param {Object} options Options
+     * @param {Int32Array|Uint32Array|Float64Array} options.array - Array of data to save to a Vector
      * @returns {Vector} - Vector whos contents are of the same type as the array passed in.
      */
     fromArray({ array }) {
@@ -161,7 +169,8 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
 
     /**
      * Get a value pointed to by the specified index
-     * @param {number} index - Vector index
+     * @param {Object} options Options
+     * @param {number} options.index - Vector index
      * @returns {number} - value in the Vector pointed to by the index
      */
     getValue({ index }) {
@@ -181,8 +190,9 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
 
     /**
      * Resizes a vector to the given size
-     * @param {number} size - number of elements to resize
-     * @param {number} fill - data to fill the vector with
+     * @param {Object} options Options
+     * @param {number} options.size - number of elements to resize
+     * @param {number} options.fill - data to fill the vector with
      */
     resize({ size, fill }) {
       try {
@@ -200,7 +210,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
     },
 
     /**
-     * Copy a vector's data into a Typed or regular JS array
+     * Copy a vector's data into a Typed Array
      * @returns {Int32Array|Uint32Array|Float64Array} - Typed Array containing values from the Vector
      */
     toArray() {

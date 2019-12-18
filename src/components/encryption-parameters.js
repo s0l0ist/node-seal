@@ -1,6 +1,11 @@
 import { Exception } from './exception'
 import { ComprModeType } from './compr-mode-type'
 
+/**
+ * EncryptionParameters
+ * @typedef {Object} EncryptionParameters
+ * @constructor
+ */
 export const EncryptionParameters = ({ library, schemeType }) => {
   const _Exception = Exception({ library })
   const _ComprModeType = ComprModeType({ library })
@@ -22,6 +27,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
     /**
      * Get the underlying wasm instance
      * @returns {instance} wasm instance
+     * @private
      */
     get instance() {
       return _instance
@@ -29,7 +35,9 @@ export const EncryptionParameters = ({ library, schemeType }) => {
 
     /**
      * Inject this object with a raw wasm instance
-     * @param {instance} instance - wasm instance
+     * @param {Object} options Options
+     * @param {instance} options.instance - wasm instance
+     * @private
      */
     inject({ instance }) {
       if (_instance) {
@@ -46,7 +54,8 @@ export const EncryptionParameters = ({ library, schemeType }) => {
      * performance of the scheme (bigger is worse), and the security level (bigger
      * is better). In Microsoft SEAL the degree of the polynomial modulus must be a power
      * of 2 (e.g.  1024, 2048, 4096, 8192, 16384, or 32768).
-     * @param {number} polyModulusDegree - degree of the polynomial modulus
+     * @param {Object} options Options
+     * @param {number} options.polyModulusDegree - degree of the polynomial modulus
      */
     setPolyModulusDegree({ polyModulusDegree }) {
       try {
@@ -71,8 +80,8 @@ export const EncryptionParameters = ({ library, schemeType }) => {
      * (bigger is better), and the security level (bigger is worse). In Microsoft SEAL each
      * of the prime numbers in the coefficient modulus must be at most 60 bits,
      * and must be congruent to 1 modulo 2*degree(poly_modulus).
-     *
-     * @param {Vector} coeffModulus - Vector of SmallModulus primes
+     * @param {Object} options Options
+     * @param {Vector} options.coeffModulus - Vector of SmallModulus primes
      */
     setCoeffModulus({ coeffModulus }) {
       try {
@@ -97,8 +106,8 @@ export const EncryptionParameters = ({ library, schemeType }) => {
      * (bigger is worse). In Microsoft SEAL the plaintext modulus can be at most 60 bits
      * long, but can otherwise be any integer. Note, however, that some features
      * (e.g. batching) require the plaintext modulus to be of a particular form.
-     *
-     * @param {SmallModulus} plainModulus - plaintext modulus parameter
+     * @param {Object} options Options
+     * @param {SmallModulus} options.plainModulus - plaintext modulus parameter
      */
     setPlainModulus({ plainModulus }) {
       try {
@@ -151,7 +160,8 @@ export const EncryptionParameters = ({ library, schemeType }) => {
 
     /**
      * Save the Encryption Parameters to a base64 string
-     * @param {ComprModeType} [compression=ComprModeType.deflate] - activate compression
+     * @param {Object} options Options
+     * @param {ComprModeType} [options.compression=ComprModeType.deflate] - activate compression
      * @returns {string} - base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
@@ -171,7 +181,8 @@ export const EncryptionParameters = ({ library, schemeType }) => {
 
     /**
      * Load the Encryption Parameters from a base64 string
-     * @param {string} encoded - base64 encoded string
+     * @param {Object} options Options
+     * @param {string} options.encoded - base64 encoded string
      */
     load({ encoded }) {
       try {

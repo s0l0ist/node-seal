@@ -1,6 +1,11 @@
 import { Exception } from './exception'
 import { ComprModeType } from './compr-mode-type'
 
+/**
+ * PublicKey
+ * @typedef {Object} PublicKey
+ * @constructor
+ */
 export const PublicKey = ({ library }) => {
   const _Exception = Exception({ library })
   const _ComprModeType = ComprModeType({ library })
@@ -22,6 +27,7 @@ export const PublicKey = ({ library }) => {
     /**
      * Get the underlying wasm instance
      * @returns {instance} wasm instance
+     * @private
      */
     get instance() {
       return _instance
@@ -29,7 +35,9 @@ export const PublicKey = ({ library }) => {
 
     /**
      * Inject this object with a raw wasm instance
-     * @param {instance} instance - wasm instance
+     * @param {Object} options Options
+     * @param {instance} options.instance - wasm instance
+     * @private
      */
     inject({ instance }) {
       if (_instance) {
@@ -41,7 +49,8 @@ export const PublicKey = ({ library }) => {
 
     /**
      * Save the PublicKey to a base64 string
-     * @param {ComprModeType} [compression=ComprModeType.deflate] - activate compression
+     * @param {Object} options Options
+     * @param {ComprModeType} [options.compression=ComprModeType.deflate] - activate compression
      * @returns {string} - base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
@@ -61,8 +70,9 @@ export const PublicKey = ({ library }) => {
 
     /**
      * Load a PublicKey from a base64 string
-     * @param {Context} context - Encryption context to enforce
-     * @param {string} encoded - base64 encoded string
+     * @param {Object} options Options
+     * @param {Context} options.context Encryption context to enforce
+     * @param {string} options.encoded - base64 encoded string
      */
     load({ context, encoded }) {
       try {

@@ -1,3 +1,8 @@
+/**
+ * SecurityLevel
+ * @typedef {Object} SecurityLevel
+ * @constructor
+ */
 export const SecurityLevel = ({ library }) => {
   const _none = library.SecLevelType.none
   const _tc128 = library.SecLevelType.tc128

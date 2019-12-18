@@ -1,6 +1,11 @@
 import { Exception } from './exception'
 import { ComprModeType } from './compr-mode-type'
 
+/**
+ * SmallModulus
+ * @typedef {Object} SmallModulus
+ * @constructor
+ */
 export const SmallModulus = ({ library }) => {
   const _Exception = Exception({ library })
   const _saveToString = library.SmallModulus.saveToString
@@ -24,6 +29,7 @@ export const SmallModulus = ({ library }) => {
     /**
      * Get the underlying wasm instance
      * @returns {instance} wasm instance
+     * @private
      */
     get instance() {
       return _instance
@@ -31,7 +37,9 @@ export const SmallModulus = ({ library }) => {
 
     /**
      * Inject this object with a raw wasm instance
-     * @param {instance} instance - wasm instance
+     * @param {Object} options Options
+     * @param {instance} options.instance - wasm instance
+     * @private
      */
     inject({ instance }) {
       if (_instance) {
@@ -97,7 +105,8 @@ export const SmallModulus = ({ library }) => {
 
     /**
      * Save the SmallModulus as a base64 string
-     * @param {ComprModeType} [compression=ComprModeType.deflate] - activate compression
+     * @param {Object} options Options
+     * @param {ComprModeType} [options.compression=ComprModeType.deflate] - activate compression
      * @returns {string} - base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
