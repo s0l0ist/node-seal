@@ -1,5 +1,4 @@
-export const PublicKey = ({library}) => {
-
+export const PublicKey = ({ library }) => {
   const _getException = library.getException
   const _ComprModeType = library.ComprModeType
   let _instance = null
@@ -7,14 +6,20 @@ export const PublicKey = ({library}) => {
     _instance = new library.PublicKey()
   } catch (e) {
     // eslint-disable-next-line no-nested-ternary
-    throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+    throw new Error(
+      typeof e === 'number'
+        ? _getException(e)
+        : e instanceof Error
+        ? e.message
+        : e
+    )
   }
 
   return {
     get instance() {
       return _instance
     },
-    inject({instance}) {
+    inject({ instance }) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -27,12 +32,18 @@ export const PublicKey = ({library}) => {
      *
      * @returns {string}
      */
-    save({compression = _ComprModeType.deflate} = {}) {
+    save({ compression = _ComprModeType.deflate } = {}) {
       try {
         return _instance.saveToString(compression)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -42,12 +53,18 @@ export const PublicKey = ({library}) => {
      * @param context
      * @param encoded
      */
-    load({context, encoded}) {
+    load({ context, encoded }) {
       try {
         _instance.loadFromString(context.instance, encoded)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     }
   }

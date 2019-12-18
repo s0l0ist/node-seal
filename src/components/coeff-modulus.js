@@ -1,5 +1,4 @@
-export const CoeffModulus = ({library}) => {
-
+export const CoeffModulus = ({ library }) => {
   const _getException = library.getException
   const _MaxBitCount = library.CoeffModulus.MaxBitCount
   const _BFVDefault = library.CoeffModulus.BFVDefault
@@ -13,12 +12,18 @@ export const CoeffModulus = ({library}) => {
      * @param securityLevel
      * @returns {number}
      */
-    MaxBitCount({polyModulusDegree, securityLevel}) {
+    MaxBitCount({ polyModulusDegree, securityLevel }) {
       try {
         return _MaxBitCount(polyModulusDegree, securityLevel)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -29,12 +34,18 @@ export const CoeffModulus = ({library}) => {
      * @param securityLevel
      * @returns {vector<SmallModulus>}
      */
-    BFVDefault({polyModulusDegree, securityLevel}) {
+    BFVDefault({ polyModulusDegree, securityLevel }) {
       try {
         return _BFVDefault(polyModulusDegree, securityLevel)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -45,12 +56,18 @@ export const CoeffModulus = ({library}) => {
      * @param {vector<Int32>} bitSizes
      * @returns {vector<SmallModulus>}
      */
-    Create({polyModulusDegree, bitSizes}) {
+    Create({ polyModulusDegree, bitSizes }) {
       try {
         return _Create(polyModulusDegree, bitSizes.instance)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     }
   }

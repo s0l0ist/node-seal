@@ -1,20 +1,26 @@
-export const BatchEncoder = ({library, context}) => {
-
+export const BatchEncoder = ({ library, context }) => {
   const _getException = library.getException
-  const _MemoryPoolHandleGlobal = library.MemoryPoolHandle.MemoryPoolHandleGlobal
+  const _MemoryPoolHandleGlobal =
+    library.MemoryPoolHandle.MemoryPoolHandleGlobal
   let _instance = null
   try {
     _instance = new library.BatchEncoder(context.instance)
   } catch (e) {
     // eslint-disable-next-line no-nested-ternary
-    throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+    throw new Error(
+      typeof e === 'number'
+        ? _getException(e)
+        : e instanceof Error
+        ? e.message
+        : e
+    )
   }
 
   return {
     get instance() {
       return _instance
     },
-    inject({instance}) {
+    inject({ instance }) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -37,12 +43,18 @@ export const BatchEncoder = ({library, context}) => {
      * @param vector
      * @param plainText
      */
-    encodeVectorInt32({vector, plainText}) {
+    encodeVectorInt32({ vector, plainText }) {
       try {
         _instance.encodeVectorInt32(vector.instance, plainText.instance)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -61,12 +73,18 @@ export const BatchEncoder = ({library, context}) => {
      * @param vector
      * @param plainText
      */
-    encodeVectorUInt32({vector, plainText}) {
+    encodeVectorUInt32({ vector, plainText }) {
       try {
         _instance.encodeVectorUInt32(vector.instance, plainText.instance)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -82,12 +100,18 @@ export const BatchEncoder = ({library, context}) => {
      * @param vector
      * @param {optional} pool
      */
-    decodeVectorInt32({plainText, vector, pool = _MemoryPoolHandleGlobal()}) {
+    decodeVectorInt32({ plainText, vector, pool = _MemoryPoolHandleGlobal() }) {
       try {
         _instance.decodeVectorInt32(plainText.instance, vector.instance, pool)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -103,12 +127,22 @@ export const BatchEncoder = ({library, context}) => {
      * @param vector
      * @param {optional} pool
      */
-    decodeVectorUInt32({plainText, vector, pool = _MemoryPoolHandleGlobal()}) {
+    decodeVectorUInt32({
+      plainText,
+      vector,
+      pool = _MemoryPoolHandleGlobal()
+    }) {
       try {
         _instance.decodeVectorUInt32(plainText.instance, vector.instance, pool)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 

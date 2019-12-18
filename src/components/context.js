@@ -1,20 +1,34 @@
-export const Context = ({library, encryptionParams, expandModChain, securityLevel}) => {
-
+export const Context = ({
+  library,
+  encryptionParams,
+  expandModChain,
+  securityLevel
+}) => {
   const _getException = library.getException
   const _printContext = library.printContext
   let _instance = null
   try {
-    _instance = new library.SEALContext(encryptionParams.instance, expandModChain, securityLevel)
+    _instance = new library.SEALContext(
+      encryptionParams.instance,
+      expandModChain,
+      securityLevel
+    )
   } catch (e) {
     // eslint-disable-next-line no-nested-ternary
-    throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+    throw new Error(
+      typeof e === 'number'
+        ? _getException(e)
+        : e instanceof Error
+        ? e.message
+        : e
+    )
   }
 
   return {
     get instance() {
       return _instance
     },
-    inject({instance}) {
+    inject({ instance }) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -30,7 +44,13 @@ export const Context = ({library, encryptionParams, expandModChain, securityLeve
         _printContext(_instance)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -42,12 +62,18 @@ export const Context = ({library, encryptionParams, expandModChain, securityLeve
      * @param parmsId
      * @returns ContextData
      */
-    getContextData({parmsId}) {
+    getContextData({ parmsId }) {
       try {
         return _instance.getContextData(parmsId)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
