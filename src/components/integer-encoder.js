@@ -34,7 +34,7 @@ export const IntegerEncoder = ({ library, context }) => {
     /**
      * Inject this object with a raw wasm instance
      * @param {Object} options Options
-     * @param {instance} options.instance - wasm instance
+     * @param {instance} options.instance wasm instance
      * @private
      */
     inject({ instance }) {
@@ -48,8 +48,8 @@ export const IntegerEncoder = ({ library, context }) => {
     /**
      * Encode an Int32 value to a PlainText
      * @param {Object} options Options
-     * @param {number} options.value - Integer to encode
-     * @param {PlainText} options.destination - Plaintext to store the encoded data
+     * @param {number} options.value Integer to encode
+     * @param {PlainText} options.destination Plaintext to store the encoded data
      */
     encodeInt32({ value, destination }) {
       try {
@@ -69,8 +69,8 @@ export const IntegerEncoder = ({ library, context }) => {
     /**
      * Encode an UInt32 value to a PlainText
      * @param {Object} options Options
-     * @param {number} options.value - Unsigned integer to encode
-     * @param {PlainText} options.destination - Plaintext to store the encoded data
+     * @param {number} options.value Unsigned integer to encode
+     * @param {PlainText} options.destination Plaintext to store the encoded data
      */
     encodeUInt32({ value, destination }) {
       try {
@@ -89,8 +89,8 @@ export const IntegerEncoder = ({ library, context }) => {
     /**
      * Decode an Int32 value from a PlainText
      * @param {Object} options Options
-     * @param {PlainText} options.plainText - Plaintext to decode
-     * @returns {number} - Int32 value
+     * @param {PlainText} options.plainText Plaintext to decode
+     * @returns {number} Int32 value
      */
     decodeInt32({ plainText }) {
       try {
@@ -110,8 +110,8 @@ export const IntegerEncoder = ({ library, context }) => {
     /**
      * Decode an UInt32 value from a PlainText
      * @param {Object} options Options
-     * @param {PlainText} options.plainText - Plaintext to decode
-     * @returns {number} - Uint32 value
+     * @param {PlainText} options.plainText Plaintext to decode
+     * @returns {number} Uint32 value
      */
     decodeUInt32({ plainText }) {
       try {

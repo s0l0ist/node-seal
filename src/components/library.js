@@ -21,8 +21,8 @@ export const Library = () => {
     /**
      * Initialize the library
      * @param {Object} options Options
-     * @param {*} options.source - Source library
-     * @param {*} options.sourceWasm - Source WASM file
+     * @param {*} options.source Source library
+     * @param {*} options.sourceWasm Source WASM file
      * @returns {Promise<null>}
      */
     initialize: async ({ source, sourceWasm }) => {

@@ -37,7 +37,7 @@ export const Encryptor = ({ library, context, publicKey }) => {
     /**
      * Inject this object with a raw wasm instance
      * @param {Object} options Options
-     * @param {instance} options.instance - wasm instance
+     * @param {instance} options.instance wasm instance
      * @private
      */
     inject({ instance }) {
@@ -53,9 +53,9 @@ export const Encryptor = ({ library, context, publicKey }) => {
      * Dynamic memory allocations in the process are allocated from the memory
      * pool pointed to by the given MemoryPoolHandle.
      * @param {Object} options Options
-     * @param {PlainText} options.plainText - PlainText to encrypt
-     * @param {CipherText} options.cipherText - CipherText destination to store the result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] - Memory pool pointer
+     * @param {PlainText} options.plainText PlainText to encrypt
+     * @param {CipherText} options.cipherText CipherText destination to store the result
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] Memory pool pointer
      */
     encrypt({ plainText, cipherText, pool = _MemoryPoolHandle.global }) {
       try {

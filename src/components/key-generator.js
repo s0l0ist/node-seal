@@ -56,7 +56,7 @@ export const KeyGenerator = ({
     /**
      * Inject this object with a raw wasm instance
      * @param {Object} options Options
-     * @param {instance} options.instance - wasm instance
+     * @param {instance} options.instance wasm instance
      * @private
      */
     inject({ instance }) {
@@ -69,7 +69,7 @@ export const KeyGenerator = ({
 
     /**
      * Return the generated SecretKey
-     * @returns {SecretKey} - The secret key that was generated upon instantiation of this KeyGenerator
+     * @returns {SecretKey} The secret key that was generated upon instantiation of this KeyGenerator
      */
     getSecretKey() {
       try {
@@ -91,7 +91,7 @@ export const KeyGenerator = ({
 
     /**
      * Return the generated PublicKey
-     * @returns {PublicKey} - The public key that was generated upon instantiation of this KeyGenerator
+     * @returns {PublicKey} The public key that was generated upon instantiation of this KeyGenerator
      */
     getPublicKey() {
       try {
@@ -113,7 +113,7 @@ export const KeyGenerator = ({
 
     /**
      * Generate and return a set of RelinKeys
-     * @returns {RelinKeys} - New RelinKeys from the KeyGenerator's internal secret key
+     * @returns {RelinKeys} New RelinKeys from the KeyGenerator's internal secret key
      */
     genRelinKeys() {
       try {
@@ -135,7 +135,7 @@ export const KeyGenerator = ({
 
     /**
      * Generate and return a set of GaloisKeys
-     * @returns {GaloisKeys} - New GaloisKeys from the KeyGenerator's internal secret key
+     * @returns {GaloisKeys} New GaloisKeys from the KeyGenerator's internal secret key
      */
     genGaloisKeys() {
       try {

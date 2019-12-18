@@ -11,8 +11,8 @@ export const Exception = ({ library }) => {
      * Returns the human readable exception string from
      * an emscripten exception pointer
      * @param {Object} options Options
-     * @param {number} options.pointer - The integer pointer thrown from emscripten
-     * @returns {string} - Human readable exception message
+     * @param {number} options.pointer The integer pointer thrown from emscripten
+     * @returns {string} Human readable exception message
      */
     getHuman({ pointer }) {
       return _getException(pointer)

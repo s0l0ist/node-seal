@@ -13,7 +13,7 @@
  * @param {GaloisKeys} options.GaloisKeys
  * @param {IntegerEncoder} options.IntegerEncoder
  * @param {KeyGenerator} options.KeyGenerator
- * @param {Library} options.Library - SEAL wasm library
+ * @param {Library} options.Library SEAL wasm library
  * @param {PlainText} options.PlainText
  * @param {PublicKey} options.PublicKey
  * @param {RelinKeys} options.RelinKeys
@@ -233,9 +233,9 @@ export const SEAL = ({ options }) => {
      * key data.
      *
      * @typedef {Object} ComprModeType
-     * @property {getter} none - Getter for the compression mode 'none'
-     * @property {getter} deflate - Getter for the compression mode 'deflate'
-     * @returns {ComprModeType} - The ComprModeType singleton
+     * @property {getter} none Getter for the compression mode 'none'
+     * @property {getter} deflate Getter for the compression mode 'deflate'
+     * @returns {ComprModeType} The ComprModeType singleton
      */
     get ComprModeType() {
       return _ComprModeType
@@ -294,7 +294,7 @@ export const SEAL = ({ options }) => {
      * @property {getter} usingKeyswitching Getter for whether the coefficient modulus supports keyswitching
      * @property {function} print Prints the context parameters to STDOUT (console.log)
      * @property {function} getContextData Returns the ContextData corresponding to encryption parameters with a given parmsId
-     * @returns {Context} - An encryption context to be used for all operations
+     * @returns {Context} An encryption context to be used for all operations
      * @constructor
      */
     Context({ encryptionParams, expandModChain, securityLevel }) {
@@ -341,7 +341,7 @@ export const SEAL = ({ options }) => {
      * @param {SecretKey} options.secretKey SecretKey to be used for decryption
      * @property {function} decrypt Decrypts a Ciphertext and stores the result in the destination parameter
      * @property {function} invariantNoiseBudget Computes the invariant noise budget (in bits) of a ciphertext
-     * @returns {Decryptor} - A decryptor instance that can be used to decrypt CipherTexts
+     * @returns {Decryptor} A decryptor instance that can be used to decrypt CipherTexts
      * @constructor
      */
     Decryptor({ context, secretKey }) {
@@ -398,7 +398,7 @@ export const SEAL = ({ options }) => {
      * @property {function} setPlainModulus Sets the plaintext modulus parameter
      * @property {function} save Save the Encryption Parameters to a base64 string
      * @property {function} load Load the Encryption Parameters from a base64 string
-     * @returns {EncryptionParameters} - A set of encryption parameters based from the scheme type
+     * @returns {EncryptionParameters} A set of encryption parameters based from the scheme type
      * @constructor
      */
     EncryptionParameters({ schemeType }) {
@@ -441,9 +441,9 @@ export const SEAL = ({ options }) => {
      * @typedef {Object} Encryptor
      * @param {Object} options Options
      * @param {Context} options.context Encryption context
-     * @param {PublicKey} options.publicKey - PublicKey to be used for encryption
+     * @param {PublicKey} options.publicKey PublicKey to be used for encryption
      * @property {function} encrypt Encrypts a plaintext and stores the result in the destination parameter
-     * @returns {Encryptor} - An encryptor instance that can be used to encrypt PlainTexts
+     * @returns {Encryptor} An encryptor instance that can be used to encrypt PlainTexts
      * @constructor
      */
     Encryptor({ context, publicKey }) {
@@ -554,7 +554,7 @@ export const SEAL = ({ options }) => {
      * Get the Exception singleton
      * @typedef {Object} Exception
      * @property {function} getHuman Returns the human readable exception string from a WASM pointer
-     * @returns {Exception} - The Exception singleton
+     * @returns {Exception} The Exception singleton
      * @constructor
      */
     get Exception() {
@@ -587,7 +587,7 @@ export const SEAL = ({ options }) => {
      * @typedef {Object} GaloisKeys
      * @property {function} save Saves the instance to a base64 string
      * @property {function} load Loads the instance from a base64 string
-     * @returns {GaloisKeys} - An empty GaloisKeys instance
+     * @returns {GaloisKeys} An empty GaloisKeys instance
      * @constructor
      */
     GaloisKeys() {
@@ -621,7 +621,7 @@ export const SEAL = ({ options }) => {
      * @property {function} encodeUInt32 Encode an UInt32 value to a PlainText
      * @property {function} decodeInt32 Decode an Int32 value from a PlainText
      * @property {function} decodeUInt32 Decode an UInt32 value from a PlainText
-     * @returns {IntegerEncoder} - An encoder to be used for encoding only integers to PlainTexts
+     * @returns {IntegerEncoder} An encoder to be used for encoding only integers to PlainTexts
      * @constructor
      */
     IntegerEncoder({ context }) {
@@ -644,13 +644,13 @@ export const SEAL = ({ options }) => {
      * @typedef {Object} KeyGenerator
      * @param {Object} options Options
      * @param {Context} options.context Encryption context
-     * @param {SecretKey} [options.secretKey] - Previously generated SecretKey
-     * @param {PublicKey} [options.publicKey] - Previously generated PublicKey
+     * @param {SecretKey} [options.secretKey] Previously generated SecretKey
+     * @param {PublicKey} [options.publicKey] Previously generated PublicKey
      * @property {function} getSecretKey Returns the generated SecretKey
      * @property {function} getPublicKey Returns the generated PublicKey
      * @property {function} genRelinKeys Generate RelinKeys
      * @property {function} genGaloisKeys Generate GaloisKeys
-     * @returns {KeyGenerator} - A KeyGenerator to be used to generate keys depending on how it was initialized
+     * @returns {KeyGenerator} A KeyGenerator to be used to generate keys depending on how it was initialized
      * @constructor
      */
     KeyGenerator({ context, secretKey = null, publicKey = null }) {
@@ -711,7 +711,7 @@ export const SEAL = ({ options }) => {
      * @typedef {Object} MemoryPoolHandle
      * @property {getter} global Getter for the MemoryPoolHandle pointing to the global memory pool
      * @property {getter} threadLocal Getter for the MemoryPoolHandle pointing to the theard-local memory pool
-     * @returns {MemoryPoolHandle} - The MemoryPoolHandle singleton
+     * @returns {MemoryPoolHandle} The MemoryPoolHandle singleton
      * @constructor
      */
     get MemoryPoolHandle() {
@@ -727,7 +727,7 @@ export const SEAL = ({ options }) => {
      * @property {function} BatchingVector Creates several prime number SmallModulus elements that can be used as
      * plainModulus encryption parameters, each supporting batching with a given
      * polyModulusDegree.
-     * @returns {PlainModulus} - The PlainModulus singleton
+     * @returns {PlainModulus} The PlainModulus singleton
      * @constructor
      */
     get PlainModulus() {
@@ -782,7 +782,7 @@ export const SEAL = ({ options }) => {
      * @property {function} toPolynomial Returns a human-readable string description of the plaintext polynomial
      * @property {function} save Saves the instance to a base64 string
      * @property {function} load Loads the instance from a base64 string
-     * @returns {PlainText} - An empty PlainText instance
+     * @returns {PlainText} An empty PlainText instance
      * @constructor
      */
     PlainText() {
@@ -807,7 +807,7 @@ export const SEAL = ({ options }) => {
      * @typedef {Object} PublicKey
      * @property {function} save Saves the instance to a base64 string
      * @property {function} load Loads the instance from a base64 string
-     * @returns {PublicKey} - An empty PublicKey instance
+     * @returns {PublicKey} An empty PublicKey instance
      * @constructor
      */
     PublicKey() {
@@ -854,7 +854,7 @@ export const SEAL = ({ options }) => {
      * @typedef {Object} RelinKeys
      * @property {function} save Saves the instance to a base64 string
      * @property {function} load Loads the instance from a base64 string
-     * @returns {RelinKeys} - An empty RelinKeys instance
+     * @returns {RelinKeys} An empty RelinKeys instance
      * @constructor
      */
     RelinKeys() {
@@ -868,7 +868,7 @@ export const SEAL = ({ options }) => {
      * @property {getter} none Getter for the 'none' scheme type
      * @property {getter} BFV Getter for the 'BFV' scheme type
      * @property {getter} CKKS Getter for the 'CKKS' scheme type
-     * @returns {SchemeType} - The SchemeType singleton
+     * @returns {SchemeType} The SchemeType singleton
      * @constructor
      */
     get SchemeType() {
@@ -893,7 +893,7 @@ export const SEAL = ({ options }) => {
      * @typedef {Object} SecretKey
      * @property {function} save Saves the instance to a base64 string
      * @property {function} load Loads the instance from a base64 string
-     * @returns {SecretKey} - An empty SecretKey instance
+     * @returns {SecretKey} An empty SecretKey instance
      * @constructor
      */
     SecretKey() {
@@ -915,7 +915,7 @@ export const SEAL = ({ options }) => {
      * @property {getter} tc128 Getter for the '128 bit' security level
      * @property {getter} tc192 Getter for the '192 bit' security level
      * @property {getter} tc256 Getter for the '256 bit' security level
-     * @returns {SecurityLevel} - The SecurityLevel singleton
+     * @returns {SecurityLevel} The SecurityLevel singleton
      * @constructor
      */
     get SecurityLevel() {
@@ -931,7 +931,7 @@ export const SEAL = ({ options }) => {
      * @property {getter} isPrime Getter for whether the value of the current SmallModulus is a prime number
      * @property {function} setValue Loads a SmallModulus from a string representing an uint64 value
      * @property {function} save Saves the instance to a base64 string
-     * @returns {SmallModulus} - An empty SmallModulus instance
+     * @returns {SmallModulus} An empty SmallModulus instance
      * @constructor
      */
     SmallModulus() {
@@ -942,7 +942,7 @@ export const SEAL = ({ options }) => {
      * Create an instance of a C++ Vector
      * @typedef {Object} Vector
      * @param {Object} options Options
-     * @param {Int32Array|Uint32Array|Float64Array} options.array - Typed Array of data
+     * @param {Int32Array|Uint32Array|Float64Array} options.array Typed Array of data
      * @property {getter} type Getter for the Vector type
      * @property {getter} size Getter for length of the Vector
      * @property {function} printMatrix Prints a matrix to the console
@@ -951,7 +951,7 @@ export const SEAL = ({ options }) => {
      * @property {function} getValue Get a value pointed to by the specified index of a Vector
      * @property {function} resize Resizes a vector to the given size
      * @property {function} toArray Copy a vector's data into a Typed Array
-     * @returns {Vector} - Vector containing the typed data
+     * @returns {Vector} Vector containing the typed data
      * @constructor
      */
     Vector({ array }) {

@@ -36,7 +36,7 @@ export const Evaluator = ({ library, context }) => {
     /**
      * Inject this object with a raw wasm instance
      * @param {Object} options Options
-     * @param {instance} options.instance - wasm instance
+     * @param {instance} options.instance wasm instance
      * @private
      */
     inject({ instance }) {
@@ -50,8 +50,8 @@ export const Evaluator = ({ library, context }) => {
     /**
      * Negates a ciphertext and stores the result in the destination parameter.
      * @param {Object} options Options
-     * @param {CipherText} options.encrypted - CipherText to negate
-     * @param {CipherText} options.destination - CipherText to store the negated result
+     * @param {CipherText} options.encrypted CipherText to negate
+     * @param {CipherText} options.destination CipherText to store the negated result
      */
     negate({ encrypted, destination }) {
       try {
@@ -72,9 +72,9 @@ export const Evaluator = ({ library, context }) => {
      * Adds two ciphertexts. This function adds together a and b
      * and stores the result in the destination parameter.
      * @param {Object} options Options
-     * @param {CipherText} options.a - CipherText operand A
-     * @param {CipherText} options.b - CipherText operand B
-     * @param {CipherText} options.destination - CipherText destination to store the sum
+     * @param {CipherText} options.a CipherText operand A
+     * @param {CipherText} options.b CipherText operand B
+     * @param {CipherText} options.destination CipherText destination to store the sum
      */
     add({ a, b, destination }) {
       try {
@@ -95,9 +95,9 @@ export const Evaluator = ({ library, context }) => {
      * Subtracts two ciphertexts. This function computes the difference of a
      * and b and stores the result in the destination parameter.
      * @param {Object} options Options
-     * @param {CipherText} options.a - CipherText operand A
-     * @param {CipherText} options.b - CipherText operand B
-     * @param {CipherText} options.destination - CipherText destination to store the difference
+     * @param {CipherText} options.a CipherText operand A
+     * @param {CipherText} options.b CipherText operand B
+     * @param {CipherText} options.destination CipherText destination to store the difference
      */
     sub({ a, b, destination }) {
       try {
@@ -120,10 +120,10 @@ export const Evaluator = ({ library, context }) => {
      * memory allocations in the process are allocated from the memory pool pointed
      * to by the given MemoryPoolHandle.
      * @param {Object} options Options
-     * @param {CipherText} options.a - CipherText operand A
-     * @param {CipherText} options.b - CipherText operand B
-     * @param {CipherText} options.destination - CipherText destination to store the product
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] - Memory pool pointer
+     * @param {CipherText} options.a CipherText operand A
+     * @param {CipherText} options.b CipherText operand B
+     * @param {CipherText} options.destination CipherText destination to store the product
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] Memory pool pointer
      */
     multiply({ a, b, destination, pool = _MemoryPoolHandle.global }) {
       try {
@@ -146,9 +146,9 @@ export const Evaluator = ({ library, context }) => {
      * in the process are allocated from the memory pool pointed to by the given
      * MemoryPoolHandle.
      * @param {Object} options Options
-     * @param {CipherText} options.encrypted - CipherText to square
-     * @param {CipherText} options.destination - CipherText destination to store the squared result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] - Memory pool pointer
+     * @param {CipherText} options.encrypted CipherText to square
+     * @param {CipherText} options.destination CipherText destination to store the squared result
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] Memory pool pointer
      */
     square({ encrypted, destination, pool = _MemoryPoolHandle.global }) {
       try {
@@ -172,10 +172,10 @@ export const Evaluator = ({ library, context }) => {
      * have size at least K-1. Dynamic memory allocations in the process are allocated
      * from the memory pool pointed to by the given MemoryPoolHandle.
      * @param {Object} options Options
-     * @param {CipherText} options.encrypted - CipherText to relinearize
-     * @param {RelinKeys} options.relinKeys - RelinKey used to perform relinearization
-     * @param {CipherText} options.destination - CipherText destination to store the relinearized result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] - Memory pool pointer
+     * @param {CipherText} options.encrypted CipherText to relinearize
+     * @param {RelinKeys} options.relinKeys RelinKey used to perform relinearization
+     * @param {CipherText} options.destination CipherText destination to store the relinearized result
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] Memory pool pointer
      */
     relinearize({
       encrypted,
@@ -208,9 +208,9 @@ export const Evaluator = ({ library, context }) => {
      * parameter. Dynamic memory allocations in the process are allocated from
      * the memory pool pointed to by the given MemoryPoolHandle.
      * @param {Object} options Options
-     * @param {CipherText} options.encrypted - CipherText to switch its modulus down
-     * @param {CipherText} options.destination - CipherText destination to store the switched result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] - Memory pool pointer
+     * @param {CipherText} options.encrypted CipherText to switch its modulus down
+     * @param {CipherText} options.destination CipherText destination to store the switched result
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] Memory pool pointer
      */
     cipherModSwitchToNext({
       encrypted,
@@ -241,10 +241,10 @@ export const Evaluator = ({ library, context }) => {
      * result in the destination parameter. Dynamic memory allocations in the process
      * are allocated from the memory pool pointed to by the given MemoryPoolHandle.
      * @param {Object} options Options
-     * @param {CipherText} options.encrypted - CipherText to switch its modulus down
-     * @param {*} options.parmsId - Target parmsId to switch to
-     * @param {CipherText} options.destination - CipherText destination to store the switched result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] - Memory pool pointer
+     * @param {CipherText} options.encrypted CipherText to switch its modulus down
+     * @param {*} options.parmsId Target parmsId to switch to
+     * @param {CipherText} options.destination CipherText destination to store the switched result
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] Memory pool pointer
      */
     cipherModSwitchTo({
       encrypted,
@@ -275,8 +275,8 @@ export const Evaluator = ({ library, context }) => {
      * Modulus switches an NTT transformed plaintext from modulo q_1...q_k down
      * to modulo q_1...q_{k-1} and stores the result in the destination parameter.
      * @param {Object} options Options
-     * @param {PlainText} options.plain - PlainText to switch its modulus down
-     * @param {PlainText} options.destination - PlainText destination to store the switched result
+     * @param {PlainText} options.plain PlainText to switch its modulus down
+     * @param {PlainText} options.destination PlainText destination to store the switched result
      */
     plainModSwitchToNext({ plain, destination }) {
       try {
@@ -298,9 +298,9 @@ export const Evaluator = ({ library, context }) => {
      * the modulus down until the parameters reach the given parmsId and stores
      * the result in the destination parameter.
      * @param {Object} options Options
-     * @param {PlainText} options.plain - PlainText to switch its modulus down
-     * @param {*} options.parmsId - Target parmsId to switch to
-     * @param {PlainText} options.destination - PlainText destination to store the switched result
+     * @param {PlainText} options.plain PlainText to switch its modulus down
+     * @param {*} options.parmsId Target parmsId to switch to
+     * @param {PlainText} options.destination PlainText destination to store the switched result
      */
     plainModSwitchTo({ plain, parmsId, destination }) {
       try {
@@ -328,9 +328,9 @@ export const Evaluator = ({ library, context }) => {
      * in the process are allocated from the memory pool pointed to by the given
      * MemoryPoolHandle.
      * @param {Object} options Options
-     * @param {CipherText} options.encrypted - CipherText to rescale
-     * @param {CipherText} options.destination - CipherText destination to store the rescaled result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] - Memory pool pointer
+     * @param {CipherText} options.encrypted CipherText to rescale
+     * @param {CipherText} options.destination CipherText destination to store the rescaled result
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] Memory pool pointer
      */
     rescaleToNext({ encrypted, destination, pool = _MemoryPoolHandle.global }) {
       try {
@@ -354,10 +354,10 @@ export const Evaluator = ({ library, context }) => {
      * memory allocations in the process are allocated from the memory pool pointed
      * to by the given MemoryPoolHandle.
      * @param {Object} options Options
-     * @param {CipherText} options.encrypted - CipherText to rescale
-     * @param {*} options.parmsId - Target parmsId to rescale to
-     * @param {CipherText} options.destination - CipherText destination to store the rescaled result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] - Memory pool pointer
+     * @param {CipherText} options.encrypted CipherText to rescale
+     * @param {*} options.parmsId Target parmsId to rescale to
+     * @param {CipherText} options.destination CipherText destination to store the rescaled result
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] Memory pool pointer
      */
     rescaleTo({
       encrypted,
@@ -392,11 +392,11 @@ export const Evaluator = ({ library, context }) => {
      * relinearization is performed automatically after every multiplication in
      * the process. In relinearization the given relinearization keys are used.
      * @param {Object} options Options
-     * @param {CipherText} options.encrypted - CipherText to exponentiate
-     * @param {number} options.exponent - Positive integer to exponentiate the CipherText
-     * @param {RelinKeys} options.relinKeys - RelinKeys used to perform relinearization after each exponentiation
-     * @param {CipherText} options.destination - CipherText destination to store the exponentiated result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] - Memory pool pointer
+     * @param {CipherText} options.encrypted CipherText to exponentiate
+     * @param {number} options.exponent Positive integer to exponentiate the CipherText
+     * @param {RelinKeys} options.relinKeys RelinKeys used to perform relinearization after each exponentiation
+     * @param {CipherText} options.destination CipherText destination to store the exponentiated result
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] Memory pool pointer
      */
     exponentiate({
       encrypted,
@@ -430,9 +430,9 @@ export const Evaluator = ({ library, context }) => {
      * a plaintext and stores the result in the destination parameter. The plaintext
      * must be valid for the current encryption parameters.
      * @param {Object} options Options
-     * @param {CipherText} options.encrypted - CipherText operand A
-     * @param {PlainText} options.plain - PlainText operand B
-     * @param {CipherText} options.destination - CipherText destination to store the sum
+     * @param {CipherText} options.encrypted CipherText operand A
+     * @param {PlainText} options.plain PlainText operand B
+     * @param {CipherText} options.destination CipherText destination to store the sum
      */
     addPlain({ encrypted, plain, destination }) {
       try {
@@ -458,9 +458,9 @@ export const Evaluator = ({ library, context }) => {
      * from a ciphertext and stores the result in the destination parameter. The
      * plaintext must be valid for the current encryption parameters.
      * @param {Object} options Options
-     * @param {CipherText} options.encrypted - CipherText operand A
-     * @param {PlainText} options.plain - PlainText operand B
-     * @param {CipherText} options.destination - CipherText destination to store the difference
+     * @param {CipherText} options.encrypted CipherText operand A
+     * @param {PlainText} options.plain PlainText operand B
+     * @param {CipherText} options.destination CipherText destination to store the difference
      */
     subPlain({ encrypted, plain, destination }) {
       try {
@@ -488,10 +488,10 @@ export const Evaluator = ({ library, context }) => {
      * and cannot be identially 0. Dynamic memory allocations in the process are
      * allocated from the memory pool pointed to by the given MemoryPoolHandle.
      * @param {Object} options Options
-     * @param {CipherText} options.encrypted - CipherText operand A
-     * @param {PlainText} options.plain - PlainText operand B
-     * @param {CipherText} options.destination - CipherText destination to store the product
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] - Memory pool pointer
+     * @param {CipherText} options.encrypted CipherText operand A
+     * @param {PlainText} options.plain PlainText operand B
+     * @param {CipherText} options.destination CipherText destination to store the product
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] Memory pool pointer
      */
     multiplyPlain({
       encrypted,
@@ -531,10 +531,10 @@ export const Evaluator = ({ library, context }) => {
      * memory allocations in the process are allocated from the memory pool pointed
      * to by the given MemoryPoolHandle.
      * @param {Object} options Options
-     * @param {PlainText} options.plain - PlainText to transform
-     * @param {*} options.parmsId - target parmsId to perform NTT transformation
-     * @param {PlainText} options.destinationNtt - PlainText destination to store the transformed result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] - Memory pool pointer
+     * @param {PlainText} options.plain PlainText to transform
+     * @param {*} options.parmsId target parmsId to perform NTT transformation
+     * @param {PlainText} options.destinationNtt PlainText destination to store the transformed result
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] Memory pool pointer
      */
     plainTransformToNtt({
       plain,
@@ -566,8 +566,8 @@ export const Evaluator = ({ library, context }) => {
      * Number Theoretic Transform separately to each polynomial of a ciphertext.
      * The result is stored in the destinationNtt parameter.
      * @param {Object} options Options
-     * @param {CipherText} options.encrypted - CipherText to transform
-     * @param {CipherText} options.destinationNtt - CipherText destination to store the transformed result
+     * @param {CipherText} options.encrypted CipherText to transform
+     * @param {CipherText} options.destinationNtt CipherText destination to store the transformed result
      */
     cipherTransformToNtt({ encrypted, destinationNtt }) {
       try {
@@ -592,8 +592,8 @@ export const Evaluator = ({ library, context }) => {
      * inverse of David Harvey's Number Theoretic Transform separately to each
      * polynomial of a ciphertext. The result is stored in the destination parameter.
      * @param {Object} options Options
-     * @param {CipherText} options.encryptedNtt - CipherText to transform
-     * @param {CipherText} options.destination - CipherText destination to store the transformed result
+     * @param {CipherText} options.encryptedNtt CipherText to transform
+     * @param {CipherText} options.destination CipherText destination to store the transformed result
      */
     cipherTransformFromNtt({ encryptedNtt, destination }) {
       try {
@@ -629,11 +629,11 @@ export const Evaluator = ({ library, context }) => {
      * In the polynomial view (not batching), a Galois automorphism by a Galois
      * element p changes Enc(plain(x)) to Enc(plain(x^p)).
      * @param {Object} options Options
-     * @param {CipherText} options.encrypted - CipherText to apply the automorphism
-     * @param {number} options.galoisElt - Number representing the Galois element
-     * @param {GaloisKeys} options.galoisKeys - GaloisKeys used to perform rotations
-     * @param {CipherText} options.destination - CipherText destination to store the result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] - Memory pool pointer
+     * @param {CipherText} options.encrypted CipherText to apply the automorphism
+     * @param {number} options.galoisElt Number representing the Galois element
+     * @param {GaloisKeys} options.galoisKeys GaloisKeys used to perform rotations
+     * @param {CipherText} options.destination CipherText destination to store the result
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] Memory pool pointer
      */
     applyGalois({
       encrypted,
@@ -672,11 +672,11 @@ export const Evaluator = ({ library, context }) => {
      * memory allocations in the process are allocated from the memory pool pointed
      * to by the given MemoryPoolHandle.
      * @param {Object} options Options
-     * @param {CipherText} options.encrypted - CipherText to rotate rows
-     * @param {number} options.steps - Int representing steps to rotate (negative = right, positive = left)
-     * @param {GaloisKeys} options.galoisKeys - GaloisKeys used to perform rotations
-     * @param {CipherText} options.destination - CipherText destination to store the rotated result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] - Memory pool pointer
+     * @param {CipherText} options.encrypted CipherText to rotate rows
+     * @param {number} options.steps Int representing steps to rotate (negative = right, positive = left)
+     * @param {GaloisKeys} options.galoisKeys GaloisKeys used to perform rotations
+     * @param {CipherText} options.destination CipherText destination to store the rotated result
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] Memory pool pointer
      */
     rotateRows({
       encrypted,
@@ -714,10 +714,10 @@ export const Evaluator = ({ library, context }) => {
      * allocations in the process are allocated from the memory pool pointed to
      * by the given MemoryPoolHandle.
      * @param {Object} options Options
-     * @param {CipherText} options.encrypted - CipherText to rotate columns
-     * @param {GaloisKeys} options.galoisKeys - GaloisKeys used to perform rotations
-     * @param {CipherText} options.destination - CipherText destination to store the rotated result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] - Memory pool pointer
+     * @param {CipherText} options.encrypted CipherText to rotate columns
+     * @param {GaloisKeys} options.galoisKeys GaloisKeys used to perform rotations
+     * @param {CipherText} options.destination CipherText destination to store the rotated result
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] Memory pool pointer
      */
     rotateColumns({
       encrypted,
@@ -753,11 +753,11 @@ export const Evaluator = ({ library, context }) => {
      * value at most N/2-1. Dynamic memory allocations in the process are allocated
      * from the memory pool pointed to by the given MemoryPoolHandle.
      * @param {Object} options Options
-     * @param {CipherText} options.encrypted - CipherText to rotate the entire vector
-     * @param {number} options.steps - Int representing steps to rotate (negative = right, positive = left)
-     * @param {GaloisKeys} options.galoisKeys - GaloisKeys used to perform rotations
-     * @param {CipherText} options.destination - CipherText destination to store the rotated result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] - Memory pool pointer
+     * @param {CipherText} options.encrypted CipherText to rotate the entire vector
+     * @param {number} options.steps Int representing steps to rotate (negative = right, positive = left)
+     * @param {GaloisKeys} options.galoisKeys GaloisKeys used to perform rotations
+     * @param {CipherText} options.destination CipherText destination to store the rotated result
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] Memory pool pointer
      */
     rotateVector({
       encrypted,
@@ -793,10 +793,10 @@ export const Evaluator = ({ library, context }) => {
      * in the process are allocated from the memory pool pointed to by the given
      * MemoryPoolHandle.
      * @param {Object} options Options
-     * @param {CipherText} options.encrypted - CipherText to complex conjugate
-     * @param {GaloisKeys} options.galoisKeys - GaloisKeys used to perform rotations
-     * @param {CipherText} options.destination - CipherText destination to store the conjugated result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] - Memory pool pointer
+     * @param {CipherText} options.encrypted CipherText to complex conjugate
+     * @param {GaloisKeys} options.galoisKeys GaloisKeys used to perform rotations
+     * @param {CipherText} options.destination CipherText destination to store the conjugated result
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] Memory pool pointer
      */
     complexConjugate({
       encrypted,

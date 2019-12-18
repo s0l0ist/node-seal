@@ -36,7 +36,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
     /**
      * Inject this object with a raw wasm instance
      * @param {Object} options Options
-     * @param {instance} options.instance - wasm instance
+     * @param {instance} options.instance wasm instance
      * @private
      */
     inject({ instance }) {
@@ -55,7 +55,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
      * is better). In Microsoft SEAL the degree of the polynomial modulus must be a power
      * of 2 (e.g.  1024, 2048, 4096, 8192, 16384, or 32768).
      * @param {Object} options Options
-     * @param {number} options.polyModulusDegree - degree of the polynomial modulus
+     * @param {number} options.polyModulusDegree degree of the polynomial modulus
      */
     setPolyModulusDegree({ polyModulusDegree }) {
       try {
@@ -81,7 +81,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
      * of the prime numbers in the coefficient modulus must be at most 60 bits,
      * and must be congruent to 1 modulo 2*degree(poly_modulus).
      * @param {Object} options Options
-     * @param {Vector} options.coeffModulus - Vector of SmallModulus primes
+     * @param {Vector} options.coeffModulus Vector of SmallModulus primes
      */
     setCoeffModulus({ coeffModulus }) {
       try {
@@ -107,7 +107,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
      * long, but can otherwise be any integer. Note, however, that some features
      * (e.g. batching) require the plaintext modulus to be of a particular form.
      * @param {Object} options Options
-     * @param {SmallModulus} options.plainModulus - plaintext modulus parameter
+     * @param {SmallModulus} options.plainModulus plaintext modulus parameter
      */
     setPlainModulus({ plainModulus }) {
       try {
@@ -127,7 +127,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
     /**
      * Returns the encryption scheme type.
      *
-     * @returns {SchemeType} - Encryption scheme type
+     * @returns {SchemeType} Encryption scheme type
      */
     get scheme() {
       return _instance.scheme()
@@ -136,7 +136,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
     /**
      * Returns the degree of the polynomial modulus parameter.
      *
-     * @returns {number} - degree of the polynomial modulus
+     * @returns {number} degree of the polynomial modulus
      */
     get polyModulusDegree() {
       return _instance.polyModulusDegree()
@@ -144,7 +144,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
 
     /**
      * Returns the currently set coefficient modulus parameter.
-     * @returns {Vector} - Vector containing SmallModulus primes
+     * @returns {Vector} Vector containing SmallModulus primes
      */
     get coeffModulus() {
       return _instance.coeffModulus()
@@ -152,7 +152,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
 
     /**
      * Returns the currently set plaintext modulus parameter.
-     * @returns {SmallModulus} - plaintext modulus
+     * @returns {SmallModulus} plaintext modulus
      */
     get plainModulus() {
       return _instance.plainModulus()
@@ -161,8 +161,8 @@ export const EncryptionParameters = ({ library, schemeType }) => {
     /**
      * Save the Encryption Parameters to a base64 string
      * @param {Object} options Options
-     * @param {ComprModeType} [options.compression=ComprModeType.deflate] - activate compression
-     * @returns {string} - base64 encoded string
+     * @param {ComprModeType} [options.compression=ComprModeType.deflate] activate compression
+     * @returns {string} base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
       try {
@@ -182,7 +182,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
     /**
      * Load the Encryption Parameters from a base64 string
      * @param {Object} options Options
-     * @param {string} options.encoded - base64 encoded string
+     * @param {string} options.encoded base64 encoded string
      */
     load({ encoded }) {
       try {
