@@ -1,6 +1,9 @@
+import { Exception } from './exception'
+import { ComprModeType } from './compr-mode-type'
+
 export const GaloisKeys = ({ library }) => {
-  const _getException = library.getException
-  const _ComprModeType = library.ComprModeType
+  const _Exception = Exception({ library })
+  const _ComprModeType = ComprModeType({ library })
   let _instance = null
   try {
     _instance = new library.GaloisKeys()
@@ -8,7 +11,7 @@ export const GaloisKeys = ({ library }) => {
     // eslint-disable-next-line no-nested-ternary
     throw new Error(
       typeof e === 'number'
-        ? _getException(e)
+        ? _Exception.getHuman(e)
         : e instanceof Error
         ? e.message
         : e
@@ -18,7 +21,7 @@ export const GaloisKeys = ({ library }) => {
   return {
     /**
      * Get the underlying wasm instance
-     * @returns {instance}
+     * @returns {instance} wasm instance
      */
     get instance() {
       return _instance
@@ -26,7 +29,7 @@ export const GaloisKeys = ({ library }) => {
 
     /**
      * Inject this object with a raw wasm instance
-     * @param instance
+     * @param {instance} instance - wasm instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -38,8 +41,8 @@ export const GaloisKeys = ({ library }) => {
 
     /**
      * Save the GaloisKeys to a base64 string
-     *
-     * @returns {string}
+     * @param {ComprModeType} [compression=ComprModeType.deflate] - activate compression
+     * @returns {string} - base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
       try {
@@ -48,7 +51,7 @@ export const GaloisKeys = ({ library }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -58,9 +61,8 @@ export const GaloisKeys = ({ library }) => {
 
     /**
      * Load a set of GaloisKeys from a base64 string
-     *
-     * @param context
-     * @param encoded
+     * @param {Context} context - Encryption context to enforce
+     * @param {string} encoded - base64 encoded string
      */
     load({ context, encoded }) {
       try {
@@ -69,7 +71,7 @@ export const GaloisKeys = ({ library }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e

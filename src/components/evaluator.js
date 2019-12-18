@@ -1,7 +1,9 @@
+import { Exception } from './exception'
+import { MemoryPoolHandle } from './memory-pool-handle'
+
 export const Evaluator = ({ library, context }) => {
-  const _getException = library.getException
-  const _MemoryPoolHandleGlobal =
-    library.MemoryPoolHandle.MemoryPoolHandleGlobal
+  const _Exception = Exception({ library })
+  const _MemoryPoolHandle = MemoryPoolHandle({ library })
   let _instance = null
   try {
     _instance = new library.Evaluator(context.instance)
@@ -9,7 +11,7 @@ export const Evaluator = ({ library, context }) => {
     // eslint-disable-next-line no-nested-ternary
     throw new Error(
       typeof e === 'number'
-        ? _getException(e)
+        ? _Exception.getHuman(e)
         : e instanceof Error
         ? e.message
         : e
@@ -19,7 +21,7 @@ export const Evaluator = ({ library, context }) => {
   return {
     /**
      * Get the underlying wasm instance
-     * @returns {instance}
+     * @returns {instance} wasm instance
      */
     get instance() {
       return _instance
@@ -27,7 +29,7 @@ export const Evaluator = ({ library, context }) => {
 
     /**
      * Inject this object with a raw wasm instance
-     * @param instance
+     * @param {instance} instance - wasm instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -39,9 +41,8 @@ export const Evaluator = ({ library, context }) => {
 
     /**
      * Negates a ciphertext and stores the result in the destination parameter.
-     *
-     * @param encrypted
-     * @param destination
+     * @param {CipherText} encrypted - CipherText to negate
+     * @param {CipherText} destination - CipherText to store the negated result
      */
     negate({ encrypted, destination }) {
       try {
@@ -50,7 +51,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -61,10 +62,9 @@ export const Evaluator = ({ library, context }) => {
     /**
      * Adds two ciphertexts. This function adds together a and b
      * and stores the result in the destination parameter.
-     *
-     * @param a
-     * @param b
-     * @param destination
+     * @param {CipherText} a - CipherText operand A
+     * @param {CipherText} b - CipherText operand B
+     * @param {CipherText} destination - CipherText destination to store the sum
      */
     add({ a, b, destination }) {
       try {
@@ -73,7 +73,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -84,11 +84,9 @@ export const Evaluator = ({ library, context }) => {
     /**
      * Subtracts two ciphertexts. This function computes the difference of a
      * and b and stores the result in the destination parameter.
-     *
-     * @param a
-     * @param b
-     * @param destination
-     * @returns {*}
+     * @param {CipherText} a - CipherText operand A
+     * @param {CipherText} b - CipherText operand B
+     * @param {CipherText} destination - CipherText destination to store the difference
      */
     sub({ a, b, destination }) {
       try {
@@ -97,7 +95,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -110,20 +108,19 @@ export const Evaluator = ({ library, context }) => {
      * and b and stores the result in the destination parameter. Dynamic
      * memory allocations in the process are allocated from the memory pool pointed
      * to by the given MemoryPoolHandle.
-     *
-     * @param a
-     * @param b
-     * @param destination
-     * @param [pool=MemoryPoolHandleGlobal]
+     * @param {CipherText} a - CipherText operand A
+     * @param {CipherText} b - CipherText operand B
+     * @param {CipherText} destination - CipherText destination to store the product
+     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global] - Memory pool pointer
      */
-    multiply({ a, b, destination, pool = _MemoryPoolHandleGlobal() }) {
+    multiply({ a, b, destination, pool = _MemoryPoolHandle.global }) {
       try {
         _instance.multiply(a.instance, b.instance, destination.instance, pool)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -137,18 +134,18 @@ export const Evaluator = ({ library, context }) => {
      * in the process are allocated from the memory pool pointed to by the given
      * MemoryPoolHandle.
      *
-     * @param encrypted
-     * @param destination
-     * @param [pool=MemoryPoolHandleGlobal]
+     * @param {CipherText} encrypted - CipherText to square
+     * @param {CipherText} destination - CipherText destination to store the squared result
+     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global] - Memory pool pointer
      */
-    square({ encrypted, destination, pool = _MemoryPoolHandleGlobal() }) {
+    square({ encrypted, destination, pool = _MemoryPoolHandle.global }) {
       try {
         _instance.square(encrypted.instance, destination.instance, pool)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -162,17 +159,16 @@ export const Evaluator = ({ library, context }) => {
      * If the size of encrypted is K+1, the given relinearization keys need to
      * have size at least K-1. Dynamic memory allocations in the process are allocated
      * from the memory pool pointed to by the given MemoryPoolHandle.
-     *
-     * @param encrypted
-     * @param relinKeys
-     * @param destination
-     * @param [pool=MemoryPoolHandleGlobal]
+     * @param {CipherText} encrypted - CipherText to relinearize
+     * @param {RelinKeys} relinKeys - RelinKey used to perform relinearization
+     * @param {CipherText} destination - CipherText destination to store the relinearized result
+     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global] - Memory pool pointer
      */
     relinearize({
       encrypted,
       relinKeys,
       destination,
-      pool = _MemoryPoolHandleGlobal()
+      pool = _MemoryPoolHandle.global
     }) {
       try {
         _instance.relinearize(
@@ -185,7 +181,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -198,15 +194,14 @@ export const Evaluator = ({ library, context }) => {
      * modulus down to q_1...q_{k-1} and stores the result in the destination
      * parameter. Dynamic memory allocations in the process are allocated from
      * the memory pool pointed to by the given MemoryPoolHandle.
-     *
-     * @param encrypted
-     * @param destination
-     * @param [pool=MemoryPoolHandleGlobal]
+     * @param {CipherText} encrypted - CipherText to switch its modulus down
+     * @param {CipherText} destination - CipherText destination to store the switched result
+     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global] - Memory pool pointer
      */
     cipherModSwitchToNext({
       encrypted,
       destination,
-      pool = _MemoryPoolHandleGlobal()
+      pool = _MemoryPoolHandle.global
     }) {
       try {
         _instance.cipherModSwitchToNext(
@@ -218,7 +213,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -231,17 +226,16 @@ export const Evaluator = ({ library, context }) => {
      * modulus down until the parameters reach the given parmsId and stores the
      * result in the destination parameter. Dynamic memory allocations in the process
      * are allocated from the memory pool pointed to by the given MemoryPoolHandle.
-     *
-     * @param encrypted
-     * @param parmsId
-     * @param destination
-     * @param [pool=MemoryPoolHandleGlobal]
+     * @param {CipherText} encrypted - CipherText to switch its modulus down
+     * @param {*} parmsId - Target parmsId to switch to
+     * @param {CipherText} destination - CipherText destination to store the switched result
+     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global] - Memory pool pointer
      */
     cipherModSwitchTo({
       encrypted,
       parmsId,
       destination,
-      pool = _MemoryPoolHandleGlobal()
+      pool = _MemoryPoolHandle.global
     }) {
       try {
         _instance.cipherModSwitchTo(
@@ -254,7 +248,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -265,9 +259,8 @@ export const Evaluator = ({ library, context }) => {
     /**
      * Modulus switches an NTT transformed plaintext from modulo q_1...q_k down
      * to modulo q_1...q_{k-1} and stores the result in the destination parameter.
-     *
-     * @param encrypted
-     * @param destination
+     * @param {PlainText} encrypted - PlainText to switch its modulus down
+     * @param {PlainText} destination - PlainText destination to store the switched result
      */
     plainModSwitchToNext({ plain, destination }) {
       try {
@@ -276,7 +269,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -289,9 +282,9 @@ export const Evaluator = ({ library, context }) => {
      * the modulus down until the parameters reach the given parmsId and stores
      * the result in the destination parameter.
      *
-     * @param encrypted
-     * @param parmsId
-     * @param destination
+     * @param {PlainText} encrypted - PlainText to switch its modulus down
+     * @param {*} parmsId - Target parmsId to switch to
+     * @param {PlainText} destination - PlainText destination to store the switched result
      */
     plainModSwitchTo({ plain, parmsId, destination }) {
       try {
@@ -304,7 +297,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -318,23 +311,18 @@ export const Evaluator = ({ library, context }) => {
      * stores the result in the destination parameter. Dynamic memory allocations
      * in the process are allocated from the memory pool pointed to by the given
      * MemoryPoolHandle.
-     *
-     * @param encrypted
-     * @param destination
-     * @param [pool=MemoryPoolHandleGlobal]
+     * @param {CipherText} encrypted - CipherText to rescale
+     * @param {CipherText} destination - CipherText destination to store the rescaled result
+     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global] - Memory pool pointer
      */
-    rescaleToNext({
-      encrypted,
-      destination,
-      pool = _MemoryPoolHandleGlobal()
-    }) {
+    rescaleToNext({ encrypted, destination, pool = _MemoryPoolHandle.global }) {
       try {
         _instance.rescaleToNext(encrypted.instance, destination.instance, pool)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -348,17 +336,16 @@ export const Evaluator = ({ library, context }) => {
      * down accordingly, and stores the result in the destination parameter. Dynamic
      * memory allocations in the process are allocated from the memory pool pointed
      * to by the given MemoryPoolHandle.
-     *
-     * @param encrypted
-     * @param parmsId
-     * @param destination
-     * @param [pool=MemoryPoolHandleGlobal]
+     * @param {CipherText} encrypted - CipherText to rescale
+     * @param {*} parmsId - Target parmsId to rescale to
+     * @param {CipherText} destination - CipherText destination to store the rescaled result
+     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global] - Memory pool pointer
      */
     rescaleTo({
       encrypted,
       parmsId,
       destination,
-      pool = _MemoryPoolHandleGlobal()
+      pool = _MemoryPoolHandle.global
     }) {
       try {
         _instance.rescaleTo(
@@ -371,7 +358,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -386,19 +373,18 @@ export const Evaluator = ({ library, context }) => {
      * MemoryPoolHandle. The exponentiation is done in a depth-optimal order, and
      * relinearization is performed automatically after every multiplication in
      * the process. In relinearization the given relinearization keys are used.
-     *
-     * @param encrypted
-     * @param exponent
-     * @param relinKeys
-     * @param destination
-     * @param [pool=MemoryPoolHandleGlobal]
+     * @param {CipherText} encrypted - CipherText to exponentiate
+     * @param {number} exponent - Positive integer to exponentiate the CipherText
+     * @param {RelinKeys} relinKeys - RelinKeys used to perform relinearization after each exponentiation
+     * @param {CipherText} destination - CipherText destination to store the exponentiated result
+     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global] - Memory pool pointer
      */
     exponentiate({
       encrypted,
       exponent,
       relinKeys,
       destination,
-      pool = _MemoryPoolHandleGlobal()
+      pool = _MemoryPoolHandle.global
     }) {
       try {
         _instance.exponentiate(
@@ -412,7 +398,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -424,10 +410,9 @@ export const Evaluator = ({ library, context }) => {
      * Adds a ciphertext and a plaintext. This function adds a ciphertext and
      * a plaintext and stores the result in the destination parameter. The plaintext
      * must be valid for the current encryption parameters.
-     *
-     * @param encrypted
-     * @param plain
-     * @param destination
+     * @param {CipherText} encrypted - CipherText operand A
+     * @param {PlainText} plain - PlainText operand B
+     * @param {CipherText} destination - CipherText destination to store the sum
      */
     addPlain({ encrypted, plain, destination }) {
       try {
@@ -440,7 +425,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -453,9 +438,9 @@ export const Evaluator = ({ library, context }) => {
      * from a ciphertext and stores the result in the destination parameter. The
      * plaintext must be valid for the current encryption parameters.
      *
-     * @param encrypted
-     * @param plain
-     * @param destination
+     * @param {CipherText} encrypted - CipherText operand A
+     * @param {PlainText} plain - PlainText operand B
+     * @param {CipherText} destination - CipherText destination to store the difference
      */
     subPlain({ encrypted, plain, destination }) {
       try {
@@ -468,7 +453,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -483,16 +468,16 @@ export const Evaluator = ({ library, context }) => {
      * and cannot be identially 0. Dynamic memory allocations in the process are
      * allocated from the memory pool pointed to by the given MemoryPoolHandle.
      *
-     * @param encrypted
-     * @param plain
-     * @param destination
-     * @param [pool=MemoryPoolHandleGlobal]
+     * @param {CipherText} encrypted - CipherText operand A
+     * @param {PlainText} plain - PlainText operand B
+     * @param {CipherText} destination - CipherText destination to store the product
+     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global] - Memory pool pointer
      */
     multiplyPlain({
       encrypted,
       plain,
       destination,
-      pool = _MemoryPoolHandleGlobal()
+      pool = _MemoryPoolHandle.global
     }) {
       try {
         _instance.multiplyPlain(
@@ -505,7 +490,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -525,17 +510,16 @@ export const Evaluator = ({ library, context }) => {
      * must be a valid plaintext under the current encryption parameters. Dynamic
      * memory allocations in the process are allocated from the memory pool pointed
      * to by the given MemoryPoolHandle.
-     *
-     * @param plain
-     * @param parmsId
-     * @param destinationNtt
-     * @param [pool=MemoryPoolHandleGlobal]
+     * @param {PlainText} plain - PlainText to transform
+     * @param {*} parmsId - target parmsId to perform NTT transformation
+     * @param {PlainText} destinationNtt - PlainText destination to store the transformed result
+     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global] - Memory pool pointer
      */
     plainTransformToNtt({
       plain,
       parmsId,
       destinationNtt,
-      pool = _MemoryPoolHandleGlobal()
+      pool = _MemoryPoolHandle.global
     }) {
       try {
         _instance.plainTransformToNtt(
@@ -548,7 +532,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -560,10 +544,8 @@ export const Evaluator = ({ library, context }) => {
      * Transforms a ciphertext to NTT domain. This functions applies David Harvey's
      * Number Theoretic Transform separately to each polynomial of a ciphertext.
      * The result is stored in the destinationNtt parameter.
-     *
-     * @param encrypted
-     * @param parmsId
-     * @param destinationNtt
+     * @param {CipherText} encrypted - CipherText to transform
+     * @param {CipherText} destinationNtt - CipherText destination to store the transformed result
      */
     cipherTransformToNtt({ encrypted, destinationNtt }) {
       try {
@@ -575,7 +557,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -587,9 +569,8 @@ export const Evaluator = ({ library, context }) => {
      * Transforms a ciphertext back from NTT domain. This functions applies the
      * inverse of David Harvey's Number Theoretic Transform separately to each
      * polynomial of a ciphertext. The result is stored in the destination parameter.
-     *
-     * @param encryptedNtt
-     * @param destination
+     * @param {CipherText} encryptedNtt - CipherText to transform
+     * @param {CipherText} destination - CipherText destination to store the transformed result
      */
     cipherTransformFromNtt({ encryptedNtt, destination }) {
       try {
@@ -601,7 +582,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -624,19 +605,18 @@ export const Evaluator = ({ library, context }) => {
      * to a column rotation (row swap) in BFV, and complex conjugation in CKKS.
      * In the polynomial view (not batching), a Galois automorphism by a Galois
      * element p changes Enc(plain(x)) to Enc(plain(x^p)).
-     *
-     * @param encrypted
-     * @param galoisElt
-     * @param galoisKeys
-     * @param destination
-     * @param [pool=MemoryPoolHandleGlobal]
+     * @param {CipherText} encrypted - CipherText to apply the automorphism
+     * @param {number} galoisElt - Number representing the Galois element
+     * @param {GaloisKeys} galoisKeys - GaloisKeys used to perform rotations
+     * @param {CipherText} destination - CipherText destination to store the result
+     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global] - Memory pool pointer
      */
     applyGalois({
       encrypted,
       galoisElt,
       galoisKeys,
       destination,
-      pool = _MemoryPoolHandleGlobal()
+      pool = _MemoryPoolHandle.global
     }) {
       try {
         _instance.applyGalois(
@@ -650,7 +630,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -667,19 +647,18 @@ export const Evaluator = ({ library, context }) => {
      * the number of steps to rotate must have absolute value at most N/2-1. Dynamic
      * memory allocations in the process are allocated from the memory pool pointed
      * to by the given MemoryPoolHandle.
-     *
-     * @param encrypted
-     * @param steps
-     * @param galoisKeys
-     * @param destination
-     * @param [pool=MemoryPoolHandleGlobal]
+     * @param {CipherText} encrypted - CipherText to rotate rows
+     * @param {number} steps - Int representing steps to rotate (negative = right, positive = left)
+     * @param {GaloisKeys} galoisKeys - GaloisKeys used to perform rotations
+     * @param {CipherText} destination - CipherText destination to store the rotated result
+     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global] - Memory pool pointer
      */
     rotateRows({
       encrypted,
       steps,
       galoisKeys,
       destination,
-      pool = _MemoryPoolHandleGlobal()
+      pool = _MemoryPoolHandle.global
     }) {
       try {
         _instance.rotateRows(
@@ -693,7 +672,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -709,17 +688,16 @@ export const Evaluator = ({ library, context }) => {
      * polynomial modulus, this means simply swapping the two rows. Dynamic memory
      * allocations in the process are allocated from the memory pool pointed to
      * by the given MemoryPoolHandle.
-     *
-     * @param encrypted
-     * @param galoisKeys
-     * @param destination
-     * @param [pool=MemoryPoolHandleGlobal]
+     * @param {CipherText} encrypted - CipherText to rotate columns
+     * @param {GaloisKeys} galoisKeys - GaloisKeys used to perform rotations
+     * @param {CipherText} destination - CipherText destination to store the rotated result
+     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global] - Memory pool pointer
      */
     rotateColumns({
       encrypted,
       galoisKeys,
       destination,
-      pool = _MemoryPoolHandleGlobal()
+      pool = _MemoryPoolHandle.global
     }) {
       try {
         _instance.rotateColumns(
@@ -732,7 +710,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -748,19 +726,18 @@ export const Evaluator = ({ library, context }) => {
      * of the polynomial modulus, the number of steps to rotate must have absolute
      * value at most N/2-1. Dynamic memory allocations in the process are allocated
      * from the memory pool pointed to by the given MemoryPoolHandle.
-     *
-     * @param encrypted
-     * @param steps
-     * @param galoisKeys
-     * @param destination
-     * @param [pool=MemoryPoolHandleGlobal]
+     * @param {CipherText} encrypted - CipherText to rotate the entire vector
+     * @param {number} steps - Int representing steps to rotate (negative = right, positive = left)
+     * @param {GaloisKeys} galoisKeys - GaloisKeys used to perform rotations
+     * @param {CipherText} destination - CipherText destination to store the rotated result
+     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global] - Memory pool pointer
      */
     rotateVector({
       encrypted,
       steps,
       galoisKeys,
       destination,
-      pool = _MemoryPoolHandleGlobal()
+      pool = _MemoryPoolHandle.global
     }) {
       try {
         _instance.rotateVector(
@@ -774,7 +751,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -788,17 +765,16 @@ export const Evaluator = ({ library, context }) => {
      * writes the result to the destination parameter. Dynamic memory allocations
      * in the process are allocated from the memory pool pointed to by the given
      * MemoryPoolHandle.
-     *
-     * @param encrypted
-     * @param galoisKeys
-     * @param destination
-     * @param [pool=MemoryPoolHandleGlobal]
+     * @param {CipherText} encrypted - CipherText to complex conjugate
+     * @param {GaloisKeys} galoisKeys - GaloisKeys used to perform rotations
+     * @param {CipherText} destination - CipherText destination to store the conjugated result
+     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global] - Memory pool pointer
      */
     complexConjugate({
       encrypted,
       galoisKeys,
       destination,
-      pool = _MemoryPoolHandleGlobal()
+      pool = _MemoryPoolHandle.global
     }) {
       try {
         _instance.complexConjugate(
@@ -811,7 +787,7 @@ export const Evaluator = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e

@@ -1,3 +1,4 @@
+import { Exception } from './exception'
 import { PublicKey } from './public-key'
 import { SecretKey } from './secret-key'
 import { RelinKeys } from './relin-keys'
@@ -9,7 +10,7 @@ export const KeyGenerator = ({
   secretKey = null,
   publicKey = null
 }) => {
-  const _getException = library.getException
+  const _Exception = Exception({ library })
   const _library = library
   const constructInstance = (secretKey, publicKey) => {
     try {
@@ -28,7 +29,7 @@ export const KeyGenerator = ({
       // eslint-disable-next-line no-nested-ternary
       throw new Error(
         typeof e === 'number'
-          ? _getException(e)
+          ? _Exception.getHuman(e)
           : e instanceof Error
           ? e.message
           : e
@@ -40,7 +41,7 @@ export const KeyGenerator = ({
   return {
     /**
      * Get the underlying wasm instance
-     * @returns {instance}
+     * @returns {instance} wasm instance
      */
     get instance() {
       return _instance
@@ -48,7 +49,7 @@ export const KeyGenerator = ({
 
     /**
      * Inject this object with a raw wasm instance
-     * @param instance
+     * @param {instance} instance - wasm instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -60,8 +61,7 @@ export const KeyGenerator = ({
 
     /**
      * Return the generated SecretKey
-     *
-     * @returns {SecretKey}
+     * @returns {SecretKey} - The secret key that was generated upon instantiation of this KeyGenerator
      */
     getSecretKey() {
       try {
@@ -73,7 +73,7 @@ export const KeyGenerator = ({
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -83,8 +83,7 @@ export const KeyGenerator = ({
 
     /**
      * Return the generated PublicKey
-     *
-     * @returns {PublicKey}
+     * @returns {PublicKey} - The public key that was generated upon instantiation of this KeyGenerator
      */
     getPublicKey() {
       try {
@@ -96,7 +95,7 @@ export const KeyGenerator = ({
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -106,8 +105,7 @@ export const KeyGenerator = ({
 
     /**
      * Generate and return a set of RelinKeys
-     *
-     * @returns {RelinKeys}
+     * @returns {RelinKeys} - New RelinKeys from the KeyGenerator's internal secret key
      */
     genRelinKeys() {
       try {
@@ -119,7 +117,7 @@ export const KeyGenerator = ({
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -129,8 +127,7 @@ export const KeyGenerator = ({
 
     /**
      * Generate and return a set of GaloisKeys
-     *
-     * @returns {GaloisKeys}
+     * @returns {GaloisKeys} - New GaloisKeys from the KeyGenerator's internal secret key
      */
     genGaloisKeys() {
       try {
@@ -142,7 +139,7 @@ export const KeyGenerator = ({
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e

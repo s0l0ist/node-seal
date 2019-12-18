@@ -1,5 +1,7 @@
+import { Exception } from './exception'
+
 export const Decryptor = ({ library, context, secretKey }) => {
-  const _getException = library.getException
+  const _Exception = Exception({ library })
   let _instance = null
   try {
     _instance = new library.Decryptor(context.instance, secretKey.instance)
@@ -7,7 +9,7 @@ export const Decryptor = ({ library, context, secretKey }) => {
     // eslint-disable-next-line no-nested-ternary
     throw new Error(
       typeof e === 'number'
-        ? _getException(e)
+        ? _Exception.getHuman(e)
         : e instanceof Error
         ? e.message
         : e
@@ -17,7 +19,7 @@ export const Decryptor = ({ library, context, secretKey }) => {
   return {
     /**
      * Get the underlying wasm instance
-     * @returns {instance}
+     * @returns {instance} wasm instance
      */
     get instance() {
       return _instance
@@ -25,7 +27,7 @@ export const Decryptor = ({ library, context, secretKey }) => {
 
     /**
      * Inject this object with a raw wasm instance
-     * @param instance
+     * @param {instance} instance - wasm instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -37,9 +39,8 @@ export const Decryptor = ({ library, context, secretKey }) => {
 
     /**
      * Decrypts a Ciphertext and stores the result in the destination parameter.
-     *
-     * @param cipherText
-     * @param plainText
+     * @param {CipherText} cipherText - CipherText to decrypt
+     * @param {PlainText} plainText - PlainText destination to store the result
      */
     decrypt({ cipherText, plainText }) {
       try {
@@ -48,7 +49,7 @@ export const Decryptor = ({ library, context, secretKey }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -72,9 +73,8 @@ export const Decryptor = ({ library, context, secretKey }) => {
      * value, which depends on the encryption parameters, and decreases when
      * computations are performed. When the budget reaches zero, the ciphertext
      * becomes too noisy to decrypt correctly.
-     *
-     * @param cipherText
-     * @returns {number}
+     * @param {CipherText} cipherText - CipherText to measure
+     * @returns {number} - invariant noise budget (in bits)
      */
     invariantNoiseBudget({ cipherText }) {
       try {
@@ -83,7 +83,7 @@ export const Decryptor = ({ library, context, secretKey }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e

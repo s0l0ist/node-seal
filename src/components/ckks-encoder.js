@@ -1,7 +1,9 @@
+import { Exception } from './exception'
+import { MemoryPoolHandle } from './memory-pool-handle'
+
 export const CKKSEncoder = ({ library, context }) => {
-  const _getException = library.getException
-  const _MemoryPoolHandleGlobal =
-    library.MemoryPoolHandle.MemoryPoolHandleGlobal
+  const _Exception = Exception({ library })
+  const _MemoryPoolHandle = MemoryPoolHandle({ library })
   let _instance = null
   try {
     _instance = new library.CKKSEncoder(context.instance)
@@ -9,7 +11,7 @@ export const CKKSEncoder = ({ library, context }) => {
     // eslint-disable-next-line no-nested-ternary
     throw new Error(
       typeof e === 'number'
-        ? _getException(e)
+        ? _Exception.getHuman(e)
         : e instanceof Error
         ? e.message
         : e
@@ -19,7 +21,7 @@ export const CKKSEncoder = ({ library, context }) => {
   return {
     /**
      * Get the underlying wasm instance
-     * @returns {instance}
+     * @returns {instance} wasm instance
      */
     get instance() {
       return _instance
@@ -27,7 +29,7 @@ export const CKKSEncoder = ({ library, context }) => {
 
     /**
      * Inject this object with a raw wasm instance
-     * @param instance
+     * @param {instance} instance - wasm instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -40,16 +42,16 @@ export const CKKSEncoder = ({ library, context }) => {
     /**
      * Encodes a vector of type double to a given plainText
      *
-     * @param vector
-     * @param scale
-     * @param plainText
-     * @param [pool=MemoryPoolHandleGlobal]
+     * @param {Vector} vector - Data to encode
+     * @param {number} scale - Scaling parameter defining encoding precision
+     * @param {PlainText} plainText - Destination to store the encoded result
+     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global]
      */
     encodeVectorDouble({
       vector,
       scale,
       plainText,
-      pool = _MemoryPoolHandleGlobal()
+      pool = _MemoryPoolHandle.global
     }) {
       try {
         _instance.encodeVectorDouble(
@@ -62,7 +64,7 @@ export const CKKSEncoder = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -73,22 +75,18 @@ export const CKKSEncoder = ({ library, context }) => {
     /**
      * Decodes a double vector to a given plainText
      *
-     * @param plainText
-     * @param vector
-     * @param [pool=MemoryPoolHandleGlobal]
+     * @param {PlainText} plainText - Data to decode
+     * @param {Vector} vector - Destination to store the decoded result
+     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global]
      */
-    decodeVectorDouble({
-      plainText,
-      vector,
-      pool = _MemoryPoolHandleGlobal()
-    }) {
+    decodeVectorDouble({ plainText, vector, pool = _MemoryPoolHandle.global }) {
       try {
         _instance.decodeVectorDouble(plainText.instance, vector.instance, pool)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -98,7 +96,7 @@ export const CKKSEncoder = ({ library, context }) => {
 
     /**
      * Returns the total number of CKKS slots available to hold data
-     * @returns {number}
+     * @returns {number} - Number of CKKS slots available
      */
     get slotCount() {
       return _instance.slotCount()

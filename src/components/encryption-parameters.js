@@ -1,6 +1,9 @@
+import { Exception } from './exception'
+import { ComprModeType } from './compr-mode-type'
+
 export const EncryptionParameters = ({ library, schemeType }) => {
-  const _getException = library.getException
-  const _ComprModeType = library.ComprModeType
+  const _Exception = Exception({ library })
+  const _ComprModeType = ComprModeType({ library })
   let _instance = null
   try {
     _instance = new library.EncryptionParameters(schemeType)
@@ -8,7 +11,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
     // eslint-disable-next-line no-nested-ternary
     throw new Error(
       typeof e === 'number'
-        ? _getException(e)
+        ? _Exception.getHuman(e)
         : e instanceof Error
         ? e.message
         : e
@@ -18,7 +21,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
   return {
     /**
      * Get the underlying wasm instance
-     * @returns {instance}
+     * @returns {instance} wasm instance
      */
     get instance() {
       return _instance
@@ -26,7 +29,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
 
     /**
      * Inject this object with a raw wasm instance
-     * @param instance
+     * @param {instance} instance - wasm instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -43,8 +46,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
      * performance of the scheme (bigger is worse), and the security level (bigger
      * is better). In Microsoft SEAL the degree of the polynomial modulus must be a power
      * of 2 (e.g.  1024, 2048, 4096, 8192, 16384, or 32768).
-     *
-     * @param polyModulusDegree
+     * @param {number} polyModulusDegree - degree of the polynomial modulus
      */
     setPolyModulusDegree({ polyModulusDegree }) {
       try {
@@ -53,7 +55,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -70,7 +72,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
      * of the prime numbers in the coefficient modulus must be at most 60 bits,
      * and must be congruent to 1 modulo 2*degree(poly_modulus).
      *
-     * @param coeffModulus
+     * @param {Vector} coeffModulus - Vector of SmallModulus primes
      */
     setCoeffModulus({ coeffModulus }) {
       try {
@@ -79,7 +81,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -96,7 +98,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
      * long, but can otherwise be any integer. Note, however, that some features
      * (e.g. batching) require the plaintext modulus to be of a particular form.
      *
-     * @param {SmallModulus} plainModulus
+     * @param {SmallModulus} plainModulus - plaintext modulus parameter
      */
     setPlainModulus({ plainModulus }) {
       try {
@@ -105,7 +107,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -116,7 +118,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
     /**
      * Returns the encryption scheme type.
      *
-     * @returns {number}
+     * @returns {SchemeType} - Encryption scheme type
      */
     get scheme() {
       return _instance.scheme()
@@ -125,7 +127,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
     /**
      * Returns the degree of the polynomial modulus parameter.
      *
-     * @returns {number}
+     * @returns {number} - degree of the polynomial modulus
      */
     get polyModulusDegree() {
       return _instance.polyModulusDegree()
@@ -133,7 +135,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
 
     /**
      * Returns the currently set coefficient modulus parameter.
-     * @returns {vector<SmallModulus>}
+     * @returns {Vector} - Vector containing SmallModulus primes
      */
     get coeffModulus() {
       return _instance.coeffModulus()
@@ -141,7 +143,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
 
     /**
      * Returns the currently set plaintext modulus parameter.
-     * @returns {SmallModulus}
+     * @returns {SmallModulus} - plaintext modulus
      */
     get plainModulus() {
       return _instance.plainModulus()
@@ -149,7 +151,8 @@ export const EncryptionParameters = ({ library, schemeType }) => {
 
     /**
      * Save the Encryption Parameters to a base64 string
-     * @returns {string}
+     * @param {ComprModeType} [compression=ComprModeType.deflate] - activate compression
+     * @returns {string} - base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
       try {
@@ -158,7 +161,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -168,8 +171,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
 
     /**
      * Load the Encryption Parameters from a base64 string
-     * @param context
-     * @param encoded
+     * @param {string} encoded - base64 encoded string
      */
     load({ encoded }) {
       try {
@@ -178,7 +180,7 @@ export const EncryptionParameters = ({ library, schemeType }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e

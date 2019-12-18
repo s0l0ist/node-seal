@@ -8,6 +8,13 @@ export const Library = () => {
     get instance() {
       return _module
     },
+    /**
+     * Initialize the library
+     *
+     * @param {*} source - Source library
+     * @param {*} sourceWasm - Source WASM file
+     * @returns {Promise<null>}
+     */
     initialize: async ({ source, sourceWasm }) => {
       return await new Promise((resolve, reject) => {
         // If we tell emscripten to build both js and wasm, this code is needed

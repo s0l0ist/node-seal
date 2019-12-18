@@ -5,8 +5,7 @@ export const ComprModeType = ({ library }) => {
   return {
     /**
      * Return the `none` Compression Mode Type
-     *
-     * @returns {number}
+     * @returns {ComprModeType} - enum for this type
      */
     get none() {
       return _none
@@ -14,8 +13,7 @@ export const ComprModeType = ({ library }) => {
 
     /**
      * Return the `deflate` Compression Mode Type
-     *
-     * @returns {number}
+     * @returns {ComprModeType} - enum for this type
      */
     get deflate() {
       return _deflate
