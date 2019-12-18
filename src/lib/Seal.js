@@ -13,7 +13,7 @@
  * @param {GaloisKeys} options.GaloisKeys
  * @param {IntegerEncoder} options.IntegerEncoder
  * @param {KeyGenerator} options.KeyGenerator
- * @param {Library} options.Library SEAL wasm library
+ * @param {Library} options.Library
  * @param {PlainText} options.PlainText
  * @param {PublicKey} options.PublicKey
  * @param {RelinKeys} options.RelinKeys
