@@ -16,9 +16,18 @@ export const CipherText = ({ library }) => {
   }
 
   return {
+    /**
+     * Get the underlying wasm instance
+     * @returns {instance}
+     */
     get instance() {
       return _instance
     },
+
+    /**
+     * Inject this object with a raw wasm instance
+     * @param instance
+     */
     inject({ instance }) {
       if (_instance) {
         _instance.delete()
@@ -28,34 +37,38 @@ export const CipherText = ({ library }) => {
     },
 
     /**
-     Returns the number of primes in the coefficient modulus of the
-     associated encryption parameters. This directly affects the
-     allocation size of the ciphertext.
+     * Returns the number of primes in the coefficient modulus of the
+     * associated encryption parameters. This directly affects the
+     * allocation size of the ciphertext.
+     * @returns {number}
      */
     get coeffModCount() {
       return _instance.coeffModCount()
     },
 
     /**
-     Returns the degree of the polynomial modulus of the associated
-     encryption parameters. This directly affects the allocation size
-     of the ciphertext.
+     * Returns the degree of the polynomial modulus of the associated
+     * encryption parameters. This directly affects the allocation size
+     * of the ciphertext.
+     * @returns {number}
      */
     get polyModulusDegree() {
       return _instance.polyModulusDegree()
     },
 
     /**
-     Returns the size of the ciphertext.
+     * Returns the size of the ciphertext.
+     * @returns {number}
      */
     get size() {
       return _instance.size()
     },
 
     /**
-     Returns the capacity of the allocation. This means the largest size
-     of the ciphertext that can be stored in the current allocation with
-     the current encryption parameters.
+     * Returns the capacity of the allocation. This means the largest size
+     * of the ciphertext that can be stored in the current allocation with
+     * the current encryption parameters.
+     * @returns {number}
      */
     get sizeCapacity() {
       return _instance.sizeCapacity()
@@ -83,13 +96,10 @@ export const CipherText = ({ library }) => {
 
     /**
      * Returns a reference to parmsId.
-     *
      * @see EncryptionParameters for more information about parmsId.
      * @returns {number}
-     *
      */
     get parmsId() {
-      // TODO: Binding type is not defined
       return _instance.parmsId()
     },
 
@@ -113,6 +123,7 @@ export const CipherText = ({ library }) => {
 
     /**
      * Save a cipherText to a base64 string
+     * @param [compression=ComprModeType.deflate]
      * @returns {string}
      */
     save({ compression = _ComprModeType.deflate } = {}) {

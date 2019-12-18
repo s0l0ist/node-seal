@@ -17,9 +17,18 @@ export const Evaluator = ({ library, context }) => {
   }
 
   return {
+    /**
+     * Get the underlying wasm instance
+     * @returns {instance}
+     */
     get instance() {
       return _instance
     },
+
+    /**
+     * Inject this object with a raw wasm instance
+     * @param instance
+     */
     inject({ instance }) {
       if (_instance) {
         _instance.delete()
@@ -105,7 +114,7 @@ export const Evaluator = ({ library, context }) => {
      * @param a
      * @param b
      * @param destination
-     * @param {optional} pool
+     * @param [pool=MemoryPoolHandleGlobal]
      */
     multiply({ a, b, destination, pool = _MemoryPoolHandleGlobal() }) {
       try {
@@ -130,7 +139,7 @@ export const Evaluator = ({ library, context }) => {
      *
      * @param encrypted
      * @param destination
-     * @param {optional} pool
+     * @param [pool=MemoryPoolHandleGlobal]
      */
     square({ encrypted, destination, pool = _MemoryPoolHandleGlobal() }) {
       try {
@@ -157,7 +166,7 @@ export const Evaluator = ({ library, context }) => {
      * @param encrypted
      * @param relinKeys
      * @param destination
-     * @param {optional} pool
+     * @param [pool=MemoryPoolHandleGlobal]
      */
     relinearize({
       encrypted,
@@ -192,7 +201,7 @@ export const Evaluator = ({ library, context }) => {
      *
      * @param encrypted
      * @param destination
-     * @param {optional} pool
+     * @param [pool=MemoryPoolHandleGlobal]
      */
     cipherModSwitchToNext({
       encrypted,
@@ -226,7 +235,7 @@ export const Evaluator = ({ library, context }) => {
      * @param encrypted
      * @param parmsId
      * @param destination
-     * @param {optional} pool
+     * @param [pool=MemoryPoolHandleGlobal]
      */
     cipherModSwitchTo({
       encrypted,
@@ -312,7 +321,7 @@ export const Evaluator = ({ library, context }) => {
      *
      * @param encrypted
      * @param destination
-     * @param {optional} pool
+     * @param [pool=MemoryPoolHandleGlobal]
      */
     rescaleToNext({
       encrypted,
@@ -343,7 +352,7 @@ export const Evaluator = ({ library, context }) => {
      * @param encrypted
      * @param parmsId
      * @param destination
-     * @param {optional} pool
+     * @param [pool=MemoryPoolHandleGlobal]
      */
     rescaleTo({
       encrypted,
@@ -382,7 +391,7 @@ export const Evaluator = ({ library, context }) => {
      * @param exponent
      * @param relinKeys
      * @param destination
-     * @param {optional} pool
+     * @param [pool=MemoryPoolHandleGlobal]
      */
     exponentiate({
       encrypted,
@@ -477,7 +486,7 @@ export const Evaluator = ({ library, context }) => {
      * @param encrypted
      * @param plain
      * @param destination
-     * @param {optional} pool
+     * @param [pool=MemoryPoolHandleGlobal]
      */
     multiplyPlain({
       encrypted,
@@ -520,7 +529,7 @@ export const Evaluator = ({ library, context }) => {
      * @param plain
      * @param parmsId
      * @param destinationNtt
-     * @param {optional} pool
+     * @param [pool=MemoryPoolHandleGlobal]
      */
     plainTransformToNtt({
       plain,
@@ -620,7 +629,7 @@ export const Evaluator = ({ library, context }) => {
      * @param galoisElt
      * @param galoisKeys
      * @param destination
-     * @param {optional} pool
+     * @param [pool=MemoryPoolHandleGlobal]
      */
     applyGalois({
       encrypted,
@@ -663,7 +672,7 @@ export const Evaluator = ({ library, context }) => {
      * @param steps
      * @param galoisKeys
      * @param destination
-     * @param {optional} pool
+     * @param [pool=MemoryPoolHandleGlobal]
      */
     rotateRows({
       encrypted,
@@ -704,7 +713,7 @@ export const Evaluator = ({ library, context }) => {
      * @param encrypted
      * @param galoisKeys
      * @param destination
-     * @param {optional} pool
+     * @param [pool=MemoryPoolHandleGlobal]
      */
     rotateColumns({
       encrypted,
@@ -744,7 +753,7 @@ export const Evaluator = ({ library, context }) => {
      * @param steps
      * @param galoisKeys
      * @param destination
-     * @param {optional} pool
+     * @param [pool=MemoryPoolHandleGlobal]
      */
     rotateVector({
       encrypted,
@@ -783,7 +792,7 @@ export const Evaluator = ({ library, context }) => {
      * @param encrypted
      * @param galoisKeys
      * @param destination
-     * @param {optional} pool
+     * @param [pool=MemoryPoolHandleGlobal]
      */
     complexConjugate({
       encrypted,
