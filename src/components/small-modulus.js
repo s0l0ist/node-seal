@@ -8,6 +8,7 @@ export const SmallModulus = ({library}) => {
   try {
     _instance = new library.SmallModulus()
   } catch (e) {
+    // eslint-disable-next-line no-nested-ternary
     throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
   }
 
@@ -32,15 +33,18 @@ export const SmallModulus = ({library}) => {
       try {
         _instance.loadFromString(value + '')
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
 
     /**
-     Returns the value of the current SmallModulus as a string.
-
-     It's a string because JS does not support uint64
-     data type very well
+     * Returns the value of the current SmallModulus as a string.
+     *
+     * It's a string because JS does not support uint64
+     * data type very well
+     *
+     * @returns {String} integer value of the SmallModulus
      */
     get value() {
       return _instance.Value()
@@ -76,6 +80,7 @@ export const SmallModulus = ({library}) => {
       try {
         return _saveToString(compression)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     }

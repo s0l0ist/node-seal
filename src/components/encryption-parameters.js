@@ -6,6 +6,7 @@ export const EncryptionParameters = ({library, schemeType}) => {
   try {
     _instance = new library.EncryptionParameters(schemeType)
   } catch (e) {
+    // eslint-disable-next-line no-nested-ternary
     throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
   }
 
@@ -35,6 +36,7 @@ export const EncryptionParameters = ({library, schemeType}) => {
       try {
         _instance.setPolyModulusDegree(polyModulusDegree)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -54,6 +56,7 @@ export const EncryptionParameters = ({library, schemeType}) => {
       try {
         _instance.setCoeffModulus(coeffModulus)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -73,6 +76,7 @@ export const EncryptionParameters = ({library, schemeType}) => {
       try {
         _instance.setPlainModulus(plainModulus)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -119,6 +123,7 @@ export const EncryptionParameters = ({library, schemeType}) => {
       try {
         return _instance.saveToString(compression)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -132,6 +137,7 @@ export const EncryptionParameters = ({library, schemeType}) => {
       try {
         _instance.loadFromString(encoded)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     }

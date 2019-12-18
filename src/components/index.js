@@ -23,4 +23,3 @@ export { SecretKey } from './secret-key'
 export { SecurityLevel } from './security-level'
 export { SmallModulus } from './small-modulus'
 export { Vector } from './vector'
-

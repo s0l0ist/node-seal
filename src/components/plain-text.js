@@ -6,6 +6,7 @@ export const PlainText = ({library}) => {
   try {
     _instance = new library.Plaintext()
   } catch (e) {
+    // eslint-disable-next-line no-nested-ternary
     throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
   }
 
@@ -31,6 +32,7 @@ export const PlainText = ({library}) => {
       try {
         return _instance.shrinkToFit()
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -38,10 +40,11 @@ export const PlainText = ({library}) => {
     /**
      Sets the plaintext polynomial to zero.
      */
-    setZero()  {
+    setZero() {
       try {
         return _instance.setZero()
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -82,29 +85,30 @@ export const PlainText = ({library}) => {
     },
 
     /**
-     Returns a human-readable string description of the plaintext polynomial.
-
-     The returned string is of the form "7FFx^3 + 1x^1 + 3" with a format
-     summarized by the following:
-     1. Terms are listed in order of strictly decreasing exponent
-     2. Coefficient values are non-negative and in hexadecimal format (hexadecimal
-     letters are in upper-case)
-     3. Exponents are positive and in decimal format
-     4. Zero coefficient terms (including the constant term) are omitted unless
-     the polynomial is exactly 0 (see rule 9)
-     5. Term with the exponent value of one is written as x^1
-     6. Term with the exponent value of zero (the constant term) is written as
-     just a hexadecimal number without x or exponent
-     7. Terms are separated exactly by <space>+<space>
-     8. Other than the +, no other terms have whitespace
-     9. If the polynomial is exactly 0, the string "0" is returned
-
-     @throws std::invalid_argument if the plaintext is in NTT transformed form
+     * Returns a human-readable string description of the plaintext polynomial.
+     *
+     * The returned string is of the form "7FFx^3 + 1x^1 + 3" with a format
+     * summarized by the following:
+     * 1. Terms are listed in order of strictly decreasing exponent
+     * 2. Coefficient values are non-negative and in hexadecimal format (hexadecimal
+     * letters are in upper-case)
+     * 3. Exponents are positive and in decimal format
+     * 4. Zero coefficient terms (including the constant term) are omitted unless
+     * the polynomial is exactly 0 (see rule 9)
+     * 5. Term with the exponent value of one is written as x^1
+     * 6. Term with the exponent value of zero (the constant term) is written as
+     * just a hexadecimal number without x or exponent
+     * 7. Terms are separated exactly by <space>+<space>
+     * 8. Other than the +, no other terms have whitespace
+     * 9. If the polynomial is exactly 0, the string "0" is returned
+     *
+     * @throws std::invalid_argument if the plaintext is in NTT transformed form
      */
     toPolynomial() {
       try {
         return _instance.toPolynomial()
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -117,10 +121,10 @@ export const PlainText = ({library}) => {
     },
 
     /**
-     Returns a reference to parms_id. The parms_id must remain zero unless the
-     plaintext polynomial is in NTT form.
-
-     @see EncryptionParameters for more information about parms_id.
+     * Returns a reference to parms_id. The parms_id must remain zero unless the
+     * plaintext polynomial is in NTT form.
+     *
+     * @see EncryptionParameters for more information about parms_id.
      */
     // TODO: Binding type is not defined
     get parmsId() {
@@ -128,16 +132,16 @@ export const PlainText = ({library}) => {
     },
 
     /**
-     Returns a reference to the scale. This is only needed when using the CKKS
-     encryption scheme. The user should have little or no reason to ever change
-     the scale by hand.
+     * Returns a reference to the scale. This is only needed when using the CKKS
+     * encryption scheme. The user should have little or no reason to ever change
+     * the scale by hand.
      */
     get scale() {
       return _instance.scale()
     },
 
     /**
-     Returns the currently used MemoryPoolHandle.
+     * Returns the currently used MemoryPoolHandle.
      */
     get pool() {
       return _instance.pool()
@@ -151,6 +155,7 @@ export const PlainText = ({library}) => {
       try {
         return _instance.saveToString(compression)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -164,6 +169,7 @@ export const PlainText = ({library}) => {
       try {
         _instance.loadFromString(context.instance, encoded)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     }

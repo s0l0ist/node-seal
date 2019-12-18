@@ -9,7 +9,7 @@ export const Library = () => {
     get instance() {
       return _module
     },
-    initialize: async function ({source, sourceWasm}) {
+    initialize: async ({source, sourceWasm}) => {
       return await new Promise((resolve, reject) => {
         // If we tell emscripten to build both js and wasm, this code is needed
         // Right now, we use single file js where the wasm is a base64 string so
@@ -29,7 +29,7 @@ export const Library = () => {
         })
 
         _timeout = setTimeout(() => {
-          reject()
+          reject(new Error('Could not initialize library in time!'))
         }, 10000)
 
         module.onRuntimeInitialized = () => {

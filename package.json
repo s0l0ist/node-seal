@@ -62,6 +62,8 @@
     "zlib:make": "bash scripts/zlib-make.sh"
   },
   "devDependencies": {
+    "eslint": "^6.7.2",
+    "eslint-plugin-jsdoc": "^18.4.3",
     "esm": "^3.2.25",
     "file-loader": "5.0.2",
     "jest": "24.9.0",

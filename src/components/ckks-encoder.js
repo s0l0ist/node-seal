@@ -6,6 +6,7 @@ export const CKKSEncoder = ({library, context}) => {
   try {
     _instance = new library.CKKSEncoder(context.instance)
   } catch (e) {
+    // eslint-disable-next-line no-nested-ternary
     throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
   }
 
@@ -33,6 +34,7 @@ export const CKKSEncoder = ({library, context}) => {
       try {
         _instance.encodeVectorDouble(vector.instance, scale, plainText.instance, pool)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -48,6 +50,7 @@ export const CKKSEncoder = ({library, context}) => {
       try {
         _instance.decodeVectorDouble(plainText.instance, vector.instance, pool)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },

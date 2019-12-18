@@ -18,6 +18,7 @@ export const PlainModulus = ({library}) => {
       try {
         return _Batching(polyModulusDegree, bitSize)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     },
@@ -35,6 +36,7 @@ export const PlainModulus = ({library}) => {
       try {
         return _BatchingVector(polyModulusDegree, bitSizes.instance)
       } catch (e) {
+        // eslint-disable-next-line no-nested-ternary
         throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
       }
     }
