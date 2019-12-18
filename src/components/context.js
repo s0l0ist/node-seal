@@ -1,10 +1,12 @@
+import { Exception } from './exception'
+
 export const Context = ({
   library,
   encryptionParams,
   expandModChain,
   securityLevel
 }) => {
-  const _getException = library.getException
+  const _Exception = Exception({ library })
   const _printContext = library.printContext
   let _instance = null
   try {
@@ -17,7 +19,7 @@ export const Context = ({
     // eslint-disable-next-line no-nested-ternary
     throw new Error(
       typeof e === 'number'
-        ? _getException(e)
+        ? _Exception.getHuman(e)
         : e instanceof Error
         ? e.message
         : e
@@ -27,7 +29,7 @@ export const Context = ({
   return {
     /**
      * Get the underlying wasm instance
-     * @returns {instance}
+     * @returns {instance} wasm instance
      */
     get instance() {
       return _instance
@@ -35,7 +37,7 @@ export const Context = ({
 
     /**
      * Inject this object with a raw wasm instance
-     * @param instance
+     * @param {instance} instance - wasm instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -55,7 +57,7 @@ export const Context = ({
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -67,9 +69,8 @@ export const Context = ({
      * Returns the ContextData corresponding to encryption parameters with a given
      * parmsId. If parameters with the given parmsId are not found then the
      * function returns nullptr.
-     *
-     * @param parmsId
-     * @returns ContextData
+     * @param {*} parmsId - specific id to return contextdata for
+     * @returns {*} - contextData corresponding to encryption parameters
      */
     getContextData({ parmsId }) {
       try {
@@ -78,7 +79,7 @@ export const Context = ({
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -89,8 +90,7 @@ export const Context = ({
     /**
      * Returns the ContextData corresponding to encryption parameters that are
      * used for keys.
-     *
-     * @returns ContextData
+     * @returns {*} - contextData corresponding to encryption parameters that are used for keys.
      */
     get keyContextData() {
       return _instance.keyContextData()
@@ -99,8 +99,7 @@ export const Context = ({
     /**
      * Returns the ContextData corresponding to the first encryption parameters
      * that are used for data.
-     *
-     * @returns ContextData
+     * @returns {*} - contextData corresponding to the first encryption parameters that are used for data
      */
     get firstContextData() {
       return _instance.firstContextData()
@@ -109,8 +108,7 @@ export const Context = ({
     /**
      * Returns the ContextData corresponding to the last encryption parameters
      * that are used for data.
-     *
-     * @returns ContextData
+     * @returns {*} - contextData corresponding to the last encryption parameters that are used for data
      */
     get lastContextData() {
       return _instance.lastContextData()
@@ -119,6 +117,7 @@ export const Context = ({
     /**
      * If the encryption parameters are set in a way that is considered valid by
      * Microsoft SEAL, the variable parameters_set is set to true.
+     * @returns {boolean} - are encryption parameters set in a way that is considered valid
      */
     get parametersSet() {
       return _instance.parametersSet()
@@ -127,8 +126,7 @@ export const Context = ({
     /**
      * Returns a parmsIdType corresponding to the set of encryption parameters
      * that are used for keys.
-     *
-     * @returns parmsIdType
+     * @returns {*} - parmsIdType corresponding to the set of encryption parameters that are used for keys
      */
     get keyParmsId() {
       return _instance.keyParmsId()
@@ -137,8 +135,7 @@ export const Context = ({
     /**
      * Returns a parmsIdType corresponding to the first encryption parameters
      * that are used for data.
-     *
-     * @returns parmsIdType
+     * @returns {*} - parmsIdType corresponding to the first encryption parameters that are used for data
      */
     get firstParmsId() {
       return _instance.firstParmsId()
@@ -147,8 +144,7 @@ export const Context = ({
     /**
      * Returns a parmsIdType corresponding to the last encryption parameters
      * that are used for data.
-     *
-     * @returns parmsIdType
+     * @returns {*} - parmsIdType corresponding to the last encryption parameters that are used for data
      */
     get lastParmsId() {
       return _instance.lastParmsId()
@@ -160,8 +156,7 @@ export const Context = ({
      * Evaluator.applyGalois, and all rotation and conjugation operations. For
      * keyswitching to be available, the coefficient modulus parameter must consist
      * of at least two prime number factors.
-     *
-     * @returns {boolean}
+     * @returns {boolean} - coefficient modulus supports keyswitching
      */
     get usingKeyswitching() {
       return _instance.usingKeyswitching()

@@ -1,7 +1,9 @@
+import { Exception } from './exception'
+import { MemoryPoolHandle } from './memory-pool-handle'
+
 export const BatchEncoder = ({ library, context }) => {
-  const _getException = library.getException
-  const _MemoryPoolHandleGlobal =
-    library.MemoryPoolHandle.MemoryPoolHandleGlobal
+  const _Exception = Exception({ library })
+  const _MemoryPoolHandle = MemoryPoolHandle({ library })
   let _instance = null
   try {
     _instance = new library.BatchEncoder(context.instance)
@@ -9,7 +11,7 @@ export const BatchEncoder = ({ library, context }) => {
     // eslint-disable-next-line no-nested-ternary
     throw new Error(
       typeof e === 'number'
-        ? _getException(e)
+        ? _Exception.getHuman(e)
         : e instanceof Error
         ? e.message
         : e
@@ -19,7 +21,7 @@ export const BatchEncoder = ({ library, context }) => {
   return {
     /**
      * Get the underlying wasm instance
-     * @returns {instance}
+     * @returns {instance} wasm instance
      */
     get instance() {
       return _instance
@@ -27,7 +29,7 @@ export const BatchEncoder = ({ library, context }) => {
 
     /**
      * Inject this object with a raw wasm instance
-     * @param instance
+     * @param {instance} instance - wasm instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -48,9 +50,9 @@ export const BatchEncoder = ({ library, context }) => {
      *
      * If the destination plaintext overlaps the input values in memory, the behavior of
      * this function is undefined.
-     *
-     * @param vector
-     * @param plainText
+     * @param {Object} opts
+     * @param {Vector} opts.vector - Data to encode
+     * @param {PlainText} opts.plainText - Destination to store the encoded result
      */
     encodeVectorInt32({ vector, plainText }) {
       try {
@@ -59,7 +61,7 @@ export const BatchEncoder = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -78,9 +80,8 @@ export const BatchEncoder = ({ library, context }) => {
      *
      * If the destination plaintext overlaps the input values in memory, the behavior of
      * this function is undefined.
-     *
-     * @param vector
-     * @param plainText
+     * @param {Vector} vector - Data to encode
+     * @param {PlainText} plainText - Destination to store the encoded result
      */
     encodeVectorUInt32({ vector, plainText }) {
       try {
@@ -89,7 +90,7 @@ export const BatchEncoder = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -104,19 +105,18 @@ export const BatchEncoder = ({ library, context }) => {
      * and coefficients less than the plaintext modulus, i.e. it must be a valid plaintext
      * for the encryption parameters. Dynamic memory allocations in the process are
      * allocated from the memory pool pointed to by the given MemoryPoolHandle.
-     *
-     * @param plainText
-     * @param vector
-     * @param [pool=MemoryPoolHandleGlobal]
+     * @param {PlainText} plainText - Data to decode
+     * @param {Vector} vector - Destination to store the decoded result
+     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global]
      */
-    decodeVectorInt32({ plainText, vector, pool = _MemoryPoolHandleGlobal() }) {
+    decodeVectorInt32({ plainText, vector, pool = _MemoryPoolHandle.global }) {
       try {
         _instance.decodeVectorInt32(plainText.instance, vector.instance, pool)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -131,23 +131,18 @@ export const BatchEncoder = ({ library, context }) => {
      * and coefficients less than the plaintext modulus, i.e. it must be a valid plaintext
      * for the encryption parameters. Dynamic memory allocations in the process are
      * allocated from the memory pool pointed to by the given MemoryPoolHandle.
-     *
-     * @param plainText
-     * @param vector
-     * @param [pool=MemoryPoolHandleGlobal]
+     * @param {PlainText} plainText - Data to decode
+     * @param {Vector} vector - Destination to store the decoded result
+     * @param {MemoryPoolHandle} [pool=MemoryPoolHandle.global]
      */
-    decodeVectorUInt32({
-      plainText,
-      vector,
-      pool = _MemoryPoolHandleGlobal()
-    }) {
+    decodeVectorUInt32({ plainText, vector, pool = _MemoryPoolHandle.global }) {
       try {
         _instance.decodeVectorUInt32(plainText.instance, vector.instance, pool)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -157,7 +152,7 @@ export const BatchEncoder = ({ library, context }) => {
 
     /**
      * Returns the total number of batching slots available to hold data
-     * @returns {number}
+     * @returns {number} - Number of batching slots available to hold data
      */
     get slotCount() {
       return _instance.slotCount()

@@ -22,7 +22,9 @@ export const SEAL = ({ options }) => {
   const _CoeffModulus = options.CoeffModulus({ library: _Library.instance })
   const _ComprModeType = options.ComprModeType({ library: _Library.instance })
   const _Exception = options.Exception({ library: _Library.instance })
-  const _MemoryPool = options.MemoryPool({ library: _Library.instance })
+  const _MemoryPoolHandle = options.MemoryPoolHandle({
+    library: _Library.instance
+  })
   const _PlainModulus = options.PlainModulus({ library: _Library.instance })
   const _SecurityLevel = options.SecurityLevel({ library: _Library.instance })
   const _SchemeType = options.SchemeType({ library: _Library.instance })
@@ -198,11 +200,11 @@ export const SEAL = ({ options }) => {
     /**
      * Get the MemoryPool singleton instance
      *
-     * @returns {MemoryPool}
+     * @returns {MemoryPoolHandle}
      * @constructor
      */
-    get MemoryPool() {
-      return _MemoryPool
+    get MemoryPoolHandle() {
+      return _MemoryPoolHandle
     },
 
     /**
@@ -288,8 +290,9 @@ export const SEAL = ({ options }) => {
     /**
      * Create an instance of a C++ Vector
      *
-     * @param array
-     * @returns {Vector}
+     * @param {Object} opts - Options
+     * @param {Int32Array|Uint32Array|Float64Array} opts.array - Typed Array of data
+     * @returns {Vector} - Vector containing the typed data
      * @constructor
      */
     Vector({ array }) {

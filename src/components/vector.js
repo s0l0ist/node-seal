@@ -1,5 +1,7 @@
+import { Exception } from './exception'
+
 export const Vector = ({ library, array = new Int32Array(0) }) => {
-  const _getException = library.getException
+  const _Exception = Exception({ library })
   const _vecFromArrayInt32 = library.vecFromArrayInt32
   const _vecFromArrayUInt32 = library.vecFromArrayUInt32
   const _vecFromArrayDouble = library.vecFromArrayDouble
@@ -33,7 +35,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
       // eslint-disable-next-line no-nested-ternary
       throw new Error(
         typeof e === 'number'
-          ? _getException(e)
+          ? _Exception.getHuman(e)
           : e instanceof Error
           ? e.message
           : e
@@ -47,7 +49,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
   return {
     /**
      * Get the underlying wasm instance
-     * @returns {instance}
+     * @returns {instance} wasm instance
      */
     get instance() {
       return _instance
@@ -55,7 +57,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
 
     /**
      * Inject this object with a raw wasm instance
-     * @param instance
+     * @param {instance} instance - wasm instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -67,7 +69,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
 
     /**
      * Return the vector type
-     * @returns {Int32ArrayConstructor|Uint32ArrayConstructor|Float64ArrayConstructor}
+     * @returns {Int32ArrayConstructor|Uint32ArrayConstructor|Float64ArrayConstructor} - Constructor used to create the vector
      */
     get type() {
       return _type
@@ -75,7 +77,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
 
     /**
      * Return the vector size
-     * @returns {number}
+     * @returns {number} - number of elements in the vector
      */
     get size() {
       return _instance.size()
@@ -86,7 +88,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      *
      * This method is mainly used for debugging this library
      *
-     * @param rowSize
+     * @param {number} rowSize
      */
     printMatrix({ rowSize }) {
       try {
@@ -104,7 +106,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -117,8 +119,8 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      *
      * This method is mainly used for debugging this library
      *
-     * @param printSize
-     * @param precision
+     * @param {number} printSize
+     * @param {number} precision
      */
     printVector({ printSize = 4, precision = 5 } = {}) {
       try {
@@ -139,7 +141,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -150,10 +152,8 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
     /**
      * Convert a typed array to a vector.
      *
-     * The type hint is useful for decryption
-     *
-     * @param array
-     * @returns {vector<int32|uint32|double>}
+     * @param {Int32Array|Uint32Array|Float64Array} array - Array of data to save to a Vector
+     * @returns {Vector} - Vector whos contents are of the same type as the array passed in.
      */
     fromArray({ array }) {
       _fromArray({ array })
@@ -161,8 +161,8 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
 
     /**
      * Get a value pointed to by the specified index
-     * @param index
-     * @returns {number}
+     * @param {number} index - Vector index
+     * @returns {number} - value in the Vector pointed to by the index
      */
     getValue({ index }) {
       try {
@@ -171,7 +171,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -181,8 +181,8 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
 
     /**
      * Resizes a vector to the given size
-     * @param size
-     * @param fill
+     * @param {number} size - number of elements to resize
+     * @param {number} fill - data to fill the vector with
      */
     resize({ size, fill }) {
       try {
@@ -191,7 +191,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -201,7 +201,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
 
     /**
      * Copy a vector's data into a Typed or regular JS array
-     * @returns {Int32Array|Uint32Array|Float64Array}
+     * @returns {Int32Array|Uint32Array|Float64Array} - Typed Array containing values from the Vector
      */
     toArray() {
       try {
@@ -224,7 +224,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e

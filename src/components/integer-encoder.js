@@ -1,5 +1,7 @@
+import { Exception } from './exception'
+
 export const IntegerEncoder = ({ library, context }) => {
-  const _getException = library.getException
+  const _Exception = Exception({ library })
   let _instance = null
   try {
     _instance = new library.IntegerEncoder(context.instance)
@@ -7,7 +9,7 @@ export const IntegerEncoder = ({ library, context }) => {
     // eslint-disable-next-line no-nested-ternary
     throw new Error(
       typeof e === 'number'
-        ? _getException(e)
+        ? _Exception.getHuman(e)
         : e instanceof Error
         ? e.message
         : e
@@ -17,7 +19,7 @@ export const IntegerEncoder = ({ library, context }) => {
   return {
     /**
      * Get the underlying wasm instance
-     * @returns {instance}
+     * @returns {instance} wasm instance
      */
     get instance() {
       return _instance
@@ -25,7 +27,7 @@ export const IntegerEncoder = ({ library, context }) => {
 
     /**
      * Inject this object with a raw wasm instance
-     * @param instance
+     * @param {instance} instance - wasm instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -37,17 +39,17 @@ export const IntegerEncoder = ({ library, context }) => {
 
     /**
      * Encode an Int32 value
-     *
-     * @param value
+     * @param {number} value - Integer to encode
+     * @param {PlainText} destination - Plaintext to store the encoded data
      */
-    encodeInt32({ value }) {
+    encodeInt32({ value, destination }) {
       try {
-        _instance.encodeInt32(value)
+        _instance.encodeInt32(value, destination.instance)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -57,17 +59,17 @@ export const IntegerEncoder = ({ library, context }) => {
 
     /**
      * Encode an UInt32 value
-     *
-     * @param value
+     * @param {number} value - Unsigned integer to encode
+     * @param {PlainText} destination - Plaintext to store the encoded data
      */
-    encodeUInt32({ value }) {
+    encodeUInt32({ value, destination }) {
       try {
-        _instance.encodeUInt32(value)
+        _instance.encodeUInt32(value, destination.instance)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -76,8 +78,8 @@ export const IntegerEncoder = ({ library, context }) => {
     },
     /**
      * Decode an Int32 value
-     *
-     * @param value
+     * @param {PlainText} plainText - Plaintext to decode
+     * @returns {number} - Int32 value
      */
     decodeInt32({ plainText }) {
       try {
@@ -86,7 +88,7 @@ export const IntegerEncoder = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -96,8 +98,8 @@ export const IntegerEncoder = ({ library, context }) => {
 
     /**
      * Decode an UInt32 value
-     *
-     * @param value
+     * @param {PlainText} plainText - Plaintext to decode
+     * @returns {number} - Uint32 value
      */
     decodeUInt32({ plainText }) {
       try {
@@ -106,7 +108,7 @@ export const IntegerEncoder = ({ library, context }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e

@@ -1,5 +1,7 @@
+import { Exception } from './exception'
+
 export const CoeffModulus = ({ library }) => {
-  const _getException = library.getException
+  const _Exception = Exception({ library })
   const _MaxBitCount = library.CoeffModulus.MaxBitCount
   const _BFVDefault = library.CoeffModulus.BFVDefault
   const _Create = library.CoeffModulus.Create
@@ -7,10 +9,9 @@ export const CoeffModulus = ({ library }) => {
   return {
     /**
      * Returns the Maximum Bit Count for the specified polyModulusDegree and securityLevel
-     *
-     * @param polyModulusDegree
-     * @param securityLevel
-     * @returns {number}
+     * @param {number} polyModulusDegree - degree of the polynomial modulus
+     * @param {SecurityLevel} securityLevel - Security Level
+     * @returns {number} - Maximum bit count
      */
     MaxBitCount({ polyModulusDegree, securityLevel }) {
       try {
@@ -19,7 +20,7 @@ export const CoeffModulus = ({ library }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -29,10 +30,9 @@ export const CoeffModulus = ({ library }) => {
 
     /**
      * Returns a default vector of primes for the BFV CoeffModulus parameter
-     *
-     * @param polyModulusDegree
-     * @param securityLevel
-     * @returns {vector<SmallModulus>}
+     * @param {number} polyModulusDegree - degree of the polynomial modulus
+     * @param {SecurityLevel} securityLevel - Security Level
+     * @returns {Vector} - Vector containing SmallModulus primes
      */
     BFVDefault({ polyModulusDegree, securityLevel }) {
       try {
@@ -41,7 +41,7 @@ export const CoeffModulus = ({ library }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -51,10 +51,9 @@ export const CoeffModulus = ({ library }) => {
 
     /**
      * Create a vector of primes for a given polyModulusDegree and bitSizes
-     *
-     * @param polyModulusDegree
-     * @param {vector<Int32>} bitSizes
-     * @returns {vector<SmallModulus>}
+     * @param {number} polyModulusDegree - degree of the polynomial modulus
+     * @param {Vector} bitSizes - Vector containing int32 values representing bit-sizes of primes
+     * @returns {Vector} - Vector containing SmallModulus primes
      */
     Create({ polyModulusDegree, bitSizes }) {
       try {
@@ -63,7 +62,7 @@ export const CoeffModulus = ({ library }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e

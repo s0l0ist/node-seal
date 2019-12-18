@@ -1,6 +1,9 @@
+import { Exception } from './exception'
+import { ComprModeType } from './compr-mode-type'
+
 export const PlainText = ({ library }) => {
-  const _getException = library.getException
-  const _ComprModeType = library.ComprModeType
+  const _Exception = Exception({ library })
+  const _ComprModeType = ComprModeType({ library })
   let _instance = null
   try {
     _instance = new library.Plaintext()
@@ -8,7 +11,7 @@ export const PlainText = ({ library }) => {
     // eslint-disable-next-line no-nested-ternary
     throw new Error(
       typeof e === 'number'
-        ? _getException(e)
+        ? _Exception.getHuman(e)
         : e instanceof Error
         ? e.message
         : e
@@ -18,7 +21,7 @@ export const PlainText = ({ library }) => {
   return {
     /**
      * Get the underlying wasm instance
-     * @returns {instance}
+     * @returns {instance} wasm instance
      */
     get instance() {
       return _instance
@@ -26,7 +29,7 @@ export const PlainText = ({ library }) => {
 
     /**
      * Inject this object with a raw wasm instance
-     * @param instance
+     * @param {instance} instance - wasm instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -37,10 +40,10 @@ export const PlainText = ({ library }) => {
     },
 
     /**
-     Allocates enough memory to accommodate the backing array of the current
-     plaintext and copies it over to the new location. This function is meant
-     to reduce the memory use of the plaintext to smallest possible and can be
-     particularly important after modulus switching.
+     * Allocates enough memory to accommodate the backing array of the current
+     * plaintext and copies it over to the new location. This function is meant
+     * to reduce the memory use of the plaintext to smallest possible and can be
+     * particularly important after modulus switching.
      */
     shrinkToFit() {
       try {
@@ -49,7 +52,7 @@ export const PlainText = ({ library }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -58,7 +61,7 @@ export const PlainText = ({ library }) => {
     },
 
     /**
-     Sets the plaintext polynomial to zero.
+     * Sets the plaintext polynomial to zero.
      */
     setZero() {
       try {
@@ -67,7 +70,7 @@ export const PlainText = ({ library }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -76,35 +79,40 @@ export const PlainText = ({ library }) => {
     },
 
     /**
-     Returns whether the current plaintext polynomial has all zero coefficients.
+     * Returns whether the current plaintext polynomial has all zero coefficients.
+     * @returns {boolean} - plaintext polynomial has all zero coefficients
      */
     get isZero() {
       return _instance.isZero()
     },
 
     /**
-     Returns the capacity of the current allocation.
+     * Returns the capacity of the current allocation.
+     * @returns {number} - capacity of the current allocation
      */
     get capacity() {
       return _instance.capacity()
     },
 
     /**
-     Returns the coefficient count of the current plaintext polynomial.
+     * Returns the coefficient count of the current plaintext polynomial.
+     * @returns {number} - coefficient count of the current plaintext polynomial
      */
     get coeffCount() {
       return _instance.coeffCount()
     },
 
     /**
-     Returns the significant coefficient count of the current plaintext polynomial.
+     * Returns the significant coefficient count of the current plaintext polynomial.
+     * @returns {number} - significant coefficient count of the current plaintext polynomial
      */
     get significantCoeffCount() {
       return _instance.significantCoeffCount()
     },
 
     /**
-     Returns the non-zero coefficient count of the current plaintext polynomial.
+     * Returns the non-zero coefficient count of the current plaintext polynomial.
+     * @returns {number} - non-zero coefficient count of the current plaintext polynomial
      */
     get nonzeroCoeffCount() {
       return _instance.nonzeroCoeffCount()
@@ -129,6 +137,7 @@ export const PlainText = ({ library }) => {
      * 9. If the polynomial is exactly 0, the string "0" is returned
      *
      * @throws std::invalid_argument if the plaintext is in NTT transformed form
+     * @returns {string} - Polynomial string
      */
     toPolynomial() {
       try {
@@ -137,7 +146,7 @@ export const PlainText = ({ library }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -146,7 +155,8 @@ export const PlainText = ({ library }) => {
     },
 
     /**
-     Returns whether the plaintext is in NTT form.
+     * Returns whether the plaintext is in NTT form.
+     * @returns {boolean} - plaintext is in NTT form
      */
     get isNttForm() {
       return _instance.isNttForm()
@@ -157,8 +167,8 @@ export const PlainText = ({ library }) => {
      * plaintext polynomial is in NTT form.
      *
      * @see EncryptionParameters for more information about parms_id.
+     * @returns {*} - parmsId pointer
      */
-    // TODO: Binding type is not defined
     get parmsId() {
       return _instance.parmsId()
     },
@@ -167,6 +177,7 @@ export const PlainText = ({ library }) => {
      * Returns a reference to the scale. This is only needed when using the CKKS
      * encryption scheme. The user should have little or no reason to ever change
      * the scale by hand.
+     * @returns {*} - reference to the scale
      */
     get scale() {
       return _instance.scale()
@@ -174,6 +185,7 @@ export const PlainText = ({ library }) => {
 
     /**
      * Returns the currently used MemoryPoolHandle.
+     * @returns {MemoryPoolHandle} - Pointer to the current memory pool handle
      */
     get pool() {
       return _instance.pool()
@@ -181,7 +193,8 @@ export const PlainText = ({ library }) => {
 
     /**
      * Save the PlainText to a base64 string
-     * @returns {string}
+     * @param {ComprModeType} [compression=ComprModeType.deflate] - activate compression
+     * @returns {string} - base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
       try {
@@ -190,7 +203,7 @@ export const PlainText = ({ library }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -200,8 +213,8 @@ export const PlainText = ({ library }) => {
 
     /**
      * Load a PlainText from a base64 string
-     * @param context
-     * @param encoded
+     * @param {Context} context - Encryption context to enforce
+     * @param {string} encoded - base64 encoded string
      */
     load({ context, encoded }) {
       try {
@@ -210,7 +223,7 @@ export const PlainText = ({ library }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e

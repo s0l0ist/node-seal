@@ -1,5 +1,7 @@
+import { Exception } from './exception'
+
 export const PlainModulus = ({ library }) => {
-  const _getException = library.getException
+  const _Exception = Exception({ library })
   const _Batching = library.PlainModulus.Batching
   const _BatchingVector = library.PlainModulus.BatchingVector
 
@@ -7,10 +9,9 @@ export const PlainModulus = ({ library }) => {
     /**
      * Creates a prime number SmallModulus for use as plainModulus encryption
      * parameter that supports batching with a given polyModulusDegree.
-     *
-     * @param {number} polyModulusDegree
-     * @param {number} bitSize
-     * @returns {SmallModulus}
+     * @param {number} polyModulusDegree - degree of the polynomial modulus
+     * @param {number} bitSize - Bit size of the prime
+     * @returns {SmallModulus} - prime number
      */
     Batching({ polyModulusDegree, bitSize }) {
       try {
@@ -19,7 +20,7 @@ export const PlainModulus = ({ library }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
@@ -31,10 +32,9 @@ export const PlainModulus = ({ library }) => {
      * Creates several prime number SmallModulus elements that can be used as
      * plainModulus encryption parameters, each supporting batching with a given
      * polyModulusDegree.
-     *
-     * @param {number} polyModulusDegree
-     * @param {vector<Int32>} bitSizes
-     * @returns {vector<SmallModulus>}
+     * @param {number} polyModulusDegree - degree of the polynomial modulus
+     * @param {Vector} bitSizes - Vector containing int32 values representing bit-sizes of primes
+     * @returns {Vector} - Vector of SmallModulus
      */
     BatchingVector({ polyModulusDegree, bitSizes }) {
       try {
@@ -43,7 +43,7 @@ export const PlainModulus = ({ library }) => {
         // eslint-disable-next-line no-nested-ternary
         throw new Error(
           typeof e === 'number'
-            ? _getException(e)
+            ? _Exception.getHuman(e)
             : e instanceof Error
             ? e.message
             : e
