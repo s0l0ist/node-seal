@@ -1,20 +1,26 @@
-export const Evaluator = ({library, context}) => {
-
+export const Evaluator = ({ library, context }) => {
   const _getException = library.getException
-  const _MemoryPoolHandleGlobal = library.MemoryPoolHandle.MemoryPoolHandleGlobal
+  const _MemoryPoolHandleGlobal =
+    library.MemoryPoolHandle.MemoryPoolHandleGlobal
   let _instance = null
   try {
     _instance = new library.Evaluator(context.instance)
   } catch (e) {
     // eslint-disable-next-line no-nested-ternary
-    throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+    throw new Error(
+      typeof e === 'number'
+        ? _getException(e)
+        : e instanceof Error
+        ? e.message
+        : e
+    )
   }
 
   return {
     get instance() {
       return _instance
     },
-    inject({instance}) {
+    inject({ instance }) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -28,12 +34,18 @@ export const Evaluator = ({library, context}) => {
      * @param encrypted
      * @param destination
      */
-    negate({encrypted, destination}) {
+    negate({ encrypted, destination }) {
       try {
         _instance.negate(encrypted.instance, destination.instance)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -45,12 +57,18 @@ export const Evaluator = ({library, context}) => {
      * @param b
      * @param destination
      */
-    add({a, b, destination}) {
+    add({ a, b, destination }) {
       try {
         _instance.add(a.instance, b.instance, destination.instance)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -63,12 +81,18 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      * @returns {*}
      */
-    sub({a, b, destination}) {
+    sub({ a, b, destination }) {
       try {
         _instance.sub(a.instance, b.instance, destination.instance)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -83,12 +107,18 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      * @param {optional} pool
      */
-    multiply({a, b, destination, pool = _MemoryPoolHandleGlobal()}) {
+    multiply({ a, b, destination, pool = _MemoryPoolHandleGlobal() }) {
       try {
         _instance.multiply(a.instance, b.instance, destination.instance, pool)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -102,12 +132,18 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      * @param {optional} pool
      */
-    square({encrypted, destination, pool = _MemoryPoolHandleGlobal()}) {
+    square({ encrypted, destination, pool = _MemoryPoolHandleGlobal() }) {
       try {
         _instance.square(encrypted.instance, destination.instance, pool)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -123,12 +159,28 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      * @param {optional} pool
      */
-    relinearize({encrypted, relinKeys, destination, pool = _MemoryPoolHandleGlobal()}) {
+    relinearize({
+      encrypted,
+      relinKeys,
+      destination,
+      pool = _MemoryPoolHandleGlobal()
+    }) {
       try {
-        _instance.relinearize(encrypted.instance, relinKeys.instance, destination.instance, pool)
+        _instance.relinearize(
+          encrypted.instance,
+          relinKeys.instance,
+          destination.instance,
+          pool
+        )
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -142,12 +194,26 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      * @param {optional} pool
      */
-    cipherModSwitchToNext({encrypted, destination, pool = _MemoryPoolHandleGlobal()}) {
+    cipherModSwitchToNext({
+      encrypted,
+      destination,
+      pool = _MemoryPoolHandleGlobal()
+    }) {
       try {
-        _instance.cipherModSwitchToNext(encrypted.instance, destination.instance, pool)
+        _instance.cipherModSwitchToNext(
+          encrypted.instance,
+          destination.instance,
+          pool
+        )
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -162,12 +228,28 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      * @param {optional} pool
      */
-    cipherModSwitchTo({encrypted, parmsId, destination, pool = _MemoryPoolHandleGlobal()}) {
+    cipherModSwitchTo({
+      encrypted,
+      parmsId,
+      destination,
+      pool = _MemoryPoolHandleGlobal()
+    }) {
       try {
-        _instance.cipherModSwitchTo(encrypted.instance, parmsId, destination.instance, pool)
+        _instance.cipherModSwitchTo(
+          encrypted.instance,
+          parmsId,
+          destination.instance,
+          pool
+        )
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -178,12 +260,18 @@ export const Evaluator = ({library, context}) => {
      * @param encrypted
      * @param destination
      */
-    plainModSwitchToNext({plain, destination}) {
+    plainModSwitchToNext({ plain, destination }) {
       try {
         _instance.plainModSwitchToNext(plain.instance, destination.instance)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -196,12 +284,22 @@ export const Evaluator = ({library, context}) => {
      * @param parmsId
      * @param destination
      */
-    plainModSwitchTo({plain, parmsId, destination}) {
+    plainModSwitchTo({ plain, parmsId, destination }) {
       try {
-        _instance.plainModSwitchTo(plain.instance, parmsId, destination.instance)
+        _instance.plainModSwitchTo(
+          plain.instance,
+          parmsId,
+          destination.instance
+        )
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -216,12 +314,22 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      * @param {optional} pool
      */
-    rescaleToNext({encrypted, destination, pool = _MemoryPoolHandleGlobal()}) {
+    rescaleToNext({
+      encrypted,
+      destination,
+      pool = _MemoryPoolHandleGlobal()
+    }) {
       try {
         _instance.rescaleToNext(encrypted.instance, destination.instance, pool)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -237,12 +345,28 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      * @param {optional} pool
      */
-    rescaleTo({encrypted, parmsId, destination, pool = _MemoryPoolHandleGlobal()}) {
+    rescaleTo({
+      encrypted,
+      parmsId,
+      destination,
+      pool = _MemoryPoolHandleGlobal()
+    }) {
       try {
-        _instance.rescaleTo(encrypted.instance, parmsId, destination.instance, pool)
+        _instance.rescaleTo(
+          encrypted.instance,
+          parmsId,
+          destination.instance,
+          pool
+        )
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -260,12 +384,30 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      * @param {optional} pool
      */
-    exponentiate({encrypted, exponent, relinKeys, destination, pool = _MemoryPoolHandleGlobal()}) {
+    exponentiate({
+      encrypted,
+      exponent,
+      relinKeys,
+      destination,
+      pool = _MemoryPoolHandleGlobal()
+    }) {
       try {
-        _instance.exponentiate(encrypted.instance, exponent, relinKeys.instance, destination.instance, pool)
+        _instance.exponentiate(
+          encrypted.instance,
+          exponent,
+          relinKeys.instance,
+          destination.instance,
+          pool
+        )
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -278,12 +420,22 @@ export const Evaluator = ({library, context}) => {
      * @param plain
      * @param destination
      */
-    addPlain({encrypted, plain, destination}) {
+    addPlain({ encrypted, plain, destination }) {
       try {
-        _instance.addPlain(encrypted.instance, plain.instance, destination.instance)
+        _instance.addPlain(
+          encrypted.instance,
+          plain.instance,
+          destination.instance
+        )
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -296,12 +448,22 @@ export const Evaluator = ({library, context}) => {
      * @param plain
      * @param destination
      */
-    subPlain({encrypted, plain, destination}) {
+    subPlain({ encrypted, plain, destination }) {
       try {
-        _instance.subPlain(encrypted.instance, plain.instance, destination.instance)
+        _instance.subPlain(
+          encrypted.instance,
+          plain.instance,
+          destination.instance
+        )
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -317,12 +479,28 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      * @param {optional} pool
      */
-    multiplyPlain({encrypted, plain, destination, pool = _MemoryPoolHandleGlobal()}) {
+    multiplyPlain({
+      encrypted,
+      plain,
+      destination,
+      pool = _MemoryPoolHandleGlobal()
+    }) {
       try {
-        _instance.multiplyPlain(encrypted.instance, plain.instance, destination.instance, pool)
+        _instance.multiplyPlain(
+          encrypted.instance,
+          plain.instance,
+          destination.instance,
+          pool
+        )
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -344,12 +522,28 @@ export const Evaluator = ({library, context}) => {
      * @param destinationNtt
      * @param {optional} pool
      */
-    plainTransformToNtt({plain, parmsId, destinationNtt, pool = _MemoryPoolHandleGlobal()}) {
+    plainTransformToNtt({
+      plain,
+      parmsId,
+      destinationNtt,
+      pool = _MemoryPoolHandleGlobal()
+    }) {
       try {
-        _instance.plainTransformToNtt(plain.instance, parmsId, destinationNtt.instance, pool)
+        _instance.plainTransformToNtt(
+          plain.instance,
+          parmsId,
+          destinationNtt.instance,
+          pool
+        )
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -362,12 +556,21 @@ export const Evaluator = ({library, context}) => {
      * @param parmsId
      * @param destinationNtt
      */
-    cipherTransformToNtt({encrypted, destinationNtt}) {
+    cipherTransformToNtt({ encrypted, destinationNtt }) {
       try {
-        _instance.cipherTransformToNtt(encrypted.instance, destinationNtt.instance)
+        _instance.cipherTransformToNtt(
+          encrypted.instance,
+          destinationNtt.instance
+        )
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -379,12 +582,21 @@ export const Evaluator = ({library, context}) => {
      * @param encryptedNtt
      * @param destination
      */
-    cipherTransformFromNtt({encryptedNtt, destination}) {
+    cipherTransformFromNtt({ encryptedNtt, destination }) {
       try {
-        _instance.cipherTransformFromNtt(encryptedNtt.instance, destination.instance)
+        _instance.cipherTransformFromNtt(
+          encryptedNtt.instance,
+          destination.instance
+        )
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -410,12 +622,30 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      * @param {optional} pool
      */
-    applyGalois({encrypted, galoisElt, galoisKeys, destination, pool = _MemoryPoolHandleGlobal()}) {
+    applyGalois({
+      encrypted,
+      galoisElt,
+      galoisKeys,
+      destination,
+      pool = _MemoryPoolHandleGlobal()
+    }) {
       try {
-        _instance.applyGalois(encrypted.instance, galoisElt, galoisKeys.instance, destination.instance, pool)
+        _instance.applyGalois(
+          encrypted.instance,
+          galoisElt,
+          galoisKeys.instance,
+          destination.instance,
+          pool
+        )
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -435,12 +665,30 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      * @param {optional} pool
      */
-    rotateRows({encrypted, steps, galoisKeys, destination, pool = _MemoryPoolHandleGlobal()}) {
+    rotateRows({
+      encrypted,
+      steps,
+      galoisKeys,
+      destination,
+      pool = _MemoryPoolHandleGlobal()
+    }) {
       try {
-        _instance.rotateRows(encrypted.instance, steps, galoisKeys.instance, destination.instance, pool)
+        _instance.rotateRows(
+          encrypted.instance,
+          steps,
+          galoisKeys.instance,
+          destination.instance,
+          pool
+        )
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -458,12 +706,28 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      * @param {optional} pool
      */
-    rotateColumns({encrypted, galoisKeys, destination, pool = _MemoryPoolHandleGlobal()}) {
+    rotateColumns({
+      encrypted,
+      galoisKeys,
+      destination,
+      pool = _MemoryPoolHandleGlobal()
+    }) {
       try {
-        _instance.rotateColumns(encrypted.instance, galoisKeys.instance, destination.instance, pool)
+        _instance.rotateColumns(
+          encrypted.instance,
+          galoisKeys.instance,
+          destination.instance,
+          pool
+        )
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -482,12 +746,30 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      * @param {optional} pool
      */
-    rotateVector({encrypted, steps, galoisKeys, destination, pool = _MemoryPoolHandleGlobal()}) {
+    rotateVector({
+      encrypted,
+      steps,
+      galoisKeys,
+      destination,
+      pool = _MemoryPoolHandleGlobal()
+    }) {
       try {
-        _instance.rotateVector(encrypted.instance, steps, galoisKeys.instance, destination.instance, pool)
+        _instance.rotateVector(
+          encrypted.instance,
+          steps,
+          galoisKeys.instance,
+          destination.instance,
+          pool
+        )
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -503,14 +785,29 @@ export const Evaluator = ({library, context}) => {
      * @param destination
      * @param {optional} pool
      */
-    complexConjugate({encrypted, galoisKeys, destination, pool = _MemoryPoolHandleGlobal()}) {
+    complexConjugate({
+      encrypted,
+      galoisKeys,
+      destination,
+      pool = _MemoryPoolHandleGlobal()
+    }) {
       try {
-        _instance.complexConjugate(encrypted.instance, galoisKeys.instance, destination.instance, pool)
+        _instance.complexConjugate(
+          encrypted.instance,
+          galoisKeys.instance,
+          destination.instance,
+          pool
+        )
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     }
   }
 }
-

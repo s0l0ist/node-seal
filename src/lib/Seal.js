@@ -1,4 +1,4 @@
-export const SEAL = ({options}) => {
+export const SEAL = ({ options }) => {
   const _BatchEncoder = options.BatchEncoder
   const _CipherText = options.CipherText
   const _CKKSEncoder = options.CKKSEncoder
@@ -19,13 +19,13 @@ export const SEAL = ({options}) => {
   const _Vector = options.Vector
 
   // Singletons
-  const _CoeffModulus = options.CoeffModulus({library: _Library.instance})
-  const _ComprModeType = options.ComprModeType({library: _Library.instance})
-  const _Exception = options.Exception({library: _Library.instance})
-  const _MemoryPool = options.MemoryPool({library: _Library.instance})
-  const _PlainModulus = options.PlainModulus({library: _Library.instance})
-  const _SecurityLevel = options.SecurityLevel({library: _Library.instance})
-  const _SchemeType = options.SchemeType({library: _Library.instance})
+  const _CoeffModulus = options.CoeffModulus({ library: _Library.instance })
+  const _ComprModeType = options.ComprModeType({ library: _Library.instance })
+  const _Exception = options.Exception({ library: _Library.instance })
+  const _MemoryPool = options.MemoryPool({ library: _Library.instance })
+  const _PlainModulus = options.PlainModulus({ library: _Library.instance })
+  const _SecurityLevel = options.SecurityLevel({ library: _Library.instance })
+  const _SchemeType = options.SchemeType({ library: _Library.instance })
 
   return {
     /**
@@ -35,8 +35,8 @@ export const SEAL = ({options}) => {
      * @returns {BatchEncoder}
      * @constructor
      */
-    BatchEncoder({context}) {
-      return _BatchEncoder({library: _Library.instance, context})
+    BatchEncoder({ context }) {
+      return _BatchEncoder({ library: _Library.instance, context })
     },
 
     /**
@@ -46,7 +46,7 @@ export const SEAL = ({options}) => {
      * @constructor
      */
     CipherText() {
-      return _CipherText({library: _Library.instance})
+      return _CipherText({ library: _Library.instance })
     },
 
     /**
@@ -56,8 +56,8 @@ export const SEAL = ({options}) => {
      * @returns {CKKSEncoder}
      * @constructor
      */
-    CKKSEncoder({context}) {
-      return _CKKSEncoder({library: _Library.instance, context})
+    CKKSEncoder({ context }) {
+      return _CKKSEncoder({ library: _Library.instance, context })
     },
 
     /**
@@ -88,8 +88,13 @@ export const SEAL = ({options}) => {
      * @returns {Context}
      * @constructor
      */
-    Context({encryptionParams, expandModChain, securityLevel}) {
-      return _Context({library: _Library.instance, encryptionParams, expandModChain, securityLevel})
+    Context({ encryptionParams, expandModChain, securityLevel }) {
+      return _Context({
+        library: _Library.instance,
+        encryptionParams,
+        expandModChain,
+        securityLevel
+      })
     },
 
     /**
@@ -100,8 +105,8 @@ export const SEAL = ({options}) => {
      * @returns {Decryptor}
      * @constructor
      */
-    Decryptor({context, secretKey}) {
-      return _Decryptor({library: _Library.instance, context, secretKey})
+    Decryptor({ context, secretKey }) {
+      return _Decryptor({ library: _Library.instance, context, secretKey })
     },
 
     /**
@@ -111,8 +116,8 @@ export const SEAL = ({options}) => {
      * @returns {EncryptionParameters}
      * @constructor
      */
-    EncryptionParameters({schemeType}) {
-      return _EncryptionParameters({library: _Library.instance, schemeType})
+    EncryptionParameters({ schemeType }) {
+      return _EncryptionParameters({ library: _Library.instance, schemeType })
     },
 
     /**
@@ -123,8 +128,8 @@ export const SEAL = ({options}) => {
      * @returns {Encryptor}
      * @constructor
      */
-    Encryptor({context, publicKey}) {
-      return _Encryptor({library: _Library.instance, context, publicKey})
+    Encryptor({ context, publicKey }) {
+      return _Encryptor({ library: _Library.instance, context, publicKey })
     },
 
     /**
@@ -134,8 +139,8 @@ export const SEAL = ({options}) => {
      * @returns {Evaluator}
      * @constructor
      */
-    Evaluator({context}) {
-      return _Evaluator({library: _Library.instance, context})
+    Evaluator({ context }) {
+      return _Evaluator({ library: _Library.instance, context })
     },
 
     /**
@@ -157,7 +162,7 @@ export const SEAL = ({options}) => {
      * @constructor
      */
     GaloisKeys() {
-      return _GaloisKeys({library: _Library.instance})
+      return _GaloisKeys({ library: _Library.instance })
     },
 
     /**
@@ -168,8 +173,8 @@ export const SEAL = ({options}) => {
      * @returns {IntegerEncoder}
      * @constructor
      */
-    IntegerEncoder({context}) {
-      return _IntegerEncoder({library: _Library.instance, context})
+    IntegerEncoder({ context }) {
+      return _IntegerEncoder({ library: _Library.instance, context })
     },
 
     /**
@@ -181,8 +186,13 @@ export const SEAL = ({options}) => {
      * @returns {KeyGenerator}
      * @constructor
      */
-    KeyGenerator({context, secretKey = null, publicKey = null}) {
-      return _KeyGenerator({library: _Library.instance, context, secretKey, publicKey})
+    KeyGenerator({ context, secretKey = null, publicKey = null }) {
+      return _KeyGenerator({
+        library: _Library.instance,
+        context,
+        secretKey,
+        publicKey
+      })
     },
 
     /**
@@ -212,7 +222,7 @@ export const SEAL = ({options}) => {
      * @constructor
      */
     PlainText() {
-      return _PlainText({library: _Library.instance})
+      return _PlainText({ library: _Library.instance })
     },
 
     /**
@@ -222,7 +232,7 @@ export const SEAL = ({options}) => {
      * @constructor
      */
     PublicKey() {
-      return _PublicKey({library: _Library.instance})
+      return _PublicKey({ library: _Library.instance })
     },
 
     /**
@@ -232,7 +242,7 @@ export const SEAL = ({options}) => {
      * @constructor
      */
     RelinKeys() {
-      return _RelinKeys({library: _Library.instance})
+      return _RelinKeys({ library: _Library.instance })
     },
 
     /**
@@ -252,7 +262,7 @@ export const SEAL = ({options}) => {
      * @constructor
      */
     SecretKey() {
-      return _SecretKey({library: _Library.instance})
+      return _SecretKey({ library: _Library.instance })
     },
 
     /**
@@ -272,7 +282,7 @@ export const SEAL = ({options}) => {
      * @constructor
      */
     SmallModulus() {
-      return _SmallModulus({library: _Library.instance})
+      return _SmallModulus({ library: _Library.instance })
     },
 
     /**
@@ -282,8 +292,8 @@ export const SEAL = ({options}) => {
      * @returns {Vector}
      * @constructor
      */
-    Vector({array}) {
-      return _Vector({library: _Library.instance, array})
-    },
+    Vector({ array }) {
+      return _Vector({ library: _Library.instance, array })
+    }
   }
 }

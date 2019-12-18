@@ -1,5 +1,4 @@
-export const SchemeType = ({library}) => {
-
+export const SchemeType = ({ library }) => {
   const _none = library.SchemeType.none
   const _BFV = library.SchemeType.BFV
   const _CKKS = library.SchemeType.CKKS

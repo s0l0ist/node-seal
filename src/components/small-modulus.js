@@ -1,5 +1,4 @@
-export const SmallModulus = ({library}) => {
-
+export const SmallModulus = ({ library }) => {
   const _getException = library.getException
   const _saveToString = library.SmallModulus.saveToString
   // const _createFromString = library.SmallModulus.createFromString
@@ -9,14 +8,20 @@ export const SmallModulus = ({library}) => {
     _instance = new library.SmallModulus()
   } catch (e) {
     // eslint-disable-next-line no-nested-ternary
-    throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+    throw new Error(
+      typeof e === 'number'
+        ? _getException(e)
+        : e instanceof Error
+        ? e.message
+        : e
+    )
   }
 
   return {
     get instance() {
       return _instance
     },
-    inject({instance}) {
+    inject({ instance }) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -29,12 +34,18 @@ export const SmallModulus = ({library}) => {
      *
      * @param value
      */
-    setValue({value}) {
+    setValue({ value }) {
       try {
         _instance.loadFromString(value + '')
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -81,7 +92,13 @@ export const SmallModulus = ({library}) => {
         return _saveToString(compression)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     }
   }

@@ -1,5 +1,4 @@
-export const EncryptionParameters = ({library, schemeType}) => {
-
+export const EncryptionParameters = ({ library, schemeType }) => {
   const _getException = library.getException
   const _ComprModeType = library.ComprModeType
   let _instance = null
@@ -7,14 +6,20 @@ export const EncryptionParameters = ({library, schemeType}) => {
     _instance = new library.EncryptionParameters(schemeType)
   } catch (e) {
     // eslint-disable-next-line no-nested-ternary
-    throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+    throw new Error(
+      typeof e === 'number'
+        ? _getException(e)
+        : e instanceof Error
+        ? e.message
+        : e
+    )
   }
 
   return {
     get instance() {
       return _instance
     },
-    inject({instance}) {
+    inject({ instance }) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -32,12 +37,18 @@ export const EncryptionParameters = ({library, schemeType}) => {
      *
      * @param polyModulusDegree
      */
-    setPolyModulusDegree({polyModulusDegree}) {
+    setPolyModulusDegree({ polyModulusDegree }) {
       try {
         _instance.setPolyModulusDegree(polyModulusDegree)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -52,12 +63,18 @@ export const EncryptionParameters = ({library, schemeType}) => {
      *
      * @param coeffModulus
      */
-    setCoeffModulus({coeffModulus}) {
+    setCoeffModulus({ coeffModulus }) {
       try {
         _instance.setCoeffModulus(coeffModulus)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -72,12 +89,18 @@ export const EncryptionParameters = ({library, schemeType}) => {
      *
      * @param {SmallModulus} plainModulus
      */
-    setPlainModulus({plainModulus}) {
+    setPlainModulus({ plainModulus }) {
       try {
         _instance.setPlainModulus(plainModulus)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -119,12 +142,18 @@ export const EncryptionParameters = ({library, schemeType}) => {
      * Save the Encryption Parameters to a base64 string
      * @returns {string}
      */
-    save({compression = _ComprModeType.deflate} = {}) {
+    save({ compression = _ComprModeType.deflate } = {}) {
       try {
         return _instance.saveToString(compression)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -133,12 +162,18 @@ export const EncryptionParameters = ({library, schemeType}) => {
      * @param context
      * @param encoded
      */
-    load({encoded}) {
+    load({ encoded }) {
       try {
         _instance.loadFromString(encoded)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     }
   }

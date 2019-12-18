@@ -3,14 +3,22 @@ import { SecretKey } from './secret-key'
 import { RelinKeys } from './relin-keys'
 import { GaloisKeys } from './galois-keys'
 
-export const KeyGenerator = ({library, context, secretKey = null, publicKey = null}) => {
-
+export const KeyGenerator = ({
+  library,
+  context,
+  secretKey = null,
+  publicKey = null
+}) => {
   const _getException = library.getException
   const _library = library
   const constructInstance = (secretKey, publicKey) => {
     try {
       if (secretKey && publicKey) {
-        return new library.KeyGenerator(context.instance, secretKey.instance, publicKey.instance)
+        return new library.KeyGenerator(
+          context.instance,
+          secretKey.instance,
+          publicKey.instance
+        )
       }
       if (secretKey && !publicKey) {
         return new library.KeyGenerator(context.instance, secretKey.instance)
@@ -18,7 +26,13 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
       return new library.KeyGenerator(context.instance)
     } catch (e) {
       // eslint-disable-next-line no-nested-ternary
-      throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+      throw new Error(
+        typeof e === 'number'
+          ? _getException(e)
+          : e instanceof Error
+          ? e.message
+          : e
+      )
     }
   }
   let _instance = constructInstance(secretKey, publicKey)
@@ -27,7 +41,7 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
     get instance() {
       return _instance
     },
-    inject({instance}) {
+    inject({ instance }) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -43,12 +57,18 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
     getSecretKey() {
       try {
         const instance = _instance.getSecretKey()
-        const key = SecretKey({library: _library})
-        key.inject({instance})
+        const key = SecretKey({ library: _library })
+        key.inject({ instance })
         return key
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -60,12 +80,18 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
     getPublicKey() {
       try {
         const instance = _instance.getPublicKey()
-        const key = PublicKey({library: _library})
-        key.inject({instance})
+        const key = PublicKey({ library: _library })
+        key.inject({ instance })
         return key
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -77,12 +103,18 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
     genRelinKeys() {
       try {
         const instance = _instance.createRelinKeys()
-        const key = RelinKeys({library: _library})
-        key.inject({instance})
+        const key = RelinKeys({ library: _library })
+        key.inject({ instance })
         return key
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -94,12 +126,18 @@ export const KeyGenerator = ({library, context, secretKey = null, publicKey = nu
     genGaloisKeys() {
       try {
         const instance = _instance.createGaloisKeys()
-        const key = GaloisKeys({library: _library})
-        key.inject({instance})
+        const key = GaloisKeys({ library: _library })
+        key.inject({ instance })
         return key
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     }
   }

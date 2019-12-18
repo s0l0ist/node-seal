@@ -1,7 +1,8 @@
-export const MemoryPool = ({library}) => {
-
-  const _MemoryPoolHandleGlobal = library.MemoryPoolHandle.MemoryPoolHandleGlobal
-  const _MemoryPoolHandleThreadLocal = library.MemoryPoolHandle.MemoryPoolHandleThreadLocal
+export const MemoryPool = ({ library }) => {
+  const _MemoryPoolHandleGlobal =
+    library.MemoryPoolHandle.MemoryPoolHandleGlobal
+  const _MemoryPoolHandleThreadLocal =
+    library.MemoryPoolHandle.MemoryPoolHandleThreadLocal
 
   return {
     /**

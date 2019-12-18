@@ -1,19 +1,24 @@
-export const Decryptor = ({library, context, secretKey}) => {
-
+export const Decryptor = ({ library, context, secretKey }) => {
   const _getException = library.getException
   let _instance = null
   try {
     _instance = new library.Decryptor(context.instance, secretKey.instance)
   } catch (e) {
     // eslint-disable-next-line no-nested-ternary
-    throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+    throw new Error(
+      typeof e === 'number'
+        ? _getException(e)
+        : e instanceof Error
+        ? e.message
+        : e
+    )
   }
 
   return {
     get instance() {
       return _instance
     },
-    inject({instance}) {
+    inject({ instance }) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -27,12 +32,18 @@ export const Decryptor = ({library, context, secretKey}) => {
      * @param cipherText
      * @param plainText
      */
-    decrypt({cipherText, plainText}) {
+    decrypt({ cipherText, plainText }) {
       try {
         _instance.decrypt(cipherText.instance, plainText.instance)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -56,12 +67,18 @@ export const Decryptor = ({library, context, secretKey}) => {
      * @param cipherText
      * @returns {number}
      */
-    invariantNoiseBudget({cipherText}) {
+    invariantNoiseBudget({ cipherText }) {
       try {
         return _instance.invariantNoiseBudget(cipherText.instance)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     }
   }

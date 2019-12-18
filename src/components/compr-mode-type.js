@@ -1,5 +1,4 @@
-export const ComprModeType = ({library}) => {
-
+export const ComprModeType = ({ library }) => {
   const _none = library.ComprModeType.none
   const _deflate = library.ComprModeType.deflate
 

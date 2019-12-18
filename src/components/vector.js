@@ -1,4 +1,4 @@
-export const Vector = ({library, array = new Int32Array(0)}) => {
+export const Vector = ({ library, array = new Int32Array(0) }) => {
   const _getException = library.getException
   const _vecFromArrayInt32 = library.vecFromArrayInt32
   const _vecFromArrayUInt32 = library.vecFromArrayUInt32
@@ -12,33 +12,43 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
   const _jsArrayUint32FromVec = library.jsArrayUint32FromVec
   const _jsArrayDoubleFromVec = library.jsArrayDoubleFromVec
   const _type = array.constructor
-  const _fromArray = ({array}) => {
+  const _fromArray = ({ array }) => {
     try {
       let vec = null
       switch (array.constructor) {
         case Int32Array:
-          vec = _vecFromArrayInt32(array); break;
+          vec = _vecFromArrayInt32(array)
+          break
         case Uint32Array:
-          vec = _vecFromArrayUInt32(array); break;
+          vec = _vecFromArrayUInt32(array)
+          break
         case Float64Array:
-          vec = _vecFromArrayDouble(array); break;
-        default: throw new Error('Unsupported vector type!')
+          vec = _vecFromArrayDouble(array)
+          break
+        default:
+          throw new Error('Unsupported vector type!')
       }
       return vec
     } catch (e) {
       // eslint-disable-next-line no-nested-ternary
-      throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+      throw new Error(
+        typeof e === 'number'
+          ? _getException(e)
+          : e instanceof Error
+          ? e.message
+          : e
+      )
     }
   }
 
-  let _instance = _fromArray({array})
+  let _instance = _fromArray({ array })
 
   // Public methods
   return {
     get instance() {
       return _instance
     },
-    inject({instance}) {
+    inject({ instance }) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -69,16 +79,27 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
      *
      * @param rowSize
      */
-    printMatrix({rowSize}) {
+    printMatrix({ rowSize }) {
       try {
         switch (_type) {
-          case Int32Array: _printMatrixInt32(_instance, rowSize); break;
-          case Uint32Array: _printMatrixUInt32(_instance, rowSize); break;
-          default: throw new Error('Unsupported matrix type!')
+          case Int32Array:
+            _printMatrixInt32(_instance, rowSize)
+            break
+          case Uint32Array:
+            _printMatrixUInt32(_instance, rowSize)
+            break
+          default:
+            throw new Error('Unsupported matrix type!')
         }
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -90,17 +111,30 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
      * @param printSize
      * @param precision
      */
-    printVector({printSize = 4, precision = 5} = {}) {
+    printVector({ printSize = 4, precision = 5 } = {}) {
       try {
         switch (_type) {
-          case Int32Array: _printVectorInt32(_instance, printSize, precision); break;
-          case Uint32Array: _printVectorUInt32(_instance, printSize, precision); break;
-          case Float64Array: _printVectorDouble(_instance, printSize, precision); break;
-          default: throw new Error('Unsupported vector type!')
+          case Int32Array:
+            _printVectorInt32(_instance, printSize, precision)
+            break
+          case Uint32Array:
+            _printVectorUInt32(_instance, printSize, precision)
+            break
+          case Float64Array:
+            _printVectorDouble(_instance, printSize, precision)
+            break
+          default:
+            throw new Error('Unsupported vector type!')
         }
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -112,8 +146,8 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
      * @param array
      * @returns {vector<int32|uint32|double>}
      */
-    fromArray({array}) {
-      _fromArray({array})
+    fromArray({ array }) {
+      _fromArray({ array })
     },
 
     /**
@@ -121,12 +155,18 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
      * @param index
      * @returns {number}
      */
-    getValue({index}) {
+    getValue({ index }) {
       try {
         return _instance.get(index)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -135,12 +175,18 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
      * @param size
      * @param fill
      */
-    resize({size, fill}) {
+    resize({ size, fill }) {
       try {
         _instance.resize(size, fill)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -153,17 +199,27 @@ export const Vector = ({library, array = new Int32Array(0)}) => {
         let arr = null
         switch (_type) {
           case Int32Array:
-            arr = _jsArrayInt32FromVec(_instance); break;
+            arr = _jsArrayInt32FromVec(_instance)
+            break
           case Uint32Array:
-            arr = _jsArrayUint32FromVec(_instance); break;
+            arr = _jsArrayUint32FromVec(_instance)
+            break
           case Float64Array:
-            arr = _jsArrayDoubleFromVec(_instance); break;
-          default: throw new Error('Unsupported vector type!')
+            arr = _jsArrayDoubleFromVec(_instance)
+            break
+          default:
+            throw new Error('Unsupported vector type!')
         }
         return arr
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     }
   }

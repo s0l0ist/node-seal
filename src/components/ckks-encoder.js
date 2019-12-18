@@ -1,20 +1,26 @@
-export const CKKSEncoder = ({library, context}) => {
-
+export const CKKSEncoder = ({ library, context }) => {
   const _getException = library.getException
-  const _MemoryPoolHandleGlobal = library.MemoryPoolHandle.MemoryPoolHandleGlobal
+  const _MemoryPoolHandleGlobal =
+    library.MemoryPoolHandle.MemoryPoolHandleGlobal
   let _instance = null
   try {
     _instance = new library.CKKSEncoder(context.instance)
   } catch (e) {
     // eslint-disable-next-line no-nested-ternary
-    throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+    throw new Error(
+      typeof e === 'number'
+        ? _getException(e)
+        : e instanceof Error
+        ? e.message
+        : e
+    )
   }
 
   return {
     get instance() {
       return _instance
     },
-    inject({instance}) {
+    inject({ instance }) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -30,12 +36,28 @@ export const CKKSEncoder = ({library, context}) => {
      * @param plainText
      * @param {optional} pool
      */
-    encodeVectorDouble({vector, scale, plainText, pool = _MemoryPoolHandleGlobal()}) {
+    encodeVectorDouble({
+      vector,
+      scale,
+      plainText,
+      pool = _MemoryPoolHandleGlobal()
+    }) {
       try {
-        _instance.encodeVectorDouble(vector.instance, scale, plainText.instance, pool)
+        _instance.encodeVectorDouble(
+          vector.instance,
+          scale,
+          plainText.instance,
+          pool
+        )
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -46,12 +68,22 @@ export const CKKSEncoder = ({library, context}) => {
      * @param vector
      * @param {optional} pool
      */
-    decodeVectorDouble({plainText, vector, pool = _MemoryPoolHandleGlobal()}) {
+    decodeVectorDouble({
+      plainText,
+      vector,
+      pool = _MemoryPoolHandleGlobal()
+    }) {
       try {
         _instance.decodeVectorDouble(plainText.instance, vector.instance, pool)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 

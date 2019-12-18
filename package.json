@@ -34,7 +34,8 @@
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "NODE_ENV=production webpack",
+    "eslint-check": "eslint --print-config ./src/main.js | eslint-config-prettier-check",
+    "build": "eslint ./src && NODE_ENV=production webpack",
     "test": "node --max-old-space-size=4096 `which jest`",
     "test:bfv": "node --max-old-space-size=4096 `which jest` --testPathIgnorePatterns=\"^((?!scheme_BFV).)*$\"",
     "test:ckks": "node --max-old-space-size=4096 `which jest` --testPathIgnorePatterns=\"^((?!scheme_CKKS).)*$\"",
@@ -63,11 +64,14 @@
   },
   "devDependencies": {
     "eslint": "^6.7.2",
+    "eslint-config-prettier": "^6.7.0",
     "eslint-plugin-jsdoc": "^18.4.3",
+    "eslint-plugin-prettier": "^3.1.2",
     "esm": "^3.2.25",
     "file-loader": "5.0.2",
     "jest": "24.9.0",
-    "webpack": "4.41.2",
+    "prettier": "^1.19.1",
+    "webpack": "4.41.3",
     "webpack-cli": "3.3.10",
     "webpack-dev-server": "3.9.0",
     "webpack-node-externals": "^1.7.2"

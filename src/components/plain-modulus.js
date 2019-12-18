@@ -1,11 +1,9 @@
-export const PlainModulus = ({library}) => {
-
+export const PlainModulus = ({ library }) => {
   const _getException = library.getException
   const _Batching = library.PlainModulus.Batching
   const _BatchingVector = library.PlainModulus.BatchingVector
 
   return {
-
     /**
      * Creates a prime number SmallModulus for use as plainModulus encryption
      * parameter that supports batching with a given polyModulusDegree.
@@ -14,12 +12,18 @@ export const PlainModulus = ({library}) => {
      * @param {number} bitSize
      * @returns {SmallModulus}
      */
-    Batching({polyModulusDegree, bitSize}) {
+    Batching({ polyModulusDegree, bitSize }) {
       try {
         return _Batching(polyModulusDegree, bitSize)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -32,12 +36,18 @@ export const PlainModulus = ({library}) => {
      * @param {vector<Int32>} bitSizes
      * @returns {vector<SmallModulus>}
      */
-    BatchingVector({polyModulusDegree, bitSizes}) {
+    BatchingVector({ polyModulusDegree, bitSizes }) {
       try {
         return _BatchingVector(polyModulusDegree, bitSizes.instance)
       } catch (e) {
         // eslint-disable-next-line no-nested-ternary
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        throw new Error(
+          typeof e === 'number'
+            ? _getException(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     }
   }

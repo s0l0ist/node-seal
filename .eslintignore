@@ -1,4 +1,7 @@
 /dist/*
+/docs/*
+/node_modules/*
+/scripts/*
 /src/bin/*.js
 /src/test/*
 /submodules/*
