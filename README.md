@@ -34,6 +34,10 @@ This sandbox was built for users to experiment and learn how to use Microsoft SE
 
 Checkout the [basics](USAGE.md)
 
+## Documentation
+
+View the latest docs [here](https://htmlpreview.github.io/?https://github.com/morfix-io/node-seal/blob/master/docs/index.html)
+
 ## Examples
 
 Check out the [Sandbox](https://morfix.io/sandbox) to run HE functions and even generate working code!
