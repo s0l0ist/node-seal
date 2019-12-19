@@ -32,13 +32,13 @@ This sandbox was built for users to experiment and learn how to use Microsoft SE
 
 ## Usage
 
-Checkout the [basics](docs/USAGE.md)
+Checkout the [basics](USAGE.md)
 
 ## Examples
 
 Check out the [Sandbox](https://morfix.io/sandbox) to run HE functions and even generate working code!
 
-If you'd rather read an example, take a look [here](docs/FULL-EXAMPLE.md).
+If you'd rather read an example, take a look [here](FULL-EXAMPLE.md).
 
 For more exhaustive examples, view the tests [here](src/test).
 
