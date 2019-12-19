@@ -1,7 +1,8 @@
 const path = require('path')
 const nodeExternals = require('webpack-node-externals')
 
-const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development'
+const mode =
+  process.env.NODE_ENV === 'production' ? 'production' : 'development'
 
 const commonConfig = {
   mode: mode,
@@ -12,7 +13,7 @@ const commonConfig = {
     publicPath: '/dist/',
     port: 9000,
     watchContentBase: true,
-    open: true,
+    open: true
   },
   module: {
     rules: [
@@ -28,7 +29,8 @@ const commonConfig = {
   }
 }
 
-const serverConfig = {...commonConfig,
+const serverConfig = {
+  ...commonConfig,
   entry: {
     seal: './src/main.js'
   },
@@ -52,10 +54,11 @@ const serverConfig = {...commonConfig,
       }
     ]
   },
-  externals: [nodeExternals()],
+  externals: [nodeExternals()]
 }
 
-const clientConfig = {...commonConfig,
+const clientConfig = {
+  ...commonConfig,
   entry: {
     seal: './src/main.js'
   },
@@ -68,9 +71,8 @@ const clientConfig = {...commonConfig,
   },
   target: 'web',
   node: {
-    fs: 'empty',
-  },
+    fs: 'empty'
+  }
 }
 
-
-module.exports = [ serverConfig, clientConfig ]
+module.exports = [serverConfig, clientConfig]

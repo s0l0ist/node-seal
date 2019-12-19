@@ -1,18 +1,43 @@
-export const Decryptor = ({library, context, secretKey}) => {
+import { Exception } from './exception'
 
-  const _getException = library.getException
+/**
+ * Decryptor
+ * @typedef {Object} Decryptor
+ * @constructor
+ */
+export const Decryptor = ({ library, context, secretKey }) => {
+  const _Exception = Exception({ library })
   let _instance = null
   try {
     _instance = new library.Decryptor(context.instance, secretKey.instance)
   } catch (e) {
-    throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+    // eslint-disable-next-line no-nested-ternary
+    throw new Error(
+      typeof e === 'number'
+        ? _Exception.getHuman(e)
+        : e instanceof Error
+        ? e.message
+        : e
+    )
   }
 
   return {
+    /**
+     * Get the underlying wasm instance
+     * @returns {instance} wasm instance
+     * @private
+     */
     get instance() {
       return _instance
     },
-    inject({instance}) {
+
+    /**
+     * Inject this object with a raw wasm instance
+     * @param {Object} options Options
+     * @param {instance} options.instance wasm instance
+     * @private
+     */
+    inject({ instance }) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -22,15 +47,22 @@ export const Decryptor = ({library, context, secretKey}) => {
 
     /**
      * Decrypts a Ciphertext and stores the result in the destination parameter.
-     *
-     * @param cipherText
-     * @param plainText
+     * @param {Object} options Options
+     * @param {CipherText} options.cipherText CipherText to decrypt
+     * @param {PlainText} options.plainText PlainText destination to store the result
      */
-    decrypt({cipherText, plainText}) {
+    decrypt({ cipherText, plainText }) {
       try {
         _instance.decrypt(cipherText.instance, plainText.instance)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        // eslint-disable-next-line no-nested-ternary
+        throw new Error(
+          typeof e === 'number'
+            ? _Exception.getHuman(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     },
 
@@ -50,15 +82,22 @@ export const Decryptor = ({library, context, secretKey}) => {
      * value, which depends on the encryption parameters, and decreases when
      * computations are performed. When the budget reaches zero, the ciphertext
      * becomes too noisy to decrypt correctly.
-     *
-     * @param cipherText
-     * @returns {number}
+     * @param {Object} options Options
+     * @param {CipherText} options.cipherText CipherText to measure
+     * @returns {number} invariant noise budget (in bits)
      */
-    invariantNoiseBudget({cipherText}) {
+    invariantNoiseBudget({ cipherText }) {
       try {
         return _instance.invariantNoiseBudget(cipherText.instance)
       } catch (e) {
-        throw new Error(typeof e === 'number' ? _getException(e) : e instanceof Error ? e.message : e)
+        // eslint-disable-next-line no-nested-ternary
+        throw new Error(
+          typeof e === 'number'
+            ? _Exception.getHuman(e)
+            : e instanceof Error
+            ? e.message
+            : e
+        )
       }
     }
   }
