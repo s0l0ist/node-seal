@@ -48,6 +48,18 @@ export const SecretKey = ({ library }) => {
     },
 
     /**
+     * Delete the underlying wasm instance
+     *
+     * Should be called before dereferencing this object
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * Save the Encryption Parameters to a base64 string
      * @param {Object} options Options
      * @param {ComprModeType} [options.compression=ComprModeType.none] activate compression

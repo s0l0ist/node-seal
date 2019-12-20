@@ -48,6 +48,18 @@ export const CKKSEncoder = ({ library, context }) => {
     },
 
     /**
+     * Delete the underlying wasm instance
+     *
+     * Should be called before dereferencing this object
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * Encodes a vector of type double to a given plainText
      * @param {Object} options Options
      * @param {Vector} options.vector Data to encode
