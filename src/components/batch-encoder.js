@@ -48,6 +48,18 @@ export const BatchEncoder = ({ library, context }) => {
     },
 
     /**
+     * Delete the underlying wasm instance
+     *
+     * Should be called before dereferencing this object
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * Creates a plaintext from a given matrix. This function "batches" a given matrix
      * of Int32 integers modulo the plaintext modulus into a plaintext element, and stores
      * the result in the destination parameter. The input vector must have size at most equal

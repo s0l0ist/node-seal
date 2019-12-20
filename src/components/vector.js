@@ -76,6 +76,18 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
     },
 
     /**
+     * Delete the underlying wasm instance
+     *
+     * Should be called before dereferencing this object
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * Return the vector type
      * @returns {Int32ArrayConstructor|Uint32ArrayConstructor|Float64ArrayConstructor} Constructor used to create the vector
      */
