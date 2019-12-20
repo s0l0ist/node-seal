@@ -46,6 +46,18 @@ export const Decryptor = ({ library, context, secretKey }) => {
     },
 
     /**
+     * Delete the underlying wasm instance
+     *
+     * Should be called before dereferencing this object
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * Decrypts a Ciphertext and stores the result in the destination parameter.
      * @param {Object} options Options
      * @param {CipherText} options.cipherText CipherText to decrypt
