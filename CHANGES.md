@@ -7,7 +7,7 @@ for more details on each SEAL version change.
 
 Feat:
 - Added `delete` method to applicable components. This method should
-  be called before dereferencing an JavaScript component. This is 
+  be called before dereferencing a JavaScript component. This is 
   because there is no way to automatically call the destructors 
   on C++ objects.
 
