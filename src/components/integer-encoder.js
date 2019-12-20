@@ -46,6 +46,18 @@ export const IntegerEncoder = ({ library, context }) => {
     },
 
     /**
+     * Delete the underlying wasm instance
+     *
+     * Should be called before dereferencing this object
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * Encode an Int32 value to a PlainText
      * @param {Object} options Options
      * @param {number} options.value Integer to encode

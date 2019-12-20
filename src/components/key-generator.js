@@ -68,6 +68,18 @@ export const KeyGenerator = ({
     },
 
     /**
+     * Delete the underlying wasm instance
+     *
+     * Should be called before dereferencing this object
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * Return the generated SecretKey
      * @returns {SecretKey} The secret key that was generated upon instantiation of this KeyGenerator
      */

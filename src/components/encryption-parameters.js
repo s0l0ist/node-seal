@@ -48,6 +48,18 @@ export const EncryptionParameters = ({ library, schemeType }) => {
     },
 
     /**
+     * Delete the underlying wasm instance
+     *
+     * Should be called before dereferencing this object
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * Sets the degree of the polynomial modulus parameter to the specified value.
      * The polynomial modulus directly affects the number of coefficients in
      * plaintext polynomials, the size of ciphertext elements, the computational
