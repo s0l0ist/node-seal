@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>JSDoc: IPlainModulus</title>
+
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="./build/entry.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Muli:100,400,700|Oswald:300|Inconsolata,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+</head>
+
+<body>
+    <div id="stickyNavbarOverlay"></div>
+    <div class="top-navbar">
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    
+                    
+                        <h1 class="navbar-item">Documentation</h1>
+                    
+                    <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3" id="sidebarNav">
+                <div class="sidebar">
+                    <nav>
+                        <h2><a href="index.html">Home</a></h2><div class="category"><h3>Interfaces</h3><ul><li><a href="IBatchEncoder.html">IBatchEncoder</a></li><li><a href="ICipherText.html">ICipherText</a></li><li><a href="ICKKSEncoder.html">ICKKSEncoder</a></li><li><a href="ICoeffModulus.html">ICoeffModulus</a></li><li><a href="IComprModeType.html">IComprModeType</a></li><li><a href="IContext.html">IContext</a></li><li><a href="IDecryptor.html">IDecryptor</a></li><li><a href="IEncryptionParameters.html">IEncryptionParameters</a></li><li><a href="IEncryptor.html">IEncryptor</a></li><li><a href="IEvaluator.html">IEvaluator</a></li><li><a href="IException.html">IException</a></li><li><a href="IGaloisKeys.html">IGaloisKeys</a></li><li><a href="IIntegerEncoder.html">IIntegerEncoder</a></li><li><a href="IKeyGenerator.html">IKeyGenerator</a></li><li><a href="IMemoryPoolHandle.html">IMemoryPoolHandle</a></li><li><a href="IPlainModulus.html">IPlainModulus</a></li><li><a href="IPlainText.html">IPlainText</a></li><li><a href="IPublicKey.html">IPublicKey</a></li><li><a href="IRelinKeys.html">IRelinKeys</a></li><li><a href="ISchemeType.html">ISchemeType</a></li><li><a href="ISEAL.html">ISEAL</a></li><li><a href="ISecretKey.html">ISecretKey</a></li><li><a href="ISecurityLevel.html">ISecurityLevel</a></li><li><a href="ISmallModulus.html">ISmallModulus</a></li><li><a href="IVector.html">IVector</a></li></ul><h3><a href="global.html">Global</a></h3></div>
+                    </nav>
+                </div>
+            </div>
+            <div class="column is-9-desktop">
+                <div class="content" id="main-content-wrapper">
+                    <header class="page-title">
+                        <p>Interface</p>
+                        <h1>IPlainModulus</h1>
+                    </header>
+                    
+                    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>IPlainModulus</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plain-modulus.js.html" class="button">View Source</a>
+            <span>
+                <a href="components_plain-modulus.js.html">components/plain-modulus.js</a>, <a href="components_plain-modulus.js.html#line13">line 13</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+        
+    
+    </div>
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class='vertical-section'>
+            <h3 class="title"><span>Methods</span></h3>
+            <div class="members">
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="Batching">
+        <a class="href-link" href="#Batching">#</a>
+        
+        <span class="code-name">
+            
+                Batching<span class="signature">(options)</span><span class="type-signature"> &rarr; {<a href="global.html#SmallModulus">SmallModulus</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Creates a prime number SmallModulus for use as plainModulus encryption
+parameter that supports batching with a given polyModulusDegree.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>options</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Object</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Options</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>polyModulusDegree</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Number</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The degree of the polynomial modulus</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>bitSize</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Number</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The bit-size of the desired prime number</td>
+</tr>
+
+  
+
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plain-modulus.js.html" class="button">View Source</a>
+            <span>
+                <a href="components_plain-modulus.js.html">components/plain-modulus.js</a>, <a href="components_plain-modulus.js.html#line17">line 17</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>A SmallModulus containing the prime number</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="global.html#SmallModulus">SmallModulus</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="BatchingVector">
+        <a class="href-link" href="#BatchingVector">#</a>
+        
+        <span class="code-name">
+            
+                BatchingVector<span class="signature">(options)</span><span class="type-signature"> &rarr; {<a href="global.html#Vector">Vector</a>.&lt;<a href="global.html#SmallModulus">SmallModulus</a>>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Creates several prime number SmallModulus elements that can be used as
+plainModulus encryption parameters, each supporting batching with a given
+polyModulusDegree.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>options</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Object</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Options</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>polyModulusDegree</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Number</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The degree of the polynomial modulus</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>bitSizes</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="global.html#Vector">Vector</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Vector containing int32 values representing bit-sizes of primes</td>
+</tr>
+
+  
+
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plain-modulus.js.html" class="button">View Source</a>
+            <span>
+                <a href="components_plain-modulus.js.html">components/plain-modulus.js</a>, <a href="components_plain-modulus.js.html#line36">line 36</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>Vector of SmallModulus containing prime numbers</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="global.html#Vector">Vector</a>.&lt;<a href="global.html#SmallModulus">SmallModulus</a>></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sat Dec 21 2019 22:05:12 GMT-0600 (Central Standard Time)</p>
+        <p class="sidebar-created-by">
+            <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+            <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+        </p>
+    </div>
+</footer>
+
+
+<script src="scripts/app.min.js"></script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

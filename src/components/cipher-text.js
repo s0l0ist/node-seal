@@ -1,11 +1,6 @@
 import { Exception } from './exception'
 import { ComprModeType } from './compr-mode-type'
 
-/**
- * CipherText
- * @typedef {Object} CipherText
- * @constructor
- */
 export const CipherText = ({ library }) => {
   const _Exception = Exception({ library })
   const _ComprModeType = ComprModeType({ library })
@@ -13,31 +8,38 @@ export const CipherText = ({ library }) => {
   try {
     _instance = new library.Ciphertext()
   } catch (e) {
-    // eslint-disable-next-line no-nested-ternary
-    throw new Error(
-      typeof e === 'number'
-        ? _Exception.getHuman(e)
-        : e instanceof Error
-        ? e.message
-        : e
-    )
+    throw _Exception.safe({ error: e })
   }
 
+  /**
+   * @typedef {Object} CipherText
+   * @implements ICipherText
+   */
+
+  /**
+   * @interface ICipherText
+   */
   return {
     /**
-     * Get the underlying wasm instance
-     * @returns {instance} wasm instance
+     * Get the underlying WASM instance
+     *
      * @private
+     * @readonly
+     * @name ICipherText#instance
+     * @type {instance}
      */
     get instance() {
       return _instance
     },
 
     /**
-     * Inject this object with a raw wasm instance
-     * @param {Object} options Options
-     * @param {instance} options.instance wasm instance
+     * Inject this object with a raw WASM instance
+     *
      * @private
+     * @function
+     * @name ICipherText#inject
+     * @param {Object} options Options
+     * @param {instance} options.instance WASM instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -48,85 +50,112 @@ export const CipherText = ({ library }) => {
     },
 
     /**
-     * Returns the number of primes in the coefficient modulus of the
+     * The number of primes in the coefficient modulus of the
      * associated encryption parameters. This directly affects the
-     * allocation size of the ciphertext.
-     * @returns {number} number of primes in the coefficient modulus
+     * allocation size of the CipherText.
+     *
+     * @readonly
+     * @name ICipherText#coeffModCount
+     * @type {Number}
      */
     get coeffModCount() {
       return _instance.coeffModCount()
     },
 
     /**
-     * Returns the degree of the polynomial modulus of the associated
+     * The degree of the polynomial modulus of the associated
      * encryption parameters. This directly affects the allocation size
-     * of the ciphertext.
-     * @returns {number} degree of the polynomial modulus
+     * of the CipherText.
+     *
+     * @readonly
+     * @name ICipherText#polyModulusDegree
+     * @type {Number}
      */
     get polyModulusDegree() {
       return _instance.polyModulusDegree()
     },
 
     /**
-     * Returns the size of the ciphertext.
-     * @returns {number} size of the ciphertext
+     * The size of the CipherText.
+     *
+     * @readonly
+     * @name ICipherText#size
+     * @type {Number}
      */
     get size() {
       return _instance.size()
     },
 
     /**
-     * Returns the capacity of the allocation. This means the largest size
-     * of the ciphertext that can be stored in the current allocation with
+     * The capacity of the allocation. This means the largest size
+     * of the CipherText that can be stored in the current allocation with
      * the current encryption parameters.
-     * @returns {number} capacity of the allocation
+     *
+     * @readonly
+     * @name ICipherText#sizeCapacity
+     * @type {Number}
      */
     get sizeCapacity() {
       return _instance.sizeCapacity()
     },
 
     /**
-     * Check whether the current ciphertext is transparent, i.e. does not require
+     * Whether the current CipherText is transparent, i.e. does not require
      * a secret key to decrypt. In typical security models such transparent
-     * ciphertexts would not be considered to be valid. Starting from the second
-     * polynomial in the current ciphertext, this function returns true if all
+     * CipherTexts would not be considered to be valid. Starting from the second
+     * polynomial in the current CipherText, this function returns true if all
      * following coefficients are identically zero. Otherwise, returns false.
-     * @returns {boolean} ciphertext is transparent
+     *
+     * @readonly
+     * @name ICipherText#isTransparent
+     * @type {Boolean}
      */
     get isTransparent() {
       return _instance.isTransparent()
     },
 
     /**
-     * Returns whether the ciphertext is in NTT form.
-     * @returns {boolean} ciphertext is in NTT form
+     * Whether the CipherText is in NTT form.
+     *
+     * @readonly
+     * @name ICipherText#isNttForm
+     * @type {Boolean}
      */
     get isNttForm() {
       return _instance.isNttForm()
     },
 
     /**
-     * Returns a reference to parmsId.
-     * @see EncryptionParameters for more information about parmsId.
-     * @returns {pointer} pointer to the parmsId
+     * The reference to parmsId.
+     * @see {@link EncryptionParameters} for more information about parmsId.
+     *
+     * @readonly
+     * @name ICipherText#parmsId
+     * @type {parmsId}
      */
     get parmsId() {
       return _instance.parmsId()
     },
 
     /**
-     * Returns a reference to the scale. This is only needed when using the
+     * The reference to the scale. This is only needed when using the
      * CKKS encryption scheme. The user should have little or no reason to ever
      * change the scale by hand.
-     * @returns {pointer} pointer to the scale
+     *
+     * @readonly
+     * @name ICipherText#scale
+     * @type {Number}
      */
     get scale() {
       return _instance.scale()
     },
 
     /**
-     * Returns the currently used MemoryPoolHandle.
-     * @returns {pointer} pointer to the MemoryPoolHandle
+     * The currently used MemoryPoolHandle.
+     *
+     * @readonly
+     * @name ICipherText#pool
+     * @type {MemoryPoolHandle}
      */
     get pool() {
       return _instance.pool()
@@ -134,43 +163,35 @@ export const CipherText = ({ library }) => {
 
     /**
      * Save a cipherText to a base64 string
+     *
+     * @function
+     * @name ICipherText#save
      * @param {Object} options Options
-     * @param {ComprModeType} [options.compression=ComprModeType.deflate] activate compression
-     * @returns {string} base64 encoded string
+     * @param {ComprModeType} [options.compression=ComprModeType.deflate] The compression mode to use
+     * @returns {String} base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
       try {
         return _instance.saveToString(compression)
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
     /**
      * Load a cipherText from a base64 string
+     *
+     * @function
+     * @name ICipherText#load
      * @param {Object} options Options
      * @param {Context} options.context Encryption context to enforce
-     * @param {string} options.encoded base64 encoded string
+     * @param {String} options.encoded base64 encoded string
      */
     load({ context, encoded }) {
       try {
         _instance.loadFromString(context.instance, encoded)
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     }
   }

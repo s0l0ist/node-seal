@@ -1,30 +1,14 @@
 import pathlib from 'path'
 
-/**
- * Library
- * @typedef {Object} Library
- * @constructor
- */
 export const Library = () => {
   let _module = null
   let _timeout = null
 
   return {
-    /**
-     * Get the underlying wasm instance
-     * @returns {instance} wasm instance
-     * @private
-     */
     get instance() {
       return _module
     },
-    /**
-     * Initialize the library
-     * @param {Object} options Options
-     * @param {*} options.source Source library
-     * @param {*} options.sourceWasm Source WASM file
-     * @returns {Promise<null>}
-     */
+
     initialize: async ({ source, sourceWasm }) => {
       return await new Promise((resolve, reject) => {
         // If we tell emscripten to build both js and wasm, this code is needed

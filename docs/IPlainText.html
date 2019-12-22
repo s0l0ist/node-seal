@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>JSDoc: IPlainText</title>
+
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="./build/entry.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Muli:100,400,700|Oswald:300|Inconsolata,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+</head>
+
+<body>
+    <div id="stickyNavbarOverlay"></div>
+    <div class="top-navbar">
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    
+                    
+                        <h1 class="navbar-item">Documentation</h1>
+                    
+                    <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3" id="sidebarNav">
+                <div class="sidebar">
+                    <nav>
+                        <h2><a href="index.html">Home</a></h2><div class="category"><h3>Interfaces</h3><ul><li><a href="IBatchEncoder.html">IBatchEncoder</a></li><li><a href="ICipherText.html">ICipherText</a></li><li><a href="ICKKSEncoder.html">ICKKSEncoder</a></li><li><a href="ICoeffModulus.html">ICoeffModulus</a></li><li><a href="IComprModeType.html">IComprModeType</a></li><li><a href="IContext.html">IContext</a></li><li><a href="IDecryptor.html">IDecryptor</a></li><li><a href="IEncryptionParameters.html">IEncryptionParameters</a></li><li><a href="IEncryptor.html">IEncryptor</a></li><li><a href="IEvaluator.html">IEvaluator</a></li><li><a href="IException.html">IException</a></li><li><a href="IGaloisKeys.html">IGaloisKeys</a></li><li><a href="IIntegerEncoder.html">IIntegerEncoder</a></li><li><a href="IKeyGenerator.html">IKeyGenerator</a></li><li><a href="IMemoryPoolHandle.html">IMemoryPoolHandle</a></li><li><a href="IPlainModulus.html">IPlainModulus</a></li><li><a href="IPlainText.html">IPlainText</a></li><li><a href="IPublicKey.html">IPublicKey</a></li><li><a href="IRelinKeys.html">IRelinKeys</a></li><li><a href="ISchemeType.html">ISchemeType</a></li><li><a href="ISEAL.html">ISEAL</a></li><li><a href="ISecretKey.html">ISecretKey</a></li><li><a href="ISecurityLevel.html">ISecurityLevel</a></li><li><a href="ISmallModulus.html">ISmallModulus</a></li><li><a href="IVector.html">IVector</a></li></ul><h3><a href="global.html">Global</a></h3></div>
+                    </nav>
+                </div>
+            </div>
+            <div class="column is-9-desktop">
+                <div class="content" id="main-content-wrapper">
+                    <header class="page-title">
+                        <p>Interface</p>
+                        <h1>IPlainText</h1>
+                    </header>
+                    
+                    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>IPlainText</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plain-text.js.html" class="button">View Source</a>
+            <span>
+                <a href="components_plain-text.js.html">components/plain-text.js</a>, <a href="components_plain-text.js.html#line19">line 19</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+        
+    
+    </div>
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class='vertical-section'>
+            <h3 class="title"><span>Members</span></h3>
+            <div class="members">
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<span class="param-type">Number</span>
+
+
+    </span>
+
+<h4 class="name" id="capacity">
+    <a class="href-link" href="#capacity">#</a>
+    
+        
+            <span class='tag'>readonly</span>
+        
+    
+    <span class="code-name">
+        capacity
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    The capacity of the current allocation.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plain-text.js.html" class="button">View Source</a>
+            <span>
+                <a href="components_plain-text.js.html">components/plain-text.js</a>, <a href="components_plain-text.js.html#line94">line 94</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<span class="param-type">Number</span>
+
+
+    </span>
+
+<h4 class="name" id="coeffCount">
+    <a class="href-link" href="#coeffCount">#</a>
+    
+        
+            <span class='tag'>readonly</span>
+        
+    
+    <span class="code-name">
+        coeffCount
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    The coefficient count of the current PlainText polynomial.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plain-text.js.html" class="button">View Source</a>
+            <span>
+                <a href="components_plain-text.js.html">components/plain-text.js</a>, <a href="components_plain-text.js.html#line105">line 105</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<span class="param-type">Boolean</span>
+
+
+    </span>
+
+<h4 class="name" id="isNttForm">
+    <a class="href-link" href="#isNttForm">#</a>
+    
+        
+            <span class='tag'>readonly</span>
+        
+    
+    <span class="code-name">
+        isNttForm
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    Whether the PlainText is in NTT form.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plain-text.js.html" class="button">View Source</a>
+            <span>
+                <a href="components_plain-text.js.html">components/plain-text.js</a>, <a href="components_plain-text.js.html#line169">line 169</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<span class="param-type">Boolean</span>
+
+
+    </span>
+
+<h4 class="name" id="isZero">
+    <a class="href-link" href="#isZero">#</a>
+    
+        
+            <span class='tag'>readonly</span>
+        
+    
+    <span class="code-name">
+        isZero
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    Whether the current PlainText polynomial has all zero coefficients.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plain-text.js.html" class="button">View Source</a>
+            <span>
+                <a href="components_plain-text.js.html">components/plain-text.js</a>, <a href="components_plain-text.js.html#line83">line 83</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<span class="param-type">Number</span>
+
+
+    </span>
+
+<h4 class="name" id="nonzeroCoeffCount">
+    <a class="href-link" href="#nonzeroCoeffCount">#</a>
+    
+        
+            <span class='tag'>readonly</span>
+        
+    
+    <span class="code-name">
+        nonzeroCoeffCount
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    Returns the non-zero coefficient count of the current PlainText polynomial.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plain-text.js.html" class="button">View Source</a>
+            <span>
+                <a href="components_plain-text.js.html">components/plain-text.js</a>, <a href="components_plain-text.js.html#line127">line 127</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<span class="param-type">ParmsIdType</span>
+
+
+    </span>
+
+<h4 class="name" id="parmsId">
+    <a class="href-link" href="#parmsId">#</a>
+    
+        
+            <span class='tag'>readonly</span>
+        
+    
+    <span class="code-name">
+        parmsId
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    The reference to parmsId of the PlainText. The parmsId must remain zero unless the
+PlainText polynomial is in NTT form.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#EncryptionParameters">EncryptionParameters</a> for more information about parmsId.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plain-text.js.html" class="button">View Source</a>
+            <span>
+                <a href="components_plain-text.js.html">components/plain-text.js</a>, <a href="components_plain-text.js.html#line180">line 180</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<span class="param-type"><a href="global.html#MemoryPoolHandle">MemoryPoolHandle</a></span>
+
+
+    </span>
+
+<h4 class="name" id="pool">
+    <a class="href-link" href="#pool">#</a>
+    
+        
+            <span class='tag'>readonly</span>
+        
+    
+    <span class="code-name">
+        pool
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    The currently used MemoryPoolHandle.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plain-text.js.html" class="button">View Source</a>
+            <span>
+                <a href="components_plain-text.js.html">components/plain-text.js</a>, <a href="components_plain-text.js.html#line207">line 207</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<span class="param-type">Number</span>
+
+
+    </span>
+
+<h4 class="name" id="scale">
+    <a class="href-link" href="#scale">#</a>
+    
+        
+            <span class='tag'>readonly</span>
+        
+    
+    <span class="code-name">
+        scale
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    The reference to the scale. This is only needed when using the CKKS
+encryption scheme. The user should have little or no reason to ever change
+the scale by hand.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plain-text.js.html" class="button">View Source</a>
+            <span>
+                <a href="components_plain-text.js.html">components/plain-text.js</a>, <a href="components_plain-text.js.html#line194">line 194</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<span class="param-type">Number</span>
+
+
+    </span>
+
+<h4 class="name" id="significantCoeffCount">
+    <a class="href-link" href="#significantCoeffCount">#</a>
+    
+        
+            <span class='tag'>readonly</span>
+        
+    
+    <span class="code-name">
+        significantCoeffCount
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    The significant coefficient count of the current PlainText polynomial.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plain-text.js.html" class="button">View Source</a>
+            <span>
+                <a href="components_plain-text.js.html">components/plain-text.js</a>, <a href="components_plain-text.js.html#line116">line 116</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+        <div class='vertical-section'>
+            <h3 class="title"><span>Methods</span></h3>
+            <div class="members">
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="load">
+        <a class="href-link" href="#load">#</a>
+        
+        <span class="code-name">
+            
+                load<span class="signature">(options)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Load a PlainText from a base64 string
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>options</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Object</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Options</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>context</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="global.html#Context">Context</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Encryption context to enforce</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>encoded</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">String</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Base64 encoded string</td>
+</tr>
+
+  
+
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plain-text.js.html" class="button">View Source</a>
+            <span>
+                <a href="components_plain-text.js.html">components/plain-text.js</a>, <a href="components_plain-text.js.html#line235">line 235</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="save">
+        <a class="href-link" href="#save">#</a>
+        
+        <span class="code-name">
+            
+                save<span class="signature">(options)</span><span class="type-signature"> &rarr; {String}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Save the PlainText to a base64 string
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>options</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Object</span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+      </td>
+  
+
+  <td class="description last">Options</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>compression</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="global.html#ComprModeType">ComprModeType</a></span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+          ComprModeType.deflate
+      
+      </td>
+  
+
+  <td class="description last">The compression mode to use</td>
+</tr>
+
+  
+
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plain-text.js.html" class="button">View Source</a>
+            <span>
+                <a href="components_plain-text.js.html">components/plain-text.js</a>, <a href="components_plain-text.js.html#line218">line 218</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>Base64 encoded string</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">String</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="setZero">
+        <a class="href-link" href="#setZero">#</a>
+        
+        <span class="code-name">
+            
+                setZero<span class="signature">()</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Sets the PlainText polynomial to zero.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plain-text.js.html" class="button">View Source</a>
+            <span>
+                <a href="components_plain-text.js.html">components/plain-text.js</a>, <a href="components_plain-text.js.html#line69">line 69</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="shrinkToFit">
+        <a class="href-link" href="#shrinkToFit">#</a>
+        
+        <span class="code-name">
+            
+                shrinkToFit<span class="signature">()</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Allocates enough memory to accommodate the backing array of the current
+PlainText and copies it over to the new location. This function is meant
+to reduce the memory use of the PlainText to smallest possible and can be
+particularly important after modulus switching.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plain-text.js.html" class="button">View Source</a>
+            <span>
+                <a href="components_plain-text.js.html">components/plain-text.js</a>, <a href="components_plain-text.js.html#line52">line 52</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="toPolynomial">
+        <a class="href-link" href="#toPolynomial">#</a>
+        
+        <span class="code-name">
+            
+                toPolynomial<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Returns a human-readable string description of the PlainText polynomial.
+
+The returned string is of the form "7FFx^3 + 1x^1 + 3" with a format
+summarized by the following:
+1. Terms are listed in order of strictly decreasing exponent
+2. Coefficient values are non-negative and in hexadecimal format (hexadecimal
+letters are in upper-case)
+3. Exponents are positive and in decimal format
+4. Zero coefficient terms (including the constant term) are omitted unless
+the polynomial is exactly 0 (see rule 9)
+5. Term with the exponent value of one is written as x^1
+6. Term with the exponent value of zero (the constant term) is written as
+just a hexadecimal number without x or exponent
+7. Terms are separated exactly by <space>+<space>
+8. Other than the +, no other terms have whitespace
+9. If the polynomial is exactly 0, the string "0" is returned
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plain-text.js.html" class="button">View Source</a>
+            <span>
+                <a href="components_plain-text.js.html">components/plain-text.js</a>, <a href="components_plain-text.js.html#line138">line 138</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Throws:</label></div>
+        <div class="column is-10">
+            
+                    
+<div class="columns">
+    
+        
+            <div class='param-desc column is-12'>std::invalid_argument if the PlainText is in NTT transformed form</div>
+        
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>Polynomial string</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">String</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sat Dec 21 2019 22:05:12 GMT-0600 (Central Standard Time)</p>
+        <p class="sidebar-created-by">
+            <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+            <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+        </p>
+    </div>
+</footer>
+
+
+<script src="scripts/app.min.js"></script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

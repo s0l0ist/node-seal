@@ -1,0 +1,154 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>JSDoc: components/security-level.js</title>
+
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="./build/entry.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Muli:100,400,700|Oswald:300|Inconsolata,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+</head>
+
+<body>
+    <div id="stickyNavbarOverlay"></div>
+    <div class="top-navbar">
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    
+                    
+                        <h1 class="navbar-item">Documentation</h1>
+                    
+                    <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3" id="sidebarNav">
+                <div class="sidebar">
+                    <nav>
+                        <h2><a href="index.html">Home</a></h2><div class="category"><h3>Interfaces</h3><ul><li><a href="IBatchEncoder.html">IBatchEncoder</a></li><li><a href="ICipherText.html">ICipherText</a></li><li><a href="ICKKSEncoder.html">ICKKSEncoder</a></li><li><a href="ICoeffModulus.html">ICoeffModulus</a></li><li><a href="IComprModeType.html">IComprModeType</a></li><li><a href="IContext.html">IContext</a></li><li><a href="IDecryptor.html">IDecryptor</a></li><li><a href="IEncryptionParameters.html">IEncryptionParameters</a></li><li><a href="IEncryptor.html">IEncryptor</a></li><li><a href="IEvaluator.html">IEvaluator</a></li><li><a href="IException.html">IException</a></li><li><a href="IGaloisKeys.html">IGaloisKeys</a></li><li><a href="IIntegerEncoder.html">IIntegerEncoder</a></li><li><a href="IKeyGenerator.html">IKeyGenerator</a></li><li><a href="IMemoryPoolHandle.html">IMemoryPoolHandle</a></li><li><a href="IPlainModulus.html">IPlainModulus</a></li><li><a href="IPlainText.html">IPlainText</a></li><li><a href="IPublicKey.html">IPublicKey</a></li><li><a href="IRelinKeys.html">IRelinKeys</a></li><li><a href="ISchemeType.html">ISchemeType</a></li><li><a href="ISEAL.html">ISEAL</a></li><li><a href="ISecretKey.html">ISecretKey</a></li><li><a href="ISecurityLevel.html">ISecurityLevel</a></li><li><a href="ISmallModulus.html">ISmallModulus</a></li><li><a href="IVector.html">IVector</a></li></ul><h3><a href="global.html">Global</a></h3></div>
+                    </nav>
+                </div>
+            </div>
+            <div class="column is-9-desktop">
+                <div class="content" id="main-content-wrapper">
+                    <header class="page-title">
+                        <p>Source</p>
+                        <h1>components/security-level.js</h1>
+                    </header>
+                    
+                    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>export const SecurityLevel = ({ library }) => {
+  const _none = library.SecLevelType.none
+  const _tc128 = library.SecLevelType.tc128
+  const _tc192 = library.SecLevelType.tc192
+  const _tc256 = library.SecLevelType.tc256
+
+  /**
+   * @typedef {Object} SecurityLevel
+   * @implements ISecurityLevel
+   */
+
+  /**
+   * @interface ISecurityLevel
+   */
+  return {
+    /**
+     * Returns the 'none' security level
+     *
+     * @readonly
+     * @name ISecurityLevel#none
+     * @type {SecurityLevel.none}
+     */
+    get none() {
+      return _none
+    },
+
+    /**
+     * Returns the '128' security level
+     *
+     * @readonly
+     * @name ISecurityLevel#tc128
+     * @type {SecurityLevel.tc128}
+     */
+    get tc128() {
+      return _tc128
+    },
+
+    /**
+     * Returns the '192' security level
+     *
+     * @readonly
+     * @name ISecurityLevel#tc192
+     * @type {SecurityLevel.tc192}
+     */
+    get tc192() {
+      return _tc192
+    },
+
+    /**
+     * Returns the '256' security level
+     *
+     * @readonly
+     * @name ISecurityLevel#tc256
+     * @type {SecurityLevel.tc256}
+     */
+    get tc256() {
+      return _tc256
+    }
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sat Dec 21 2019 22:05:12 GMT-0600 (Central Standard Time)</p>
+        <p class="sidebar-created-by">
+            <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+            <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+        </p>
+    </div>
+</footer>
+
+
+<script src="scripts/app.min.js"></script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

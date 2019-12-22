@@ -1,11 +1,6 @@
 import { Exception } from './exception'
 import { MemoryPoolHandle } from './memory-pool-handle'
 
-/**
- * Encryptor
- * @typedef {Object} Encryptor
- * @constructor
- */
 export const Encryptor = ({ library, context, publicKey }) => {
   const _Exception = Exception({ library })
   const _MemoryPoolHandle = MemoryPoolHandle({ library })
@@ -14,31 +9,38 @@ export const Encryptor = ({ library, context, publicKey }) => {
   try {
     _instance = new library.Encryptor(context.instance, publicKey.instance)
   } catch (e) {
-    // eslint-disable-next-line no-nested-ternary
-    throw new Error(
-      typeof e === 'number'
-        ? _Exception.getHuman(e)
-        : e instanceof Error
-        ? e.message
-        : e
-    )
+    throw _Exception.safe({ error: e })
   }
 
+  /**
+   * @typedef {Object} Encryptor
+   * @implements IEncryptor
+   */
+
+  /**
+   * @interface IEncryptor
+   */
   return {
     /**
-     * Get the underlying wasm instance
-     * @returns {instance} wasm instance
+     * Get the underlying WASM instance
+     *
      * @private
+     * @readonly
+     * @name IEncryptor#instance
+     * @type {instance}
      */
     get instance() {
       return _instance
     },
 
     /**
-     * Inject this object with a raw wasm instance
-     * @param {Object} options Options
-     * @param {instance} options.instance wasm instance
+     * Inject this object with a raw WASM instance
+     *
      * @private
+     * @function
+     * @name IEncryptor#inject
+     * @param {Object} options Options
+     * @param {instance} options.instance WASM instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -49,26 +51,22 @@ export const Encryptor = ({ library, context, publicKey }) => {
     },
 
     /**
-     * Encrypts a plaintext and stores the result in the destination parameter.
+     * Encrypts a PlainText and stores the result in the destination parameter.
      * Dynamic memory allocations in the process are allocated from the memory
      * pool pointed to by the given MemoryPoolHandle.
+     *
+     * @function
+     * @name IEncryptor#encrypt
      * @param {Object} options Options
      * @param {PlainText} options.plainText PlainText to encrypt
      * @param {CipherText} options.cipherText CipherText destination to store the result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] Memory pool pointer
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
      */
     encrypt({ plainText, cipherText, pool = _MemoryPoolHandle.global }) {
       try {
         _instance.encrypt(plainText.instance, cipherText.instance, pool)
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     }
   }

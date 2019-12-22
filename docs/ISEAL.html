@@ -1,0 +1,4289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>JSDoc: ISEAL</title>
+
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="./build/entry.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Muli:100,400,700|Oswald:300|Inconsolata,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+</head>
+
+<body>
+    <div id="stickyNavbarOverlay"></div>
+    <div class="top-navbar">
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    
+                    
+                        <h1 class="navbar-item">Documentation</h1>
+                    
+                    <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3" id="sidebarNav">
+                <div class="sidebar">
+                    <nav>
+                        <h2><a href="index.html">Home</a></h2><div class="category"><h3>Interfaces</h3><ul><li><a href="IBatchEncoder.html">IBatchEncoder</a></li><li><a href="ICipherText.html">ICipherText</a></li><li><a href="ICKKSEncoder.html">ICKKSEncoder</a></li><li><a href="ICoeffModulus.html">ICoeffModulus</a></li><li><a href="IComprModeType.html">IComprModeType</a></li><li><a href="IContext.html">IContext</a></li><li><a href="IDecryptor.html">IDecryptor</a></li><li><a href="IEncryptionParameters.html">IEncryptionParameters</a></li><li><a href="IEncryptor.html">IEncryptor</a></li><li><a href="IEvaluator.html">IEvaluator</a></li><li><a href="IException.html">IException</a></li><li><a href="IGaloisKeys.html">IGaloisKeys</a></li><li><a href="IIntegerEncoder.html">IIntegerEncoder</a></li><li><a href="IKeyGenerator.html">IKeyGenerator</a></li><li><a href="IMemoryPoolHandle.html">IMemoryPoolHandle</a></li><li><a href="IPlainModulus.html">IPlainModulus</a></li><li><a href="IPlainText.html">IPlainText</a></li><li><a href="IPublicKey.html">IPublicKey</a></li><li><a href="IRelinKeys.html">IRelinKeys</a></li><li><a href="ISchemeType.html">ISchemeType</a></li><li><a href="ISEAL.html">ISEAL</a></li><li><a href="ISecretKey.html">ISecretKey</a></li><li><a href="ISecurityLevel.html">ISecurityLevel</a></li><li><a href="ISmallModulus.html">ISmallModulus</a></li><li><a href="IVector.html">IVector</a></li></ul><h3><a href="global.html">Global</a></h3></div>
+                    </nav>
+                </div>
+            </div>
+            <div class="column is-9-desktop">
+                <div class="content" id="main-content-wrapper">
+                    <header class="page-title">
+                        <p>Interface</p>
+                        <h1>ISEAL</h1>
+                    </header>
+                    
+                    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>ISEAL</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line41">line 41</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+        
+    
+    </div>
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class='vertical-section'>
+            <h3 class="title"><span>Members</span></h3>
+            <div class="members">
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<span class="param-type"><a href="global.html#CoeffModulus">CoeffModulus</a></span>
+
+
+    </span>
+
+<h4 class="name" id="CoeffModulus">
+    <a class="href-link" href="#CoeffModulus">#</a>
+    
+        
+            <span class='tag'>readonly</span>
+        
+    
+    <span class="code-name">
+        CoeffModulus
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    This class contains static methods for creating a coefficient modulus easily.
+Note that while these functions take a SecurityLevel argument, all security
+guarantees are lost if the output is used with encryption parameters with
+a mismatching value for the PolyModulusDegree.
+
+The default value SecurityLevel.tc128 provides a very high level of security
+and is the default security level enforced by Microsoft SEAL when constructing
+a SEALContext object. Normal users should not have to specify the security
+level explicitly anywhere.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line172">line 172</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+const vector = Morfix.CoeffModulus.Create({ polyModulusDegree, bitSizes })</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<span class="param-type"><a href="global.html#ComprModeType">ComprModeType</a></span>
+
+
+    </span>
+
+<h4 class="name" id="ComprModeType">
+    <a class="href-link" href="#ComprModeType">#</a>
+    
+        
+            <span class='tag'>readonly</span>
+        
+    
+    <span class="code-name">
+        ComprModeType
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    A type to describe the compression algorithm applied to serialized data.
+Ciphertext and key data consist of a large number of 64-bit words storing
+integers modulo prime numbers much smaller than the word size, resulting in
+a large number of zero bytes in the output. Any compression algorithm should
+be able to clean up these zero bytes and hence compress both CipherText and
+key data.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line197">line 197</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+const keyGenerator = Morfix.KeyGenerator({ context })
+const secretKey = keyGenerator.getSecretKey()
+const base64 = secretKey.save({ compression: Morfix.ComprModeType.deflate })</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<span class="param-type"><a href="global.html#Exception">Exception</a></span>
+
+
+    </span>
+
+<h4 class="name" id="Exception">
+    <a class="href-link" href="#Exception">#</a>
+    
+        
+            <span class='tag'>readonly</span>
+        
+    
+    <span class="code-name">
+        Exception
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    Get the Exception singleton. Users should have little use
+for this static instance as it is used internally.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line504">line 504</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+try {
+  &lt;WASM method which is throwing>
+} catch (e) {
+  throw Morfix.Exception.safe({ error: e})
+}</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<span class="param-type"><a href="global.html#MemoryPoolHandle">MemoryPoolHandle</a></span>
+
+
+    </span>
+
+<h4 class="name" id="MemoryPoolHandle">
+    <a class="href-link" href="#MemoryPoolHandle">#</a>
+    
+        
+            <span class='tag'>readonly</span>
+        
+    
+    <span class="code-name">
+        MemoryPoolHandle
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    Manages a shared pointer to a memory pool. Microsoft SEAL uses memory pools
+for improved performance due to the large number of memory allocations
+needed by the homomorphic encryption operations, and the underlying polynomial
+arithmetic. The library automatically creates a shared global memory pool
+that is used for all dynamic allocations by default, and the user can
+optionally create any number of custom memory pools to be used instead.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line643">line 643</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+const encryptor = Morfix.Encryptor({ context, publicKey })
+encryptor.encrypt({ plainText, cipherText, pool: Morfix.MemoryPoolHandle.global })</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<span class="param-type"><a href="global.html#PlainModulus">PlainModulus</a></span>
+
+
+    </span>
+
+<h4 class="name" id="PlainModulus">
+    <a class="href-link" href="#PlainModulus">#</a>
+    
+        
+            <span class='tag'>readonly</span>
+        
+    
+    <span class="code-name">
+        PlainModulus
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    Contains static methods for creating a PlainText modulus easily
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line702">line 702</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+const smallModulus = Morfix.PlainModulus.Batching({ polyModulusDegree, bitSize })</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<span class="param-type"><a href="global.html#SchemeType">SchemeType</a></span>
+
+
+    </span>
+
+<h4 class="name" id="SchemeType">
+    <a class="href-link" href="#SchemeType">#</a>
+    
+        
+            <span class='tag'>readonly</span>
+        
+    
+    <span class="code-name">
+        SchemeType
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    The SchemeType singleton
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line853">line 853</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+const encParms = Morfix.EncryptionParameters({ schemeType: Morfix.SchemeType.BFV })</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<span class="param-type"><a href="global.html#SecurityLevel">SecurityLevel</a></span>
+
+
+    </span>
+
+<h4 class="name" id="SecurityLevel">
+    <a class="href-link" href="#SecurityLevel">#</a>
+    
+        
+            <span class='tag'>readonly</span>
+        
+    
+    <span class="code-name">
+        SecurityLevel
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    Represents a standard security level according to the HomomorphicEncryption.org
+security standard. The value SecurityLevel.none signals that no standard
+security level should be imposed. The value SecurityLevel.tc128 provides
+a very high level of security and is the default security level enforced by
+Microsoft SEAL when constructing a SEALContext object. Normal users should not
+have to specify the security level explicitly anywhere.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line903">line 903</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+const encParms = Morfix.EncryptionParameters({ schemeType: Morfix.SchemeType.BFV })
+const context = Morfix.Context({
+  encryptionParams: encParms,
+  expandModChain: true,
+  securityLevel: Morfix.SecurityLevel.tc128
+  })</code></pre>
+    
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+        <div class='vertical-section'>
+            <h3 class="title"><span>Methods</span></h3>
+            <div class="members">
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="BatchEncoder">
+        <a class="href-link" href="#BatchEncoder">#</a>
+        
+        <span class="code-name">
+            
+                BatchEncoder<span class="signature">(options)</span><span class="type-signature"> &rarr; {<a href="global.html#BatchEncoder">BatchEncoder</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Provides functionality for CRT batching. If the polynomial modulus degree is N, and
+the PlainText modulus is a prime number T such that T is congruent to 1 modulo 2N,
+then BatchEncoder allows the PlainText elements to be viewed as 2-by-(N/2)
+matrices of integers modulo T. Homomorphic operations performed on such encrypted
+matrices are applied coefficient (slot) wise, enabling powerful SIMD functionality
+for computations that are vectorizable. This functionality is often called "batching"
+in the homomorphic encryption literature.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>options</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Object</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Options</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>context</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="global.html#Context">Context</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Encryption context</td>
+</tr>
+
+  
+
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line45">line 45</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="global.html#BatchEncoder">BatchEncoder</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+const batchEncoder = Morfix.BatchEncoder({ context })</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="CipherText">
+        <a class="href-link" href="#CipherText">#</a>
+        
+        <span class="code-name">
+            
+                CipherText<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#CipherText">CipherText</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Class to store a CipherText element. The data for a CipherText consists
+of two or more polynomials, which are in Microsoft SEAL stored in a CRT
+form with respect to the factors of the coefficient modulus. This data
+itself is not meant to be modified directly by the user, but is instead
+operated on by functions in the Evaluator class. The size of the backing
+array of a CipherText depends on the encryption parameters and the size
+of the CipherText (at least 2). If the PolyModulusDegree encryption
+parameter is N, and the number of primes in the CoeffModulus encryption
+parameter is K, then the CipherText backing array requires precisely
+8*N*K*size bytes of memory. A CipherText also carries with it the
+parmsId of its associated encryption parameters, which is used to check
+the validity of the CipherText for homomorphic operations and decryption.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line92">line 92</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>An empty CipherText instance</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="global.html#CipherText">CipherText</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+const cipherText = Morfix.CipherText()</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="CKKSEncoder">
+        <a class="href-link" href="#CKKSEncoder">#</a>
+        
+        <span class="code-name">
+            
+                CKKSEncoder<span class="signature">(options)</span><span class="type-signature"> &rarr; {<a href="global.html#CKKSEncoder">CKKSEncoder</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Provides functionality for encoding vectors of complex or real numbers into
+PlainText polynomials to be encrypted and computed on using the CKKS scheme.
+If the polynomial modulus degree is N, then CKKSEncoder converts vectors of
+N/2 complex numbers into PlainText elements. Homomorphic operations performed
+on such encrypted vectors are applied coefficient (slot-)wise, enabling
+powerful SIMD functionality for computations that are vectorizable. This
+functionality is often called "batching" in the homomorphic encryption
+literature.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>options</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Object</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Options</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>context</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="global.html#Context">Context</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Encryption context</td>
+</tr>
+
+  
+
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line134">line 134</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>An encoder used for the CKKS scheme type</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="global.html#CKKSEncoder">CKKSEncoder</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+const ckksEncoder = Morfix.CKKSEncoder({ context })</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="Context">
+        <a class="href-link" href="#Context">#</a>
+        
+        <span class="code-name">
+            
+                Context<span class="signature">(options)</span><span class="type-signature"> &rarr; {<a href="global.html#Context">Context</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Performs sanity checks (validation) and pre-computations for a given set of encryption
+parameters. While the EncryptionParameters class is intended to be a light-weight class
+to store the encryption parameters, the SEALContext class is a heavy-weight class that
+is constructed from a given set of encryption parameters. It validates the parameters
+for correctness, evaluates their properties, and performs and stores the results of
+several costly pre-computations.
+
+After the user has set at least the PolyModulus, CoeffModulus, and PlainModulus
+parameters in a given EncryptionParameters instance, the parameters can be validated
+for correctness and functionality by constructing an instance of SEALContext. The
+constructor of SEALContext does all of its work automatically, and concludes by
+constructing and storing an instance of the EncryptionParameterQualifiers class, with
+its flags set according to the properties of the given parameters. If the created
+instance of EncryptionParameterQualifiers has the parametersSet flag set to true, the
+given parameter set has been deemed valid and is ready to be used. If the parameters
+were for some reason not appropriately set, the parametersSet flag will be false,
+and a SEALContext will have to be created after the parameters are corrected.
+
+By default, SEALContext creates a chain of SEALContext.ContextData instances. The
+first one in the chain corresponds to special encryption parameters that are reserved
+to be used by the various key classes (SecretKey, PublicKey, etc.). These are the exact
+same encryption parameters that are created by the user and passed to th constructor of
+SEALContext. The functions keyContextData() and key_parmsId() return the ContextData
+and the parmsId corresponding to these special parameters. The rest of the ContextData
+instances in the chain correspond to encryption parameters that are derived from the
+first encryption parameters by always removing the last one of the moduli in the
+CoeffModulus, until the resulting parameters are no longer valid, e.g., there are no
+more primes left. These derived encryption parameters are used by CipherTexts and
+PlainTexts and their respective ContextData can be accessed through the
+get_context_data(ParmsIdType) function. The functions first_context_data() and
+last_context_data() return the ContextData corresponding to the first and the last
+set of parameters in the "data" part of the chain, i.e., the second and the last element
+in the full chain. The chain itself is a doubly linked list, and is referred to as the
+modulus switching chain.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>options</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Object</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Options</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>encryptionParams</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="global.html#EncryptionParameters">EncryptionParameters</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">A set of specific encryption parameters</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>expandModChain</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">boolean</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Determines whether or not to enable modulus switching</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>securityLevel</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="global.html#SecurityLevel">SecurityLevel</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The security strength in bits.</td>
+</tr>
+
+  
+
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line221">line 221</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>An encryption context to be used for all operations</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="global.html#Context">Context</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+const context = Morfix.Context({ encryptionParams, expandModChain, securityLevel })</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="Decryptor">
+        <a class="href-link" href="#Decryptor">#</a>
+        
+        <span class="code-name">
+            
+                Decryptor<span class="signature">(options)</span><span class="type-signature"> &rarr; {<a href="global.html#Decryptor">Decryptor</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Decrypts Ciphertext objects into Plaintext objects. Constructing a Decryptor
+requires a SEALContext with valid encryption parameters, and the secret key.
+The Decryptor is also used to compute the invariant noise budget in a given
+CipherText.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>options</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Object</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Options</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>context</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="global.html#Context">Context</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Encryption context</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>secretKey</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="global.html#SecretKey">SecretKey</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">SecretKey to be used for decryption</td>
+</tr>
+
+  
+
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line280">line 280</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>A Decryptor instance that can be used to decrypt CipherTexts</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="global.html#Decryptor">Decryptor</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+const decryptor = Morfix.Decryptor({ context, secretKey })</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="EncryptionParameters">
+        <a class="href-link" href="#EncryptionParameters">#</a>
+        
+        <span class="code-name">
+            
+                EncryptionParameters<span class="signature">(options)</span><span class="type-signature"> &rarr; {<a href="global.html#EncryptionParameters">EncryptionParameters</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Represents user-customizable encryption scheme settings. The parameters (most
+importantly PolyModulus, CoeffModulus, PlainModulus) significantly affect
+the performance, capabilities, and security of the encryption scheme. Once
+an instance of EncryptionParameters is populated with appropriate parameters,
+it can be used to create an instance of the SEALContext class, which verifies
+the validity of the parameters, and performs necessary pre-computations.
+
+Picking appropriate encryption parameters is essential to enable a particular
+application while balancing performance and security. Some encryption settings
+will not allow some inputs (e.g. attempting to encrypt a polynomial with more
+coefficients than PolyModulus or larger coefficients than PlainModulus) or,
+support the desired computations (with noise growing too fast due to too large
+PlainModulus and too small CoeffModulus).
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>options</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Object</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Options</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>schemeType</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="global.html#SchemeType">SchemeType</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The desired scheme type to use</td>
+</tr>
+
+  
+
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line324">line 324</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>A set of encryption parameters based from the scheme type</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="global.html#EncryptionParameters">EncryptionParameters</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+const encParms = Morfix.EncryptionParameters({ schemeType })</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="Encryptor">
+        <a class="href-link" href="#Encryptor">#</a>
+        
+        <span class="code-name">
+            
+                Encryptor<span class="signature">(options)</span><span class="type-signature"> &rarr; {<a href="global.html#Encryptor">Encryptor</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Encrypts Plaintext objects into Ciphertext objects. Constructing an Encryptor
+requires a SEALContext with valid encryption parameters, the public key and/or
+the secret key. If an Encrytor is given a secret key, it supports symmetric-key
+encryption. If an Encryptor is given a public key, it supports asymmetric-key
+encryption.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>options</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Object</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Options</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>context</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="global.html#Context">Context</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Encryption context</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>publicKey</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="global.html#PublicKey">PublicKey</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">PublicKey to be used for encryption</td>
+</tr>
+
+  
+
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line379">line 379</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>An Encryptor instance that can be used to encrypt PlainTexts</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="global.html#Encryptor">Encryptor</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+const encryptor = Morfix.Encryptor({ context, publicKey })</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="Evaluator">
+        <a class="href-link" href="#Evaluator">#</a>
+        
+        <span class="code-name">
+            
+                Evaluator<span class="signature">(options)</span><span class="type-signature"> &rarr; {<a href="global.html#Evaluator">Evaluator</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Provides operations on CipherTexts. Due to the properties of the encryption
+scheme, the arithmetic operations pass through the encryption layer to the
+underlying PlainText, changing it according to the type of the operation. Since
+the PlainText elements are fundamentally polynomials in the polynomial quotient
+ring Z_T[x]/(X^N+1), where T is the PlainText modulus and X^N+1 is the polynomial
+modulus, this is the ring where the arithmetic operations will take place.
+BatchEncoder (batching) provider an alternative possibly more convenient view
+of the PlainText elements as 2-by-(N2/2) matrices of integers modulo the PlainText
+modulus. In the batching view the arithmetic operations act on the matrices
+element-wise. Some of the operations only apply in the batching view, such as
+matrix row and column rotations. Other operations such as relinearization have
+no semantic meaning but are necessary for performance reasons.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>options</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Object</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Options</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>context</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="global.html#Context">Context</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Encryption context</td>
+</tr>
+
+  
+
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>EncryptionParameters for more details on encryption parameters.</li>
+        
+            <li>BatchEncoder for more details on batching</li>
+        
+            <li>RelinKeys for more details on relinearization keys.</li>
+        
+            <li>GaloisKeys for more details on Galois keys.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line424">line 424</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>An evaluator instance to be used to perform homomorphic evaluations</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="global.html#Evaluator">Evaluator</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+const evaluator = Morfix.Evaluator({ context })</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="GaloisKeys">
+        <a class="href-link" href="#GaloisKeys">#</a>
+        
+        <span class="code-name">
+            
+                GaloisKeys<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#GaloisKeys">GaloisKeys</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Class to store Galois keys.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>SecretKey for the class that stores the secret key.</li>
+        
+            <li>PublicKey for the class that stores the public key.</li>
+        
+            <li>RelinKeys for the class that stores the relinearization keys.</li>
+        
+            <li>KeyGenerator for the class that generates the Galois keys.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line526">line 526</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>An empty GaloisKeys instance</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="global.html#GaloisKeys">GaloisKeys</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+// Generate an empty key and load from a base64 string
+const galoisKeys = Morfix.GaloisKeys()
+galoisKeys.load({ context, encoded: &lt;base64 string>})
+
+// Or generate them from a KeyGenerator
+const keyGenerator = Morfix.KeyGenerator({ context })
+const galoisKeys = keyGenerator.genGaloisKeys()</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="IntegerEncoder">
+        <a class="href-link" href="#IntegerEncoder">#</a>
+        
+        <span class="code-name">
+            
+                IntegerEncoder<span class="signature">(options)</span><span class="type-signature"> &rarr; {<a href="global.html#IntegerEncoder">IntegerEncoder</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Encodes integers into PlainText polynomials that Encryptor can encrypt. An instance of
+the IntegerEncoder class converts an integer into a PlainText polynomial by placing its
+binary digits as the coefficients of the polynomial. Decoding the integer amounts to
+evaluating the PlainText polynomial at x=2.
+
+Addition and multiplication on the integer side translate into addition and multiplication
+on the encoded PlainText polynomial side, provided that the length of the polynomial
+never grows to be of the size of the polynomial modulus (PolyModulus), and that the
+coefficients of the PlainText polynomials appearing throughout the computations never
+experience coefficients larger than the PlainText modulus (PlainModulus).
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>options</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Object</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Options</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>context</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="global.html#Context">Context</a></span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Encryption context</td>
+</tr>
+
+  
+
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line568">line 568</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>An IntegerEncoder to be used for encoding only integers to PlainTexts</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="global.html#IntegerEncoder">IntegerEncoder</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+const integerEncoder = Morfix.IntegerEncoder({ context })</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="KeyGenerator">
+        <a class="href-link" href="#KeyGenerator">#</a>
+        
+        <span class="code-name">
+            
+                KeyGenerator<span class="signature">(options)</span><span class="type-signature"> &rarr; {<a href="global.html#KeyGenerator">KeyGenerator</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Generates matching secret key and public key. An existing KeyGenerator can
+also at any time be used to generate relinearization keys and Galois keys.
+Constructing a KeyGenerator requires only a SEALContext.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>options</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Object</span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+      </td>
+  
+
+  <td class="description last">Options</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>context</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="global.html#Context">Context</a></span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+      </td>
+  
+
+  <td class="description last">Encryption context</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>secretKey</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="global.html#SecretKey">SecretKey</a></span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+          null
+      
+      </td>
+  
+
+  <td class="description last">Previously generated SecretKey</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>publicKey</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type"><a href="global.html#PublicKey">PublicKey</a></span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+          null
+      
+      </td>
+  
+
+  <td class="description last">Previously generated PublicKey</td>
+</tr>
+
+  
+
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>EncryptionParameters for more details on encryption parameters.</li>
+        
+            <li>SecretKey for more details on secret key.</li>
+        
+            <li>PublicKey for more details on public key.</li>
+        
+            <li>RelinKeys for more details on relinearization keys.</li>
+        
+            <li>GaloisKeys for more details on Galois keys.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line602">line 602</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>A KeyGenerator to be used to generate keys depending on how it was initialized</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="global.html#KeyGenerator">KeyGenerator</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+// Creating a KeyGenerator automatically creates an internal Secret and Public key pair
+const keyGenerator = Morfix.KeyGenerator({ context })
+
+// Optionally, pass in an existing SecetKey
+const keyGenerator = Morfix.KeyGenerator({ context, secretKey: someSecretKey })
+
+// In addition, pass in an existing PublicKey with SecetKey to avoid unnecessary key generation
+const keyGenerator = Morfix.KeyGenerator({ context, secretKey: someSecretKey, publicKey: somePublicKey })</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="PlainText">
+        <a class="href-link" href="#PlainText">#</a>
+        
+        <span class="code-name">
+            
+                PlainText<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#PlainText">PlainText</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Create an instance of a PlainText. The data for the PlainText is a polynomial
+with coefficients modulo the PlainText modulus. The degree of the PlainText
+polynomial must be one less than the degree of the polynomial modulus. The
+backing array always allocates one 64-bit word per each coefficient of the
+polynomial.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>CipherText for the class that stores CipherTexts.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line719">line 719</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>An empty PlainText instance</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="global.html#PlainText">PlainText</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+const plainText = Morfix.PlainText()</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="PublicKey">
+        <a class="href-link" href="#PublicKey">#</a>
+        
+        <span class="code-name">
+            
+                PublicKey<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#PublicKey">PublicKey</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Create an instance of a PublicKey. This key is used to encrypt PlainTexts
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>KeyGenerator for the class that generates the public key.</li>
+        
+            <li>SecretKey for the class that stores the secret key.</li>
+        
+            <li>RelinKeys for the class that stores the relinearization keys.</li>
+        
+            <li>GaloisKeys for the class that stores the Galois keys.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line764">line 764</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>An empty PublicKey instance</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="global.html#PublicKey">PublicKey</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+// Generate an empty key and load from a base64 string
+const publicKey = Morfix.PublicKey()
+publicKey.load({ context, encoded: &lt;base64 string>})
+
+// Or generate them from a KeyGenerator
+const keyGenerator = Morfix.KeyGenerator({ context })
+const publicKey = keyGenerator.getPublicKey()</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="RelinKeys">
+        <a class="href-link" href="#RelinKeys">#</a>
+        
+        <span class="code-name">
+            
+                RelinKeys<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#RelinKeys">RelinKeys</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Create an instance of a RelinKey. This key is used to perform relinearization
+on CipherTexts.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>SecretKey for the class that stores the secret key.</li>
+        
+            <li>PublicKey for the class that stores the public key.</li>
+        
+            <li>GaloisKeys for the class that stores the Galois keys.</li>
+        
+            <li>KeyGenerator for the class that generates the relinearization keys.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line797">line 797</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>An empty RelinKeys instance</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="global.html#RelinKeys">RelinKeys</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+// Generate an empty key and load from a base64 string
+const relinKeys = Morfix.RelinKeys()
+relinKeys.load({ context, encoded: &lt;base64 string>})
+
+// Or generate them from a KeyGenerator
+const keyGenerator = Morfix.KeyGenerator({ context })
+const relinKeys = keyGenerator.genRelinKeys()</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="SecretKey">
+        <a class="href-link" href="#SecretKey">#</a>
+        
+        <span class="code-name">
+            
+                SecretKey<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#SecretKey">SecretKey</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Create an instance of a SecretKey. This key is used to decrypt CipherTexts.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>KeyGenerator for the class that generates the secret key.</li>
+        
+            <li>PublicKey for the class that stores the public key.</li>
+        
+            <li>RelinKeys for the class that stores the relinearization keys.</li>
+        
+            <li>GaloisKeys for the class that stores the Galois keys.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line870">line 870</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>An empty SecretKey instance</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="global.html#SecretKey">SecretKey</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+// Generate an empty key and load from a base64 string
+const secretKey = Morfix.SecretKey()
+secretKey.load({ context, encoded: &lt;base64 string>})
+
+// Or generate them from a KeyGenerator
+const keyGenerator = Morfix.KeyGenerator({ context })
+const secretKey = keyGenerator.getSecretKey()</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="SmallModulus">
+        <a class="href-link" href="#SmallModulus">#</a>
+        
+        <span class="code-name">
+            
+                SmallModulus<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#SmallModulus">SmallModulus</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Create an instance of a SmallModulus
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line930">line 930</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>An empty SmallModulus instance</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="global.html#SmallModulus">SmallModulus</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+const smallModulus = Morfix.SmallModulus()
+smallModulus.setValue({ value: '5'})</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="Vector">
+        <a class="href-link" href="#Vector">#</a>
+        
+        <span class="code-name">
+            
+                Vector<span class="signature">(options)</span><span class="type-signature"> &rarr; {<a href="global.html#Vector">Vector</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Create an instance of a C++ Vector
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>options</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Object</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Options</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>array</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Int32Array</span>
+|
+
+<span class="param-type">Uint32Array</span>
+|
+
+<span class="param-type">Float64Array</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Typed Array of data</td>
+</tr>
+
+  
+
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_Seal.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_Seal.js.html">lib/Seal.js</a>, <a href="lib_Seal.js.html#line948">line 948</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>Vector containing the typed data</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="global.html#Vector">Vector</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { Seal } from 'node-seal'
+const Morfix = await Seal
+...
+const vectorInt32 = Morfix.Vector({ array: Int32Array.from([1, 2, 3]) })
+const vectorUint32 = Morfix.Vector({ array: Uint32Array.from([1, 2, 3]) })
+const vectorFloat64 = Morfix.Vector({ array: Float64Array.from([1.11, 2.22, 3.33]) })</code></pre>
+    
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sat Dec 21 2019 22:05:12 GMT-0600 (Central Standard Time)</p>
+        <p class="sidebar-created-by">
+            <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+            <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+        </p>
+    </div>
+</footer>
+
+
+<script src="scripts/app.min.js"></script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
