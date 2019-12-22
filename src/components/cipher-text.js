@@ -50,6 +50,20 @@ export const CipherText = ({ library }) => {
     },
 
     /**
+     * Delete the underlying WASM instance
+     *
+     * Should be called before dereferencing this object
+     * @function
+     * @name ICipherText#delete
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * The number of primes in the coefficient modulus of the
      * associated encryption parameters. This directly affects the
      * allocation size of the CipherText.

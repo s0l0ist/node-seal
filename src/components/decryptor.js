@@ -48,6 +48,20 @@ export const Decryptor = ({ library, context, secretKey }) => {
     },
 
     /**
+     * Delete the underlying WASM instance
+     *
+     * Should be called before dereferencing this object
+     * @function
+     * @name IDecryptor#delete
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * Decrypts a Ciphertext and stores the result in the destination parameter.
      *
      * @function

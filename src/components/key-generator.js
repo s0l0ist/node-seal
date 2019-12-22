@@ -70,6 +70,20 @@ export const KeyGenerator = ({
     },
 
     /**
+     * Delete the underlying WASM instance
+     *
+     * Should be called before dereferencing this object
+     * @function
+     * @name IKeyGenerator#delete
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * Return the generated SecretKey
      *
      * @function

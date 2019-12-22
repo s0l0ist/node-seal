@@ -3,6 +3,14 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 3.0.2
+
+Feat:
+- Added `delete` method to applicable components. This method should
+  be called before dereferencing a JavaScript component. This is 
+  because there is no way to automatically call the destructors 
+  on C++ objects.
+
 ## Version 3.0.1
 
 No updates to core library functionality.

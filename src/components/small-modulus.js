@@ -52,6 +52,20 @@ export const SmallModulus = ({ library }) => {
     },
 
     /**
+     * Delete the underlying WASM instance
+     *
+     * Should be called before dereferencing this object
+     * @function
+     * @name ISmallModulus#delete
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * Loads a SmallModulus from a string representing an uint64 value.
      *
      * @function

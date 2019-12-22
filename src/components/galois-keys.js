@@ -50,6 +50,20 @@ export const GaloisKeys = ({ library }) => {
     },
 
     /**
+     * Delete the underlying WASM instance
+     *
+     * Should be called before dereferencing this object
+     * @function
+     * @name IGaloisKeys#delete
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * Save the GaloisKeys to a base64 string
      *
      * @function

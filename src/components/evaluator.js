@@ -50,6 +50,20 @@ export const Evaluator = ({ library, context }) => {
     },
 
     /**
+     * Delete the underlying WASM instance
+     *
+     * Should be called before dereferencing this object
+     * @function
+     * @name IEvaluator#delete
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * Negates a CipherText and stores the result in the destination parameter.
      *
      * @function

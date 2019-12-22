@@ -77,6 +77,20 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
     },
 
     /**
+     * Delete the underlying WASM instance
+     *
+     * Should be called before dereferencing this object
+     * @function
+     * @name IVector#delete
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * The Vector type
      *
      * @readonly
