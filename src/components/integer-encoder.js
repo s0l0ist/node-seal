@@ -48,6 +48,20 @@ export const IntegerEncoder = ({ library, context }) => {
     },
 
     /**
+     * Delete the underlying WASM instance
+     *
+     * Should be called before dereferencing this object
+     * @function
+     * @name IIntegerEncoder#delete
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * Encode an Int32 value to a PlainText
      *
      * @function

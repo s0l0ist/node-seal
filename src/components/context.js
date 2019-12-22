@@ -58,6 +58,20 @@ export const Context = ({
     },
 
     /**
+     * Delete the underlying WASM instance
+     *
+     * Should be called before dereferencing this object
+     * @function
+     * @name IContext#delete
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * Prints the context parameters to STDOUT (console.log)
      *
      * @function

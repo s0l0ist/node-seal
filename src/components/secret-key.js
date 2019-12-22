@@ -50,6 +50,20 @@ export const SecretKey = ({ library }) => {
     },
 
     /**
+     * Delete the underlying WASM instance
+     *
+     * Should be called before dereferencing this object
+     * @function
+     * @name ISecretKey#delete
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * Save the Encryption Parameters to a base64 string
      *
      * @function

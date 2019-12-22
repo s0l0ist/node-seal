@@ -50,6 +50,20 @@ export const CKKSEncoder = ({ library, context }) => {
     },
 
     /**
+     * Delete the underlying WASM instance
+     *
+     * Should be called before dereferencing this object
+     * @function
+     * @name ICKKSEncoder#delete
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * Encodes a vector of type double to a given plainText
      *
      * @function

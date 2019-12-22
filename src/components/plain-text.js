@@ -50,6 +50,20 @@ export const PlainText = ({ library }) => {
     },
 
     /**
+     * Delete the underlying WASM instance
+     *
+     * Should be called before dereferencing this object
+     * @function
+     * @name IPlainText#delete
+     */
+    delete() {
+      if (_instance) {
+        _instance.delete()
+        _instance = null
+      }
+    },
+
+    /**
      * Allocates enough memory to accommodate the backing array of the current
      * PlainText and copies it over to the new location. This function is meant
      * to reduce the memory use of the PlainText to smallest possible and can be
