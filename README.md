@@ -36,7 +36,7 @@ Checkout the [basics](USAGE.md)
 
 ## Documentation
 
-View the latest docs [here](https://htmlpreview.github.io/?https://github.com/morfix-io/node-seal/blob/master/docs/ISEAL.html)
+View the latest docs [here](https://docs.morfix.io)
 
 ## Examples
 
