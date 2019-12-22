@@ -1,34 +1,3 @@
-/**
- * Microsoft SEAL
- *
- * @param {Object} options Options
- * @param {BatchEncoder} options.BatchEncoder
- * @param {CipherText} options.CipherText
- * @param {CKKSEncoder} options.CKKSEncoder
- * @param {Context} options.Context
- * @param {Decryptor} options.Decryptor
- * @param {EncryptionParameters} options.EncryptionParameters
- * @param {Encryptor} options.Encryptor
- * @param {Evaluator} options.Evaluator
- * @param {GaloisKeys} options.GaloisKeys
- * @param {IntegerEncoder} options.IntegerEncoder
- * @param {KeyGenerator} options.KeyGenerator
- * @param {Library} options.Library
- * @param {PlainText} options.PlainText
- * @param {PublicKey} options.PublicKey
- * @param {RelinKeys} options.RelinKeys
- * @param {SecretKey} options.SecretKey
- * @param {SmallModulus} options.SmallModulus
- * @param {Vector} options.Vector
- * @param {CoeffModulus} options.CoeffModulus
- * @param {ComprModeType} options.ComprModeType
- * @param {Exception} options.Exception
- * @param {MemoryPoolHandle} options.MemoryPoolHandle
- * @param {PlainModulus} options.PlainModulus
- * @param {SecurityLevel} options.SecurityLevel
- * @param {SchemeType} options.SchemeType
- * @constructor
- */
 export const SEAL = ({ options }) => {
   const _BatchEncoder = options.BatchEncoder
   const _CipherText = options.CipherText
@@ -64,13 +33,20 @@ export const SEAL = ({ options }) => {
   })
   const _SchemeType = options.SchemeType({ library: _Library.instance })
 
+  /**
+   * @typedef {Object} SEAL
+   * @implements ISEAL
+   */
+
+  /**
+   * @interface ISEAL
+   */
   return {
     /**
-     * Create an instance of a BatchEncoder
-     *
+     * @description
      * Provides functionality for CRT batching. If the polynomial modulus degree is N, and
-     * the plaintext modulus is a prime number T such that T is congruent to 1 modulo 2N,
-     * then BatchEncoder allows the plaintext elements to be viewed as 2-by-(N/2)
+     * the PlainText modulus is a prime number T such that T is congruent to 1 modulo 2N,
+     * then BatchEncoder allows the PlainText elements to be viewed as 2-by-(N/2)
      * matrices of integers modulo T. Homomorphic operations performed on such encrypted
      * matrices are applied coefficient (slot) wise, enabling powerful SIMD functionality
      * for computations that are vectorizable. This functionality is often called "batching"
@@ -78,97 +54,89 @@ export const SEAL = ({ options }) => {
      *
      * @par Mathematical Background
      * Mathematically speaking, if the polynomial modulus is X^N+1, N is a power of two, and
-     * plain_modulus is a prime number T such that 2N divides T-1, then integers modulo T
+     * PlainModulus is a prime number T such that 2N divides T-1, then integers modulo T
      * contain a primitive 2N-th root of unity and the polynomial X^N+1 splits into n distinct
      * linear factors as X^N+1 = (X-a_1)*...*(X-a_N) mod T, where the constants a_1, ..., a_n
      * are all the distinct primitive 2N-th roots of unity in integers modulo T. The Chinese
-     * Remainder Theorem (CRT) states that the plaintext space Z_T[X]/(X^N+1) in this case is
+     * Remainder Theorem (CRT) states that the PlainText space Z_T[X]/(X^N+1) in this case is
      * isomorphic (as an algebra) to the N-fold direct product of fields Z_T. The isomorphism
      * is easy to compute explicitly in both directions, which is what this class does.
      * Furthermore, the Galois group of the extension is (Z/2NZ)* ~= Z/2Z x Z/(N/2) whose
      * action on the primitive roots of unity is easy to describe. Since the batching slots
      * correspond 1-to-1 to the primitive roots of unity, applying Galois automorphisms on the
-     * plaintext act by permuting the slots. By applying generators of the two cyclic
-     * subgroups of the Galois group, we can effectively view the plaintext as a 2-by-(N/2)
+     * PlainText act by permuting the slots. By applying generators of the two cyclic
+     * subgroups of the Galois group, we can effectively view the PlainText as a 2-by-(N/2)
      * matrix, and enable cyclic row rotations, and column rotations (row swaps).
      *
      * @par Valid Parameters
-     * Whether batching can be used depends on whether the plaintext modulus has been chosen
+     * Whether batching can be used depends on whether the PlainText modulus has been chosen
      * appropriately. Thus, to construct a BatchEncoder the user must provide an instance
      * of SEALContext such that its associated EncryptionParameterQualifiers object has the
-     * flags parameters_set and enable_batching set to true.
+     * flags parametersSet and enableBatching set to true.
      *
-     * @typedef {Object} BatchEncoder
+     * @function
+     * @name ISEAL#BatchEncoder
      * @param {Object} options Options
      * @param {Context} options.context Encryption context
-     * @property {function} encodeVectorInt32 Encodes a Vector of Int32 types to a PlainText
-     * @property {function} encodeVectorUInt32 Encodes a Vector of UInt32 types to a PlainText
-     * @property {function} decodeVectorInt32 Decodes a PlainText to a Vector of Int32
-     * @property {function} decodeVectorUInt32 Decodes a PlainText to a Vector of UInt32
-     * @property {getter} slotCount Getter for the total number of batching slots available to hold data
-     * @returns {BatchEncoder} A 'batching' encoder used for the BFV scheme type
-     * @constructor
+     * @returns {BatchEncoder}
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const batchEncoder = Morfix.BatchEncoder({ context })
      */
     BatchEncoder({ context }) {
       return _BatchEncoder({ library: _Library.instance, context })
     },
 
     /**
-     * Create an instance of a CipherText
-     *
-     * Class to store a ciphertext element. The data for a ciphertext consists
+     * @description
+     * Class to store a CipherText element. The data for a CipherText consists
      * of two or more polynomials, which are in Microsoft SEAL stored in a CRT
      * form with respect to the factors of the coefficient modulus. This data
      * itself is not meant to be modified directly by the user, but is instead
      * operated on by functions in the Evaluator class. The size of the backing
-     * array of a ciphertext depends on the encryption parameters and the size
-     * of the ciphertext (at least 2). If the poly_modulus_degree encryption
-     * parameter is N, and the number of primes in the coeff_modulus encryption
-     * parameter is K, then the ciphertext backing array requires precisely
-     * 8*N*K*size bytes of memory. A ciphertext also carries with it the
-     * parms_id of its associated encryption parameters, which is used to check
-     * the validity of the ciphertext for homomorphic operations and decryption.
+     * array of a CipherText depends on the encryption parameters and the size
+     * of the CipherText (at least 2). If the PolyModulusDegree encryption
+     * parameter is N, and the number of primes in the CoeffModulus encryption
+     * parameter is K, then the CipherText backing array requires precisely
+     * 8*N*K*size bytes of memory. A CipherText also carries with it the
+     * parmsId of its associated encryption parameters, which is used to check
+     * the validity of the CipherText for homomorphic operations and decryption.
      *
      * @par Memory Management
-     * The size of a ciphertext refers to the number of polynomials it contains,
+     * The size of a CipherText refers to the number of polynomials it contains,
      * whereas its capacity refers to the number of polynomials that fit in the
      * current memory allocation. In high-performance applications unnecessary
      * re-allocations should be avoided by reserving enough memory for the
-     * ciphertext to begin with either by providing the desired capacity to the
+     * CipherText to begin with either by providing the desired capacity to the
      * constructor as an extra argument, or by calling the reserve function at
      * any time.
      *
      * @par Thread Safety
-     * In general, reading from ciphertext is thread-safe as long as no other
+     * In general, reading from CipherText is thread-safe as long as no other
      * thread is concurrently mutating it. This is due to the underlying data
-     * structure storing the ciphertext not being thread-safe.
+     * structure storing the CipherText not being thread-safe.
      *
-     * @typedef {Object} CipherText
-     * @property {getter} coeffModCount Getter for the number of primes in the coefficient modulus
-     * @property {getter} polyModulusDegree Getter for the degree of the polynomial modulus
-     * @property {getter} size Getter for the size of the ciphertext
-     * @property {getter} sizeCapacity Getter for the capacity of the allocation
-     * @property {getter} isTransparent Getter for whether the current ciphertext is transparent
-     * @property {getter} isNttForm Getter for whether the ciphertext is in NTT form
-     * @property {getter} parmsId Getter for a reference to parmsId
-     * @property {getter} scale Getter for a reference to the scale
-     * @property {getter} pool Getter for the currently used MemoryPoolHandle
-     * @property {function} save Save a cipherText to a base64 string
-     * @property {function} load Load a cipherText from a base64 string
+     * @function
+     * @name ISEAL#CipherText
      * @returns {CipherText} An empty CipherText instance
-     * @constructor
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const cipherText = Morfix.CipherText()
      */
     CipherText() {
       return _CipherText({ library: _Library.instance })
     },
 
     /**
-     * Create an instance of a CKKSEncoder
-     *
+     * @description
      * Provides functionality for encoding vectors of complex or real numbers into
-     * plaintext polynomials to be encrypted and computed on using the CKKS scheme.
+     * PlainText polynomials to be encrypted and computed on using the CKKS scheme.
      * If the polynomial modulus degree is N, then CKKSEncoder converts vectors of
-     * N/2 complex numbers into plaintext elements. Homomorphic operations performed
+     * N/2 complex numbers into PlainText elements. Homomorphic operations performed
      * on such encrypted vectors are applied coefficient (slot-)wise, enabling
      * powerful SIMD functionality for computations that are vectorizable. This
      * functionality is often called "batching" in the homomorphic encryption
@@ -179,71 +147,79 @@ export const SEAL = ({ options }) => {
      * two, the CKKSEncoder implements an approximation of the canonical embedding
      * of the ring of integers Z[X]/(X^N+1) into C^(N/2), where C denotes the complex
      * numbers. The Galois group of the extension is (Z/2NZ)* ~= Z/2Z x Z/(N/2)
-     * whose action on the primitive roots of unity modulo coeff_modulus is easy to
+     * whose action on the primitive roots of unity modulo CoeffModulus is easy to
      * describe. Since the batching slots correspond 1-to-1 to the primitive roots
-     * of unity, applying Galois automorphisms on the plaintext acts by permuting
+     * of unity, applying Galois automorphisms on the PlainText acts by permuting
      * the slots. By applying generators of the two cyclic subgroups of the Galois
      * group, we can effectively enable cyclic rotations and complex conjugations
      * of the encrypted complex vectors.
      *
-     * @typedef {Object} CKKSEncoder
+     * @function
+     * @name ISEAL#CKKSEncoder
      * @param {Object} options Options
      * @param {Context} options.context Encryption context
-     * @property {function} encodeVectorDouble Encodes a Vector of Float64 types to a PlainText
-     * @property {function} decodeVectorDouble Decodes a PlainText to a Vector of Float64
-     * @property {getter} slotCount Getter to returns the total number of CKKS slots available to hold data
      * @returns {CKKSEncoder} An encoder used for the CKKS scheme type
-     * @constructor
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const ckksEncoder = Morfix.CKKSEncoder({ context })
      */
     CKKSEncoder({ context }) {
       return _CKKSEncoder({ library: _Library.instance, context })
     },
 
     /**
-     * CoeffModulus
-     *
+     * @description
      * This class contains static methods for creating a coefficient modulus easily.
-     * Note that while these functions take a sec_level_type argument, all security
+     * Note that while these functions take a SecurityLevel argument, all security
      * guarantees are lost if the output is used with encryption parameters with
-     * a mismatching value for the poly_modulus_degree.
+     * a mismatching value for the PolyModulusDegree.
      *
-     * The default value sec_level_type::tc128 provides a very high level of security
+     * The default value SecurityLevel.tc128 provides a very high level of security
      * and is the default security level enforced by Microsoft SEAL when constructing
      * a SEALContext object. Normal users should not have to specify the security
      * level explicitly anywhere.
      *
-     * @typedef {Object} CoeffModulus
-     * @property {function} MaxBitCount Returns the Maximum Bit Count for the specified polyModulusDegree and securityLevel
-     * @property {function} BFVDefault Returns a default vector of primes for the BFV CoeffModulus parameter
-     * @property {function} Create Creates a vector of primes for a given polyModulusDegree and bitSizes
-     * @returns {CoeffModulus} The CoeffModulus singleton
+     * @readonly
+     * @name ISEAL#CoeffModulus
+     * @type {CoeffModulus}
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const vector = Morfix.CoeffModulus.Create({ polyModulusDegree, bitSizes })
      */
     get CoeffModulus() {
       return _CoeffModulus
     },
 
     /**
-     * ComprModeType
-     *
+     * @description
      * A type to describe the compression algorithm applied to serialized data.
      * Ciphertext and key data consist of a large number of 64-bit words storing
      * integers modulo prime numbers much smaller than the word size, resulting in
      * a large number of zero bytes in the output. Any compression algorithm should
-     * be able to clean up these zero bytes and hence compress both ciphertext and
+     * be able to clean up these zero bytes and hence compress both CipherText and
      * key data.
      *
-     * @typedef {Object} ComprModeType
-     * @property {getter} none Getter for the compression mode 'none'
-     * @property {getter} deflate Getter for the compression mode 'deflate'
-     * @returns {ComprModeType} The ComprModeType singleton
+     * @readonly
+     * @name ISEAL#ComprModeType
+     * @type {ComprModeType}
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const keyGenerator = Morfix.KeyGenerator({ context })
+     * const secretKey = keyGenerator.getSecretKey()
+     * const base64 = secretKey.save({ compression: Morfix.ComprModeType.deflate })
      */
     get ComprModeType() {
       return _ComprModeType
     },
 
     /**
-     * Create an instance of a Context
-     *
+     * @description
      * Performs sanity checks (validation) and pre-computations for a given set of encryption
      * parameters. While the EncryptionParameters class is intended to be a light-weight class
      * to store the encryption parameters, the SEALContext class is a heavy-weight class that
@@ -251,51 +227,46 @@ export const SEAL = ({ options }) => {
      * for correctness, evaluates their properties, and performs and stores the results of
      * several costly pre-computations.
      *
-     * After the user has set at least the poly_modulus, coeff_modulus, and plain_modulus
+     * After the user has set at least the PolyModulus, CoeffModulus, and PlainModulus
      * parameters in a given EncryptionParameters instance, the parameters can be validated
      * for correctness and functionality by constructing an instance of SEALContext. The
      * constructor of SEALContext does all of its work automatically, and concludes by
      * constructing and storing an instance of the EncryptionParameterQualifiers class, with
      * its flags set according to the properties of the given parameters. If the created
-     * instance of EncryptionParameterQualifiers has the parameters_set flag set to true, the
+     * instance of EncryptionParameterQualifiers has the parametersSet flag set to true, the
      * given parameter set has been deemed valid and is ready to be used. If the parameters
-     * were for some reason not appropriately set, the parameters_set flag will be false,
+     * were for some reason not appropriately set, the parametersSet flag will be false,
      * and a SEALContext will have to be created after the parameters are corrected.
      *
-     * By default, SEALContext creates a chain of SEALContext::ContextData instances. The
+     * By default, SEALContext creates a chain of SEALContext.ContextData instances. The
      * first one in the chain corresponds to special encryption parameters that are reserved
      * to be used by the various key classes (SecretKey, PublicKey, etc.). These are the exact
      * same encryption parameters that are created by the user and passed to th constructor of
-     * SEALContext. The functions key_context_data() and key_parms_id() return the ContextData
-     * and the parms_id corresponding to these special parameters. The rest of the ContextData
+     * SEALContext. The functions keyContextData() and key_parmsId() return the ContextData
+     * and the parmsId corresponding to these special parameters. The rest of the ContextData
      * instances in the chain correspond to encryption parameters that are derived from the
      * first encryption parameters by always removing the last one of the moduli in the
-     * coeff_modulus, until the resulting parameters are no longer valid, e.g., there are no
-     * more primes left. These derived encryption parameters are used by ciphertexts and
-     * plaintexts and their respective ContextData can be accessed through the
-     * get_context_data(parms_id_type) function. The functions first_context_data() and
+     * CoeffModulus, until the resulting parameters are no longer valid, e.g., there are no
+     * more primes left. These derived encryption parameters are used by CipherTexts and
+     * PlainTexts and their respective ContextData can be accessed through the
+     * get_context_data(ParmsIdType) function. The functions first_context_data() and
      * last_context_data() return the ContextData corresponding to the first and the last
      * set of parameters in the "data" part of the chain, i.e., the second and the last element
      * in the full chain. The chain itself is a doubly linked list, and is referred to as the
      * modulus switching chain.
      *
-     * @typedef {Object} Context
+     * @function
+     * @name ISEAL#Context
      * @param {Object} options Options
      * @param {EncryptionParameters} options.encryptionParams A set of specific encryption parameters
      * @param {boolean} options.expandModChain Determines whether or not to enable modulus switching
      * @param {SecurityLevel} options.securityLevel The security strength in bits.
-     * @property {getter} keyContextData Getter for the ContextData corresponding to encryption parameters that are used for keys
-     * @property {getter} firstContextData Getter for the ContextData corresponding to the first encryption parameters that are used for data
-     * @property {getter} lastContextData Getter for the ContextData corresponding to the last encryption parameters that are used for data
-     * @property {getter} parametersSet Getter for if the encryption parameters are set in a way that is considered valid by Microsoft SEAL
-     * @property {getter} keyParmsId Getter for a parmsIdType corresponding to the set of encryption parameters that are used for keys
-     * @property {getter} firstParmsId Getter for a parmsIdType corresponding to the first encryption parameters that are used for data
-     * @property {getter} lastParmsId Getter for a parmsIdType corresponding to the last encryption parameters that are used for data
-     * @property {getter} usingKeyswitching Getter for whether the coefficient modulus supports keyswitching
-     * @property {function} print Prints the context parameters to STDOUT (console.log)
-     * @property {function} getContextData Returns the ContextData corresponding to encryption parameters with a given parmsId
      * @returns {Context} An encryption context to be used for all operations
-     * @constructor
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const context = Morfix.Context({ encryptionParams, expandModChain, securityLevel })
      */
     Context({ encryptionParams, expandModChain, securityLevel }) {
       return _Context({
@@ -307,12 +278,11 @@ export const SEAL = ({ options }) => {
     },
 
     /**
-     * Create an instance of a Decryptor
-     *
+     * @description
      * Decrypts Ciphertext objects into Plaintext objects. Constructing a Decryptor
      * requires a SEALContext with valid encryption parameters, and the secret key.
      * The Decryptor is also used to compute the invariant noise budget in a given
-     * ciphertext.
+     * CipherText.
      *
      * @par Overloads
      * For the decrypt function we provide two overloads concerning the memory pool
@@ -327,32 +297,34 @@ export const SEAL = ({ options }) => {
      * unnecessary performance bottlenecks.
      *
      * @par NTT form
-     * When using the BFV scheme (scheme_type::BFV), all plaintext and ciphertexts
+     * When using the BFV scheme (SchemeType.BFV), all PlainText and CipherTexts
      * should remain by default in the usual coefficient representation, i.e. not in
-     * NTT form. When using the CKKS scheme (scheme_type::CKKS), all plaintexts and
-     * ciphertexts should remain by default in NTT form. We call these scheme-specific
-     * NTT states the "default NTT form". Decryption requires the input ciphertexts
+     * NTT form. When using the CKKS scheme (SchemeType.CKKS), all PlainTexts and
+     * CipherTexts should remain by default in NTT form. We call these scheme-specific
+     * NTT states the "default NTT form". Decryption requires the input CipherTexts
      * to be in the default NTT form, and will throw an exception if this is not the
      * case.
      *
-     * @typedef {Object} Decryptor
+     * @function
+     * @name ISEAL#Decryptor
      * @param {Object} options Options
      * @param {Context} options.context Encryption context
      * @param {SecretKey} options.secretKey SecretKey to be used for decryption
-     * @property {function} decrypt Decrypts a Ciphertext and stores the result in the destination parameter
-     * @property {function} invariantNoiseBudget Computes the invariant noise budget (in bits) of a ciphertext
-     * @returns {Decryptor} A decryptor instance that can be used to decrypt CipherTexts
-     * @constructor
+     * @returns {Decryptor} A Decryptor instance that can be used to decrypt CipherTexts
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const decryptor = Morfix.Decryptor({ context, secretKey })
      */
     Decryptor({ context, secretKey }) {
       return _Decryptor({ library: _Library.instance, context, secretKey })
     },
 
     /**
-     * Create an instance of EncryptionParameters
-     *
+     * @description
      * Represents user-customizable encryption scheme settings. The parameters (most
-     * importantly poly_modulus, coeff_modulus, plain_modulus) significantly affect
+     * importantly PolyModulus, CoeffModulus, PlainModulus) significantly affect
      * the performance, capabilities, and security of the encryption scheme. Once
      * an instance of EncryptionParameters is populated with appropriate parameters,
      * it can be used to create an instance of the SEALContext class, which verifies
@@ -361,20 +333,20 @@ export const SEAL = ({ options }) => {
      * Picking appropriate encryption parameters is essential to enable a particular
      * application while balancing performance and security. Some encryption settings
      * will not allow some inputs (e.g. attempting to encrypt a polynomial with more
-     * coefficients than poly_modulus or larger coefficients than plain_modulus) or,
+     * coefficients than PolyModulus or larger coefficients than PlainModulus) or,
      * support the desired computations (with noise growing too fast due to too large
-     * plain_modulus and too small coeff_modulus).
+     * PlainModulus and too small CoeffModulus).
      *
-     * @par parms_id
+     * @par parmsId
      * The EncryptionParameters class maintains at all times a 256-bit hash of the
-     * currently set encryption parameters called the parms_id. This hash acts as
+     * currently set encryption parameters called the parmsId. This hash acts as
      * a unique identifier of the encryption parameters and is used by all further
-     * objects created for these encryption parameters. The parms_id is not intended
+     * objects created for these encryption parameters. The parmsId is not intended
      * to be directly modified by the user but is used internally for pre-computation
      * data lookup and input validity checks. In modulus switching the user can use
-     * the parms_id to keep track of the chain of encryption parameters. The parms_id
+     * the parmsId to keep track of the chain of encryption parameters. The parmsId
      * is not exposed in the public API of EncryptionParameters, but can be accessed
-     * through the SEALContext::ContextData class once the SEALContext has been created.
+     * through the SEALContext.ContextData class once the SEALContext has been created.
      *
      * @par Thread Safety
      * In general, reading from EncryptionParameters is thread-safe, while mutating
@@ -386,20 +358,16 @@ export const SEAL = ({ options }) => {
      * an expert in RLWE-based encryption when selecting parameters, as this is where
      * inexperienced users seem to most often make critical mistakes.
      *
-     * @typedef {Object} EncryptionParameters
+     * @function
+     * @name ISEAL#EncryptionParameters
      * @param {Object} options Options
      * @param {SchemeType} options.schemeType The desired scheme type to use
-     * @property {getter} scheme Getter for the encryption scheme type
-     * @property {getter} polyModulusDegree Getter for the degree of the polynomial modulus parameter
-     * @property {getter} coeffModulus Getter for the currently set coefficient modulus parameter
-     * @property {getter} plainModulus Getter the currently set plaintext modulus parameter
-     * @property {function} setPolyModulusDegree Sets the degree of the polynomial modulus parameter to the specified value
-     * @property {function} setCoeffModulus Sets the coefficient modulus parameter
-     * @property {function} setPlainModulus Sets the plaintext modulus parameter
-     * @property {function} save Save the Encryption Parameters to a base64 string
-     * @property {function} load Load the Encryption Parameters from a base64 string
      * @returns {EncryptionParameters} A set of encryption parameters based from the scheme type
-     * @constructor
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const encParms = Morfix.EncryptionParameters({ schemeType })
      */
     EncryptionParameters({ schemeType }) {
       return _EncryptionParameters({
@@ -409,8 +377,7 @@ export const SEAL = ({ options }) => {
     },
 
     /**
-     * Create an instance of an Encryptor
-     *
+     * @description
      * Encrypts Plaintext objects into Ciphertext objects. Constructing an Encryptor
      * requires a SEALContext with valid encryption parameters, the public key and/or
      * the secret key. If an Encrytor is given a secret key, it supports symmetric-key
@@ -430,37 +397,40 @@ export const SEAL = ({ options }) => {
      * performance bottlenecks.
      *
      * @par NTT form
-     * When using the BFV scheme (scheme_type::BFV), all plaintext and ciphertexts should
+     * When using the BFV scheme (SchemeType.BFV), all PlainText and CipherTexts should
      * remain by default in the usual coefficient representation, i.e. not in NTT form.
-     * When using the CKKS scheme (scheme_type::CKKS), all plaintexts and ciphertexts
+     * When using the CKKS scheme (SchemeType.CKKS), all PlainTexts and CipherTexts
      * should remain by default in NTT form. We call these scheme-specific NTT states
-     * the "default NTT form". Decryption requires the input ciphertexts to be in
+     * the "default NTT form". Decryption requires the input CipherTexts to be in
      * the default NTT form, and will throw an exception if this is not the case.
      *
      *
-     * @typedef {Object} Encryptor
+     * @function
+     * @name ISEAL#Encryptor
      * @param {Object} options Options
      * @param {Context} options.context Encryption context
      * @param {PublicKey} options.publicKey PublicKey to be used for encryption
-     * @property {function} encrypt Encrypts a plaintext and stores the result in the destination parameter
-     * @returns {Encryptor} An encryptor instance that can be used to encrypt PlainTexts
-     * @constructor
+     * @returns {Encryptor} An Encryptor instance that can be used to encrypt PlainTexts
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const encryptor = Morfix.Encryptor({ context, publicKey })
      */
     Encryptor({ context, publicKey }) {
       return _Encryptor({ library: _Library.instance, context, publicKey })
     },
 
     /**
-     * Create an instance of an Evaluator
-     *
-     * Provides operations on ciphertexts. Due to the properties of the encryption
+     * @description
+     * Provides operations on CipherTexts. Due to the properties of the encryption
      * scheme, the arithmetic operations pass through the encryption layer to the
-     * underlying plaintext, changing it according to the type of the operation. Since
-     * the plaintext elements are fundamentally polynomials in the polynomial quotient
-     * ring Z_T[x]/(X^N+1), where T is the plaintext modulus and X^N+1 is the polynomial
+     * underlying PlainText, changing it according to the type of the operation. Since
+     * the PlainText elements are fundamentally polynomials in the polynomial quotient
+     * ring Z_T[x]/(X^N+1), where T is the PlainText modulus and X^N+1 is the polynomial
      * modulus, this is the ring where the arithmetic operations will take place.
      * BatchEncoder (batching) provider an alternative possibly more convenient view
-     * of the plaintext elements as 2-by-(N2/2) matrices of integers modulo the plaintext
+     * of the PlainText elements as 2-by-(N2/2) matrices of integers modulo the PlainText
      * modulus. In the batching view the arithmetic operations act on the matrices
      * element-wise. Some of the operations only apply in the batching view, such as
      * matrix row and column rotations. Other operations such as relinearization have
@@ -468,42 +438,42 @@ export const SEAL = ({ options }) => {
      *
      * @par Arithmetic Operations
      * The core operations are arithmetic operations, in particular multiplication
-     * and addition of ciphertexts. In addition to these, we also provide negation,
+     * and addition of CipherTexts. In addition to these, we also provide negation,
      * subtraction, squaring, exponentiation, and multiplication and addition of
-     * several ciphertexts for convenience. in many cases some of the inputs to a
-     * computation are plaintext elements rather than ciphertexts. For this we
+     * several CipherTexts for convenience. in many cases some of the inputs to a
+     * computation are PlainText elements rather than CipherTexts. For this we
      * provide fast "plain" operations: plain addition, plain subtraction, and plain
      * multiplication.
      *
      * @par Relinearization
      * One of the most important non-arithmetic operations is relinearization, which
-     * takes as input a ciphertext of size K+1 and relinearization keys (at least K-1
-     * keys are needed), and changes the size of the ciphertext down to 2 (minimum size).
+     * takes as input a CipherText of size K+1 and relinearization keys (at least K-1
+     * keys are needed), and changes the size of the CipherText down to 2 (minimum size).
      * For most use-cases only one relinearization key suffices, in which case
      * relinearization should be performed after every multiplication. Homomorphic
-     * multiplication of ciphertexts of size K+1 and L+1 outputs a ciphertext of size
+     * multiplication of CipherTexts of size K+1 and L+1 outputs a CipherText of size
      * K+L+1, and the computational cost of multiplication is proportional to K*L.
      * Plain multiplication and addition operations of any type do not change the
      * size. Relinearization requires relinearization keys to have been generated.
      *
      * @par Rotations
-     * When batching is enabled, we provide operations for rotating the plaintext matrix
+     * When batching is enabled, we provide operations for rotating the PlainText matrix
      * rows cyclically left or right, and for rotating the columns (swapping the rows).
      * Rotations require Galois keys to have been generated.
      *
      * @par Other Operations
-     * We also provide operations for transforming ciphertexts to NTT form and back,
-     * and for transforming plaintext polynomials to NTT form. These can be used in
+     * We also provide operations for transforming CipherTexts to NTT form and back,
+     * and for transforming PlainText polynomials to NTT form. These can be used in
      * a very fast plain multiplication variant, that assumes the inputs to be in NTT
      * form. Since the NTT has to be done in any case in plain multiplication, this
-     * function can be used when e.g. one plaintext input is used in several plain
+     * function can be used when e.g. one PlainText input is used in several plain
      * multiplication, and transforming it several times would not make sense.
      *
      * @par NTT form
-     * When using the BFV scheme (scheme_type::BFV), all plaintexts and ciphertexts
+     * When using the BFV scheme (SchemeType.BFV), all PlainTexts and CipherTexts
      * should remain by default in the usual coefficient representation, i.e., not
-     * in NTT form. When using the CKKS scheme (scheme_type::CKKS), all plaintexts
-     * and ciphertexts should remain by default in NTT form. We call these scheme-
+     * in NTT form. When using the CKKS scheme (SchemeType.CKKS), all PlainTexts
+     * and CipherTexts should remain by default in NTT form. We call these scheme-
      * specific NTT states the "default NTT form". Some functions, such as add, work
      * even if the inputs are not in the default state, but others, such as multiply,
      * will throw an exception. The output of all evaluation functions will be in
@@ -516,60 +486,52 @@ export const SEAL = ({ options }) => {
      * @see RelinKeys for more details on relinearization keys.
      * @see GaloisKeys for more details on Galois keys.
      *
-     * @typedef {Object} Evaluator
+     * @function
+     * @name ISEAL#Evaluator
      * @param {Object} options Options
      * @param {Context} options.context Encryption context
-     * @property {function} negate Negates a ciphertext and stores the result in the destination parameter
-     * @property {function} add Adds two CipherTexts
-     * @property {function} addPlain Adds a PlainText to a CipherText
-     * @property {function} sub Subtracts two CipherTexts
-     * @property {function} subPlain Subtracts a PlainText from a CipherText
-     * @property {function} multiply Multiplies two CipherTexts
-     * @property {function} multiplyPlain Multiplies a CipherText by a PlainText
-     * @property {function} square Squares a CipherText
-     * @property {function} relinearize Relinearizes a CipherText
-     * @property {function} cipherModSwitchToNext Switches a CipherText to the next downstream modulus
-     * @property {function} cipherModSwitchTo Switches a CipherText to the specified parmsId
-     * @property {function} plainModSwitchToNext Switches a PlainText to the next downstream modulus
-     * @property {function} plainModSwitchTo Switches a PlainText to the specified parmsId
-     * @property {function} rescaleToNext Rescales a CipherText
-     * @property {function} rescaleTo Rescales a CipherText to the specified parmsId
-     * @property {function} exponentiate Exponentiates a CipherText
-     * @property {function} plainTransformToNtt Transforms a PlainText to the NTT domain
-     * @property {function} cipherTransformToNtt Transforms a CipherText to the NTT domain
-     * @property {function} cipherTransformFromNtt Transforms a CipherText back from the NTT domain
-     * @property {function} applyGalois Applies a Galois automorphism to a CipherText
-     * @property {function} rotateRows Rotates a CipherText's matrix rows cyclically
-     * @property {function} rotateColumns Rotates a CipherText's matrix columns cyclically
-     * @property {function} rotateVector Rotates a CipherText's vector cyclically
-     * @property {function} complexConjugate Complex conjugates CipherText's slot values (CKKS only)
      * @returns {Evaluator} An evaluator instance to be used to perform homomorphic evaluations
-     * @constructor
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const evaluator = Morfix.Evaluator({ context })
      */
     Evaluator({ context }) {
       return _Evaluator({ library: _Library.instance, context })
     },
 
     /**
-     * Get the Exception singleton
-     * @typedef {Object} Exception
-     * @property {function} getHuman Returns the human readable exception string from a WASM pointer
-     * @returns {Exception} The Exception singleton
-     * @constructor
+     * @description
+     * Get the Exception singleton. Users should have little use
+     * for this static instance as it is used internally.
+     *
+     * @readonly
+     * @name ISEAL#Exception
+     * @type {Exception}
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * try {
+     *   <WASM method which is throwing>
+     * } catch (e) {
+     *   throw Morfix.Exception.safe({ error: e})
+     * }
      */
     get Exception() {
       return _Exception
     },
 
     /**
-     * Create an instance of GaloisKeys
      *
+     * @description
      * Class to store Galois keys.
      *
      * @par Slot Rotations
      * Galois keys are used together with batching (BatchEncoder). If the polynomial modulus
-     * is a polynomial of degree N, in batching the idea is to view a plaintext polynomial as
-     * a 2-by-(N/2) matrix of integers modulo plaintext modulus. Normal homomorphic computations
+     * is a polynomial of degree N, in batching the idea is to view a PlainText polynomial as
+     * a 2-by-(N/2) matrix of integers modulo PlainText modulus. Normal homomorphic computations
      * operate on such encrypted matrices element (slot) wise. However, special rotation
      * operations allow us to also rotate the matrix rows cyclically in either direction, and
      * rotate the columns (swap the rows). These operations require the Galois keys.
@@ -584,53 +546,61 @@ export const SEAL = ({ options }) => {
      * @see RelinKeys for the class that stores the relinearization keys.
      * @see KeyGenerator for the class that generates the Galois keys.
      *
-     * @typedef {Object} GaloisKeys
-     * @property {function} save Saves the instance to a base64 string
-     * @property {function} load Loads the instance from a base64 string
+     * @function
+     * @name ISEAL#GaloisKeys
      * @returns {GaloisKeys} An empty GaloisKeys instance
-     * @constructor
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * // Generate an empty key and load from a base64 string
+     * const galoisKeys = Morfix.GaloisKeys()
+     * galoisKeys.load({ context, encoded: <base64 string>})
+     *
+     * // Or generate them from a KeyGenerator
+     * const keyGenerator = Morfix.KeyGenerator({ context })
+     * const galoisKeys = keyGenerator.genGaloisKeys()
      */
     GaloisKeys() {
       return _GaloisKeys({ library: _Library.instance })
     },
 
     /**
-     * Create an instance of an IntegerEncoder
-     *
-     * Encodes integers into plaintext polynomials that Encryptor can encrypt. An instance of
-     * the IntegerEncoder class converts an integer into a plaintext polynomial by placing its
+     * @description
+     * Encodes integers into PlainText polynomials that Encryptor can encrypt. An instance of
+     * the IntegerEncoder class converts an integer into a PlainText polynomial by placing its
      * binary digits as the coefficients of the polynomial. Decoding the integer amounts to
-     * evaluating the plaintext polynomial at x=2.
+     * evaluating the PlainText polynomial at x=2.
      *
      * Addition and multiplication on the integer side translate into addition and multiplication
-     * on the encoded plaintext polynomial side, provided that the length of the polynomial
-     * never grows to be of the size of the polynomial modulus (poly_modulus), and that the
-     * coefficients of the plaintext polynomials appearing throughout the computations never
-     * experience coefficients larger than the plaintext modulus (plain_modulus).
+     * on the encoded PlainText polynomial side, provided that the length of the polynomial
+     * never grows to be of the size of the polynomial modulus (PolyModulus), and that the
+     * coefficients of the PlainText polynomials appearing throughout the computations never
+     * experience coefficients larger than the PlainText modulus (PlainModulus).
      *
      * @par Negative Integers
      * Negative integers are represented by using -1 instead of 1 in the binary representation,
-     * and the negative coefficients are stored in the plaintext polynomials as unsigned integers
-     * that represent them modulo the plaintext modulus. Thus, for example, a coefficient of -1
-     * would be stored as a polynomial coefficient plain_modulus-1.
+     * and the negative coefficients are stored in the PlainText polynomials as unsigned integers
+     * that represent them modulo the PlainText modulus. Thus, for example, a coefficient of -1
+     * would be stored as a polynomial coefficient PlainModulus-1.
      *
-     * @typedef {Object} IntegerEncoder
+     * @function
+     * @name ISEAL#IntegerEncoder
      * @param {Object} options Options
      * @param {Context} options.context Encryption context
-     * @property {function} encodeInt32 Encode an Int32 value to a PlainText
-     * @property {function} encodeUInt32 Encode an UInt32 value to a PlainText
-     * @property {function} decodeInt32 Decode an Int32 value from a PlainText
-     * @property {function} decodeUInt32 Decode an UInt32 value from a PlainText
-     * @returns {IntegerEncoder} An encoder to be used for encoding only integers to PlainTexts
-     * @constructor
+     * @returns {IntegerEncoder} An IntegerEncoder to be used for encoding only integers to PlainTexts
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const integerEncoder = Morfix.IntegerEncoder({ context })
      */
     IntegerEncoder({ context }) {
       return _IntegerEncoder({ library: _Library.instance, context })
     },
 
     /**
-     * Create an instance of a KeyGenerator
-     *
+     * @description
      * Generates matching secret key and public key. An existing KeyGenerator can
      * also at any time be used to generate relinearization keys and Galois keys.
      * Constructing a KeyGenerator requires only a SEALContext.
@@ -641,17 +611,25 @@ export const SEAL = ({ options }) => {
      * @see RelinKeys for more details on relinearization keys.
      * @see GaloisKeys for more details on Galois keys.
      *
-     * @typedef {Object} KeyGenerator
+     * @function
+     * @name ISEAL#KeyGenerator
      * @param {Object} options Options
      * @param {Context} options.context Encryption context
-     * @param {SecretKey} [options.secretKey] Previously generated SecretKey
-     * @param {PublicKey} [options.publicKey] Previously generated PublicKey
-     * @property {function} getSecretKey Returns the generated SecretKey
-     * @property {function} getPublicKey Returns the generated PublicKey
-     * @property {function} genRelinKeys Generate RelinKeys
-     * @property {function} genGaloisKeys Generate GaloisKeys
+     * @param {SecretKey} [options.secretKey=null] Previously generated SecretKey
+     * @param {PublicKey} [options.publicKey=null] Previously generated PublicKey
      * @returns {KeyGenerator} A KeyGenerator to be used to generate keys depending on how it was initialized
-     * @constructor
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * // Creating a KeyGenerator automatically creates an internal Secret and Public key pair
+     * const keyGenerator = Morfix.KeyGenerator({ context })
+     *
+     * // Optionally, pass in an existing SecetKey
+     * const keyGenerator = Morfix.KeyGenerator({ context, secretKey: someSecretKey })
+     *
+     * // In addition, pass in an existing PublicKey with SecetKey to avoid unnecessary key generation
+     * const keyGenerator = Morfix.KeyGenerator({ context, secretKey: someSecretKey, publicKey: somePublicKey })
      */
     KeyGenerator({ context, secretKey = null, publicKey = null }) {
       return _KeyGenerator({
@@ -663,8 +641,7 @@ export const SEAL = ({ options }) => {
     },
 
     /**
-     * MemoryPoolHandle
-     *
+     * @description
      * Manages a shared pointer to a memory pool. Microsoft SEAL uses memory pools
      * for improved performance due to the large number of memory allocations
      * needed by the homomorphic encryption operations, and the underlying polynomial
@@ -692,7 +669,7 @@ export const SEAL = ({ options }) => {
      * A MemoryPoolHandle has to be set to point either to the global memory pool,
      * or to a new memory pool. If this is not done, the MemoryPoolHandle is
      * said to be uninitialized, and cannot be used. Initialization simple means
-     * assigning MemoryPoolHandle::Global() or MemoryPoolHandle::New() to it.
+     * assigning MemoryPoolHandle.Global() or MemoryPoolHandle.New() to it.
      *
      * @par Managing Lifetime
      * Internally, the MemoryPoolHandle wraps an std::shared_ptr pointing to
@@ -708,91 +685,85 @@ export const SEAL = ({ options }) => {
      * order of these global variables to be correct (i.e. global memory pool
      * first).
      *
-     * @typedef {Object} MemoryPoolHandle
-     * @property {getter} global Getter for the MemoryPoolHandle pointing to the global memory pool
-     * @property {getter} threadLocal Getter for the MemoryPoolHandle pointing to the theard-local memory pool
-     * @returns {MemoryPoolHandle} The MemoryPoolHandle singleton
-     * @constructor
+     * @readonly
+     * @name ISEAL#MemoryPoolHandle
+     * @type {MemoryPoolHandle}
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const encryptor = Morfix.Encryptor({ context, publicKey })
+     * encryptor.encrypt({ plainText, cipherText, pool: Morfix.MemoryPoolHandle.global })
      */
     get MemoryPoolHandle() {
       return _MemoryPoolHandle
     },
 
     /**
-     * Get the PlainModulus singleton
+     * @description
+     * Contains static methods for creating a PlainText modulus easily
      *
-     * @typedef {Object} PlainModulus
-     * @property {function} Batching Creates a prime number SmallModulus for use as plainModulus encryption
-     * parameter that supports batching with a given polyModulusDegree.
-     * @property {function} BatchingVector Creates several prime number SmallModulus elements that can be used as
-     * plainModulus encryption parameters, each supporting batching with a given
-     * polyModulusDegree.
-     * @returns {PlainModulus} The PlainModulus singleton
-     * @constructor
+     * @readonly
+     * @name ISEAL#PlainModulus
+     * @type {PlainModulus}
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const smallModulus = Morfix.PlainModulus.Batching({ polyModulusDegree, bitSize })
      */
     get PlainModulus() {
       return _PlainModulus
     },
 
     /**
-     * Create an instance of a PlainText
-     *
-     * Class to store a plaintext element. The data for the plaintext is a polynomial
-     * with coefficients modulo the plaintext modulus. The degree of the plaintext
+     * @description
+     * Create an instance of a PlainText. The data for the PlainText is a polynomial
+     * with coefficients modulo the PlainText modulus. The degree of the PlainText
      * polynomial must be one less than the degree of the polynomial modulus. The
      * backing array always allocates one 64-bit word per each coefficient of the
      * polynomial.
      *
      * @par Memory Management
-     * The coefficient count of a plaintext refers to the number of word-size
-     * coefficients in the plaintext, whereas its capacity refers to the number of
+     * The coefficient count of a PlainText refers to the number of word-size
+     * coefficients in the PlainText, whereas its capacity refers to the number of
      * word-size coefficients that fit in the current memory allocation. In high-
      * performance applications unnecessary re-allocations should be avoided by
-     * reserving enough memory for the plaintext to begin with either by providing
+     * reserving enough memory for the PlainText to begin with either by providing
      * the desired capacity to the constructor as an extra argument, or by calling
      * the reserve function at any time.
      *
-     * When the scheme is scheme_type::BFV each coefficient of a plaintext is a 64-bit
-     * word, but when the scheme is scheme_type::CKKS the plaintext is by default
+     * When the scheme is SchemeType.BFV each coefficient of a PlainText is a 64-bit
+     * word, but when the scheme is SchemeType.CKKS the PlainText is by default
      * stored in an NTT transformed form with respect to each of the primes in the
      * coefficient modulus. Thus, the size of the allocation that is needed is the
      * size of the coefficient modulus (number of primes) times the degree of the
-     * polynomial modulus. In addition, a valid CKKS plaintext also store the parms_id
+     * polynomial modulus. In addition, a valid CKKS PlainText also store the parmsId
      * for the corresponding encryption parameters.
      *
      * @par Thread Safety
-     * In general, reading from plaintext is thread-safe as long as no other thread
+     * In general, reading from PlainText is thread-safe as long as no other thread
      * is concurrently mutating it. This is due to the underlying data structure
-     * storing the plaintext not being thread-safe.
+     * storing the PlainText not being thread-safe.
      *
-     * @see Ciphertext for the class that stores ciphertexts.
+     * @see CipherText for the class that stores CipherTexts.
      *
-     * @typedef {Object} PlainText
-     * @property {getter} isZero Getter for whether the current plaintext polynomial has all zero coefficients
-     * @property {getter} capacity Getter for the capacity of the current allocation
-     * @property {getter} coeffCount Getter for the coefficient count of the current plaintext polynomial
-     * @property {getter} significantCoeffCount Getter for the significant coefficient count of the current plaintext polynomial
-     * @property {getter} nonzeroCoeffCount Getter for the non-zero coefficient count of the current plaintext polynomial
-     * @property {getter} isNttForm Getter for whether the plaintext is in NTT form
-     * @property {getter} parmsId Getter for a reference to parmsId
-     * @property {getter} scale Getter for a reference to the scale
-     * @property {getter} pool Getter for the currently used MemoryPoolHandle
-     * @property {function} shrinkToFit Reduce the memory use of the plaintext
-     * @property {function} setZero Set the PlainText polynomial to zero
-     * @property {function} toPolynomial Returns a human-readable string description of the plaintext polynomial
-     * @property {function} save Saves the instance to a base64 string
-     * @property {function} load Loads the instance from a base64 string
+     * @function
+     * @name ISEAL#PlainText
      * @returns {PlainText} An empty PlainText instance
-     * @constructor
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const plainText = Morfix.PlainText()
      */
     PlainText() {
       return _PlainText({ library: _Library.instance })
     },
 
     /**
-     * Create an instance of a PublicKey
-     *
-     * Class to store a public key.
+     * @description
+     * Create an instance of a PublicKey. This key is used to encrypt PlainTexts
      *
      * @par Thread Safety
      * In general, reading from PublicKey is thread-safe as long as no other thread
@@ -804,32 +775,41 @@ export const SEAL = ({ options }) => {
      * @see RelinKeys for the class that stores the relinearization keys.
      * @see GaloisKeys for the class that stores the Galois keys.
      *
-     * @typedef {Object} PublicKey
-     * @property {function} save Saves the instance to a base64 string
-     * @property {function} load Loads the instance from a base64 string
+     * @function
+     * @name ISEAL#PublicKey
      * @returns {PublicKey} An empty PublicKey instance
-     * @constructor
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * // Generate an empty key and load from a base64 string
+     * const publicKey = Morfix.PublicKey()
+     * publicKey.load({ context, encoded: <base64 string>})
+     *
+     * // Or generate them from a KeyGenerator
+     * const keyGenerator = Morfix.KeyGenerator({ context })
+     * const publicKey = keyGenerator.getPublicKey()
      */
     PublicKey() {
       return _PublicKey({ library: _Library.instance })
     },
 
     /**
-     * Create an instance of a RelinKeys
-     *
-     * Class to store relinearization keys.
+     * @description
+     * Create an instance of a RelinKey. This key is used to perform relinearization
+     * on CipherTexts.
      *
      * @par Relinearization
-     * Freshly encrypted ciphertexts have a size of 2, and multiplying ciphertexts
-     * of sizes K and L results in a ciphertext of size K+L-1. Unfortunately, this
+     * Freshly encrypted CipherTexts have a size of 2, and multiplying CipherTexts
+     * of sizes K and L results in a CipherText of size K+L-1. Unfortunately, this
      * growth in size slows down further multiplications and increases noise growth.
      * Relinearization is an operation that has no semantic meaning, but it reduces
-     * the size of ciphertexts back to 2. Microsoft SEAL can only relinearize size 3
-     * ciphertexts back to size 2, so if the ciphertexts grow larger than size 3,
+     * the size of CipherTexts back to 2. Microsoft SEAL can only relinearize size 3
+     * CipherTexts back to size 2, so if the CipherTexts grow larger than size 3,
      * there is no way to reduce their size. Relinearization requires an instance of
      * RelinKeys to be created by the secret key owner and to be shared with the
      * evaluator. Note that plain multiplication is fundamentally different from
-     * normal multiplication and does not result in ciphertext size growth.
+     * normal multiplication and does not result in CipherText size growth.
      *
      * @par When to Relinearize
      * Typically, one should always relinearize after each multiplications. However,
@@ -851,34 +831,45 @@ export const SEAL = ({ options }) => {
      * @see GaloisKeys for the class that stores the Galois keys.
      * @see KeyGenerator for the class that generates the relinearization keys.
      *
-     * @typedef {Object} RelinKeys
-     * @property {function} save Saves the instance to a base64 string
-     * @property {function} load Loads the instance from a base64 string
+     * @function
+     * @name ISEAL#RelinKeys
      * @returns {RelinKeys} An empty RelinKeys instance
-     * @constructor
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * // Generate an empty key and load from a base64 string
+     * const relinKeys = Morfix.RelinKeys()
+     * relinKeys.load({ context, encoded: <base64 string>})
+     *
+     * // Or generate them from a KeyGenerator
+     * const keyGenerator = Morfix.KeyGenerator({ context })
+     * const relinKeys = keyGenerator.genRelinKeys()
      */
     RelinKeys() {
       return _RelinKeys({ library: _Library.instance })
     },
 
     /**
-     * Get the SchemeType singleton
+     * @description
+     * The SchemeType singleton
      *
-     * @typedef {Object} SchemeType
-     * @property {getter} none Getter for the 'none' scheme type
-     * @property {getter} BFV Getter for the 'BFV' scheme type
-     * @property {getter} CKKS Getter for the 'CKKS' scheme type
-     * @returns {SchemeType} The SchemeType singleton
-     * @constructor
+     * @readonly
+     * @name ISEAL#SchemeType
+     * @type {SchemeType}
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const encParms = Morfix.EncryptionParameters({ schemeType: Morfix.SchemeType.BFV })
      */
     get SchemeType() {
       return _SchemeType
     },
 
     /**
-     * Create an instance of a SecretKey
-     *
-     * Class to store a secret key.
+     * @description
+     * Create an instance of a SecretKey. This key is used to decrypt CipherTexts.
      *
      * @par Thread Safety
      * In general, reading from SecretKey is thread-safe as long as no other thread
@@ -890,69 +881,86 @@ export const SEAL = ({ options }) => {
      * @see RelinKeys for the class that stores the relinearization keys.
      * @see GaloisKeys for the class that stores the Galois keys.
      *
-     * @typedef {Object} SecretKey
-     * @property {function} save Saves the instance to a base64 string
-     * @property {function} load Loads the instance from a base64 string
+     * @function
+     * @name ISEAL#SecretKey
      * @returns {SecretKey} An empty SecretKey instance
-     * @constructor
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * // Generate an empty key and load from a base64 string
+     * const secretKey = Morfix.SecretKey()
+     * secretKey.load({ context, encoded: <base64 string>})
+     *
+     * // Or generate them from a KeyGenerator
+     * const keyGenerator = Morfix.KeyGenerator({ context })
+     * const secretKey = keyGenerator.getSecretKey()
      */
     SecretKey() {
       return _SecretKey({ library: _Library.instance })
     },
 
     /**
-     * SecurityLevel
-     *
+     * @description
      * Represents a standard security level according to the HomomorphicEncryption.org
-     * security standard. The value sec_level_type::none signals that no standard
-     * security level should be imposed. The value sec_level_type::tc128 provides
+     * security standard. The value SecurityLevel.none signals that no standard
+     * security level should be imposed. The value SecurityLevel.tc128 provides
      * a very high level of security and is the default security level enforced by
      * Microsoft SEAL when constructing a SEALContext object. Normal users should not
      * have to specify the security level explicitly anywhere.
      *
-     * @typedef {Object} SecurityLevel
-     * @property {getter} none Getter for the 'none' security level
-     * @property {getter} tc128 Getter for the '128 bit' security level
-     * @property {getter} tc192 Getter for the '192 bit' security level
-     * @property {getter} tc256 Getter for the '256 bit' security level
-     * @returns {SecurityLevel} The SecurityLevel singleton
-     * @constructor
+     * @readonly
+     * @name ISEAL#SecurityLevel
+     * @type {SecurityLevel}
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const encParms = Morfix.EncryptionParameters({ schemeType: Morfix.SchemeType.BFV })
+     * const context = Morfix.Context({
+     *   encryptionParams: encParms,
+     *   expandModChain: true,
+     *   securityLevel: Morfix.SecurityLevel.tc128
+     *   })
      */
     get SecurityLevel() {
       return _SecurityLevel
     },
 
     /**
+     * @description
      * Create an instance of a SmallModulus
-     * @typedef {Object} SmallModulus
-     * @property {getter} value Getter for the string value of the SmallModulus
-     * @property {getter} bitCount Getter for the significant bit count of the value of the current SmallModulus
-     * @property {getter} isZero Getter for whether the value of the current SmallModulus is zero
-     * @property {getter} isPrime Getter for whether the value of the current SmallModulus is a prime number
-     * @property {function} setValue Loads a SmallModulus from a string representing an uint64 value
-     * @property {function} save Saves the instance to a base64 string
+     *
+     * @function
+     * @name ISEAL#SmallModulus
      * @returns {SmallModulus} An empty SmallModulus instance
-     * @constructor
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const smallModulus = Morfix.SmallModulus()
+     * smallModulus.setValue({ value: '5'})
      */
     SmallModulus() {
       return _SmallModulus({ library: _Library.instance })
     },
 
     /**
+     * @description
      * Create an instance of a C++ Vector
-     * @typedef {Object} Vector
+     *
+     * @function
+     * @name ISEAL#Vector
      * @param {Object} options Options
      * @param {Int32Array|Uint32Array|Float64Array} options.array Typed Array of data
-     * @property {getter} type Getter for the Vector type
-     * @property {getter} size Getter for length of the Vector
-     * @property {function} printMatrix Prints a matrix to the console
-     * @property {function} printVector Prints a vector to the console
-     * @property {function} fromArray Convert a typed array to a vector
-     * @property {function} getValue Get a value pointed to by the specified index of a Vector
-     * @property {function} resize Resizes a vector to the given size
-     * @property {function} toArray Copy a vector's data into a Typed Array
      * @returns {Vector} Vector containing the typed data
-     * @constructor
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const vectorInt32 = Morfix.Vector({ array: Int32Array.from([1, 2, 3]) })
+     * const vectorUint32 = Morfix.Vector({ array: Uint32Array.from([1, 2, 3]) })
+     * const vectorFloat64 = Morfix.Vector({ array: Float64Array.from([1.11, 2.22, 3.33]) })
      */
     Vector({ array }) {
       return _Vector({ library: _Library.instance, array })

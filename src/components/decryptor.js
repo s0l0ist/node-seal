@@ -1,41 +1,43 @@
 import { Exception } from './exception'
 
-/**
- * Decryptor
- * @typedef {Object} Decryptor
- * @constructor
- */
 export const Decryptor = ({ library, context, secretKey }) => {
   const _Exception = Exception({ library })
   let _instance = null
   try {
     _instance = new library.Decryptor(context.instance, secretKey.instance)
   } catch (e) {
-    // eslint-disable-next-line no-nested-ternary
-    throw new Error(
-      typeof e === 'number'
-        ? _Exception.getHuman(e)
-        : e instanceof Error
-        ? e.message
-        : e
-    )
+    throw _Exception.safe({ error: e })
   }
 
+  /**
+   * @typedef {Object} Decryptor
+   * @implements IDecryptor
+   */
+
+  /**
+   * @interface IDecryptor
+   */
   return {
     /**
-     * Get the underlying wasm instance
-     * @returns {instance} wasm instance
+     * Get the underlying WASM instance
+     *
      * @private
+     * @readonly
+     * @name IDecryptor#instance
+     * @type {instance}
      */
     get instance() {
       return _instance
     },
 
     /**
-     * Inject this object with a raw wasm instance
-     * @param {Object} options Options
-     * @param {instance} options.instance wasm instance
+     * Inject this object with a raw WASM instance
+     *
      * @private
+     * @function
+     * @name IDecryptor#inject
+     * @param {Object} options Options
+     * @param {instance} options.instance WASM instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -47,6 +49,9 @@ export const Decryptor = ({ library, context, secretKey }) => {
 
     /**
      * Decrypts a Ciphertext and stores the result in the destination parameter.
+     *
+     * @function
+     * @name IDecryptor#decrypt
      * @param {Object} options Options
      * @param {CipherText} options.cipherText CipherText to decrypt
      * @param {PlainText} options.plainText PlainText destination to store the result
@@ -55,49 +60,38 @@ export const Decryptor = ({ library, context, secretKey }) => {
       try {
         _instance.decrypt(cipherText.instance, plainText.instance)
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
     /**
-     * Computes the invariant noise budget (in bits) of a ciphertext. The invariant
+     * Computes the invariant noise budget (in bits) of a CipherText. The invariant
      * noise budget measures the amount of room there is for the noise to grow while
      * ensuring correct decryptions. This function works only with the BFV scheme.
      *
      * @par Invariant Noise Budget
-     * The invariant noise polynomial of a ciphertext is a rational coefficient
-     * polynomial, such that a ciphertext decrypts correctly as long as the
+     * The invariant noise polynomial of a CipherText is a rational coefficient
+     * polynomial, such that a CipherText decrypts correctly as long as the
      * coefficients of the invariantnoise polynomial are of absolute value less
      * than 1/2. Thus, we call the infinity-norm of the invariant noise polynomial
      * the invariant noise, and for correct decryption requireit to be less than
      * 1/2. If v denotes the invariant noise, we define the invariant noise budget
      * as -log2(2v). Thus, the invariant noise budget starts from some initial
      * value, which depends on the encryption parameters, and decreases when
-     * computations are performed. When the budget reaches zero, the ciphertext
+     * computations are performed. When the budget reaches zero, the CipherText
      * becomes too noisy to decrypt correctly.
+     *
+     * @function
+     * @name IDecryptor#invariantNoiseBudget
      * @param {Object} options Options
      * @param {CipherText} options.cipherText CipherText to measure
-     * @returns {number} invariant noise budget (in bits)
+     * @returns {Number} Invariant noise budget (in bits)
      */
     invariantNoiseBudget({ cipherText }) {
       try {
         return _instance.invariantNoiseBudget(cipherText.instance)
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     }
   }

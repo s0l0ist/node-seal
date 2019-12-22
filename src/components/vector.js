@@ -1,10 +1,5 @@
 import { Exception } from './exception'
 
-/**
- * Vector
- * @typedef {Object} Vector
- * @constructor
- */
 export const Vector = ({ library, array = new Int32Array(0) }) => {
   const _Exception = Exception({ library })
   const _vecFromArrayInt32 = library.vecFromArrayInt32
@@ -37,35 +32,41 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
       }
       return vec
     } catch (e) {
-      // eslint-disable-next-line no-nested-ternary
-      throw new Error(
-        typeof e === 'number'
-          ? _Exception.getHuman(e)
-          : e instanceof Error
-          ? e.message
-          : e
-      )
+      throw _Exception.safe({ error: e })
     }
   }
 
   let _instance = _fromArray({ array })
 
-  // Public methods
+  /**
+   * @typedef {Object} Vector
+   * @implements IVector
+   */
+
+  /**
+   * @interface IVector
+   */
   return {
     /**
-     * Get the underlying wasm instance
-     * @returns {instance} wasm instance
+     * Get the underlying WASM instance
+     *
      * @private
+     * @readonly
+     * @name IVector#instance
+     * @type {instance}
      */
     get instance() {
       return _instance
     },
 
     /**
-     * Inject this object with a raw wasm instance
-     * @param {Object} options Options
-     * @param {instance} options.instance wasm instance
+     * Inject this object with a raw WASM instance
+     *
      * @private
+     * @function
+     * @name IVector#inject
+     * @param {Object} options Options
+     * @param {instance} options.instance WASM instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -76,16 +77,22 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
     },
 
     /**
-     * Return the vector type
-     * @returns {Int32ArrayConstructor|Uint32ArrayConstructor|Float64ArrayConstructor} Constructor used to create the vector
+     * The Vector type
+     *
+     * @readonly
+     * @name IVector#type
+     * @type {(Int32ArrayConstructor|Uint32ArrayConstructor|Float64ArrayConstructor)}
      */
     get type() {
       return _type
     },
 
     /**
-     * Return the vector size
-     * @returns {number} number of elements in the vector
+     * The vector size
+     *
+     * @readonly
+     * @name IVector#size
+     * @type {Number}
      */
     get size() {
       return _instance.size()
@@ -95,8 +102,11 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      * Prints a matrix to the console
      *
      * This method is mainly used for debugging this library
+     *
+     * @function
+     * @name IVector#printMatrix
      * @param {Object} options Options
-     * @param {number} options.rowSize
+     * @param {Number} options.rowSize Number of rows in of the Vector (BFV = polyModDeg / 2, CKKS = polyModDeg)
      */
     printMatrix({ rowSize }) {
       try {
@@ -111,14 +121,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
             throw new Error('Unsupported matrix type!')
         }
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
@@ -126,9 +129,12 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      * Prints a vector to the console
      *
      * This method is mainly used for debugging this library
+     *
+     * @function
+     * @name IVector#printVector
      * @param {Object} options Options
-     * @param {number} [options.printSize=4]
-     * @param {number} [options.precision=5]
+     * @param {Number} [options.printSize=4] Number of elements to print
+     * @param {Number} [options.precision=5] Number of decimals to print
      */
     printVector({ printSize = 4, precision = 5 } = {}) {
       try {
@@ -146,22 +152,18 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
             throw new Error('Unsupported vector type!')
         }
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
     /**
      * Convert a typed array to a vector.
+     *
+     * @function
+     * @name IVector#fromArray
      * @param {Object} options Options
      * @param {Int32Array|Uint32Array|Float64Array} options.array Array of data to save to a Vector
-     * @returns {Vector} Vector whos contents are of the same type as the array passed in.
+     * @returns {Vector<(Int32Array|Uint32Array|Float64Array)>} Vector containing the same data type as the array
      */
     fromArray({ array }) {
       _fromArray({ array })
@@ -169,49 +171,44 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
 
     /**
      * Get a value pointed to by the specified index
+     *
+     * @function
+     * @name IVector#getValue
      * @param {Object} options Options
-     * @param {number} options.index Vector index
-     * @returns {number} value in the Vector pointed to by the index
+     * @param {Number} options.index Index of the Vector
+     * @returns {Number} Value of the element in the Vector pointed to by the index
      */
     getValue({ index }) {
       try {
         return _instance.get(index)
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
     /**
      * Resizes a vector to the given size
+     *
+     * @function
+     * @name IVector#resize
      * @param {Object} options Options
-     * @param {number} options.size number of elements to resize
-     * @param {number} options.fill data to fill the vector with
+     * @param {Number} options.size Number of elements to resize
+     * @param {Number} options.fill Data to fill the vector with
      */
     resize({ size, fill }) {
       try {
         _instance.resize(size, fill)
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
     /**
      * Copy a vector's data into a Typed Array
-     * @returns {Int32Array|Uint32Array|Float64Array} Typed Array containing values from the Vector
+     *
+     * @function
+     * @name IVector#toArray
+     * @returns {(Int32Array|Uint32Array|Float64Array)} TypedArray containing values from the Vector
      */
     toArray() {
       try {
@@ -231,14 +228,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
         }
         return arr
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     }
   }
