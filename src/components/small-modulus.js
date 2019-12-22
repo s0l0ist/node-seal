@@ -1,11 +1,6 @@
 import { Exception } from './exception'
 import { ComprModeType } from './compr-mode-type'
 
-/**
- * SmallModulus
- * @typedef {Object} SmallModulus
- * @constructor
- */
 export const SmallModulus = ({ library }) => {
   const _Exception = Exception({ library })
   const _saveToString = library.SmallModulus.saveToString
@@ -15,31 +10,38 @@ export const SmallModulus = ({ library }) => {
   try {
     _instance = new library.SmallModulus()
   } catch (e) {
-    // eslint-disable-next-line no-nested-ternary
-    throw new Error(
-      typeof e === 'number'
-        ? _Exception.getHuman(e)
-        : e instanceof Error
-        ? e.message
-        : e
-    )
+    throw _Exception.safe({ error: e })
   }
 
+  /**
+   * @typedef {Object} SmallModulus
+   * @implements ISmallModulus
+   */
+
+  /**
+   * @interface ISmallModulus
+   */
   return {
     /**
-     * Get the underlying wasm instance
-     * @returns {instance} wasm instance
+     * Get the underlying WASM instance
+     *
      * @private
+     * @readonly
+     * @name ISmallModulus#instance
+     * @type {instance}
      */
     get instance() {
       return _instance
     },
 
     /**
-     * Inject this object with a raw wasm instance
-     * @param {Object} options Options
-     * @param {instance} options.instance wasm instance
+     * Inject this object with a raw WASM instance
+     *
      * @private
+     * @function
+     * @name ISmallModulus#inject
+     * @param {Object} options Options
+     * @param {instance} options.instance WASM instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -50,9 +52,11 @@ export const SmallModulus = ({ library }) => {
     },
 
     /**
-     * Delete the underlying wasm instance
+     * Delete the underlying WASM instance
      *
      * Should be called before dereferencing this object
+     * @function
+     * @name ISmallModulus#delete
      */
     delete() {
       if (_instance) {
@@ -63,53 +67,58 @@ export const SmallModulus = ({ library }) => {
 
     /**
      * Loads a SmallModulus from a string representing an uint64 value.
-     * @param {string} value string representation of a uint64 value
+     *
+     * @function
+     * @name ISmallModulus#setValue
+     * @param {String} value String representation of a uint64 value
      */
     setValue({ value }) {
       try {
         _instance.loadFromString(value + '')
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
     /**
-     * Returns the value of the current SmallModulus as a string.
+     * The value of the current SmallModulus as a string.
      *
-     * It's a string because JS does not support uint64
-     * data type very well
-     * @returns {string} integer value of the SmallModulus
+     * @readonly
+     * @name ISmallModulus#value
+     * @type {String}
      */
     get value() {
       return _instance.Value()
     },
 
     /**
-     * Returns the significant bit count of the value of the current SmallModulus.
-     * @returns {number} significant bit count of the value of the current SmallModulus
+     * The significant bit count of the value of the current SmallModulus.
+     *
+     * @readonly
+     * @name ISmallModulus#bitCount
+     * @type {Number}
      */
     get bitCount() {
       return _instance.bitCount()
     },
 
     /**
-     * Returns whether the value of the current SmallModulus is zero.
-     * @returns {boolean} value of the current SmallModulus is zero
+     * Whether the value of the current SmallModulus is zero.
+     *
+     * @readonly
+     * @name ISmallModulus#isZero
+     * @type {Boolean}
      */
     get isZero() {
       return _instance.isZero()
     },
 
     /**
-     * Returns whether the value of the current SmallModulus is a prime number.
-     * @returns {boolean} value of the current SmallModulus is a prime number
+     * Whether the value of the current SmallModulus is a prime number.
+     *
+     * @readonly
+     * @name ISmallModulus#isPrime
+     * @type {Boolean}
      */
     get isPrime() {
       return _instance.isPrime()
@@ -117,22 +126,18 @@ export const SmallModulus = ({ library }) => {
 
     /**
      * Save the SmallModulus as a base64 string
+     *
+     * @function
+     * @name ISmallModulus#save
      * @param {Object} options Options
-     * @param {ComprModeType} [options.compression=ComprModeType.deflate] activate compression
-     * @returns {string} base64 encoded string
+     * @param {ComprModeType} [options.compression=ComprModeType.deflate] The compression mode to use
+     * @returns {String} Base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
       try {
         return _saveToString(compression)
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     }
   }

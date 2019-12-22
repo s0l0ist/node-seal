@@ -1,10 +1,5 @@
 import { Exception } from './exception'
 
-/**
- * CoeffModulus
- * @typedef {Object} CoeffModulus
- * @constructor
- */
 export const CoeffModulus = ({ library }) => {
   const _Exception = Exception({ library })
   const _MaxBitCount = library.CoeffModulus.MaxBitCount
@@ -12,72 +7,65 @@ export const CoeffModulus = ({ library }) => {
   const _Create = library.CoeffModulus.Create
 
   /**
-   * CoeffModulus
+   * @typedef {Object} CoeffModulus
+   * @implements ICoeffModulus
+   */
+
+  /**
+   * @interface ICoeffModulus
    */
   return {
     /**
      * Returns the Maximum Bit Count for the specified polyModulusDegree and securityLevel
+     *
+     * @function
+     * @name ICoeffModulus#MaxBitCount
      * @param {Object} options Options
-     * @param {number} options.polyModulusDegree degree of the polynomial modulus
+     * @param {Number} options.polyModulusDegree Degree of the polynomial modulus
      * @param {SecurityLevel} options.securityLevel Security Level
-     * @returns {number} Maximum bit count
+     * @returns {Number} Maximum bit count
      */
     MaxBitCount({ polyModulusDegree, securityLevel }) {
       try {
         return _MaxBitCount(polyModulusDegree, securityLevel)
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
     /**
      * Returns a default vector of primes for the BFV CoeffModulus parameter
+     *
+     * @function
+     * @name ICoeffModulus#BFVDefault
      * @param {Object} options Options
-     * @param {number} options.polyModulusDegree degree of the polynomial modulus
+     * @param {Number} options.polyModulusDegree Degree of the polynomial modulus
      * @param {SecurityLevel} options.securityLevel Security Level
-     * @returns {Vector} Vector containing SmallModulus primes
+     * @returns {Vector<SmallModulus>} Vector containing SmallModulus primes
      */
     BFVDefault({ polyModulusDegree, securityLevel }) {
       try {
         return _BFVDefault(polyModulusDegree, securityLevel)
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
     /**
      * Creates a vector of primes for a given polyModulusDegree and bitSizes
+     *
+     * @function
+     * @name ICoeffModulus#Create
      * @param {Object} options Options
-     * @param {number} options.polyModulusDegree degree of the polynomial modulus
+     * @param {Number} options.polyModulusDegree Degree of the polynomial modulus
      * @param {Vector} options.bitSizes Vector containing int32 values representing bit-sizes of primes
-     * @returns {Vector} Vector containing SmallModulus primes
+     * @returns {Vector<SmallModulus>} Vector containing SmallModulus primes
      */
     Create({ polyModulusDegree, bitSizes }) {
       try {
         return _Create(polyModulusDegree, bitSizes.instance)
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     }
   }

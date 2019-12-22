@@ -10,7 +10,7 @@ describe('encrypt on BFV', () => {
       parms.setPolyModulusDegree({
         polyModulusDegree: 16384
       })
-        
+
       // Create a suitable vector of CoeffModulus primes
       parms.setCoeffModulus({
         coeffModulus: Morfix.CoeffModulus.Create({
@@ -19,7 +19,7 @@ describe('encrypt on BFV', () => {
           securityLevel: Morfix.SecurityLevel.tc256
         })
       })
-      
+
       // Set the PlainModulus to a prime of bitSize 20.
       parms.setPlainModulus({
         plainModulus: Morfix.PlainModulus.Batching({
@@ -27,7 +27,7 @@ describe('encrypt on BFV', () => {
           bitSize: 20
         })
       })
-      
+
       const context = Morfix.Context({
         encryptionParams: parms,
         expandModChain: true,
@@ -54,23 +54,23 @@ describe('encrypt on BFV', () => {
         context: context,
         secretKey: secretKey
       })
-      
+
       // Create data to be encrypted
       const array = Int32Array.from({
         length: 16384
       }).map((x, i) =>  i)
-      
+
       // Convert data to a c++ 'vector'
       const vector = Morfix.Vector({array})
 
       // Create a plainText variable and encode the vector to it
       const plainText = Morfix.PlainText()
-      
+
       encoder.encodeVectorInt32({
         vector: vector,
         plainText: plainText
       })
-      
+
       // Create a cipherText variable and encrypt the plainText to it
       const cipherText = Morfix.CipherText()
       encryptor.encrypt({
@@ -88,7 +88,7 @@ describe('encrypt on BFV', () => {
       // Create a c++ vector to store the decoded result
       const decodeVector = Morfix.Vector({array: new Int32Array() })
 
-      // Decode the plaintext to the c++ vector
+      // Decode the PlainText to the c++ vector
       encoder.decodeVectorInt32({
         plainText: decryptedPlainText,
         vector: decodeVector

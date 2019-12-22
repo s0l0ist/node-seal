@@ -159,7 +159,7 @@ const genTests = (verb) => {
       // Create a c++ vector to store the decoded result
       const decodeVector = Morfix.Vector({array: new ${TYPES_CONSTRUCTOR[SCHEME_TYPES[schemeType]][TYPES[type]]}() })
 
-      // Decode the plaintext to the c++ vector
+      // Decode the PlainText to the c++ vector
       encoder.${DECODE_ACTIONS_CONSTRUCTOR[SCHEME_TYPES[schemeType]][TYPES[type]]}({
         plainText: decryptedPlainText,
         vector: decodeVector

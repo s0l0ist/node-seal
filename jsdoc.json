@@ -1,0 +1,26 @@
+{
+  "tags": {
+    "allowUnknownTags": [
+      "par",
+      "warning",
+      "optional",
+      "helpwanted",
+      "category"
+    ]
+  },
+  "source": {
+    "include": [
+      "./src/lib",
+      "./src/components"
+    ],
+    "includePattern": ".js$"
+  },
+  "opts": {
+    "destination": "./docs/",
+    "readme": "README.md",
+    "template": "node_modules/better-docs"
+  },
+  "plugins": [
+    "node_modules/better-docs/category"
+  ]
+}

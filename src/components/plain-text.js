@@ -1,11 +1,6 @@
 import { Exception } from './exception'
 import { ComprModeType } from './compr-mode-type'
 
-/**
- * PlainText
- * @typedef {Object} PlainText
- * @constructor
- */
 export const PlainText = ({ library }) => {
   const _Exception = Exception({ library })
   const _ComprModeType = ComprModeType({ library })
@@ -13,31 +8,38 @@ export const PlainText = ({ library }) => {
   try {
     _instance = new library.Plaintext()
   } catch (e) {
-    // eslint-disable-next-line no-nested-ternary
-    throw new Error(
-      typeof e === 'number'
-        ? _Exception.getHuman(e)
-        : e instanceof Error
-        ? e.message
-        : e
-    )
+    throw _Exception.safe({ error: e })
   }
 
+  /**
+   * @typedef {Object} PlainText
+   * @implements IPlainText
+   */
+
+  /**
+   * @interface IPlainText
+   */
   return {
     /**
-     * Get the underlying wasm instance
-     * @returns {instance} wasm instance
+     * Get the underlying WASM instance
+     *
      * @private
+     * @readonly
+     * @name IPlainText#instance
+     * @type {instance}
      */
     get instance() {
       return _instance
     },
 
     /**
-     * Inject this object with a raw wasm instance
-     * @param {Object} options Options
-     * @param {instance} options.instance wasm instance
+     * Inject this object with a raw WASM instance
+     *
      * @private
+     * @function
+     * @name IPlainText#inject
+     * @param {Object} options Options
+     * @param {instance} options.instance WASM instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -48,9 +50,11 @@ export const PlainText = ({ library }) => {
     },
 
     /**
-     * Delete the underlying wasm instance
+     * Delete the underlying WASM instance
      *
      * Should be called before dereferencing this object
+     * @function
+     * @name IPlainText#delete
      */
     delete() {
       if (_instance) {
@@ -61,85 +65,92 @@ export const PlainText = ({ library }) => {
 
     /**
      * Allocates enough memory to accommodate the backing array of the current
-     * plaintext and copies it over to the new location. This function is meant
-     * to reduce the memory use of the plaintext to smallest possible and can be
+     * PlainText and copies it over to the new location. This function is meant
+     * to reduce the memory use of the PlainText to smallest possible and can be
      * particularly important after modulus switching.
+     *
+     * @function
+     * @name IPlainText#shrinkToFit
      */
     shrinkToFit() {
       try {
         return _instance.shrinkToFit()
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
     /**
-     * Sets the plaintext polynomial to zero.
+     * Sets the PlainText polynomial to zero.
+     *
+     * @function
+     * @name IPlainText#setZero
      */
     setZero() {
       try {
         return _instance.setZero()
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
     /**
-     * Returns whether the current plaintext polynomial has all zero coefficients.
-     * @returns {boolean} plaintext polynomial has all zero coefficients
+     * Whether the current PlainText polynomial has all zero coefficients.
+     *
+     * @readonly
+     * @name IPlainText#isZero
+     * @type {Boolean}
      */
     get isZero() {
       return _instance.isZero()
     },
 
     /**
-     * Returns the capacity of the current allocation.
-     * @returns {number} capacity of the current allocation
+     * The capacity of the current allocation.
+     *
+     * @readonly
+     * @name IPlainText#capacity
+     * @type {Number}
      */
     get capacity() {
       return _instance.capacity()
     },
 
     /**
-     * Returns the coefficient count of the current plaintext polynomial.
-     * @returns {number} coefficient count of the current plaintext polynomial
+     * The coefficient count of the current PlainText polynomial.
+     *
+     * @readonly
+     * @name IPlainText#coeffCount
+     * @type {Number}
      */
     get coeffCount() {
       return _instance.coeffCount()
     },
 
     /**
-     * Returns the significant coefficient count of the current plaintext polynomial.
-     * @returns {number} significant coefficient count of the current plaintext polynomial
+     * The significant coefficient count of the current PlainText polynomial.
+     *
+     * @readonly
+     * @name IPlainText#significantCoeffCount
+     * @type {Number}
      */
     get significantCoeffCount() {
       return _instance.significantCoeffCount()
     },
 
     /**
-     * Returns the non-zero coefficient count of the current plaintext polynomial.
-     * @returns {number} non-zero coefficient count of the current plaintext polynomial
+     * Returns the non-zero coefficient count of the current PlainText polynomial.
+     *
+     * @readonly
+     * @name IPlainText#nonzeroCoeffCount
+     * @type {Number}
      */
     get nonzeroCoeffCount() {
       return _instance.nonzeroCoeffCount()
     },
 
     /**
-     * Returns a human-readable string description of the plaintext polynomial.
+     * Returns a human-readable string description of the PlainText polynomial.
      *
      * The returned string is of the form "7FFx^3 + 1x^1 + 3" with a format
      * summarized by the following:
@@ -156,56 +167,63 @@ export const PlainText = ({ library }) => {
      * 8. Other than the +, no other terms have whitespace
      * 9. If the polynomial is exactly 0, the string "0" is returned
      *
-     * @throws std::invalid_argument if the plaintext is in NTT transformed form
-     * @returns {string} Polynomial string
+     * @function
+     * @name IPlainText#toPolynomial
+     * @throws std::invalid_argument if the PlainText is in NTT transformed form
+     * @returns {String} Polynomial string
      */
     toPolynomial() {
       try {
         return _instance.toPolynomial()
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
     /**
-     * Returns whether the plaintext is in NTT form.
-     * @returns {boolean} plaintext is in NTT form
+     * Whether the PlainText is in NTT form.
+     *
+     * @readonly
+     * @name IPlainText#isNttForm
+     * @type {Boolean}
      */
     get isNttForm() {
       return _instance.isNttForm()
     },
 
     /**
-     * Returns a reference to parms_id. The parms_id must remain zero unless the
-     * plaintext polynomial is in NTT form.
+     * The reference to parmsId of the PlainText. The parmsId must remain zero unless the
+     * PlainText polynomial is in NTT form.
      *
-     * @see EncryptionParameters for more information about parms_id.
-     * @returns {*} parmsId pointer
+     * @see {@link EncryptionParameters} for more information about parmsId.
+     *
+     * @readonly
+     * @name IPlainText#parmsId
+     * @type {ParmsIdType}
      */
     get parmsId() {
       return _instance.parmsId()
     },
 
     /**
-     * Returns a reference to the scale. This is only needed when using the CKKS
+     * The reference to the scale. This is only needed when using the CKKS
      * encryption scheme. The user should have little or no reason to ever change
      * the scale by hand.
-     * @returns {*} reference to the scale
+     *
+     * @readonly
+     * @name IPlainText#scale
+     * @type {Number}
      */
     get scale() {
       return _instance.scale()
     },
 
     /**
-     * Returns the currently used MemoryPoolHandle.
-     * @returns {MemoryPoolHandle} Pointer to the current memory pool handle
+     * The currently used MemoryPoolHandle.
+     *
+     * @readonly
+     * @name IPlainText#pool
+     * @type {MemoryPoolHandle}
      */
     get pool() {
       return _instance.pool()
@@ -213,43 +231,35 @@ export const PlainText = ({ library }) => {
 
     /**
      * Save the PlainText to a base64 string
+     *
+     * @function
+     * @name IPlainText#save
      * @param {Object} options Options
-     * @param {ComprModeType} [options.compression=ComprModeType.deflate] activate compression
-     * @returns {string} base64 encoded string
+     * @param {ComprModeType} [options.compression=ComprModeType.deflate] The compression mode to use
+     * @returns {String} Base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
       try {
         return _instance.saveToString(compression)
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
     /**
      * Load a PlainText from a base64 string
+     *
+     * @function
+     * @name IPlainText#load
      * @param {Object} options Options
      * @param {Context} options.context Encryption context to enforce
-     * @param {string} options.encoded base64 encoded string
+     * @param {String} options.encoded Base64 encoded string
      */
     load({ context, encoded }) {
       try {
         _instance.loadFromString(context.instance, encoded)
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     }
   }
