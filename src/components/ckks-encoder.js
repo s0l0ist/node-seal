@@ -1,11 +1,6 @@
 import { Exception } from './exception'
 import { MemoryPoolHandle } from './memory-pool-handle'
 
-/**
- * CKKSEncoder
- * @typedef {Object} CKKSEncoder
- * @constructor
- */
 export const CKKSEncoder = ({ library, context }) => {
   const _Exception = Exception({ library })
   const _MemoryPoolHandle = MemoryPoolHandle({ library })
@@ -13,31 +8,38 @@ export const CKKSEncoder = ({ library, context }) => {
   try {
     _instance = new library.CKKSEncoder(context.instance)
   } catch (e) {
-    // eslint-disable-next-line no-nested-ternary
-    throw new Error(
-      typeof e === 'number'
-        ? _Exception.getHuman(e)
-        : e instanceof Error
-        ? e.message
-        : e
-    )
+    throw _Exception.safe({ error: e })
   }
 
+  /**
+   * @typedef {Object} CKKSEncoder
+   * @implements ICKKSEncoder
+   */
+
+  /**
+   * @interface ICKKSEncoder
+   */
   return {
     /**
-     * Get the underlying wasm instance
-     * @returns {instance} wasm instance
+     * Get the underlying WASM instance
+     *
      * @private
+     * @readonly
+     * @name ICKKSEncoder#instance
+     * @type {instance}
      */
     get instance() {
       return _instance
     },
 
     /**
-     * Inject this object with a raw wasm instance
-     * @param {Object} options Options
-     * @param {instance} options.instance wasm instance
+     * Inject this object with a raw WASM instance
+     *
      * @private
+     * @function
+     * @name ICKKSEncoder#inject
+     * @param {Object} options Options
+     * @param {instance} options.instance WASM instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -48,9 +50,11 @@ export const CKKSEncoder = ({ library, context }) => {
     },
 
     /**
-     * Delete the underlying wasm instance
+     * Delete the underlying WASM instance
      *
      * Should be called before dereferencing this object
+     * @function
+     * @name ICKKSEncoder#delete
      */
     delete() {
       if (_instance) {
@@ -61,11 +65,14 @@ export const CKKSEncoder = ({ library, context }) => {
 
     /**
      * Encodes a vector of type double to a given plainText
+     *
+     * @function
+     * @name ICKKSEncoder#encodeVectorDouble
      * @param {Object} options Options
      * @param {Vector} options.vector Data to encode
-     * @param {number} options.scale Scaling parameter defining encoding precision
+     * @param {Number} options.scale Scaling parameter defining encoding precision
      * @param {PlainText} options.plainText Destination to store the encoded result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global]
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
      */
     encodeVectorDouble({
       vector,
@@ -81,42 +88,34 @@ export const CKKSEncoder = ({ library, context }) => {
           pool
         )
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
     /**
      * Decodes a double vector to a given plainText
+     *
+     * @function
+     * @name ICKKSEncoder#decodeVectorDouble
      * @param {Object} options Options
      * @param {PlainText} options.plainText Data to decode
      * @param {Vector} options.vector Destination to store the decoded result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global]
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
      */
     decodeVectorDouble({ plainText, vector, pool = _MemoryPoolHandle.global }) {
       try {
         _instance.decodeVectorDouble(plainText.instance, vector.instance, pool)
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
     /**
-     * Returns the total number of CKKS slots available to hold data
-     * @returns {number} Number of CKKS slots available
+     * The total number of CKKS slots available to hold data
+     *
+     * @readonly
+     * @name ICKKSEncoder#slotCount
+     * @type {Number}
      */
     get slotCount() {
       return _instance.slotCount()

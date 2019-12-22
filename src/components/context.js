@@ -1,10 +1,5 @@
 import { Exception } from './exception'
 
-/**
- * Context
- * @typedef {Object} Context
- * @constructor
- */
 export const Context = ({
   library,
   encryptionParams,
@@ -21,31 +16,38 @@ export const Context = ({
       securityLevel
     )
   } catch (e) {
-    // eslint-disable-next-line no-nested-ternary
-    throw new Error(
-      typeof e === 'number'
-        ? _Exception.getHuman(e)
-        : e instanceof Error
-        ? e.message
-        : e
-    )
+    throw _Exception.safe({ error: e })
   }
 
+  /**
+   * @typedef {Object} Context
+   * @implements IContext
+   */
+
+  /**
+   * @interface IContext
+   */
   return {
     /**
-     * Get the underlying wasm instance
-     * @returns {instance} wasm instance
+     * Get the underlying WASM instance
+     *
      * @private
+     * @readonly
+     * @name IContext#instance
+     * @type {instance}
      */
     get instance() {
       return _instance
     },
 
     /**
-     * Inject this object with a raw wasm instance
-     * @param {Object} options Options
-     * @param {instance} options.instance wasm instance
+     * Inject this object with a raw WASM instance
+     *
      * @private
+     * @function
+     * @name IContext#inject
+     * @param {Object} options Options
+     * @param {instance} options.instance WASM instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -56,9 +58,11 @@ export const Context = ({
     },
 
     /**
-     * Delete the underlying wasm instance
+     * Delete the underlying WASM instance
      *
      * Should be called before dereferencing this object
+     * @function
+     * @name IContext#delete
      */
     delete() {
       if (_instance) {
@@ -69,19 +73,15 @@ export const Context = ({
 
     /**
      * Prints the context parameters to STDOUT (console.log)
+     *
+     * @function
+     * @name IContext#print
      */
     print() {
       try {
         _printContext(_instance)
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
@@ -89,36 +89,38 @@ export const Context = ({
      * Returns the ContextData corresponding to encryption parameters with a given
      * parmsId. If parameters with the given parmsId are not found then the
      * function returns nullptr.
+     *
+     * @function
+     * @name IContext#getContextData
      * @param {Object} options Options
-     * @param {*} options.parmsId specific id to return contextdata for
-     * @returns {*} contextData corresponding to encryption parameters
+     * @param {ParmsIdType} options.parmsId Specific id to return ContextData for
+     * @returns {ContextData} ContextData corresponding to encryption parameters
      */
     getContextData({ parmsId }) {
       try {
         return _instance.getContextData(parmsId)
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
     /**
-     * Returns the ContextData corresponding to encryption parameters that are used for keys.
-     * @returns {*} contextData corresponding to encryption parameters that are used for keys.
+     * The ContextData corresponding to encryption parameters that are used for keys.
+     *
+     * @readonly
+     * @name IContext#keyContextData
+     * @type {ContextData}
      */
     get keyContextData() {
       return _instance.keyContextData()
     },
 
     /**
-     * Returns the ContextData corresponding to the first encryption parameters that are used for data.
-     * @returns {*} contextData corresponding to the first encryption parameters that are used for data
+     * The ContextData corresponding to the first encryption parameters that are used for data.
+     *
+     * @readonly
+     * @name IContext#firstContextData
+     * @type {ContextData}
      */
     get firstContextData() {
       return _instance.firstContextData()
@@ -126,16 +128,22 @@ export const Context = ({
 
     /**
      * Returns the ContextData corresponding to the last encryption parameters that are used for data.
-     * @returns {*} contextData corresponding to the last encryption parameters that are used for data
+     *
+     * @readonly
+     * @name IContext#lastContextData
+     * @type {ContextData}
      */
     get lastContextData() {
       return _instance.lastContextData()
     },
 
     /**
-     * If the encryption parameters are set in a way that is considered valid by
+     * Whether the encryption parameters are set in a way that is considered valid by
      * Microsoft SEAL, the variable parameters_set is set to true.
-     * @returns {boolean} are encryption parameters set in a way that is considered valid
+     *
+     * @readonly
+     * @name IContext#parametersSet
+     * @type {Boolean}
      */
     get parametersSet() {
       return _instance.parametersSet()
@@ -143,7 +151,10 @@ export const Context = ({
 
     /**
      * Returns a parmsIdType corresponding to the set of encryption parameters that are used for keys.
-     * @returns {*} parmsIdType corresponding to the set of encryption parameters that are used for keys
+     *
+     * @readonly
+     * @name IContext#keyParmsId
+     * @type {ParmsIdType}
      */
     get keyParmsId() {
       return _instance.keyParmsId()
@@ -151,27 +162,36 @@ export const Context = ({
 
     /**
      * Returns a parmsIdType corresponding to the first encryption parameters that are used for data.
-     * @returns {*} parmsIdType corresponding to the first encryption parameters that are used for data
+     *
+     * @readonly
+     * @name IContext#firstParmsId
+     * @type {ParmsIdType}
      */
     get firstParmsId() {
       return _instance.firstParmsId()
     },
 
     /**
-     * Returns a parmsIdType corresponding to the last encryption parameters that are used for data.
-     * @returns {*} parmsIdType corresponding to the last encryption parameters that are used for data
+     * The parmsIdType corresponding to the last encryption parameters that are used for data.
+     *
+     * @readonly
+     * @name IContext#lastParmsId
+     * @type {ParmsIdType}
      */
     get lastParmsId() {
       return _instance.lastParmsId()
     },
 
     /**
-     * Returns whether the coefficient modulus supports keyswitching. In practice,
+     * Whether the coefficient modulus supports keyswitching. In practice,
      * support for keyswitching is required by Evaluator.relinearize,
      * Evaluator.applyGalois, and all rotation and conjugation operations. For
      * keyswitching to be available, the coefficient modulus parameter must consist
      * of at least two prime number factors.
-     * @returns {boolean} coefficient modulus supports keyswitching
+     *
+     * @readonly
+     * @name IContext#usingKeyswitching
+     * @type {Boolean}
      */
     get usingKeyswitching() {
       return _instance.usingKeyswitching()

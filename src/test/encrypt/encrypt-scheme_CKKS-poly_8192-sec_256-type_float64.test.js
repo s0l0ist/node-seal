@@ -10,7 +10,7 @@ describe('encrypt on CKKS', () => {
       parms.setPolyModulusDegree({
         polyModulusDegree: 8192
       })
-        
+
       // Create a suitable vector of CoeffModulus primes (we use default set)
       parms.setCoeffModulus({
         coeffModulus: Morfix.CoeffModulus.Create({
@@ -19,7 +19,7 @@ describe('encrypt on CKKS', () => {
           securityLevel: Morfix.SecurityLevel.tc256
         })
       })
-      
+
       const context = Morfix.Context({
         encryptionParams: parms,
         expandModChain: true,
@@ -46,24 +46,24 @@ describe('encrypt on CKKS', () => {
         context: context,
         secretKey: secretKey
       })
-      
+
       // Create data to be encrypted
       const array = Float64Array.from({
         length: 4096
       }).map((x, i) =>  i)
-      
+
       // Convert data to a c++ 'vector'
       const vector = Morfix.Vector({array})
 
       // Create a plainText variable and encode the vector to it
       const plainText = Morfix.PlainText()
-      
+
       encoder.encodeVectorDouble({
         vector: vector,
         scale: Math.pow(2, 20),
         plainText: plainText
       })
-      
+
       // Create a cipherText variable and encrypt the plainText to it
       const cipherText = Morfix.CipherText()
       encryptor.encrypt({
@@ -81,7 +81,7 @@ describe('encrypt on CKKS', () => {
       // Create a c++ vector to store the decoded result
       const decodeVector = Morfix.Vector({array: new Float64Array() })
 
-      // Decode the plaintext to the c++ vector
+      // Decode the PlainText to the c++ vector
       encoder.decodeVectorDouble({
         plainText: decryptedPlainText,
         vector: decodeVector
@@ -91,13 +91,13 @@ describe('encrypt on CKKS', () => {
       const decryptedArray = decodeVector.toArray()
 
       expect(decryptedArray).toBeInstanceOf(Float64Array)
-      
+
       // Hacks to get quick approximate values. Convert ±0 to 0 by adding 0.
       const approxValues = array.map(x => 0 + Math.round(x))
       const approxDecrypted = decryptedArray.map(x => 0 + Math.round(x))
       // Check values
       expect(approxDecrypted).toEqual(approxValues)
-      
+
     })
   })
 })

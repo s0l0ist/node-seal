@@ -4,11 +4,6 @@ import { SecretKey } from './secret-key'
 import { RelinKeys } from './relin-keys'
 import { GaloisKeys } from './galois-keys'
 
-/**
- * KeyGenerator
- * @typedef {Object} KeyGenerator
- * @constructor
- */
 export const KeyGenerator = ({
   library,
   context,
@@ -31,33 +26,40 @@ export const KeyGenerator = ({
       }
       return new library.KeyGenerator(context.instance)
     } catch (e) {
-      // eslint-disable-next-line no-nested-ternary
-      throw new Error(
-        typeof e === 'number'
-          ? _Exception.getHuman(e)
-          : e instanceof Error
-          ? e.message
-          : e
-      )
+      throw _Exception.safe({ error: e })
     }
   }
   let _instance = constructInstance(secretKey, publicKey)
 
+  /**
+   * @typedef {Object} KeyGenerator
+   * @implements IKeyGenerator
+   */
+
+  /**
+   * @interface IKeyGenerator
+   */
   return {
     /**
-     * Get the underlying wasm instance
-     * @returns {instance} wasm instance
+     * Get the underlying WASM instance
+     *
      * @private
+     * @readonly
+     * @name IKeyGenerator#instance
+     * @type {instance}
      */
     get instance() {
       return _instance
     },
 
     /**
-     * Inject this object with a raw wasm instance
-     * @param {Object} options Options
-     * @param {instance} options.instance wasm instance
+     * Inject this object with a raw WASM instance
+     *
      * @private
+     * @function
+     * @name IKeyGenerator#inject
+     * @param {Object} options Options
+     * @param {instance} options.instance WASM instance
      */
     inject({ instance }) {
       if (_instance) {
@@ -68,9 +70,11 @@ export const KeyGenerator = ({
     },
 
     /**
-     * Delete the underlying wasm instance
+     * Delete the underlying WASM instance
      *
      * Should be called before dereferencing this object
+     * @function
+     * @name IKeyGenerator#delete
      */
     delete() {
       if (_instance) {
@@ -81,6 +85,9 @@ export const KeyGenerator = ({
 
     /**
      * Return the generated SecretKey
+     *
+     * @function
+     * @name IKeyGenerator#getSecretKey
      * @returns {SecretKey} The secret key that was generated upon instantiation of this KeyGenerator
      */
     getSecretKey() {
@@ -90,19 +97,15 @@ export const KeyGenerator = ({
         key.inject({ instance })
         return key
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
     /**
      * Return the generated PublicKey
+     *
+     * @function
+     * @name IKeyGenerator#getPublicKey
      * @returns {PublicKey} The public key that was generated upon instantiation of this KeyGenerator
      */
     getPublicKey() {
@@ -112,19 +115,15 @@ export const KeyGenerator = ({
         key.inject({ instance })
         return key
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
     /**
      * Generate and return a set of RelinKeys
+     *
+     * @function
+     * @name IKeyGenerator#genRelinKeys
      * @returns {RelinKeys} New RelinKeys from the KeyGenerator's internal secret key
      */
     genRelinKeys() {
@@ -134,19 +133,15 @@ export const KeyGenerator = ({
         key.inject({ instance })
         return key
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     },
 
     /**
      * Generate and return a set of GaloisKeys
+     *
+     * @function
+     * @name IKeyGenerator#genGaloisKeys
      * @returns {GaloisKeys} New GaloisKeys from the KeyGenerator's internal secret key
      */
     genGaloisKeys() {
@@ -156,14 +151,7 @@ export const KeyGenerator = ({
         key.inject({ instance })
         return key
       } catch (e) {
-        // eslint-disable-next-line no-nested-ternary
-        throw new Error(
-          typeof e === 'number'
-            ? _Exception.getHuman(e)
-            : e instanceof Error
-            ? e.message
-            : e
-        )
+        throw _Exception.safe({ error: e })
       }
     }
   }
