@@ -66,6 +66,14 @@ export const BatchEncoder = ({ library, context }) => {
      * @param {Object} options Options
      * @param {Vector} options.vector Data to encode
      * @param {PlainText} options.plainText Destination to store the encoded result
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const batchEncoder = Morfix.BatchEncoder({ context })
+     * const vectorInt32 = Morfix.Vector({ array: Int32Array.from([1, 2, 3]) })
+     * const plain = Morfix.PlainText()
+     * batchEncoder.encodeVectorInt32({ vector: vectorInt32, plainText: plain })
      */
     encodeVectorInt32({ vector, plainText }) {
       try {
@@ -92,6 +100,14 @@ export const BatchEncoder = ({ library, context }) => {
      * @param {Object} options Options
      * @param {Vector} options.vector Data to encode
      * @param {PlainText} options.plainText Destination to store the encoded result
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const batchEncoder = Morfix.BatchEncoder({ context })
+     * const vectorUint32 = Morfix.Vector({ array: Uint32Array.from([1, 2, 3]) })
+     * const plain = Morfix.PlainText()
+     * batchEncoder.encodeVectorInt32({ vector: vectorUint32, plainText: plain })
      */
     encodeVectorUInt32({ vector, plainText }) {
       try {
@@ -115,6 +131,21 @@ export const BatchEncoder = ({ library, context }) => {
      * @param {PlainText} options.plainText Data to decode
      * @param {Vector} options.vector Destination to store the decoded result
      * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global]
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const batchEncoder = Morfix.BatchEncoder({ context })
+     *
+     * const vectorInt32 = Morfix.Vector({ array: Int32Array.from([1, 2, 3]) })
+     * const plain = Morfix.PlainText()
+     * batchEncoder.encodeVectorInt32({ vector: vectorInt32, plainText: plain })
+     *
+     * const decodedVector = Morfix.Vector({ array: new Int32Array() })
+     * batchEncoder.decodeVectorInt32({
+     *   plainText: plain,
+     *   vector: decodedVector
+     * })
      */
     decodeVectorInt32({ plainText, vector, pool = _MemoryPoolHandle.global }) {
       try {
@@ -138,6 +169,21 @@ export const BatchEncoder = ({ library, context }) => {
      * @param {PlainText} options.plainText Data to decode
      * @param {Vector} options.vector Destination to store the decoded result
      * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global]
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const batchEncoder = Morfix.BatchEncoder({ context })
+     *
+     * const vectorUint32 = Morfix.Vector({ array: Uint32Array.from([1, 2, 3]) })
+     * const plain = Morfix.PlainText()
+     * batchEncoder.encodeVectorInt32({ vector: vectorUint32, plainText: plain })
+     *
+     * const decodedVector = Morfix.Vector({ array: new Uint32Array() })
+     * batchEncoder.decodeVectorUInt32({
+     *   plainText: plain,
+     *   vector: decodedVector
+     * })
      */
     decodeVectorUInt32({ plainText, vector, pool = _MemoryPoolHandle.global }) {
       try {
