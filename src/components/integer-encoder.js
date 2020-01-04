@@ -105,7 +105,7 @@ export const IntegerEncoder = ({ library, context }) => {
      */
     decodeInt32({ plainText }) {
       try {
-        _instance.decodeInt32(plainText.instance)
+        return _instance.decodeInt32(plainText.instance)
       } catch (e) {
         throw _Exception.safe({ error: e })
       }
@@ -122,7 +122,7 @@ export const IntegerEncoder = ({ library, context }) => {
      */
     decodeUInt32({ plainText }) {
       try {
-        _instance.decodeUInt32(plainText.instance)
+        return _instance.decodeUInt32(plainText.instance)
       } catch (e) {
         throw _Exception.safe({ error: e })
       }
