@@ -3,6 +3,11 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 3.0.5
+
+Chore:
+- Updated to the latest release of emsdk version (1.39.5) and rebuilt dist
+
 ## Version 3.0.4
 
 Fix:
