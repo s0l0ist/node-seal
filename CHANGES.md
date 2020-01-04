@@ -3,6 +3,13 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 3.0.4
+
+Fix:
+- Integer encoder was improperly calling methods that returned a plaintext instead
+  of the other methods which accept a destination plaintext as a parameter. This encoder
+  now operates as expected.
+
 ## Version 3.0.3
 
 Fix:
