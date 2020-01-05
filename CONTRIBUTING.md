@@ -58,6 +58,7 @@ yarn seal:clean     # When you want to remove all artifacts
 yarn seal:cmake     # Do this once
 yarn seal:make      # Will begin building the SEAL static library
 yarn seal:build     # Will compile the Web Assembly file from the shared library
+yarn build          # Will build the browser and node minified dist to be packed for npm
 ```
 
 All test should pass when making contributions to the Web Assembly module. 
