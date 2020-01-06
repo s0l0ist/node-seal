@@ -77,7 +77,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
     },
 
     /**
-     * Delete the underlying WASM instance
+     * Delete the underlying WASM instance.
      *
      * Should be called before dereferencing this object
      * @function
