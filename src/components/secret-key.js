@@ -50,7 +50,7 @@ export const SecretKey = ({ library }) => {
     },
 
     /**
-     * Delete the underlying WASM instance
+     * Delete the underlying WASM instance.
      *
      * Should be called before dereferencing this object
      * @function

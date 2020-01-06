@@ -71,7 +71,7 @@ export const SEAL = ({ options }) => {
      * @par Valid Parameters
      * Whether batching can be used depends on whether the PlainText modulus has been chosen
      * appropriately. Thus, to construct a BatchEncoder the user must provide an instance
-     * of SEALContext such that its associated EncryptionParameterQualifiers object has the
+     * of Context such that its associated EncryptionParameterQualifiers object has the
      * flags parametersSet and enableBatching set to true.
      *
      * @function
@@ -178,7 +178,7 @@ export const SEAL = ({ options }) => {
      *
      * The default value SecurityLevel.tc128 provides a very high level of security
      * and is the default security level enforced by Microsoft SEAL when constructing
-     * a SEALContext object. Normal users should not have to specify the security
+     * a Context object. Normal users should not have to specify the security
      * level explicitly anywhere.
      *
      * @readonly
@@ -188,7 +188,9 @@ export const SEAL = ({ options }) => {
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const vector = Morfix.CoeffModulus.Create({ polyModulusDegree, bitSizes })
+     * const polyModulusDegree = 4096
+     * const bitSizes = Morfix.Vector({ array: Int32Array.from([36, 36, 37]) })
+     * const coeffModulus = Morfix.CoeffModulus.Create({ polyModulusDegree, bitSizes })
      */
     get CoeffModulus() {
       return _CoeffModulus
@@ -197,7 +199,7 @@ export const SEAL = ({ options }) => {
     /**
      * @description
      * A type to describe the compression algorithm applied to serialized data.
-     * Ciphertext and key data consist of a large number of 64-bit words storing
+     * CipherText and key data consist of a large number of 64-bit words storing
      * integers modulo prime numbers much smaller than the word size, resulting in
      * a large number of zero bytes in the output. Any compression algorithm should
      * be able to clean up these zero bytes and hence compress both CipherText and
@@ -212,7 +214,10 @@ export const SEAL = ({ options }) => {
      * ...
      * const keyGenerator = Morfix.KeyGenerator({ context })
      * const secretKey = keyGenerator.getSecretKey()
-     * const base64 = secretKey.save({ compression: Morfix.ComprModeType.deflate })
+     * const base64 = secretKey.save() // Defaults to ComprModeType.deflate
+     *
+     * // Manually specify the compression type
+     * // const base64 = secretKey.save({ compression: Morfix.ComprModeType.none })
      */
     get ComprModeType() {
       return _ComprModeType
@@ -222,27 +227,27 @@ export const SEAL = ({ options }) => {
      * @description
      * Performs sanity checks (validation) and pre-computations for a given set of encryption
      * parameters. While the EncryptionParameters class is intended to be a light-weight class
-     * to store the encryption parameters, the SEALContext class is a heavy-weight class that
+     * to store the encryption parameters, the Context class is a heavy-weight class that
      * is constructed from a given set of encryption parameters. It validates the parameters
      * for correctness, evaluates their properties, and performs and stores the results of
      * several costly pre-computations.
      *
      * After the user has set at least the PolyModulus, CoeffModulus, and PlainModulus
      * parameters in a given EncryptionParameters instance, the parameters can be validated
-     * for correctness and functionality by constructing an instance of SEALContext. The
-     * constructor of SEALContext does all of its work automatically, and concludes by
+     * for correctness and functionality by constructing an instance of Context. The
+     * constructor of Context does all of its work automatically, and concludes by
      * constructing and storing an instance of the EncryptionParameterQualifiers class, with
      * its flags set according to the properties of the given parameters. If the created
      * instance of EncryptionParameterQualifiers has the parametersSet flag set to true, the
      * given parameter set has been deemed valid and is ready to be used. If the parameters
      * were for some reason not appropriately set, the parametersSet flag will be false,
-     * and a SEALContext will have to be created after the parameters are corrected.
+     * and a Context will have to be created after the parameters are corrected.
      *
-     * By default, SEALContext creates a chain of SEALContext.ContextData instances. The
+     * By default, Context creates a chain of Context.ContextData instances. The
      * first one in the chain corresponds to special encryption parameters that are reserved
      * to be used by the various key classes (SecretKey, PublicKey, etc.). These are the exact
      * same encryption parameters that are created by the user and passed to th constructor of
-     * SEALContext. The functions keyContextData() and key_parmsId() return the ContextData
+     * Context. The functions keyContextData() and key_parmsId() return the ContextData
      * and the parmsId corresponding to these special parameters. The rest of the ContextData
      * instances in the chain correspond to encryption parameters that are derived from the
      * first encryption parameters by always removing the last one of the moduli in the
@@ -279,8 +284,8 @@ export const SEAL = ({ options }) => {
 
     /**
      * @description
-     * Decrypts Ciphertext objects into Plaintext objects. Constructing a Decryptor
-     * requires a SEALContext with valid encryption parameters, and the secret key.
+     * Decrypts CipherText objects into PlainText objects. Constructing a Decryptor
+     * requires a Context with valid encryption parameters, and the secret key.
      * The Decryptor is also used to compute the invariant noise budget in a given
      * CipherText.
      *
@@ -327,7 +332,7 @@ export const SEAL = ({ options }) => {
      * importantly PolyModulus, CoeffModulus, PlainModulus) significantly affect
      * the performance, capabilities, and security of the encryption scheme. Once
      * an instance of EncryptionParameters is populated with appropriate parameters,
-     * it can be used to create an instance of the SEALContext class, which verifies
+     * it can be used to create an instance of the Context class, which verifies
      * the validity of the parameters, and performs necessary pre-computations.
      *
      * Picking appropriate encryption parameters is essential to enable a particular
@@ -346,7 +351,7 @@ export const SEAL = ({ options }) => {
      * data lookup and input validity checks. In modulus switching the user can use
      * the parmsId to keep track of the chain of encryption parameters. The parmsId
      * is not exposed in the public API of EncryptionParameters, but can be accessed
-     * through the SEALContext.ContextData class once the SEALContext has been created.
+     * through the Context.ContextData class once the Context has been created.
      *
      * @par Thread Safety
      * In general, reading from EncryptionParameters is thread-safe, while mutating
@@ -378,8 +383,8 @@ export const SEAL = ({ options }) => {
 
     /**
      * @description
-     * Encrypts Plaintext objects into Ciphertext objects. Constructing an Encryptor
-     * requires a SEALContext with valid encryption parameters, the public key and/or
+     * Encrypts PlainText objects into CipherText objects. Constructing an Encryptor
+     * requires a Context with valid encryption parameters, the public key and/or
      * the secret key. If an Encrytor is given a secret key, it supports symmetric-key
      * encryption. If an Encryptor is given a public key, it supports asymmetric-key
      * encryption.
@@ -392,9 +397,9 @@ export const SEAL = ({ options }) => {
      * Encryptor to be used concurrently by several threads without running into thread
      * contention in allocations taking place during operations. For example, one can
      * share one single Encryptor across any number of threads, but in each thread
-     * call the encrypt function by giving it a thread-local MemoryPoolHandle to use.
-     * It is important for a developer to understand how this works to avoid unnecessary
-     * performance bottlenecks.
+     * call the encrypt function by giving it a thread-local MemoryPoolHandle
+     * (MemoryPoolHandle.threadLocal) to use. It is important for a developer
+     * to understand how this works to avoid unnecessary performance bottlenecks.
      *
      * @par NTT form
      * When using the BFV scheme (SchemeType.BFV), all PlainText and CipherTexts should
@@ -477,14 +482,14 @@ export const SEAL = ({ options }) => {
      * specific NTT states the "default NTT form". Some functions, such as add, work
      * even if the inputs are not in the default state, but others, such as multiply,
      * will throw an exception. The output of all evaluation functions will be in
-     * the same state as the input(s), with the exception of the transform_to_ntt
-     * and transform_from_ntt functions, which change the state. Ideally, unless these
+     * the same state as the input(s), with the exception of the transformToNtt
+     * and transformFromNtt functions, which change the state. Ideally, unless these
      * two functions are called, all other functions should "just work".
      *
-     * @see EncryptionParameters for more details on encryption parameters.
-     * @see BatchEncoder for more details on batching
-     * @see RelinKeys for more details on relinearization keys.
-     * @see GaloisKeys for more details on Galois keys.
+     * @see {@link EncryptionParameters} for more details on encryption parameters.
+     * @see {@link BatchEncoder} for more details on batching
+     * @see {@link RelinKeys} for more details on relinearization keys.
+     * @see {@link GaloisKeys} for more details on Galois keys.
      *
      * @function
      * @name ISEAL#Evaluator
@@ -541,10 +546,10 @@ export const SEAL = ({ options }) => {
      * concurrently mutating it. This is due to the underlying data structure storing the
      * Galois keys not being thread-safe.
      *
-     * @see SecretKey for the class that stores the secret key.
-     * @see PublicKey for the class that stores the public key.
-     * @see RelinKeys for the class that stores the relinearization keys.
-     * @see KeyGenerator for the class that generates the Galois keys.
+     * @see {@link SecretKey} for the class that stores the secret key.
+     * @see {@link PublicKey} for the class that stores the public key.
+     * @see {@link RelinKeys} for the class that stores the relinearization keys.
+     * @see {@link KeyGenerator} for the class that generates the galois keys.
      *
      * @function
      * @name ISEAL#GaloisKeys
@@ -603,13 +608,13 @@ export const SEAL = ({ options }) => {
      * @description
      * Generates matching secret key and public key. An existing KeyGenerator can
      * also at any time be used to generate relinearization keys and Galois keys.
-     * Constructing a KeyGenerator requires only a SEALContext.
+     * Constructing a KeyGenerator requires only a Context.
      *
-     * @see EncryptionParameters for more details on encryption parameters.
-     * @see SecretKey for more details on secret key.
-     * @see PublicKey for more details on public key.
-     * @see RelinKeys for more details on relinearization keys.
-     * @see GaloisKeys for more details on Galois keys.
+     * @see {@link EncryptionParameters} for more details on encryption parameters.
+     * @see {@link SecretKey} for more details on secret key.
+     * @see {@link PublicKey} for more details on public key.
+     * @see {@link RelinKeys} for more details on relinearization keys.
+     * @see {@link GaloisKeys} for more details on Galois keys.
      *
      * @function
      * @name ISEAL#KeyGenerator
@@ -675,7 +680,7 @@ export const SEAL = ({ options }) => {
      * Internally, the MemoryPoolHandle wraps an std::shared_ptr pointing to
      * a memory pool class. Thus, as long as a MemoryPoolHandle pointing to
      * a particular memory pool exists, the pool stays alive. Classes such as
-     * Evaluator and Ciphertext store their own local copies of a MemoryPoolHandle
+     * Evaluator and CipherText store their own local copies of a MemoryPoolHandle
      * to guarantee that the pool stays alive as long as the managing object
      * itself stays alive. The global memory pool is implemented as a global
      * std::shared_ptr to a memory pool class, and is thus expected to stay
@@ -746,7 +751,7 @@ export const SEAL = ({ options }) => {
      * is concurrently mutating it. This is due to the underlying data structure
      * storing the PlainText not being thread-safe.
      *
-     * @see CipherText for the class that stores CipherTexts.
+     * @see {@link CipherText} for the class that stores CipherTexts.
      *
      * @function
      * @name ISEAL#PlainText
@@ -770,10 +775,10 @@ export const SEAL = ({ options }) => {
      * is concurrently mutating it. This is due to the underlying data structure
      * storing the public key not being thread-safe.
      *
-     * @see KeyGenerator for the class that generates the public key.
-     * @see SecretKey for the class that stores the secret key.
-     * @see RelinKeys for the class that stores the relinearization keys.
-     * @see GaloisKeys for the class that stores the Galois keys.
+     * @see {@link KeyGenerator} for the class that generates the public key.
+     * @see {@link SecretKey} for the class that stores the secret key.
+     * @see {@link RelinKeys} for the class that stores the relinearization keys.
+     * @see {@link GaloisKeys} for the class that stores the galois keys.
      *
      * @function
      * @name ISEAL#PublicKey
@@ -826,10 +831,10 @@ export const SEAL = ({ options }) => {
      * is concurrently mutating it. This is due to the underlying data structure
      * storing the relinearization keys not being thread-safe.
      *
-     * @see SecretKey for the class that stores the secret key.
-     * @see PublicKey for the class that stores the public key.
-     * @see GaloisKeys for the class that stores the Galois keys.
-     * @see KeyGenerator for the class that generates the relinearization keys.
+     * @see {@link SecretKey} for the class that stores the secret key.
+     * @see {@link PublicKey} for the class that stores the public key.
+     * @see {@link GaloisKeys} for the class that stores the galois keys.
+     * @see {@link KeyGenerator} for the class that generates the relinearization keys.
      *
      * @function
      * @name ISEAL#RelinKeys
@@ -876,10 +881,10 @@ export const SEAL = ({ options }) => {
      * is concurrently mutating it. This is due to the underlying data structure
      * storing the secret key not being thread-safe.
      *
-     * @see KeyGenerator for the class that generates the secret key.
-     * @see PublicKey for the class that stores the public key.
-     * @see RelinKeys for the class that stores the relinearization keys.
-     * @see GaloisKeys for the class that stores the Galois keys.
+     * @see {@link KeyGenerator} for the class that generates the secret key.
+     * @see {@link PublicKey} for the class that stores the public key.
+     * @see {@link RelinKeys} for the class that stores the relinearization keys.
+     * @see {@link GaloisKeys} for the class that stores the galois keys.
      *
      * @function
      * @name ISEAL#SecretKey
@@ -906,7 +911,7 @@ export const SEAL = ({ options }) => {
      * security standard. The value SecurityLevel.none signals that no standard
      * security level should be imposed. The value SecurityLevel.tc128 provides
      * a very high level of security and is the default security level enforced by
-     * Microsoft SEAL when constructing a SEALContext object. Normal users should not
+     * Microsoft SEAL when constructing a Context object. Normal users should not
      * have to specify the security level explicitly anywhere.
      *
      * @readonly

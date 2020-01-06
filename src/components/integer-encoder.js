@@ -48,7 +48,7 @@ export const IntegerEncoder = ({ library, context }) => {
     },
 
     /**
-     * Delete the underlying WASM instance
+     * Delete the underlying WASM instance.
      *
      * Should be called before dereferencing this object
      * @function
@@ -68,7 +68,7 @@ export const IntegerEncoder = ({ library, context }) => {
      * @name IIntegerEncoder#encodeInt32
      * @param {Object} options Options
      * @param {Number} options.value Integer to encode
-     * @param {PlainText} options.destination Plaintext to store the encoded data
+     * @param {PlainText} options.destination PlainText to store the encoded data
      */
     encodeInt32({ value, destination }) {
       try {
@@ -85,7 +85,7 @@ export const IntegerEncoder = ({ library, context }) => {
      * @name IIntegerEncoder#encodeUInt32
      * @param {Object} options Options
      * @param {Number} options.value Unsigned integer to encode
-     * @param {PlainText} options.destination Plaintext to store the encoded data
+     * @param {PlainText} options.destination PlainText to store the encoded data
      */
     encodeUInt32({ value, destination }) {
       try {
@@ -100,7 +100,7 @@ export const IntegerEncoder = ({ library, context }) => {
      * @function
      * @name IIntegerEncoder#decodeInt32
      * @param {Object} options Options
-     * @param {PlainText} options.plainText Plaintext to decode
+     * @param {PlainText} options.plainText PlainText to decode
      * @returns {Number} Int32 value
      */
     decodeInt32({ plainText }) {
@@ -117,7 +117,7 @@ export const IntegerEncoder = ({ library, context }) => {
      * @function
      * @name IIntegerEncoder#decodeUInt32
      * @param {Object} options Options
-     * @param {PlainText} options.plainText Plaintext to decode
+     * @param {PlainText} options.plainText PlainText to decode
      * @returns {Number} Uint32 value
      */
     decodeUInt32({ plainText }) {
