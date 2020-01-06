@@ -50,7 +50,8 @@ export const IntegerEncoder = ({ library, context }) => {
     /**
      * Delete the underlying WASM instance.
      *
-     * Should be called before dereferencing this object
+     * Should be called before dereferencing this object to prevent the
+     * WASM heap from growing indefinitely.
      * @function
      * @name IIntegerEncoder#delete
      */
