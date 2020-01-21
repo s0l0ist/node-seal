@@ -13,8 +13,8 @@ Fix:
   
 Chore:
 - Updated to the latest release of emsdk version (1.39.6) and rebuilt dist.
-  This has removed some build warnings and introduced others, 
-  but functionally it is the same.
+  This has removed some build warnings in seal:build and introduced 
+  harmless others during seal:make.
 
 ## Version 3.0.5
 
