@@ -1,4 +1,5 @@
 import { Exception } from './exception'
+import { ParmsIdType } from './parms-id-type'
 
 export const Context = ({
   library,
@@ -8,6 +9,7 @@ export const Context = ({
 }) => {
   const _Exception = Exception({ library })
   const _printContext = library.printContext
+  const _library = library
   let _instance = null
   try {
     _instance = new library.SEALContext(
@@ -99,7 +101,7 @@ export const Context = ({
      */
     getContextData({ parmsId }) {
       try {
-        return _instance.getContextData(parmsId)
+        return _instance.getContextData(parmsId.instance)
       } catch (e) {
         throw _Exception.safe({ error: e })
       }
@@ -158,7 +160,10 @@ export const Context = ({
      * @type {ParmsIdType}
      */
     get keyParmsId() {
-      return _instance.keyParmsId()
+      const instance = _instance.keyParmsId()
+      const parmsId = ParmsIdType({ library: _library })
+      parmsId.inject({ instance })
+      return parmsId
     },
 
     /**
@@ -169,7 +174,10 @@ export const Context = ({
      * @type {ParmsIdType}
      */
     get firstParmsId() {
-      return _instance.firstParmsId()
+      const instance = _instance.firstParmsId()
+      const parmsId = ParmsIdType({ library: _library })
+      parmsId.inject({ instance })
+      return parmsId
     },
 
     /**
@@ -180,7 +188,10 @@ export const Context = ({
      * @type {ParmsIdType}
      */
     get lastParmsId() {
-      return _instance.lastParmsId()
+      const instance = _instance.lastParmsId()
+      const parmsId = ParmsIdType({ library: _library })
+      parmsId.inject({ instance })
+      return parmsId
     },
 
     /**

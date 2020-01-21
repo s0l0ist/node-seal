@@ -3,6 +3,19 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 3.0.6
+
+Fix:
+- Added missing ParmsIdType binding which allows for `parmsId` to be passed 
+  into all related methods correctly without throwing an unbound type exception.
+- ParmsIdType has an instance method which returns an array of bigints for
+  read-only inspection.
+  
+Chore:
+- Updated to the latest release of emsdk version (1.39.6) and rebuilt dist.
+  This has removed some build warnings in seal:build and introduced 
+  harmless others during seal:make.
+
 ## Version 3.0.5
 
 Chore:

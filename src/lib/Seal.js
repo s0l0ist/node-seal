@@ -11,6 +11,7 @@ export const SEAL = ({ options }) => {
   const _IntegerEncoder = options.IntegerEncoder
   const _KeyGenerator = options.KeyGenerator
   const _Library = options.Library
+  const _ParmsIdType = options.ParmsIdType
   const _PlainText = options.PlainText
   const _PublicKey = options.PublicKey
   const _RelinKeys = options.RelinKeys
@@ -702,6 +703,23 @@ export const SEAL = ({ options }) => {
      */
     get MemoryPoolHandle() {
       return _MemoryPoolHandle
+    },
+
+    /**
+     * @description
+     * Create an instance of a ParmsIdType.
+     *
+     * @function
+     * @name ISEAL#ParmsIdType
+     * @returns {ParmsIdType} An empty ParmsIdType instance
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const parmsId = Morfix.ParmsIdType()
+     */
+    ParmsIdType() {
+      return _ParmsIdType({ library: _Library.instance })
     },
 
     /**
