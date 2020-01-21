@@ -234,7 +234,7 @@ export const Evaluator = ({ library, context }) => {
      * @name IEvaluator#cipherModSwitchTo
      * @param {Object} options Options
      * @param {CipherText} options.encrypted CipherText to switch its modulus down
-     * @param {*} options.parmsId Target parmsId to switch to
+     * @param {ParmsIdType} options.parmsId Target parmsId to switch to
      * @param {CipherText} options.destination CipherText destination to store the switched result
      * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
      */
@@ -247,7 +247,7 @@ export const Evaluator = ({ library, context }) => {
       try {
         _instance.cipherModSwitchTo(
           encrypted.instance,
-          parmsId,
+          parmsId.instance,
           destination.instance,
           pool
         )
@@ -290,7 +290,7 @@ export const Evaluator = ({ library, context }) => {
       try {
         _instance.plainModSwitchTo(
           plain.instance,
-          parmsId,
+          parmsId.instance,
           destination.instance
         )
       } catch (e) {
@@ -344,7 +344,7 @@ export const Evaluator = ({ library, context }) => {
       try {
         _instance.rescaleTo(
           encrypted.instance,
-          parmsId,
+          parmsId.instance,
           destination.instance,
           pool
         )
@@ -501,7 +501,7 @@ export const Evaluator = ({ library, context }) => {
       try {
         _instance.plainTransformToNtt(
           plain.instance,
-          parmsId,
+          parmsId.instance,
           destinationNtt.instance,
           pool
         )
