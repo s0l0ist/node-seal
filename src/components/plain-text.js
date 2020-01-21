@@ -1,9 +1,11 @@
 import { Exception } from './exception'
 import { ComprModeType } from './compr-mode-type'
+import { ParmsIdType } from './parms-id-type'
 
 export const PlainText = ({ library }) => {
   const _Exception = Exception({ library })
   const _ComprModeType = ComprModeType({ library })
+  const _library = library
   let _instance = null
   try {
     _instance = new library.Plaintext()
@@ -203,7 +205,10 @@ export const PlainText = ({ library }) => {
      * @type {ParmsIdType}
      */
     get parmsId() {
-      return _instance.parmsId()
+      const instance = _instance.parmsId()
+      const parmsId = ParmsIdType({ library: _library })
+      parmsId.inject({ instance })
+      return parmsId
     },
 
     /**
