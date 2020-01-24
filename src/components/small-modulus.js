@@ -82,14 +82,15 @@ export const SmallModulus = ({ library }) => {
     },
 
     /**
-     * The value of the current SmallModulus as a string.
+     * The value of the current SmallModulus as a BigInt.
      *
      * @readonly
      * @name ISmallModulus#value
-     * @type {String}
+     * @type {BigInt}
      */
     get value() {
-      return _instance.Value()
+      // eslint-disable-next-line no-undef
+      return BigInt(_instance.value())
     },
 
     /**

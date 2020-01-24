@@ -23,7 +23,7 @@ export const ParmsIdType = ({ library }) => {
      *
      * @private
      * @readonly
-     * @name ISmallModulus#instance
+     * @name IParmsIdType#instance
      * @type {instance}
      */
     get instance() {
@@ -53,7 +53,7 @@ export const ParmsIdType = ({ library }) => {
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name ISmallModulus#delete
+     * @name IParmsIdType#delete
      */
     delete() {
       if (_instance) {
