@@ -1,14 +1,35 @@
 import { Exception } from './exception'
 import { ComprModeType } from './compr-mode-type'
+import { SmallModulus } from './small-modulus'
 
-export const EncryptionParameters = ({ library, schemeType }) => {
+export const EncryptionParameters = ({
+  library,
+  schemeType,
+  suppressWarning = false
+}) => {
   const _Exception = Exception({ library })
   const _ComprModeType = ComprModeType({ library })
+  const _library = library
   let _instance = null
-  try {
-    _instance = new library.EncryptionParameters(schemeType)
-  } catch (e) {
-    throw _Exception.safe({ error: e })
+
+  // Normal users must supply a schemeType. If no schemeType is passed in,
+  // this class serves as a wrapper for the pointer to the
+  // EncryptionParameters that ContextData.parms() returns.
+  if (schemeType) {
+    try {
+      _instance = new library.EncryptionParameters(schemeType)
+    } catch (e) {
+      throw _Exception.safe({ error: e })
+    }
+  }
+
+  if (!schemeType && !suppressWarning) {
+    console.warn(
+      "You're creating an uninitialized EncryptionParameters object. This is probably not what you meant to do. This" +
+        ' constructor is only allowed to' +
+        ' wrap a pointer from `ContextData.parms`. To remove this warning, pass in the option `suppressWarning` set' +
+        " to 'true' in this constructor."
+    )
   }
 
   /**
@@ -156,10 +177,19 @@ export const EncryptionParameters = ({ library, schemeType }) => {
      *
      * @readonly
      * @name IEncryptionParameters#coeffModulus
-     * @type {Vector<SmallModulus>}
+     * @type {Array<BigInt>}
      */
     get coeffModulus() {
-      return _instance.coeffModulus()
+      try {
+        const vectorSmallModulus = _instance.coeffModulus()
+        const values = vectorSmallModulus.values()
+        // eslint-disable-next-line no-undef
+        const array = values.split(',').map(x => BigInt(x))
+        vectorSmallModulus.delete()
+        return array
+      } catch (e) {
+        throw _Exception.safe({ error: e })
+      }
     },
 
     /**
@@ -170,7 +200,10 @@ export const EncryptionParameters = ({ library, schemeType }) => {
      * @type {SmallModulus}
      */
     get plainModulus() {
-      return _instance.plainModulus()
+      const instance = _instance.plainModulus()
+      const smallModulus = SmallModulus({ library: _library })
+      smallModulus.inject({ instance })
+      return smallModulus
     },
 
     /**

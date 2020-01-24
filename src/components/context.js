@@ -1,5 +1,6 @@
 import { Exception } from './exception'
 import { ParmsIdType } from './parms-id-type'
+import { ContextData } from './context-data'
 
 export const Context = ({
   library,
@@ -101,7 +102,10 @@ export const Context = ({
      */
     getContextData({ parmsId }) {
       try {
-        return _instance.getContextData(parmsId.instance)
+        const instance = _instance.getContextData(parmsId.instance)
+        const contextData = ContextData({ library: _library })
+        contextData.inject({ instance })
+        return contextData
       } catch (e) {
         throw _Exception.safe({ error: e })
       }
@@ -115,7 +119,14 @@ export const Context = ({
      * @type {ContextData}
      */
     get keyContextData() {
-      return _instance.keyContextData()
+      try {
+        const instance = _instance.keyContextData()
+        const contextData = ContextData({ library: _library })
+        contextData.inject({ instance })
+        return contextData
+      } catch (e) {
+        throw _Exception.safe({ error: e })
+      }
     },
 
     /**
@@ -126,7 +137,14 @@ export const Context = ({
      * @type {ContextData}
      */
     get firstContextData() {
-      return _instance.firstContextData()
+      try {
+        const instance = _instance.firstContextData()
+        const contextData = ContextData({ library: _library })
+        contextData.inject({ instance })
+        return contextData
+      } catch (e) {
+        throw _Exception.safe({ error: e })
+      }
     },
 
     /**
@@ -137,7 +155,14 @@ export const Context = ({
      * @type {ContextData}
      */
     get lastContextData() {
-      return _instance.lastContextData()
+      try {
+        const instance = _instance.lastContextData()
+        const contextData = ContextData({ library: _library })
+        contextData.inject({ instance })
+        return contextData
+      } catch (e) {
+        throw _Exception.safe({ error: e })
+      }
     },
 
     /**

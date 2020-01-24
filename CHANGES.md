@@ -3,6 +3,25 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 3.1.0
+
+Fix:
+- `Context.getContextData({ parmsId })` now returns an instance of `ContextData`
+- `Context.keyContextData` now returns an instance of `ContextData`
+- `Context.firstContextData` now returns an instance of `ContextData`
+- `Context.lastContextData` now returns an instance of `ContextData`
+- `EncryptionParameters.plainModulus` now returns a wrapped instance of `SmallModulus` instead of the raw WASM instance.
+- `EncryptionParameters.coeffModulus` returns an array of BigInts containing the primes instead of an overly complex
+ `vector<SmallModulus>` which had no direct methods to extract the internal values and was therefore useless.
+ 
+Feat:
+- Added `ContextData` binding which can be used for inspecting a `Context` information in greater detail.
+- Added `EncryptionParameterQualifiers` binding to be used for advanced debugging.
+
+Breaking:
+- `SmallModulus.value` now returns a BigInt containing the value stored inside 
+  the instance instead of a string.
+
 ## Version 3.0.6
 
 Fix:
