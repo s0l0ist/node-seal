@@ -11,7 +11,6 @@ export const SEAL = ({ options }) => {
   const _IntegerEncoder = options.IntegerEncoder
   const _KeyGenerator = options.KeyGenerator
   const _Library = options.Library
-  const _ParmsIdType = options.ParmsIdType
   const _PlainText = options.PlainText
   const _PublicKey = options.PublicKey
   const _RelinKeys = options.RelinKeys
@@ -248,15 +247,15 @@ export const SEAL = ({ options }) => {
      * first one in the chain corresponds to special encryption parameters that are reserved
      * to be used by the various key classes (SecretKey, PublicKey, etc.). These are the exact
      * same encryption parameters that are created by the user and passed to th constructor of
-     * Context. The functions keyContextData() and key_parmsId() return the ContextData
+     * Context. The functions keyContextData() and keyParmsId() return the ContextData
      * and the parmsId corresponding to these special parameters. The rest of the ContextData
      * instances in the chain correspond to encryption parameters that are derived from the
      * first encryption parameters by always removing the last one of the moduli in the
      * CoeffModulus, until the resulting parameters are no longer valid, e.g., there are no
      * more primes left. These derived encryption parameters are used by CipherTexts and
      * PlainTexts and their respective ContextData can be accessed through the
-     * get_context_data(ParmsIdType) function. The functions first_context_data() and
-     * last_context_data() return the ContextData corresponding to the first and the last
+     * getContextData(ParmsIdType) function. The functions firstContextData() and
+     * lastContextData() return the ContextData corresponding to the first and the last
      * set of parameters in the "data" part of the chain, i.e., the second and the last element
      * in the full chain. The chain itself is a doubly linked list, and is referred to as the
      * modulus switching chain.
@@ -703,23 +702,6 @@ export const SEAL = ({ options }) => {
      */
     get MemoryPoolHandle() {
       return _MemoryPoolHandle
-    },
-
-    /**
-     * @description
-     * Create an instance of a ParmsIdType.
-     *
-     * @function
-     * @name ISEAL#ParmsIdType
-     * @returns {ParmsIdType} An empty ParmsIdType instance
-     * @example
-     * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
-     * ...
-     * const parmsId = Morfix.ParmsIdType()
-     */
-    ParmsIdType() {
-      return _ParmsIdType({ library: _Library.instance })
     },
 
     /**
