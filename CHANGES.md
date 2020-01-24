@@ -10,8 +10,10 @@ Fix:
 - `Context.keyContextData` now returns an instance of `ContextData`
 - `Context.firstContextData` now returns an instance of `ContextData`
 - `Context.lastContextData` now returns an instance of `ContextData`
-- `EncryptionParameters.plainModulus` now returns a wrapped instance of `SmallModulus`
-
+- `EncryptionParameters.plainModulus` now returns a wrapped instance of `SmallModulus` instead of the raw WASM instance.
+- `EncryptionParameters.coeffModulus` returns an array of BigInts containing the primes instead of an overly complex
+ `vector<SmallModulus>` which had no direct methods to extract the internal values and was therefore useless.
+ 
 Feat:
 - Added `ContextData` binding which can be used for inspecting a `Context` information in greater detail.
 - Added `EncryptionParameterQualifiers` binding to be used for advanced debugging.
