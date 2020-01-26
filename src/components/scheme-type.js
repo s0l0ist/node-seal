@@ -14,6 +14,7 @@ export const SchemeType = ({ library }) => {
     /**
      * Return the 'none' scheme type
      *
+     * @readonly
      * @name SchemeType.none
      * @type {SchemeType.none}
      */
@@ -27,6 +28,7 @@ export const SchemeType = ({ library }) => {
     /**
      * Return the 'BFV' scheme type
      *
+     * @readonly
      * @name SchemeType.BFV
      * @type {SchemeType.BFV}
      */
@@ -40,6 +42,7 @@ export const SchemeType = ({ library }) => {
     /**
      * Return the 'CKKS' scheme type
      *
+     * @readonly
      * @name SchemeType.CKKS
      * @type {SchemeType.CKKS}
      */

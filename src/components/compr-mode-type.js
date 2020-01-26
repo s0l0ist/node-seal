@@ -13,6 +13,7 @@ export const ComprModeType = ({ library }) => {
     /**
      * The `none` Compression Mode Type
      *
+     * @readonly
      * @name ComprModeType.none
      * @type {ComprModeType.none}
      */
@@ -26,6 +27,7 @@ export const ComprModeType = ({ library }) => {
     /**
      * The `deflate` Compression Mode Type
      *
+     * @readonly
      * @name ComprModeType.deflate
      * @type {ComprModeType.deflate}
      */

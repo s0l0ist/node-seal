@@ -181,7 +181,7 @@ export const SEAL = ({ options }) => {
      * level explicitly anywhere.
      *
      * @readonly
-     * @name SEAL#CoeffModulus
+     * @name SEAL.CoeffModulus
      * @type {CoeffModulus}
      * @example
      * import { Seal } from 'node-seal'
@@ -205,7 +205,7 @@ export const SEAL = ({ options }) => {
      * key data.
      *
      * @readonly
-     * @name SEAL#ComprModeType
+     * @name SEAL.ComprModeType
      * @type {ComprModeType}
      * @example
      * import { Seal } from 'node-seal'
@@ -511,7 +511,7 @@ export const SEAL = ({ options }) => {
      * for this static instance as it is used internally.
      *
      * @readonly
-     * @name SEAL#Exception
+     * @name SEAL.Exception
      * @type {Exception}
      * @example
      * import { Seal } from 'node-seal'
@@ -690,7 +690,7 @@ export const SEAL = ({ options }) => {
      * first).
      *
      * @readonly
-     * @name SEAL#MemoryPoolHandle
+     * @name SEAL.MemoryPoolHandle
      * @type {MemoryPoolHandle}
      * @example
      * import { Seal } from 'node-seal'
@@ -708,7 +708,7 @@ export const SEAL = ({ options }) => {
      * Contains static methods for creating a PlainText modulus easily
      *
      * @readonly
-     * @name SEAL#PlainModulus
+     * @name SEAL.PlainModulus
      * @type {PlainModulus}
      * @example
      * import { Seal } from 'node-seal'

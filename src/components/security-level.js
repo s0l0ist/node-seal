@@ -15,6 +15,7 @@ export const SecurityLevel = ({ library }) => {
     /**
      * Returns the 'none' security level
      *
+     * @readonly
      * @name SecurityLevel.none
      * @type {SecurityLevel.none}
      */
@@ -28,6 +29,7 @@ export const SecurityLevel = ({ library }) => {
     /**
      * Returns the '128' security level
      *
+     * @readonly
      * @name SecurityLevel.tc128
      * @type {SecurityLevel.tc128}
      */
@@ -41,6 +43,7 @@ export const SecurityLevel = ({ library }) => {
     /**
      * Returns the '192' security level
      *
+     * @readonly
      * @name SecurityLevel.tc192
      * @type {SecurityLevel.tc192}
      */
@@ -54,6 +57,7 @@ export const SecurityLevel = ({ library }) => {
     /**
      * Returns the '256' security level
      *
+     * @readonly
      * @name SecurityLevel.tc256
      * @type {SecurityLevel.tc256}
      */
