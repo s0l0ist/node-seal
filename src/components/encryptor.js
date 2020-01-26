@@ -13,12 +13,11 @@ export const Encryptor = ({ library, context, publicKey }) => {
   }
 
   /**
-   * @typedef {Object} Encryptor
-   * @implements IEncryptor
+   * @implements Encryptor
    */
 
   /**
-   * @interface IEncryptor
+   * @interface Encryptor
    */
   return {
     /**
@@ -26,7 +25,7 @@ export const Encryptor = ({ library, context, publicKey }) => {
      *
      * @private
      * @readonly
-     * @name IEncryptor#instance
+     * @name Encryptor#instance
      * @type {instance}
      */
     get instance() {
@@ -38,7 +37,7 @@ export const Encryptor = ({ library, context, publicKey }) => {
      *
      * @private
      * @function
-     * @name IEncryptor#inject
+     * @name Encryptor#inject
      * @param {Object} options Options
      * @param {instance} options.instance WASM instance
      */
@@ -56,7 +55,7 @@ export const Encryptor = ({ library, context, publicKey }) => {
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name IEncryptor#delete
+     * @name Encryptor#delete
      */
     delete() {
       if (_instance) {
@@ -71,11 +70,11 @@ export const Encryptor = ({ library, context, publicKey }) => {
      * pool pointed to by the given MemoryPoolHandle.
      *
      * @function
-     * @name IEncryptor#encrypt
+     * @name Encryptor#encrypt
      * @param {Object} options Options
      * @param {PlainText} options.plainText PlainText to encrypt
      * @param {CipherText} options.cipherText CipherText destination to store the result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
     encrypt({ plainText, cipherText, pool = _MemoryPoolHandle.global }) {
       try {

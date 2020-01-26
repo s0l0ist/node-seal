@@ -14,12 +14,11 @@ export const SmallModulus = ({ library }) => {
   }
 
   /**
-   * @typedef {Object} SmallModulus
-   * @implements ISmallModulus
+   * @implements SmallModulus
    */
 
   /**
-   * @interface ISmallModulus
+   * @interface SmallModulus
    */
   return {
     /**
@@ -27,7 +26,7 @@ export const SmallModulus = ({ library }) => {
      *
      * @private
      * @readonly
-     * @name ISmallModulus#instance
+     * @name SmallModulus#instance
      * @type {instance}
      */
     get instance() {
@@ -39,7 +38,7 @@ export const SmallModulus = ({ library }) => {
      *
      * @private
      * @function
-     * @name ISmallModulus#inject
+     * @name SmallModulus#inject
      * @param {Object} options Options
      * @param {instance} options.instance WASM instance
      */
@@ -57,7 +56,7 @@ export const SmallModulus = ({ library }) => {
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name ISmallModulus#delete
+     * @name SmallModulus#delete
      */
     delete() {
       if (_instance) {
@@ -70,7 +69,7 @@ export const SmallModulus = ({ library }) => {
      * Loads a SmallModulus from a string representing an uint64 value.
      *
      * @function
-     * @name ISmallModulus#setValue
+     * @name SmallModulus#setValue
      * @param {String} value String representation of a uint64 value
      */
     setValue({ value }) {
@@ -85,7 +84,7 @@ export const SmallModulus = ({ library }) => {
      * The value of the current SmallModulus as a BigInt.
      *
      * @readonly
-     * @name ISmallModulus#value
+     * @name SmallModulus#value
      * @type {BigInt}
      */
     get value() {
@@ -97,7 +96,7 @@ export const SmallModulus = ({ library }) => {
      * The significant bit count of the value of the current SmallModulus.
      *
      * @readonly
-     * @name ISmallModulus#bitCount
+     * @name SmallModulus#bitCount
      * @type {Number}
      */
     get bitCount() {
@@ -108,7 +107,7 @@ export const SmallModulus = ({ library }) => {
      * Whether the value of the current SmallModulus is zero.
      *
      * @readonly
-     * @name ISmallModulus#isZero
+     * @name SmallModulus#isZero
      * @type {Boolean}
      */
     get isZero() {
@@ -119,7 +118,7 @@ export const SmallModulus = ({ library }) => {
      * Whether the value of the current SmallModulus is a prime number.
      *
      * @readonly
-     * @name ISmallModulus#isPrime
+     * @name SmallModulus#isPrime
      * @type {Boolean}
      */
     get isPrime() {
@@ -130,9 +129,9 @@ export const SmallModulus = ({ library }) => {
      * Save the SmallModulus as a base64 string
      *
      * @function
-     * @name ISmallModulus#save
+     * @name SmallModulus#save
      * @param {Object} options Options
-     * @param {ComprModeType} [options.compression=ComprModeType.deflate] The compression mode to use
+     * @param {ComprModeType} [options.compression={@link ComprModeType.deflate}] The compression mode to use
      * @returns {String} Base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {

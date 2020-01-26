@@ -6,12 +6,11 @@ export const PlainModulus = ({ library }) => {
   const _BatchingVector = library.PlainModulus.BatchingVector
 
   /**
-   * @typedef {Object} PlainModulus
-   * @implements IPlainModulus
+   * @implements PlainModulus
    */
 
   /**
-   * @interface IPlainModulus
+   * @interface PlainModulus
    */
   return {
     /**
@@ -19,7 +18,7 @@ export const PlainModulus = ({ library }) => {
      * parameter that supports batching with a given polyModulusDegree.
      *
      * @function
-     * @name IPlainModulus.Batching
+     * @name PlainModulus.Batching
      * @param {Object} options Options
      * @param {Number} options.polyModulusDegree The degree of the polynomial modulus
      * @param {Number} options.bitSize The bit-size of the desired prime number
@@ -39,7 +38,7 @@ export const PlainModulus = ({ library }) => {
      * polyModulusDegree.
      *
      * @function
-     * @name IPlainModulus.BatchingVector
+     * @name PlainModulus.BatchingVector
      * @param {Object} options Options
      * @param {Number} options.polyModulusDegree The degree of the polynomial modulus
      * @param {Vector} options.bitSizes Vector containing int32 values representing bit-sizes of primes

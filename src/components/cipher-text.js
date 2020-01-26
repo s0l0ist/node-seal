@@ -14,12 +14,11 @@ export const CipherText = ({ library }) => {
   }
 
   /**
-   * @typedef {Object} CipherText
-   * @implements ICipherText
+   * @implements CipherText
    */
 
   /**
-   * @interface ICipherText
+   * @interface CipherText
    */
   return {
     /**
@@ -27,7 +26,7 @@ export const CipherText = ({ library }) => {
      *
      * @private
      * @readonly
-     * @name ICipherText#instance
+     * @name CipherText#instance
      * @type {instance}
      */
     get instance() {
@@ -39,7 +38,7 @@ export const CipherText = ({ library }) => {
      *
      * @private
      * @function
-     * @name ICipherText#inject
+     * @name CipherText#inject
      * @param {Object} options Options
      * @param {instance} options.instance WASM instance
      */
@@ -57,7 +56,7 @@ export const CipherText = ({ library }) => {
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name ICipherText#delete
+     * @name CipherText#delete
      */
     delete() {
       if (_instance) {
@@ -72,7 +71,7 @@ export const CipherText = ({ library }) => {
      * allocation size of the CipherText.
      *
      * @readonly
-     * @name ICipherText#coeffModCount
+     * @name CipherText#coeffModCount
      * @type {Number}
      */
     get coeffModCount() {
@@ -85,7 +84,7 @@ export const CipherText = ({ library }) => {
      * of the CipherText.
      *
      * @readonly
-     * @name ICipherText#polyModulusDegree
+     * @name CipherText#polyModulusDegree
      * @type {Number}
      */
     get polyModulusDegree() {
@@ -96,7 +95,7 @@ export const CipherText = ({ library }) => {
      * The size of the CipherText.
      *
      * @readonly
-     * @name ICipherText#size
+     * @name CipherText#size
      * @type {Number}
      */
     get size() {
@@ -109,7 +108,7 @@ export const CipherText = ({ library }) => {
      * the current encryption parameters.
      *
      * @readonly
-     * @name ICipherText#sizeCapacity
+     * @name CipherText#sizeCapacity
      * @type {Number}
      */
     get sizeCapacity() {
@@ -124,7 +123,7 @@ export const CipherText = ({ library }) => {
      * following coefficients are identically zero. Otherwise, returns false.
      *
      * @readonly
-     * @name ICipherText#isTransparent
+     * @name CipherText#isTransparent
      * @type {Boolean}
      */
     get isTransparent() {
@@ -135,7 +134,7 @@ export const CipherText = ({ library }) => {
      * Whether the CipherText is in NTT form.
      *
      * @readonly
-     * @name ICipherText#isNttForm
+     * @name CipherText#isNttForm
      * @type {Boolean}
      */
     get isNttForm() {
@@ -147,7 +146,7 @@ export const CipherText = ({ library }) => {
      * @see {@link EncryptionParameters} for more information about parmsId.
      *
      * @readonly
-     * @name ICipherText#parmsId
+     * @name CipherText#parmsId
      * @type {ParmsIdType}
      */
     get parmsId() {
@@ -163,7 +162,7 @@ export const CipherText = ({ library }) => {
      * change the scale by hand.
      *
      * @readonly
-     * @name ICipherText#scale
+     * @name CipherText#scale
      * @type {Number}
      */
     get scale() {
@@ -174,7 +173,7 @@ export const CipherText = ({ library }) => {
      * The currently used MemoryPoolHandle.
      *
      * @readonly
-     * @name ICipherText#pool
+     * @name CipherText#pool
      * @type {MemoryPoolHandle}
      */
     get pool() {
@@ -185,9 +184,9 @@ export const CipherText = ({ library }) => {
      * Save a cipherText to a base64 string
      *
      * @function
-     * @name ICipherText#save
+     * @name CipherText#save
      * @param {Object} options Options
-     * @param {ComprModeType} [options.compression=ComprModeType.deflate] The compression mode to use
+     * @param {ComprModeType} [options.compression={@link ComprModeType.deflate}] The compression mode to use
      * @returns {String} base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
@@ -202,7 +201,7 @@ export const CipherText = ({ library }) => {
      * Load a cipherText from a base64 string
      *
      * @function
-     * @name ICipherText#load
+     * @name CipherText#load
      * @param {Object} options Options
      * @param {Context} options.context Encryption context to enforce
      * @param {String} options.encoded base64 encoded string

@@ -12,12 +12,11 @@ export const BatchEncoder = ({ library, context }) => {
   }
 
   /**
-   * @typedef {Object} BatchEncoder
-   * @implements IBatchEncoder
+   * @implements BatchEncoder
    */
 
   /**
-   * @interface IBatchEncoder
+   * @interface BatchEncoder
    */
   return {
     /**
@@ -25,7 +24,7 @@ export const BatchEncoder = ({ library, context }) => {
      *
      * @private
      * @readonly
-     * @name IBatchEncoder#instance
+     * @name BatchEncoder#instance
      * @type {instance}
      */
     get instance() {
@@ -37,7 +36,7 @@ export const BatchEncoder = ({ library, context }) => {
      *
      * @private
      * @function
-     * @name IBatchEncoder#inject
+     * @name BatchEncoder#inject
      * @param {Object} options Options
      * @param {instance} options.instance WASM instance
      */
@@ -55,7 +54,7 @@ export const BatchEncoder = ({ library, context }) => {
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name IBatchEncoder#delete
+     * @name BatchEncoder#delete
      */
     delete() {
       if (_instance) {
@@ -77,7 +76,7 @@ export const BatchEncoder = ({ library, context }) => {
      * this function is undefined.
      *
      * @function
-     * @name IBatchEncoder#encodeVectorInt32
+     * @name BatchEncoder#encodeVectorInt32
      * @param {Object} options Options
      * @param {Vector} options.vector Data to encode
      * @param {PlainText} options.plainText Destination to store the encoded result
@@ -111,7 +110,7 @@ export const BatchEncoder = ({ library, context }) => {
      * this function is undefined.
      *
      * @function
-     * @name IBatchEncoder#encodeVectorUInt32
+     * @name BatchEncoder#encodeVectorUInt32
      * @param {Object} options Options
      * @param {Vector} options.vector Data to encode
      * @param {PlainText} options.plainText Destination to store the encoded result
@@ -141,11 +140,11 @@ export const BatchEncoder = ({ library, context }) => {
      * allocated from the memory pool pointed to by the given MemoryPoolHandle.
      *
      * @function
-     * @name IBatchEncoder#decodeVectorInt32
+     * @name BatchEncoder#decodeVectorInt32
      * @param {Object} options Options
      * @param {PlainText} options.plainText Data to decode
      * @param {Vector} options.vector Destination to store the decoded result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global]
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}]
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
@@ -179,11 +178,11 @@ export const BatchEncoder = ({ library, context }) => {
      * allocated from the memory pool pointed to by the given MemoryPoolHandle.
      *
      * @function
-     * @name IBatchEncoder#decodeVectorUInt32
+     * @name BatchEncoder#decodeVectorUInt32
      * @param {Object} options Options
      * @param {PlainText} options.plainText Data to decode
      * @param {Vector} options.vector Destination to store the decoded result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global]
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}]
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
@@ -212,7 +211,7 @@ export const BatchEncoder = ({ library, context }) => {
      * The total number of batching slots available to hold data
      *
      * @readonly
-     * @name IBatchEncoder#slotCount
+     * @name BatchEncoder#slotCount
      * @type {Number}
      */
     get slotCount() {

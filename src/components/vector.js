@@ -39,12 +39,11 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
   let _instance = _fromArray({ array })
 
   /**
-   * @typedef {Object} Vector
-   * @implements IVector
+   * @implements Vector
    */
 
   /**
-   * @interface IVector
+   * @interface Vector
    */
   return {
     /**
@@ -52,7 +51,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      *
      * @private
      * @readonly
-     * @name IVector#instance
+     * @name Vector#instance
      * @type {instance}
      */
     get instance() {
@@ -64,7 +63,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      *
      * @private
      * @function
-     * @name IVector#inject
+     * @name Vector#inject
      * @param {Object} options Options
      * @param {instance} options.instance WASM instance
      */
@@ -82,7 +81,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name IVector#delete
+     * @name Vector#delete
      */
     delete() {
       if (_instance) {
@@ -95,7 +94,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      * The Vector type
      *
      * @readonly
-     * @name IVector#type
+     * @name Vector#type
      * @type {(Int32ArrayConstructor|Uint32ArrayConstructor|Float64ArrayConstructor)}
      */
     get type() {
@@ -106,7 +105,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      * The vector size
      *
      * @readonly
-     * @name IVector#size
+     * @name Vector#size
      * @type {Number}
      */
     get size() {
@@ -119,7 +118,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      * This method is mainly used for debugging this library
      *
      * @function
-     * @name IVector#printMatrix
+     * @name Vector#printMatrix
      * @param {Object} options Options
      * @param {Number} options.rowSize Number of rows in of the Vector (BFV = polyModDeg / 2, CKKS = polyModDeg)
      */
@@ -146,7 +145,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      * This method is mainly used for debugging this library
      *
      * @function
-     * @name IVector#printVector
+     * @name Vector#printVector
      * @param {Object} options Options
      * @param {Number} [options.printSize=4] Number of elements to print
      * @param {Number} [options.precision=5] Number of decimals to print
@@ -175,9 +174,9 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      * Convert a typed array to a vector.
      *
      * @function
-     * @name IVector#fromArray
+     * @name Vector#fromArray
      * @param {Object} options Options
-     * @param {Int32Array|Uint32Array|Float64Array} options.array Array of data to save to a Vector
+     * @param {(Int32Array|Uint32Array|Float64Array)} options.array Array of data to save to a Vector
      * @returns {Vector<(Int32Array|Uint32Array|Float64Array)>} Vector containing the same data type as the array
      */
     fromArray({ array }) {
@@ -188,7 +187,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      * Get a value pointed to by the specified index
      *
      * @function
-     * @name IVector#getValue
+     * @name Vector#getValue
      * @param {Object} options Options
      * @param {Number} options.index Index of the Vector
      * @returns {Number} Value of the element in the Vector pointed to by the index
@@ -205,7 +204,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      * Resizes a vector to the given size
      *
      * @function
-     * @name IVector#resize
+     * @name Vector#resize
      * @param {Object} options Options
      * @param {Number} options.size Number of elements to resize
      * @param {Number} options.fill Data to fill the vector with
@@ -222,7 +221,7 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      * Copy a vector's data into a Typed Array
      *
      * @function
-     * @name IVector#toArray
+     * @name Vector#toArray
      * @returns {(Int32Array|Uint32Array|Float64Array)} TypedArray containing values from the Vector
      */
     toArray() {

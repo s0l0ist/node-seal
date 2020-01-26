@@ -10,12 +10,11 @@ export const ParmsIdType = ({ library }) => {
   }
 
   /**
-   * @typedef {Object} ParmsIdType
-   * @implements IParmsIdType
+   * @implements ParmsIdType
    */
 
   /**
-   * @interface IParmsIdType
+   * @interface ParmsIdType
    */
   return {
     /**
@@ -23,7 +22,7 @@ export const ParmsIdType = ({ library }) => {
      *
      * @private
      * @readonly
-     * @name IParmsIdType#instance
+     * @name ParmsIdType#instance
      * @type {instance}
      */
     get instance() {
@@ -35,7 +34,7 @@ export const ParmsIdType = ({ library }) => {
      *
      * @private
      * @function
-     * @name IParmsIdType#inject
+     * @name ParmsIdType#inject
      * @param {Object} options Options
      * @param {instance} options.instance WASM instance
      */
@@ -53,7 +52,7 @@ export const ParmsIdType = ({ library }) => {
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name IParmsIdType#delete
+     * @name ParmsIdType#delete
      */
     delete() {
       if (_instance) {
@@ -66,7 +65,7 @@ export const ParmsIdType = ({ library }) => {
      * The values of the current ParmsIdType as an Array of BigInts.
      *
      * @readonly
-     * @name IParmsIdType#values
+     * @name ParmsIdType#values
      * @type {Array<BigInt>}
      */
     get values() {

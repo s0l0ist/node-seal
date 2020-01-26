@@ -12,12 +12,11 @@ export const PublicKey = ({ library }) => {
   }
 
   /**
-   * @typedef {Object} PublicKey
-   * @implements IPublicKey
+   * @implements PublicKey
    */
 
   /**
-   * @interface IPublicKey
+   * @interface PublicKey
    */
   return {
     /**
@@ -25,7 +24,7 @@ export const PublicKey = ({ library }) => {
      *
      * @private
      * @readonly
-     * @name IPublicKey#instance
+     * @name PublicKey#instance
      * @type {instance}
      */
     get instance() {
@@ -37,7 +36,7 @@ export const PublicKey = ({ library }) => {
      *
      * @private
      * @function
-     * @name IPublicKey#inject
+     * @name PublicKey#inject
      * @param {Object} options Options
      * @param {instance} options.instance WASM instance
      */
@@ -55,7 +54,7 @@ export const PublicKey = ({ library }) => {
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name IPublicKey#delete
+     * @name PublicKey#delete
      */
     delete() {
       if (_instance) {
@@ -68,9 +67,9 @@ export const PublicKey = ({ library }) => {
      * Save the PublicKey to a base64 string
      *
      * @function
-     * @name IPublicKey#save
+     * @name PublicKey#save
      * @param {Object} options Options
-     * @param {ComprModeType} [options.compression=ComprModeType.deflate] The compression mode to use
+     * @param {ComprModeType} [options.compression={@link ComprModeType.deflate}] The compression mode to use
      * @returns {String} Base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
@@ -85,7 +84,7 @@ export const PublicKey = ({ library }) => {
      * Load a PublicKey from a base64 string
      *
      * @function
-     * @name IPublicKey#load
+     * @name PublicKey#load
      * @param {Object} options Options
      * @param {Context} options.context Encryption context to enforce
      * @param {String} options.encoded Base64 encoded string

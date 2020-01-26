@@ -3,31 +3,36 @@ export const MemoryPoolHandle = ({ library }) => {
   const _threadLocal = library.MemoryPoolHandle.MemoryPoolHandleThreadLocal
 
   /**
-   * @typedef {Object} MemoryPoolHandle
-   * @implements IMemoryPoolHandle
+   * @implements MemoryPoolHandle
    */
 
   /**
-   * @interface IMemoryPoolHandle
+   * @interface MemoryPoolHandle
    */
   return {
     /**
      * The MemoryPoolHandle pointing to the global memory pool.
      *
-     * @name IMemoryPoolHandle.global
+     * @name MemoryPoolHandle.global
      * @type {MemoryPoolHandle.global}
      */
     get global() {
+      /**
+       * @typedef {MemoryPoolHandle.global} MemoryPoolHandle.global
+       */
       return _global()
     },
 
     /**
      * The MemoryPoolHandle pointing to the thread-local memory pool.
      *
-     * @name IMemoryPoolHandle.threadLocal
+     * @name MemoryPoolHandle.threadLocal
      * @type {MemoryPoolHandle.threadLocal}
      */
     get threadLocal() {
+      /**
+       * @typedef {MemoryPoolHandle.threadLocal} MemoryPoolHandle.threadLocal
+       */
       return _threadLocal()
     }
   }

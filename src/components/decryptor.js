@@ -10,12 +10,11 @@ export const Decryptor = ({ library, context, secretKey }) => {
   }
 
   /**
-   * @typedef {Object} Decryptor
-   * @implements IDecryptor
+   * @implements Decryptor
    */
 
   /**
-   * @interface IDecryptor
+   * @interface Decryptor
    */
   return {
     /**
@@ -23,7 +22,7 @@ export const Decryptor = ({ library, context, secretKey }) => {
      *
      * @private
      * @readonly
-     * @name IDecryptor#instance
+     * @name Decryptor#instance
      * @type {instance}
      */
     get instance() {
@@ -35,7 +34,7 @@ export const Decryptor = ({ library, context, secretKey }) => {
      *
      * @private
      * @function
-     * @name IDecryptor#inject
+     * @name Decryptor#inject
      * @param {Object} options Options
      * @param {instance} options.instance WASM instance
      */
@@ -53,7 +52,7 @@ export const Decryptor = ({ library, context, secretKey }) => {
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name IDecryptor#delete
+     * @name Decryptor#delete
      */
     delete() {
       if (_instance) {
@@ -66,7 +65,7 @@ export const Decryptor = ({ library, context, secretKey }) => {
      * Decrypts a CipherText and stores the result in the destination parameter.
      *
      * @function
-     * @name IDecryptor#decrypt
+     * @name Decryptor#decrypt
      * @param {Object} options Options
      * @param {CipherText} options.cipherText CipherText to decrypt
      * @param {PlainText} options.plainText PlainText destination to store the result
@@ -97,7 +96,7 @@ export const Decryptor = ({ library, context, secretKey }) => {
      * becomes too noisy to decrypt correctly.
      *
      * @function
-     * @name IDecryptor#invariantNoiseBudget
+     * @name Decryptor#invariantNoiseBudget
      * @param {Object} options Options
      * @param {CipherText} options.cipherText CipherText to measure
      * @returns {Number} Invariant noise budget (in bits)

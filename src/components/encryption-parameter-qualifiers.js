@@ -5,12 +5,11 @@ export const EncryptionParameterQualifiers = ({ library }) => {
   let _instance = null
 
   /**
-   * @typedef {Object} EncryptionParameterQualifiers
-   * @implements IEncryptionParameterQualifiers
+   * @implements EncryptionParameterQualifiers
    */
 
   /**
-   * @interface IEncryptionParameterQualifiers
+   * @interface EncryptionParameterQualifiers
    */
   return {
     /**
@@ -18,7 +17,7 @@ export const EncryptionParameterQualifiers = ({ library }) => {
      *
      * @private
      * @readonly
-     * @name IEncryptionParameterQualifiers#instance
+     * @name EncryptionParameterQualifiers#instance
      * @type {instance}
      */
     get instance() {
@@ -30,7 +29,7 @@ export const EncryptionParameterQualifiers = ({ library }) => {
      *
      * @private
      * @function
-     * @name IEncryptionParameterQualifiers#inject
+     * @name EncryptionParameterQualifiers#inject
      * @param {Object} options Options
      * @param {instance} options.instance WASM instance
      */
@@ -48,7 +47,7 @@ export const EncryptionParameterQualifiers = ({ library }) => {
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name IEncryptionParameterQualifiers#delete
+     * @name EncryptionParameterQualifiers#delete
      */
     delete() {
       if (_instance) {
@@ -62,7 +61,7 @@ export const EncryptionParameterQualifiers = ({ library }) => {
      * Microsoft SEAL, the variable parameters_set is set to true.
      *
      * @readonly
-     * @name IEncryptionParameterQualifiers#parametersSet
+     * @name EncryptionParameterQualifiers#parametersSet
      * @type {Boolean}
      */
     get parametersSet() {
@@ -83,7 +82,7 @@ export const EncryptionParameterQualifiers = ({ library }) => {
      * true.
      *
      * @readonly
-     * @name IEncryptionParameterQualifiers#usingFFT
+     * @name EncryptionParameterQualifiers#usingFFT
      * @type {Boolean}
      */
     get usingFFT() {
@@ -105,7 +104,7 @@ export const EncryptionParameterQualifiers = ({ library }) => {
      * can only be true if using_ntt is true.
      *
      * @readonly
-     * @name IEncryptionParameterQualifiers#usingNTT
+     * @name EncryptionParameterQualifiers#usingNTT
      * @type {Boolean}
      */
     get usingNTT() {
@@ -128,7 +127,7 @@ export const EncryptionParameterQualifiers = ({ library }) => {
      * support batching, the variable using_batching is set to true.
      *
      * @readonly
-     * @name IEncryptionParameterQualifiers#usingBatching
+     * @name EncryptionParameterQualifiers#usingBatching
      * @type {Boolean}
      */
     get usingBatching() {
@@ -148,7 +147,7 @@ export const EncryptionParameterQualifiers = ({ library }) => {
      * In this case the variable using_fast_plain_lift is set to true.
      *
      * @readonly
-     * @name IEncryptionParameterQualifiers#usingFastPlainLift
+     * @name EncryptionParameterQualifiers#usingFastPlainLift
      * @type {Boolean}
      */
     get usingFastPlainLift() {
@@ -165,7 +164,7 @@ export const EncryptionParameterQualifiers = ({ library }) => {
      * base conversion can be omitted, improving performance.
      *
      * @readonly
-     * @name IEncryptionParameterQualifiers#usingDescendingModulusChain
+     * @name EncryptionParameterQualifiers#usingDescendingModulusChain
      * @type {Boolean}
      */
     get usingDescendingModulusChain() {
@@ -181,8 +180,8 @@ export const EncryptionParameterQualifiers = ({ library }) => {
      * parameters from HomomorphicEncryption.org security standard.
      *
      * @readonly
-     * @name IEncryptionParameterQualifiers#securityLevel
-     * @type {SecurityLevel.none|SecurityLevel.tc128|SecurityLevel.tc192|SecurityLevel.tc256}
+     * @name EncryptionParameterQualifiers#securityLevel
+     * @type {(SecurityLevel.none|SecurityLevel.tc128|SecurityLevel.tc192|SecurityLevel.tc256)}
      */
     get securityLevel() {
       try {

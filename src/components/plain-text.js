@@ -14,12 +14,11 @@ export const PlainText = ({ library }) => {
   }
 
   /**
-   * @typedef {Object} PlainText
-   * @implements IPlainText
+   * @implements PlainText
    */
 
   /**
-   * @interface IPlainText
+   * @interface PlainText
    */
   return {
     /**
@@ -27,7 +26,7 @@ export const PlainText = ({ library }) => {
      *
      * @private
      * @readonly
-     * @name IPlainText#instance
+     * @name PlainText#instance
      * @type {instance}
      */
     get instance() {
@@ -39,7 +38,7 @@ export const PlainText = ({ library }) => {
      *
      * @private
      * @function
-     * @name IPlainText#inject
+     * @name PlainText#inject
      * @param {Object} options Options
      * @param {instance} options.instance WASM instance
      */
@@ -57,7 +56,7 @@ export const PlainText = ({ library }) => {
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name IPlainText#delete
+     * @name PlainText#delete
      */
     delete() {
       if (_instance) {
@@ -73,7 +72,7 @@ export const PlainText = ({ library }) => {
      * particularly important after modulus switching.
      *
      * @function
-     * @name IPlainText#shrinkToFit
+     * @name PlainText#shrinkToFit
      */
     shrinkToFit() {
       try {
@@ -87,7 +86,7 @@ export const PlainText = ({ library }) => {
      * Sets the PlainText polynomial to zero.
      *
      * @function
-     * @name IPlainText#setZero
+     * @name PlainText#setZero
      */
     setZero() {
       try {
@@ -101,7 +100,7 @@ export const PlainText = ({ library }) => {
      * Whether the current PlainText polynomial has all zero coefficients.
      *
      * @readonly
-     * @name IPlainText#isZero
+     * @name PlainText#isZero
      * @type {Boolean}
      */
     get isZero() {
@@ -112,7 +111,7 @@ export const PlainText = ({ library }) => {
      * The capacity of the current allocation.
      *
      * @readonly
-     * @name IPlainText#capacity
+     * @name PlainText#capacity
      * @type {Number}
      */
     get capacity() {
@@ -123,7 +122,7 @@ export const PlainText = ({ library }) => {
      * The coefficient count of the current PlainText polynomial.
      *
      * @readonly
-     * @name IPlainText#coeffCount
+     * @name PlainText#coeffCount
      * @type {Number}
      */
     get coeffCount() {
@@ -134,7 +133,7 @@ export const PlainText = ({ library }) => {
      * The significant coefficient count of the current PlainText polynomial.
      *
      * @readonly
-     * @name IPlainText#significantCoeffCount
+     * @name PlainText#significantCoeffCount
      * @type {Number}
      */
     get significantCoeffCount() {
@@ -145,7 +144,7 @@ export const PlainText = ({ library }) => {
      * Returns the non-zero coefficient count of the current PlainText polynomial.
      *
      * @readonly
-     * @name IPlainText#nonzeroCoeffCount
+     * @name PlainText#nonzeroCoeffCount
      * @type {Number}
      */
     get nonzeroCoeffCount() {
@@ -171,7 +170,7 @@ export const PlainText = ({ library }) => {
      * 9. If the polynomial is exactly 0, the string "0" is returned
      *
      * @function
-     * @name IPlainText#toPolynomial
+     * @name PlainText#toPolynomial
      * @throws std::invalid_argument if the PlainText is in NTT transformed form
      * @returns {String} Polynomial string
      */
@@ -187,7 +186,7 @@ export const PlainText = ({ library }) => {
      * Whether the PlainText is in NTT form.
      *
      * @readonly
-     * @name IPlainText#isNttForm
+     * @name PlainText#isNttForm
      * @type {Boolean}
      */
     get isNttForm() {
@@ -201,7 +200,7 @@ export const PlainText = ({ library }) => {
      * @see {@link EncryptionParameters} for more information about parmsId.
      *
      * @readonly
-     * @name IPlainText#parmsId
+     * @name PlainText#parmsId
      * @type {ParmsIdType}
      */
     get parmsId() {
@@ -217,7 +216,7 @@ export const PlainText = ({ library }) => {
      * the scale by hand.
      *
      * @readonly
-     * @name IPlainText#scale
+     * @name PlainText#scale
      * @type {Number}
      */
     get scale() {
@@ -228,7 +227,7 @@ export const PlainText = ({ library }) => {
      * The currently used MemoryPoolHandle.
      *
      * @readonly
-     * @name IPlainText#pool
+     * @name PlainText#pool
      * @type {MemoryPoolHandle}
      */
     get pool() {
@@ -239,9 +238,9 @@ export const PlainText = ({ library }) => {
      * Save the PlainText to a base64 string
      *
      * @function
-     * @name IPlainText#save
+     * @name PlainText#save
      * @param {Object} options Options
-     * @param {ComprModeType} [options.compression=ComprModeType.deflate] The compression mode to use
+     * @param {ComprModeType} [options.compression={@link ComprModeType.deflate}] The compression mode to use
      * @returns {String} Base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
@@ -256,7 +255,7 @@ export const PlainText = ({ library }) => {
      * Load a PlainText from a base64 string
      *
      * @function
-     * @name IPlainText#load
+     * @name PlainText#load
      * @param {Object} options Options
      * @param {Context} options.context Encryption context to enforce
      * @param {String} options.encoded Base64 encoded string

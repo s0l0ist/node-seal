@@ -3,31 +3,36 @@ export const ComprModeType = ({ library }) => {
   const _deflate = library.ComprModeType.deflate
 
   /**
-   * @typedef {Object} ComprModeType
-   * @implements IComprModeType
+   * @implements ComprModeType
    */
 
   /**
-   * @interface IComprModeType
+   * @interface ComprModeType
    */
   return {
     /**
      * The `none` Compression Mode Type
      *
-     * @name IComprModeType.none
+     * @name ComprModeType.none
      * @type {ComprModeType.none}
      */
     get none() {
+      /**
+       * @typedef {ComprModeType.none} ComprModeType.none
+       */
       return _none
     },
 
     /**
      * The `deflate` Compression Mode Type
      *
-     * @name IComprModeType.deflate
+     * @name ComprModeType.deflate
      * @type {ComprModeType.deflate}
      */
     get deflate() {
+      /**
+       * @typedef {ComprModeType.deflate} ComprModeType.deflate
+       */
       return _deflate
     }
   }

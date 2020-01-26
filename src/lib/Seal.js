@@ -34,12 +34,11 @@ export const SEAL = ({ options }) => {
   const _SchemeType = options.SchemeType({ library: _Library.instance })
 
   /**
-   * @typedef {Object} SEAL
-   * @implements ISEAL
+   * @implements SEAL
    */
 
   /**
-   * @interface ISEAL
+   * @interface SEAL
    */
   return {
     /**
@@ -75,7 +74,7 @@ export const SEAL = ({ options }) => {
      * flags parametersSet and enableBatching set to true.
      *
      * @function
-     * @name ISEAL#BatchEncoder
+     * @name SEAL#BatchEncoder
      * @param {Object} options Options
      * @param {Context} options.context Encryption context
      * @returns {BatchEncoder}
@@ -119,7 +118,7 @@ export const SEAL = ({ options }) => {
      * structure storing the CipherText not being thread-safe.
      *
      * @function
-     * @name ISEAL#CipherText
+     * @name SEAL#CipherText
      * @returns {CipherText} An empty CipherText instance
      * @example
      * import { Seal } from 'node-seal'
@@ -155,7 +154,7 @@ export const SEAL = ({ options }) => {
      * of the encrypted complex vectors.
      *
      * @function
-     * @name ISEAL#CKKSEncoder
+     * @name SEAL#CKKSEncoder
      * @param {Object} options Options
      * @param {Context} options.context Encryption context
      * @returns {CKKSEncoder} An encoder used for the CKKS scheme type
@@ -182,7 +181,7 @@ export const SEAL = ({ options }) => {
      * level explicitly anywhere.
      *
      * @readonly
-     * @name ISEAL#CoeffModulus
+     * @name SEAL#CoeffModulus
      * @type {CoeffModulus}
      * @example
      * import { Seal } from 'node-seal'
@@ -206,7 +205,7 @@ export const SEAL = ({ options }) => {
      * key data.
      *
      * @readonly
-     * @name ISEAL#ComprModeType
+     * @name SEAL#ComprModeType
      * @type {ComprModeType}
      * @example
      * import { Seal } from 'node-seal'
@@ -261,7 +260,7 @@ export const SEAL = ({ options }) => {
      * modulus switching chain.
      *
      * @function
-     * @name ISEAL#Context
+     * @name SEAL#Context
      * @param {Object} options Options
      * @param {EncryptionParameters} options.encryptionParams A set of specific encryption parameters
      * @param {boolean} options.expandModChain Determines whether or not to enable modulus switching
@@ -311,7 +310,7 @@ export const SEAL = ({ options }) => {
      * case.
      *
      * @function
-     * @name ISEAL#Decryptor
+     * @name SEAL#Decryptor
      * @param {Object} options Options
      * @param {Context} options.context Encryption context
      * @param {SecretKey} options.secretKey SecretKey to be used for decryption
@@ -364,7 +363,7 @@ export const SEAL = ({ options }) => {
      * inexperienced users seem to most often make critical mistakes.
      *
      * @function
-     * @name ISEAL#EncryptionParameters
+     * @name SEAL#EncryptionParameters
      * @param {Object} options Options
      * @param {SchemeType} options.schemeType The desired scheme type to use
      * @returns {EncryptionParameters} A set of encryption parameters based from the scheme type
@@ -411,7 +410,7 @@ export const SEAL = ({ options }) => {
      *
      *
      * @function
-     * @name ISEAL#Encryptor
+     * @name SEAL#Encryptor
      * @param {Object} options Options
      * @param {Context} options.context Encryption context
      * @param {PublicKey} options.publicKey PublicKey to be used for encryption
@@ -492,7 +491,7 @@ export const SEAL = ({ options }) => {
      * @see {@link GaloisKeys} for more details on Galois keys.
      *
      * @function
-     * @name ISEAL#Evaluator
+     * @name SEAL#Evaluator
      * @param {Object} options Options
      * @param {Context} options.context Encryption context
      * @returns {Evaluator} An evaluator instance to be used to perform homomorphic evaluations
@@ -512,7 +511,7 @@ export const SEAL = ({ options }) => {
      * for this static instance as it is used internally.
      *
      * @readonly
-     * @name ISEAL#Exception
+     * @name SEAL#Exception
      * @type {Exception}
      * @example
      * import { Seal } from 'node-seal'
@@ -552,7 +551,7 @@ export const SEAL = ({ options }) => {
      * @see {@link KeyGenerator} for the class that generates the galois keys.
      *
      * @function
-     * @name ISEAL#GaloisKeys
+     * @name SEAL#GaloisKeys
      * @returns {GaloisKeys} An empty GaloisKeys instance
      * @example
      * import { Seal } from 'node-seal'
@@ -590,7 +589,7 @@ export const SEAL = ({ options }) => {
      * would be stored as a polynomial coefficient PlainModulus-1.
      *
      * @function
-     * @name ISEAL#IntegerEncoder
+     * @name SEAL#IntegerEncoder
      * @param {Object} options Options
      * @param {Context} options.context Encryption context
      * @returns {IntegerEncoder} An IntegerEncoder to be used for encoding only integers to PlainTexts
@@ -617,7 +616,7 @@ export const SEAL = ({ options }) => {
      * @see {@link GaloisKeys} for more details on Galois keys.
      *
      * @function
-     * @name ISEAL#KeyGenerator
+     * @name SEAL#KeyGenerator
      * @param {Object} options Options
      * @param {Context} options.context Encryption context
      * @param {SecretKey} [options.secretKey=null] Previously generated SecretKey
@@ -691,7 +690,7 @@ export const SEAL = ({ options }) => {
      * first).
      *
      * @readonly
-     * @name ISEAL#MemoryPoolHandle
+     * @name SEAL#MemoryPoolHandle
      * @type {MemoryPoolHandle}
      * @example
      * import { Seal } from 'node-seal'
@@ -709,7 +708,7 @@ export const SEAL = ({ options }) => {
      * Contains static methods for creating a PlainText modulus easily
      *
      * @readonly
-     * @name ISEAL#PlainModulus
+     * @name SEAL#PlainModulus
      * @type {PlainModulus}
      * @example
      * import { Seal } from 'node-seal'
@@ -754,7 +753,7 @@ export const SEAL = ({ options }) => {
      * @see {@link CipherText} for the class that stores CipherTexts.
      *
      * @function
-     * @name ISEAL#PlainText
+     * @name SEAL#PlainText
      * @returns {PlainText} An empty PlainText instance
      * @example
      * import { Seal } from 'node-seal'
@@ -781,7 +780,7 @@ export const SEAL = ({ options }) => {
      * @see {@link GaloisKeys} for the class that stores the galois keys.
      *
      * @function
-     * @name ISEAL#PublicKey
+     * @name SEAL#PublicKey
      * @returns {PublicKey} An empty PublicKey instance
      * @example
      * import { Seal } from 'node-seal'
@@ -837,7 +836,7 @@ export const SEAL = ({ options }) => {
      * @see {@link KeyGenerator} for the class that generates the relinearization keys.
      *
      * @function
-     * @name ISEAL#RelinKeys
+     * @name SEAL#RelinKeys
      * @returns {RelinKeys} An empty RelinKeys instance
      * @example
      * import { Seal } from 'node-seal'
@@ -860,7 +859,7 @@ export const SEAL = ({ options }) => {
      * The SchemeType singleton
      *
      * @readonly
-     * @name ISEAL#SchemeType
+     * @name SEAL#SchemeType
      * @type {SchemeType}
      * @example
      * import { Seal } from 'node-seal'
@@ -887,7 +886,7 @@ export const SEAL = ({ options }) => {
      * @see {@link GaloisKeys} for the class that stores the galois keys.
      *
      * @function
-     * @name ISEAL#SecretKey
+     * @name SEAL#SecretKey
      * @returns {SecretKey} An empty SecretKey instance
      * @example
      * import { Seal } from 'node-seal'
@@ -915,7 +914,7 @@ export const SEAL = ({ options }) => {
      * have to specify the security level explicitly anywhere.
      *
      * @readonly
-     * @name ISEAL#SecurityLevel
+     * @name SEAL#SecurityLevel
      * @type {SecurityLevel}
      * @example
      * import { Seal } from 'node-seal'
@@ -937,7 +936,7 @@ export const SEAL = ({ options }) => {
      * Create an instance of a SmallModulus
      *
      * @function
-     * @name ISEAL#SmallModulus
+     * @name SEAL#SmallModulus
      * @returns {SmallModulus} An empty SmallModulus instance
      * @example
      * import { Seal } from 'node-seal'
@@ -955,7 +954,7 @@ export const SEAL = ({ options }) => {
      * Create an instance of a C++ Vector
      *
      * @function
-     * @name ISEAL#Vector
+     * @name SEAL#Vector
      * @param {Object} options Options
      * @param {Int32Array|Uint32Array|Float64Array} options.array Typed Array of data
      * @returns {Vector} Vector containing the typed data

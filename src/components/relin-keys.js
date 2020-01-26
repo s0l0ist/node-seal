@@ -12,12 +12,11 @@ export const RelinKeys = ({ library }) => {
   }
 
   /**
-   * @typedef {Object} RelinKeys
-   * @implements IRelinKeys
+   * @implements RelinKeys
    */
 
   /**
-   * @interface IRelinKeys
+   * @interface RelinKeys
    */
   return {
     /**
@@ -25,7 +24,7 @@ export const RelinKeys = ({ library }) => {
      *
      * @private
      * @readonly
-     * @name IRelinKeys#instance
+     * @name RelinKeys#instance
      * @type {instance}
      */
     get instance() {
@@ -37,7 +36,7 @@ export const RelinKeys = ({ library }) => {
      *
      * @private
      * @function
-     * @name IRelinKeys#inject
+     * @name RelinKeys#inject
      * @param {Object} options Options
      * @param {instance} options.instance WASM instance
      */
@@ -55,7 +54,7 @@ export const RelinKeys = ({ library }) => {
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name IRelinKeys#delete
+     * @name RelinKeys#delete
      */
     delete() {
       if (_instance) {
@@ -68,9 +67,9 @@ export const RelinKeys = ({ library }) => {
      * Save the RelinKeys to a base64 string
      *
      * @function
-     * @name IRelinKeys#save
+     * @name RelinKeys#save
      * @param {Object} options Options
-     * @param {ComprModeType} [options.compression=ComprModeType.deflate] The compression mode to use
+     * @param {ComprModeType} [options.compression={@link ComprModeType.deflate}] The compression mode to use
      * @returns {String} Base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
@@ -85,7 +84,7 @@ export const RelinKeys = ({ library }) => {
      * Load a set of RelinKeys from a base64 string
      *
      * @function
-     * @name IRelinKeys#load
+     * @name RelinKeys#load
      * @param {Object} options Options
      * @param {Context} options.context Encryption context to enforce
      * @param {String} options.encoded Base64 encoded string

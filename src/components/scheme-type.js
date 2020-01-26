@@ -4,41 +4,49 @@ export const SchemeType = ({ library }) => {
   const _CKKS = library.SchemeType.CKKS
 
   /**
-   * @typedef {SchemeType} SchemeType
-   * @implements ISchemeType
+   * @implements SchemeType
    */
 
   /**
-   * @interface ISchemeType
+   * @interface SchemeType
    */
   return {
     /**
      * Return the 'none' scheme type
      *
-     * @name ISchemeType.none
+     * @name SchemeType.none
      * @type {SchemeType.none}
      */
     get none() {
+      /**
+       * @typedef {SchemeType.none} SchemeType.none
+       */
       return _none
     },
 
     /**
      * Return the 'BFV' scheme type
      *
-     * @name ISchemeType.BFV
+     * @name SchemeType.BFV
      * @type {SchemeType.BFV}
      */
     get BFV() {
+      /**
+       * @typedef {SchemeType.BFV} SchemeType.BFV
+       */
       return _BFV
     },
 
     /**
      * Return the 'CKKS' scheme type
      *
-     * @name ISchemeType.CKKS
+     * @name SchemeType.CKKS
      * @type {SchemeType.CKKS}
      */
     get CKKS() {
+      /**
+       * @typedef {SchemeType.CKKS} SchemeType.CKKS
+       */
       return _CKKS
     }
   }

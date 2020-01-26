@@ -12,12 +12,11 @@ export const Evaluator = ({ library, context }) => {
   }
 
   /**
-   * @typedef {Object} Evaluator
-   * @implements IEvaluator
+   * @implements Evaluator
    */
 
   /**
-   * @interface IEvaluator
+   * @interface Evaluator
    */
   return {
     /**
@@ -25,7 +24,7 @@ export const Evaluator = ({ library, context }) => {
      *
      * @private
      * @readonly
-     * @name IEvaluator#instance
+     * @name Evaluator#instance
      * @type {instance}
      */
     get instance() {
@@ -37,7 +36,7 @@ export const Evaluator = ({ library, context }) => {
      *
      * @private
      * @function
-     * @name IEvaluator#inject
+     * @name Evaluator#inject
      * @param {Object} options Options
      * @param {instance} options.instance WASM instance
      */
@@ -55,7 +54,7 @@ export const Evaluator = ({ library, context }) => {
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name IEvaluator#delete
+     * @name Evaluator#delete
      */
     delete() {
       if (_instance) {
@@ -68,7 +67,7 @@ export const Evaluator = ({ library, context }) => {
      * Negates a CipherText and stores the result in the destination parameter.
      *
      * @function
-     * @name IEvaluator#negate
+     * @name Evaluator#negate
      * @param {Object} options Options
      * @param {CipherText} options.encrypted CipherText to negate
      * @param {CipherText} options.destination CipherText to store the negated result
@@ -86,7 +85,7 @@ export const Evaluator = ({ library, context }) => {
      * and stores the result in the destination parameter.
      *
      * @function
-     * @name IEvaluator#add
+     * @name Evaluator#add
      * @param {Object} options Options
      * @param {CipherText} options.a CipherText operand A
      * @param {CipherText} options.b CipherText operand B
@@ -105,7 +104,7 @@ export const Evaluator = ({ library, context }) => {
      * and b and stores the result in the destination parameter.
      *
      * @function
-     * @name IEvaluator#sub
+     * @name Evaluator#sub
      * @param {Object} options Options
      * @param {CipherText} options.a CipherText operand A
      * @param {CipherText} options.b CipherText operand B
@@ -126,12 +125,12 @@ export const Evaluator = ({ library, context }) => {
      * to by the given MemoryPoolHandle.
      *
      * @function
-     * @name IEvaluator#multiply
+     * @name Evaluator#multiply
      * @param {Object} options Options
      * @param {CipherText} options.a CipherText operand A
      * @param {CipherText} options.b CipherText operand B
      * @param {CipherText} options.destination CipherText destination to store the product
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
     multiply({ a, b, destination, pool = _MemoryPoolHandle.global }) {
       try {
@@ -148,11 +147,11 @@ export const Evaluator = ({ library, context }) => {
      * MemoryPoolHandle.
      *
      * @function
-     * @name IEvaluator#square
+     * @name Evaluator#square
      * @param {Object} options Options
      * @param {CipherText} options.encrypted CipherText to square
      * @param {CipherText} options.destination CipherText destination to store the squared result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
     square({ encrypted, destination, pool = _MemoryPoolHandle.global }) {
       try {
@@ -170,12 +169,12 @@ export const Evaluator = ({ library, context }) => {
      * from the memory pool pointed to by the given MemoryPoolHandle.
      *
      * @function
-     * @name IEvaluator#relinearize
+     * @name Evaluator#relinearize
      * @param {Object} options Options
      * @param {CipherText} options.encrypted CipherText to relinearize
      * @param {RelinKeys} options.relinKeys RelinKey used to perform relinearization
      * @param {CipherText} options.destination CipherText destination to store the relinearized result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
     relinearize({
       encrypted,
@@ -202,11 +201,11 @@ export const Evaluator = ({ library, context }) => {
      * the memory pool pointed to by the given MemoryPoolHandle.
      *
      * @function
-     * @name IEvaluator#cipherModSwitchToNext
+     * @name Evaluator#cipherModSwitchToNext
      * @param {Object} options Options
      * @param {CipherText} options.encrypted CipherText to switch its modulus down
      * @param {CipherText} options.destination CipherText destination to store the switched result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
     cipherModSwitchToNext({
       encrypted,
@@ -231,12 +230,12 @@ export const Evaluator = ({ library, context }) => {
      * are allocated from the memory pool pointed to by the given MemoryPoolHandle.
      *
      * @function
-     * @name IEvaluator#cipherModSwitchTo
+     * @name Evaluator#cipherModSwitchTo
      * @param {Object} options Options
      * @param {CipherText} options.encrypted CipherText to switch its modulus down
      * @param {ParmsIdType} options.parmsId Target parmsId to switch to
      * @param {CipherText} options.destination CipherText destination to store the switched result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
     cipherModSwitchTo({
       encrypted,
@@ -261,7 +260,7 @@ export const Evaluator = ({ library, context }) => {
      * to modulo q_1...q_{k-1} and stores the result in the destination parameter.
      *
      * @function
-     * @name IEvaluator#plainModSwitchToNext
+     * @name Evaluator#plainModSwitchToNext
      * @param {Object} options Options
      * @param {PlainText} options.plain PlainText to switch its modulus down
      * @param {PlainText} options.destination PlainText destination to store the switched result
@@ -280,7 +279,7 @@ export const Evaluator = ({ library, context }) => {
      * the result in the destination parameter.
      *
      * @function
-     * @name IEvaluator#plainModSwitchTo
+     * @name Evaluator#plainModSwitchTo
      * @param {Object} options Options
      * @param {PlainText} options.plain PlainText to switch its modulus down
      * @param {ParmsIdType} options.parmsId Target parmsId to switch to
@@ -306,11 +305,11 @@ export const Evaluator = ({ library, context }) => {
      * MemoryPoolHandle.
      *
      * @function
-     * @name IEvaluator#rescaleToNext
+     * @name Evaluator#rescaleToNext
      * @param {Object} options Options
      * @param {CipherText} options.encrypted CipherText to rescale
      * @param {CipherText} options.destination CipherText destination to store the rescaled result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
     rescaleToNext({ encrypted, destination, pool = _MemoryPoolHandle.global }) {
       try {
@@ -328,12 +327,12 @@ export const Evaluator = ({ library, context }) => {
      * to by the given MemoryPoolHandle.
      *
      * @function
-     * @name IEvaluator#rescaleTo
+     * @name Evaluator#rescaleTo
      * @param {Object} options Options
      * @param {CipherText} options.encrypted CipherText to rescale
      * @param {ParmsIdType} options.parmsId Target parmsId to rescale to
      * @param {CipherText} options.destination CipherText destination to store the rescaled result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
     rescaleTo({
       encrypted,
@@ -362,13 +361,13 @@ export const Evaluator = ({ library, context }) => {
      * the process. In relinearization the given relinearization keys are used.
      *
      * @function
-     * @name IEvaluator#exponentiate
+     * @name Evaluator#exponentiate
      * @param {Object} options Options
      * @param {CipherText} options.encrypted CipherText to exponentiate
      * @param {Number} options.exponent Positive integer to exponentiate the CipherText
      * @param {RelinKeys} options.relinKeys RelinKeys used to perform relinearization after each exponentiation
      * @param {CipherText} options.destination CipherText destination to store the exponentiated result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
     exponentiate({
       encrypted,
@@ -396,7 +395,7 @@ export const Evaluator = ({ library, context }) => {
      * must be valid for the current encryption parameters.
      *
      * @function
-     * @name IEvaluator#addPlain
+     * @name Evaluator#addPlain
      * @param {Object} options Options
      * @param {CipherText} options.encrypted CipherText operand A
      * @param {PlainText} options.plain PlainText operand B
@@ -420,7 +419,7 @@ export const Evaluator = ({ library, context }) => {
      * PlainText must be valid for the current encryption parameters.
      *
      * @function
-     * @name IEvaluator#subPlain
+     * @name Evaluator#subPlain
      * @param {Object} options Options
      * @param {CipherText} options.encrypted CipherText operand A
      * @param {PlainText} options.plain PlainText operand B
@@ -446,12 +445,12 @@ export const Evaluator = ({ library, context }) => {
      * allocated from the memory pool pointed to by the given MemoryPoolHandle.
      *
      * @function
-     * @name IEvaluator#multiplyPlain
+     * @name Evaluator#multiplyPlain
      * @param {Object} options Options
      * @param {CipherText} options.encrypted CipherText operand A
      * @param {PlainText} options.plain PlainText operand B
      * @param {CipherText} options.destination CipherText destination to store the product
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
     multiplyPlain({
       encrypted,
@@ -485,12 +484,12 @@ export const Evaluator = ({ library, context }) => {
      * to by the given MemoryPoolHandle.
      *
      * @function
-     * @name IEvaluator#plainTransformToNtt
+     * @name Evaluator#plainTransformToNtt
      * @param {Object} options Options
      * @param {PlainText} options.plain PlainText to transform
      * @param {ParmsIdType} options.parmsId target parmsId to perform NTT transformation
      * @param {PlainText} options.destinationNtt PlainText destination to store the transformed result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
     plainTransformToNtt({
       plain,
@@ -516,7 +515,7 @@ export const Evaluator = ({ library, context }) => {
      * The result is stored in the destinationNtt parameter.
      *
      * @function
-     * @name IEvaluator#cipherTransformToNtt
+     * @name Evaluator#cipherTransformToNtt
      * @param {Object} options Options
      * @param {CipherText} options.encrypted CipherText to transform
      * @param {CipherText} options.destinationNtt CipherText destination to store the transformed result
@@ -538,7 +537,7 @@ export const Evaluator = ({ library, context }) => {
      * polynomial of a CipherText. The result is stored in the destination parameter.
      *
      * @function
-     * @name IEvaluator#cipherTransformFromNtt
+     * @name Evaluator#cipherTransformFromNtt
      * @param {Object} options Options
      * @param {CipherText} options.encryptedNtt CipherText to transform
      * @param {CipherText} options.destination CipherText destination to store the transformed result
@@ -571,13 +570,13 @@ export const Evaluator = ({ library, context }) => {
      * element p changes Enc(plain(x)) to Enc(plain(x^p)).
      *
      * @function
-     * @name IEvaluator#applyGalois
+     * @name Evaluator#applyGalois
      * @param {Object} options Options
      * @param {CipherText} options.encrypted CipherText to apply the automorphism
      * @param {Number} options.galoisElt Number representing the Galois element
      * @param {GaloisKeys} options.galoisKeys GaloisKeys used to perform rotations
      * @param {CipherText} options.destination CipherText destination to store the result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
     applyGalois({
       encrypted,
@@ -610,13 +609,13 @@ export const Evaluator = ({ library, context }) => {
      * to by the given MemoryPoolHandle.
      *
      * @function
-     * @name IEvaluator#rotateRows
+     * @name Evaluator#rotateRows
      * @param {Object} options Options
      * @param {CipherText} options.encrypted CipherText to rotate rows
      * @param {Number} options.steps Int representing steps to rotate (negative = right, positive = left)
      * @param {GaloisKeys} options.galoisKeys GaloisKeys used to perform rotations
      * @param {CipherText} options.destination CipherText destination to store the rotated result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
     rotateRows({
       encrypted,
@@ -648,12 +647,12 @@ export const Evaluator = ({ library, context }) => {
      * by the given MemoryPoolHandle.
      *
      * @function
-     * @name IEvaluator#rotateColumns
+     * @name Evaluator#rotateColumns
      * @param {Object} options Options
      * @param {CipherText} options.encrypted CipherText to rotate columns
      * @param {GaloisKeys} options.galoisKeys GaloisKeys used to perform rotations
      * @param {CipherText} options.destination CipherText destination to store the rotated result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
     rotateColumns({
       encrypted,
@@ -683,13 +682,13 @@ export const Evaluator = ({ library, context }) => {
      * from the memory pool pointed to by the given MemoryPoolHandle.
      *
      * @function
-     * @name IEvaluator#rotateVector
+     * @name Evaluator#rotateVector
      * @param {Object} options Options
      * @param {CipherText} options.encrypted CipherText to rotate the entire vector
      * @param {Number} options.steps Int representing steps to rotate (negative = right, positive = left)
      * @param {GaloisKeys} options.galoisKeys GaloisKeys used to perform rotations
      * @param {CipherText} options.destination CipherText destination to store the rotated result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
     rotateVector({
       encrypted,
@@ -719,12 +718,12 @@ export const Evaluator = ({ library, context }) => {
      * MemoryPoolHandle.
      *
      * @function
-     * @name IEvaluator#complexConjugate
+     * @name Evaluator#complexConjugate
      * @param {Object} options Options
      * @param {CipherText} options.encrypted CipherText to complex conjugate
      * @param {GaloisKeys} options.galoisKeys GaloisKeys used to perform rotations
      * @param {CipherText} options.destination CipherText destination to store the conjugated result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
     complexConjugate({
       encrypted,

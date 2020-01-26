@@ -23,12 +23,11 @@ export const Context = ({
   }
 
   /**
-   * @typedef {Object} Context
-   * @implements IContext
+   * @implements Context
    */
 
   /**
-   * @interface IContext
+   * @interface Context
    */
   return {
     /**
@@ -36,7 +35,7 @@ export const Context = ({
      *
      * @private
      * @readonly
-     * @name IContext#instance
+     * @name Context#instance
      * @type {instance}
      */
     get instance() {
@@ -48,7 +47,7 @@ export const Context = ({
      *
      * @private
      * @function
-     * @name IContext#inject
+     * @name Context#inject
      * @param {Object} options Options
      * @param {instance} options.instance WASM instance
      */
@@ -66,7 +65,7 @@ export const Context = ({
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name IContext#delete
+     * @name Context#delete
      */
     delete() {
       if (_instance) {
@@ -79,7 +78,7 @@ export const Context = ({
      * Prints the context parameters to STDOUT (console.log)
      *
      * @function
-     * @name IContext#print
+     * @name Context#print
      */
     print() {
       try {
@@ -95,7 +94,7 @@ export const Context = ({
      * function returns nullptr.
      *
      * @function
-     * @name IContext#getContextData
+     * @name Context#getContextData
      * @param {Object} options Options
      * @param {ParmsIdType} options.parmsId Specific id to return ContextData for
      * @returns {ContextData} ContextData corresponding to encryption parameters
@@ -115,7 +114,7 @@ export const Context = ({
      * The ContextData corresponding to encryption parameters that are used for keys.
      *
      * @readonly
-     * @name IContext#keyContextData
+     * @name Context#keyContextData
      * @type {ContextData}
      */
     get keyContextData() {
@@ -133,7 +132,7 @@ export const Context = ({
      * The ContextData corresponding to the first encryption parameters that are used for data.
      *
      * @readonly
-     * @name IContext#firstContextData
+     * @name Context#firstContextData
      * @type {ContextData}
      */
     get firstContextData() {
@@ -151,7 +150,7 @@ export const Context = ({
      * Returns the ContextData corresponding to the last encryption parameters that are used for data.
      *
      * @readonly
-     * @name IContext#lastContextData
+     * @name Context#lastContextData
      * @type {ContextData}
      */
     get lastContextData() {
@@ -170,7 +169,7 @@ export const Context = ({
      * Microsoft SEAL, the variable parameters_set is set to true.
      *
      * @readonly
-     * @name IContext#parametersSet
+     * @name Context#parametersSet
      * @type {Boolean}
      */
     get parametersSet() {
@@ -181,7 +180,7 @@ export const Context = ({
      * Returns a parmsIdType corresponding to the set of encryption parameters that are used for keys.
      *
      * @readonly
-     * @name IContext#keyParmsId
+     * @name Context#keyParmsId
      * @type {ParmsIdType}
      */
     get keyParmsId() {
@@ -195,7 +194,7 @@ export const Context = ({
      * Returns a parmsIdType corresponding to the first encryption parameters that are used for data.
      *
      * @readonly
-     * @name IContext#firstParmsId
+     * @name Context#firstParmsId
      * @type {ParmsIdType}
      */
     get firstParmsId() {
@@ -209,7 +208,7 @@ export const Context = ({
      * The parmsIdType corresponding to the last encryption parameters that are used for data.
      *
      * @readonly
-     * @name IContext#lastParmsId
+     * @name Context#lastParmsId
      * @type {ParmsIdType}
      */
     get lastParmsId() {
@@ -227,7 +226,7 @@ export const Context = ({
      * of at least two prime number factors.
      *
      * @readonly
-     * @name IContext#usingKeyswitching
+     * @name Context#usingKeyswitching
      * @type {Boolean}
      */
     get usingKeyswitching() {
