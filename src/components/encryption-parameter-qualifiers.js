@@ -182,7 +182,7 @@ export const EncryptionParameterQualifiers = ({ library }) => {
      *
      * @readonly
      * @name IEncryptionParameterQualifiers#securityLevel
-     * @type {SecurityLevel}
+     * @type {SecurityLevel.none|SecurityLevel.tc128|SecurityLevel.tc192|SecurityLevel.tc256}
      */
     get securityLevel() {
       try {
