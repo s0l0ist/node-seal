@@ -14,8 +14,7 @@ export const MemoryPoolHandle = ({ library }) => {
     /**
      * The MemoryPoolHandle pointing to the global memory pool.
      *
-     * @readonly
-     * @name IMemoryPoolHandle#global
+     * @name IMemoryPoolHandle.global
      * @type {MemoryPoolHandle.global}
      */
     get global() {
@@ -25,8 +24,7 @@ export const MemoryPoolHandle = ({ library }) => {
     /**
      * The MemoryPoolHandle pointing to the thread-local memory pool.
      *
-     * @readonly
-     * @name IMemoryPoolHandle#threadLocal
+     * @name IMemoryPoolHandle.threadLocal
      * @type {MemoryPoolHandle.threadLocal}
      */
     get threadLocal() {

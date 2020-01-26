@@ -15,7 +15,7 @@ export const Exception = ({ library }) => {
      * an emscripten exception pointer
      *
      * @function
-     * @name IException#getHuman
+     * @name IException.getHuman
      * @param {Object} options Options
      * @param {Number} options.pointer The integer pointer thrown from emscripten
      * @returns {String} Human readable exception message
@@ -28,7 +28,7 @@ export const Exception = ({ library }) => {
      * Takes a caught exception in SEAL library and gets a safe error string
      *
      * @function
-     * @name IException#safe
+     * @name IException.safe
      * @param {Object} options Options
      * @param {(Number|Error|String)} options.error Unsafe error to normalize
      * @returns {Error}

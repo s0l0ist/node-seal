@@ -14,8 +14,7 @@ export const ComprModeType = ({ library }) => {
     /**
      * The `none` Compression Mode Type
      *
-     * @readonly
-     * @name IComprModeType#none
+     * @name IComprModeType.none
      * @type {ComprModeType.none}
      */
     get none() {
@@ -25,8 +24,7 @@ export const ComprModeType = ({ library }) => {
     /**
      * The `deflate` Compression Mode Type
      *
-     * @readonly
-     * @name IComprModeType#deflate
+     * @name IComprModeType.deflate
      * @type {ComprModeType.deflate}
      */
     get deflate() {

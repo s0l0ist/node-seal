@@ -19,7 +19,7 @@ export const CoeffModulus = ({ library }) => {
      * Returns the Maximum Bit Count for the specified polyModulusDegree and securityLevel
      *
      * @function
-     * @name ICoeffModulus#MaxBitCount
+     * @name ICoeffModulus.MaxBitCount
      * @param {Object} options Options
      * @param {Number} options.polyModulusDegree Degree of the polynomial modulus
      * @param {SecurityLevel} options.securityLevel Security Level
@@ -37,7 +37,7 @@ export const CoeffModulus = ({ library }) => {
      * Returns a default vector of primes for the BFV CoeffModulus parameter
      *
      * @function
-     * @name ICoeffModulus#BFVDefault
+     * @name ICoeffModulus.BFVDefault
      * @param {Object} options Options
      * @param {Number} options.polyModulusDegree Degree of the polynomial modulus
      * @param {SecurityLevel} options.securityLevel Security Level
@@ -55,7 +55,7 @@ export const CoeffModulus = ({ library }) => {
      * Creates a vector of primes for a given polyModulusDegree and bitSizes
      *
      * @function
-     * @name ICoeffModulus#Create
+     * @name ICoeffModulus.Create
      * @param {Object} options Options
      * @param {Number} options.polyModulusDegree Degree of the polynomial modulus
      * @param {Vector} options.bitSizes Vector containing int32 values representing bit-sizes of primes

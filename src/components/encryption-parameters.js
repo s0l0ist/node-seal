@@ -155,7 +155,7 @@ export const EncryptionParameters = ({
      *
      * @readonly
      * @name IEncryptionParameters#scheme
-     * @type {SchemeType}
+     * @type {SchemeType.none|SchemeType.BFV|SchemeType.CKKS}
      */
     get scheme() {
       return _instance.scheme()
