@@ -859,7 +859,7 @@ export const SEAL = ({ options }) => {
      * The SchemeType singleton
      *
      * @readonly
-     * @name SEAL#SchemeType
+     * @name SEAL.SchemeType
      * @type {SchemeType}
      * @example
      * import { Seal } from 'node-seal'
@@ -914,7 +914,7 @@ export const SEAL = ({ options }) => {
      * have to specify the security level explicitly anywhere.
      *
      * @readonly
-     * @name SEAL#SecurityLevel
+     * @name SEAL.SecurityLevel
      * @type {SecurityLevel}
      * @example
      * import { Seal } from 'node-seal'
