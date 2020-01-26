@@ -5,51 +5,62 @@ export const SecurityLevel = ({ library }) => {
   const _tc256 = library.SecLevelType.tc256
 
   /**
-   * @typedef {Object} SecurityLevel
-   * @implements ISecurityLevel
+   * @implements SecurityLevel
    */
 
   /**
-   * @interface ISecurityLevel
+   * @interface SecurityLevel
    */
   return {
     /**
      * Returns the 'none' security level
      *
-     * @name ISecurityLevel.none
+     * @name SecurityLevel.none
      * @type {SecurityLevel.none}
      */
     get none() {
+      /**
+       * @typedef {SecurityLevel.none} SecurityLevel.none
+       */
       return _none
     },
 
     /**
      * Returns the '128' security level
      *
-     * @name ISecurityLevel.tc128
+     * @name SecurityLevel.tc128
      * @type {SecurityLevel.tc128}
      */
     get tc128() {
+      /**
+       * @typedef {SecurityLevel.tc128} SecurityLevel.tc128
+       */
       return _tc128
     },
 
     /**
      * Returns the '192' security level
      *
-     * @name ISecurityLevel.tc192
+     * @name SecurityLevel.tc192
      * @type {SecurityLevel.tc192}
      */
     get tc192() {
+      /**
+       * @typedef {SecurityLevel.tc192} SecurityLevel.tc192
+       */
       return _tc192
     },
 
     /**
      * Returns the '256' security level
      *
-     * @name ISecurityLevel.tc256
+     * @name SecurityLevel.tc256
      * @type {SecurityLevel.tc256}
      */
     get tc256() {
+      /**
+       * @typedef {SecurityLevel.tc256} SecurityLevel.tc256
+       */
       return _tc256
     }
   }

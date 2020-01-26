@@ -12,12 +12,11 @@ export const CKKSEncoder = ({ library, context }) => {
   }
 
   /**
-   * @typedef {Object} CKKSEncoder
-   * @implements ICKKSEncoder
+   * @implements CKKSEncoder
    */
 
   /**
-   * @interface ICKKSEncoder
+   * @interface CKKSEncoder
    */
   return {
     /**
@@ -25,7 +24,7 @@ export const CKKSEncoder = ({ library, context }) => {
      *
      * @private
      * @readonly
-     * @name ICKKSEncoder#instance
+     * @name CKKSEncoder#instance
      * @type {instance}
      */
     get instance() {
@@ -37,7 +36,7 @@ export const CKKSEncoder = ({ library, context }) => {
      *
      * @private
      * @function
-     * @name ICKKSEncoder#inject
+     * @name CKKSEncoder#inject
      * @param {Object} options Options
      * @param {instance} options.instance WASM instance
      */
@@ -55,7 +54,7 @@ export const CKKSEncoder = ({ library, context }) => {
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name ICKKSEncoder#delete
+     * @name CKKSEncoder#delete
      */
     delete() {
       if (_instance) {
@@ -68,12 +67,12 @@ export const CKKSEncoder = ({ library, context }) => {
      * Encodes a vector of type double to a given plainText
      *
      * @function
-     * @name ICKKSEncoder#encodeVectorDouble
+     * @name CKKSEncoder#encodeVectorDouble
      * @param {Object} options Options
      * @param {Vector} options.vector Data to encode
      * @param {Number} options.scale Scaling parameter defining encoding precision
      * @param {PlainText} options.plainText Destination to store the encoded result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
     encodeVectorDouble({
       vector,
@@ -97,11 +96,11 @@ export const CKKSEncoder = ({ library, context }) => {
      * Decodes a double vector to a given plainText
      *
      * @function
-     * @name ICKKSEncoder#decodeVectorDouble
+     * @name CKKSEncoder#decodeVectorDouble
      * @param {Object} options Options
      * @param {PlainText} options.plainText Data to decode
      * @param {Vector} options.vector Destination to store the decoded result
-     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
     decodeVectorDouble({ plainText, vector, pool = _MemoryPoolHandle.global }) {
       try {
@@ -115,7 +114,7 @@ export const CKKSEncoder = ({ library, context }) => {
      * The total number of CKKS slots available to hold data
      *
      * @readonly
-     * @name ICKKSEncoder#slotCount
+     * @name CKKSEncoder#slotCount
      * @type {Number}
      */
     get slotCount() {

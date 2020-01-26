@@ -33,12 +33,11 @@ export const EncryptionParameters = ({
   }
 
   /**
-   * @typedef {Object} EncryptionParameters
-   * @implements IEncryptionParameters
+   * @implements EncryptionParameters
    */
 
   /**
-   * @interface IEncryptionParameters
+   * @interface EncryptionParameters
    */
   return {
     /**
@@ -46,7 +45,7 @@ export const EncryptionParameters = ({
      *
      * @private
      * @readonly
-     * @name IEncryptionParameters#instance
+     * @name EncryptionParameters#instance
      * @type {instance}
      */
     get instance() {
@@ -58,7 +57,7 @@ export const EncryptionParameters = ({
      *
      * @private
      * @function
-     * @name IEncryptionParameters#inject
+     * @name EncryptionParameters#inject
      * @param {Object} options Options
      * @param {instance} options.instance WASM instance
      */
@@ -76,7 +75,7 @@ export const EncryptionParameters = ({
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name IEncryptionParameters#delete
+     * @name EncryptionParameters#delete
      */
     delete() {
       if (_instance) {
@@ -94,7 +93,7 @@ export const EncryptionParameters = ({
      * of 2 (e.g.  1024, 2048, 4096, 8192, 16384, or 32768).
      *
      * @function
-     * @name IEncryptionParameters#setPolyModulusDegree
+     * @name EncryptionParameters#setPolyModulusDegree
      * @param {Object} options Options
      * @param {Number} options.polyModulusDegree The degree of the polynomial modulus
      */
@@ -116,7 +115,7 @@ export const EncryptionParameters = ({
      * and must be congruent to 1 modulo 2*degree(poly_modulus).
      *
      * @function
-     * @name IEncryptionParameters#setCoeffModulus
+     * @name EncryptionParameters#setCoeffModulus
      * @param {Object} options Options
      * @param {Vector} options.coeffModulus Vector of SmallModulus primes
      */
@@ -138,7 +137,7 @@ export const EncryptionParameters = ({
      * (e.g. batching) require the PlainText modulus to be of a particular form.
      *
      * @function
-     * @name IEncryptionParameters#setPlainModulus
+     * @name EncryptionParameters#setPlainModulus
      * @param {Object} options Options
      * @param {SmallModulus} options.plainModulus PlainText modulus parameter
      */
@@ -154,7 +153,7 @@ export const EncryptionParameters = ({
      * The encryption scheme type.
      *
      * @readonly
-     * @name IEncryptionParameters#scheme
+     * @name EncryptionParameters#scheme
      * @type {SchemeType.none|SchemeType.BFV|SchemeType.CKKS}
      */
     get scheme() {
@@ -165,7 +164,7 @@ export const EncryptionParameters = ({
      * The degree of the polynomial modulus parameter.
      *
      * @readonly
-     * @name IEncryptionParameters#polyModulusDegree
+     * @name EncryptionParameters#polyModulusDegree
      * @type {Number}
      */
     get polyModulusDegree() {
@@ -176,7 +175,7 @@ export const EncryptionParameters = ({
      * Returns the currently set coefficient modulus parameter.
      *
      * @readonly
-     * @name IEncryptionParameters#coeffModulus
+     * @name EncryptionParameters#coeffModulus
      * @type {Array<BigInt>}
      */
     get coeffModulus() {
@@ -196,7 +195,7 @@ export const EncryptionParameters = ({
      * Returns the currently set PlainText modulus parameter.
      *
      * @readonly
-     * @name IEncryptionParameters#plainModulus
+     * @name EncryptionParameters#plainModulus
      * @type {SmallModulus}
      */
     get plainModulus() {
@@ -210,9 +209,9 @@ export const EncryptionParameters = ({
      * Save the Encryption Parameters to a base64 string
      *
      * @function
-     * @name IEncryptionParameters#save
+     * @name EncryptionParameters#save
      * @param {Object} options Options
-     * @param {ComprModeType} [options.compression=ComprModeType.deflate] The compression mode to use
+     * @param {ComprModeType} [options.compression={@link ComprModeType.deflate}] The compression mode to use
      * @returns {String} base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
@@ -227,7 +226,7 @@ export const EncryptionParameters = ({
      * Load the Encryption Parameters from a base64 string
      *
      * @function
-     * @name IEncryptionParameters#load
+     * @name EncryptionParameters#load
      * @param {Object} options Options
      * @param {String} options.encoded base64 encoded string
      */

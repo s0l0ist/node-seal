@@ -12,12 +12,11 @@ export const GaloisKeys = ({ library }) => {
   }
 
   /**
-   * @typedef {Object} GaloisKeys
-   * @implements IGaloisKeys
+   * @implements GaloisKeys
    */
 
   /**
-   * @interface IGaloisKeys
+   * @interface GaloisKeys
    */
   return {
     /**
@@ -25,7 +24,7 @@ export const GaloisKeys = ({ library }) => {
      *
      * @private
      * @readonly
-     * @name IGaloisKeys#instance
+     * @name GaloisKeys#instance
      * @type {instance}
      */
     get instance() {
@@ -37,7 +36,7 @@ export const GaloisKeys = ({ library }) => {
      *
      * @private
      * @function
-     * @name IGaloisKeys#inject
+     * @name GaloisKeys#inject
      * @param {Object} options Options
      * @param {instance} options.instance WASM instance
      */
@@ -55,7 +54,7 @@ export const GaloisKeys = ({ library }) => {
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name IGaloisKeys#delete
+     * @name GaloisKeys#delete
      */
     delete() {
       if (_instance) {
@@ -68,9 +67,9 @@ export const GaloisKeys = ({ library }) => {
      * Save the GaloisKeys to a base64 string
      *
      * @function
-     * @name IGaloisKeys#save
+     * @name GaloisKeys#save
      * @param {Object} options Options
-     * @param {ComprModeType} [options.compression=ComprModeType.deflate] The compression mode to use
+     * @param {ComprModeType} [options.compression={@link ComprModeType.deflate}] The compression mode to use
      * @returns {String} Base64 encoded string
      */
     save({ compression = _ComprModeType.deflate } = {}) {
@@ -85,7 +84,7 @@ export const GaloisKeys = ({ library }) => {
      * Load a set of GaloisKeys from a base64 string
      *
      * @function
-     * @name IGaloisKeys#load
+     * @name GaloisKeys#load
      * @param {Object} options Options
      * @param {Context} options.context Encryption context to enforce
      * @param {String} options.encoded Base64 encoded string

@@ -9,12 +9,11 @@ export const ContextData = ({ library }) => {
   let _instance = null
 
   /**
-   * @typedef {Object} ContextData
-   * @implements IContextData
+   * @implements ContextData
    */
 
   /**
-   * @interface IContextData
+   * @interface ContextData
    */
   return {
     /**
@@ -22,7 +21,7 @@ export const ContextData = ({ library }) => {
      *
      * @private
      * @readonly
-     * @name IContextData#instance
+     * @name ContextData#instance
      * @type {instance}
      */
     get instance() {
@@ -34,7 +33,7 @@ export const ContextData = ({ library }) => {
      *
      * @private
      * @function
-     * @name IContextData#inject
+     * @name ContextData#inject
      * @param {Object} options Options
      * @param {instance} options.instance WASM instance
      */
@@ -52,7 +51,7 @@ export const ContextData = ({ library }) => {
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name IContextData#delete
+     * @name ContextData#delete
      */
     delete() {
       if (_instance) {
@@ -65,7 +64,7 @@ export const ContextData = ({ library }) => {
      * Returns a const reference to the underlying encryption parameters.
      *
      * @readonly
-     * @name IContextData#parms
+     * @name ContextData#parms
      * @type {EncryptionParameters}
      */
     get parms() {
@@ -86,7 +85,7 @@ export const ContextData = ({ library }) => {
      * Returns the parmsId of the current parameters.
      *
      * @readonly
-     * @name IContextData#parmsId
+     * @name ContextData#parmsId
      * @type {ParmsIdType}
      */
     get parmsId() {
@@ -107,7 +106,7 @@ export const ContextData = ({ library }) => {
      * to the encryption parameters have been made.
      *
      * @readonly
-     * @name IContextData#qualifiers
+     * @name ContextData#qualifiers
      * @type {EncryptionParameterQualifiers}
      */
     get qualifiers() {
@@ -127,7 +126,7 @@ export const ContextData = ({ library }) => {
      * Returns the significant bit count of the total coefficient modulus.
      *
      * @readonly
-     * @name IContextData#totalCoeffModulusBitCount
+     * @name ContextData#totalCoeffModulusBitCount
      * @type {Number}
      */
     get totalCoeffModulusBitCount() {
@@ -144,7 +143,7 @@ export const ContextData = ({ library }) => {
      * chain, then the result is nullptr.
      *
      * @readonly
-     * @name IContextData#prevContextData
+     * @name ContextData#prevContextData
      * @type {ContextData}
      */
     get prevContextData() {
@@ -164,7 +163,7 @@ export const ContextData = ({ library }) => {
      * chain, then the result is nullptr.
      *
      * @readonly
-     * @name IContextData#nextContextData
+     * @name ContextData#nextContextData
      * @type {ContextData}
      */
     get nextContextData() {
@@ -183,7 +182,7 @@ export const ContextData = ({ library }) => {
      * have index 0 and the index increases sequentially in the parameter chain.
      *
      * @readonly
-     * @name IEncryptionParameterQualifiers#chainIndex
+     * @name EncryptionParameterQualifiers#chainIndex
      * @type {Number}
      */
     get chainIndex() {

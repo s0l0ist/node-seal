@@ -12,12 +12,11 @@ export const SecretKey = ({ library }) => {
   }
 
   /**
-   * @typedef {Object} SecretKey
-   * @implements ISecretKey
+   * @implements SecretKey
    */
 
   /**
-   * @interface ISecretKey
+   * @interface SecretKey
    */
   return {
     /**
@@ -25,7 +24,7 @@ export const SecretKey = ({ library }) => {
      *
      * @private
      * @readonly
-     * @name ISecretKey#instance
+     * @name SecretKey#instance
      * @type {instance}
      */
     get instance() {
@@ -37,7 +36,7 @@ export const SecretKey = ({ library }) => {
      *
      * @private
      * @function
-     * @name ISecretKey#inject
+     * @name SecretKey#inject
      * @param {Object} options Options
      * @param {instance} options.instance WASM instance
      */
@@ -55,7 +54,7 @@ export const SecretKey = ({ library }) => {
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name ISecretKey#delete
+     * @name SecretKey#delete
      */
     delete() {
       if (_instance) {
@@ -68,9 +67,9 @@ export const SecretKey = ({ library }) => {
      * Save the Encryption Parameters to a base64 string
      *
      * @function
-     * @name ISecretKey#save
+     * @name SecretKey#save
      * @param {Object} options Options
-     * @param {ComprModeType} [options.compression=ComprModeType.none] The compression mode to use
+     * @param {ComprModeType} [options.compression={@link ComprModeType.none}] The compression mode to use
      * @returns {String} Base64 encoded string
      */
     save({ compression = _ComprModeType.none } = {}) {
@@ -85,7 +84,7 @@ export const SecretKey = ({ library }) => {
      * Load a SecretKey from a base64 string
      *
      * @function
-     * @name ISecretKey#load
+     * @name SecretKey#load
      * @param {Object} options Options
      * @param {Context} options.context Encryption context to enforce
      * @param {String} options.encoded Base64 encoded string

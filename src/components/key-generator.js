@@ -32,12 +32,11 @@ export const KeyGenerator = ({
   let _instance = constructInstance(secretKey, publicKey)
 
   /**
-   * @typedef {Object} KeyGenerator
-   * @implements IKeyGenerator
+   * @implements KeyGenerator
    */
 
   /**
-   * @interface IKeyGenerator
+   * @interface KeyGenerator
    */
   return {
     /**
@@ -45,7 +44,7 @@ export const KeyGenerator = ({
      *
      * @private
      * @readonly
-     * @name IKeyGenerator#instance
+     * @name KeyGenerator#instance
      * @type {instance}
      */
     get instance() {
@@ -57,7 +56,7 @@ export const KeyGenerator = ({
      *
      * @private
      * @function
-     * @name IKeyGenerator#inject
+     * @name KeyGenerator#inject
      * @param {Object} options Options
      * @param {instance} options.instance WASM instance
      */
@@ -75,7 +74,7 @@ export const KeyGenerator = ({
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name IKeyGenerator#delete
+     * @name KeyGenerator#delete
      */
     delete() {
       if (_instance) {
@@ -88,7 +87,7 @@ export const KeyGenerator = ({
      * Return the generated SecretKey
      *
      * @function
-     * @name IKeyGenerator#getSecretKey
+     * @name KeyGenerator#getSecretKey
      * @returns {SecretKey} The secret key that was generated upon instantiation of this KeyGenerator
      */
     getSecretKey() {
@@ -106,7 +105,7 @@ export const KeyGenerator = ({
      * Return the generated PublicKey
      *
      * @function
-     * @name IKeyGenerator#getPublicKey
+     * @name KeyGenerator#getPublicKey
      * @returns {PublicKey} The public key that was generated upon instantiation of this KeyGenerator
      */
     getPublicKey() {
@@ -124,7 +123,7 @@ export const KeyGenerator = ({
      * Generate and return a set of RelinKeys
      *
      * @function
-     * @name IKeyGenerator#genRelinKeys
+     * @name KeyGenerator#genRelinKeys
      * @returns {RelinKeys} New RelinKeys from the KeyGenerator's internal secret key
      */
     genRelinKeys() {
@@ -142,7 +141,7 @@ export const KeyGenerator = ({
      * Generate and return a set of GaloisKeys
      *
      * @function
-     * @name IKeyGenerator#genGaloisKeys
+     * @name KeyGenerator#genGaloisKeys
      * @returns {GaloisKeys} New GaloisKeys from the KeyGenerator's internal secret key
      */
     genGaloisKeys() {
