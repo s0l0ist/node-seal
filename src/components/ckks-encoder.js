@@ -1,9 +1,11 @@
 import { Exception } from './exception'
 import { MemoryPoolHandle } from './memory-pool-handle'
+import { PlainText } from './plain-text'
 
 export const CKKSEncoder = ({ library, context }) => {
   const _Exception = Exception({ library })
   const _MemoryPoolHandle = MemoryPoolHandle({ library })
+  const _library = library
   let _instance = null
   try {
     _instance = new library.CKKSEncoder(context.instance)
@@ -29,7 +31,13 @@ export const CKKSEncoder = ({ library, context }) => {
         return
       }
       if (array.constructor === Float64Array) {
-        return _instance.encode(array, scale, plainText.instance, pool)
+        if (plainText) {
+          _instance.encode(array, scale, plainText.instance, pool)
+          return
+        }
+        const plain = PlainText({ library: _library })
+        _instance.encode(array, scale, plain.instance, pool)
+        return plain
       } else {
         throw new Error(
           'Unsupported array type! `array` must be of type Float64Array.'
@@ -154,9 +162,18 @@ export const CKKSEncoder = ({ library, context }) => {
      * @param {Object} options Options
      * @param {Float64Array} options.array Data to encode
      * @param {Number} options.scale Scaling parameter defining encoding precision
-     * @param {Vector} [options.vector] Deprecated: Data to encode
-     * @param {PlainText} options.plainText Destination to store the encoded result
+     * @param {PlainText} [options.plainText] Destination to store the encoded result
      * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {PlainText} PlainText holding the encoded data
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const ckksEncoder = Morfix.CKKSEncoder({ context })
+     *
+     * const plainText = ckksEncoder.encode({
+     *   array: Float64Array.from([1.11, -2.222, 3.333])
+     * })
      */
     encode: options => encode(options),
 
@@ -169,10 +186,8 @@ export const CKKSEncoder = ({ library, context }) => {
      * @name CKKSEncoder#decode
      * @param {Object} options Options
      * @param {PlainText} options.plainText Data to decode
-     * @param {Vector} [options.vector] Deprecated: Destination to store the decoded result
      * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {Float64Array|undefined} Does not return a value if a Vector was passed, other wise
-     * returns the decoded values directly
+     * @returns {Float64Array} TypedArray containing the decoded data
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal

@@ -36,22 +36,22 @@ describe('encrypt on BFV', () => {
       expect(context.parametersSet).toBe(true)
 
       const encoder = Morfix.BatchEncoder({
-        context: context
+        context
       })
 
       const keyGenerator = Morfix.KeyGenerator({
-        context: context
+        context
       })
 
       const publicKey = keyGenerator.getPublicKey()
       const secretKey = keyGenerator.getSecretKey()
       const encryptor = Morfix.Encryptor({
-        context: context,
-        publicKey: publicKey
+        context,
+        publicKey
       })
       const decryptor = Morfix.Decryptor({
-        context: context,
-        secretKey: secretKey
+        context,
+        secretKey
       })
 
       // Create data to be encrypted
@@ -59,26 +59,19 @@ describe('encrypt on BFV', () => {
         length: 32768
       }).map((x, i) =>  i)
 
-      // Create a plainText variable and encode the vector to it
-      const plainText = Morfix.PlainText()
+      // Encode the Array
+      const plainText = encoder.encode({
+        array
+      })
 
-      encoder.encode({
-        array,
+      // Encrypt the PlainText
+      const cipherText = encryptor.encrypt({
         plainText
       })
 
-      // Create a cipherText variable and encrypt the plainText to it
-      const cipherText = Morfix.CipherText()
-      encryptor.encrypt({
-        plainText,
+      // Decrypt the CipherText
+      const decryptedPlainText = decryptor.decrypt({
         cipherText
-      })
-
-      // Create a new plainText variable to store the decrypted cipherText
-      const decryptedPlainText = Morfix.PlainText()
-      decryptor.decrypt({
-        cipherText,
-        plainText: decryptedPlainText
       })
 
       // Decode the PlainText

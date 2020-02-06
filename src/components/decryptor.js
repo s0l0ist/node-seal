@@ -1,7 +1,9 @@
 import { Exception } from './exception'
+import { PlainText } from './plain-text'
 
 export const Decryptor = ({ library, context, secretKey }) => {
   const _Exception = Exception({ library })
+  const _library = library
   let _instance = null
   try {
     _instance = new library.Decryptor(context.instance, secretKey.instance)
@@ -68,11 +70,19 @@ export const Decryptor = ({ library, context, secretKey }) => {
      * @name Decryptor#decrypt
      * @param {Object} options Options
      * @param {CipherText} options.cipherText CipherText to decrypt
-     * @param {PlainText} options.plainText PlainText destination to store the result
+     * @param {PlainText} [options.plainText] PlainText destination to store the decrypted result
+     * @returns {PlainText|undefined} Returns undefined if a PlainText was specified. Otherwise returns a
+     * PlainText containng the decrypted result
      */
     decrypt({ cipherText, plainText }) {
       try {
-        _instance.decrypt(cipherText.instance, plainText.instance)
+        if (plainText) {
+          _instance.decrypt(cipherText.instance, plainText.instance)
+          return
+        }
+        const plain = PlainText({ library: _library })
+        _instance.decrypt(cipherText.instance, plain.instance)
+        return plain
       } catch (e) {
         throw _Exception.safe({ error: e })
       }

@@ -1,9 +1,11 @@
 import { Exception } from './exception'
 import { MemoryPoolHandle } from './memory-pool-handle'
+import { PlainText } from './plain-text'
 
 export const BatchEncoder = ({ library, context }) => {
   const _Exception = Exception({ library })
   const _MemoryPoolHandle = MemoryPoolHandle({ library })
+  const _library = library
   let _instance = null
   try {
     _instance = new library.BatchEncoder(context.instance)
@@ -21,16 +23,30 @@ export const BatchEncoder = ({ library, context }) => {
         _instance.encodeVectorUInt32(vector.instance, plainText.instance)
         return
       }
-      switch (array.constructor) {
-        case Int32Array:
-          return _instance.encode(array, plainText.instance, true)
-        case Uint32Array:
-          return _instance.encode(array, plainText.instance, false)
-        default:
-          throw new Error(
-            'Unsupported array type! `array` must be of type Int32Array or Uint32Array.'
-          )
+
+      if (array.constructor === Int32Array) {
+        if (plainText) {
+          _instance.encode(array, plainText.instance, true)
+          return
+        }
+        const plain = PlainText({ library: _library })
+        _instance.encode(array, plain.instance, true)
+        return plain
       }
+
+      if (array.constructor === Uint32Array) {
+        if (plainText) {
+          _instance.encode(array, plainText.instance, false)
+          return
+        }
+        const plain = PlainText({ library: _library })
+        _instance.encode(array, plain.instance, false)
+        return plain
+      }
+
+      throw new Error(
+        'Unsupported array type! `array` must be of type Int32Array or Uint32Array.'
+      )
     } catch (e) {
       throw _Exception.safe({ error: e })
     }
@@ -257,19 +273,16 @@ export const BatchEncoder = ({ library, context }) => {
      * @name BatchEncoder#encode
      * @param {Object} options Options
      * @param {Int32Array|Uint32Array} options.array Data to encode
-     * @param {Vector} [options.vector] Deprecated: Data to encode
-     * @param {String} [options.helper] Deprecated: Required hint for the Vector type
-     * @param {PlainText} options.plainText Destination to store the encoded result
+     * @param {PlainText} [options.plainText] Destination to store the encoded result
+     * @returns {PlainText} PlainText holding the encoded data
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
      * const batchEncoder = Morfix.BatchEncoder({ context })
-     * const plainText = Morfix.PlainText()
      *
-     * batchEncoder.encode({
-     *   array: Int32Array.from([1, -2, 3]),
-     *   plainText
+     * const plainText = batchEncoder.encode({
+     *   array: Int32Array.from([1, -2, 3])
      * })
      */
     encode: options => encode(options),
@@ -286,19 +299,19 @@ export const BatchEncoder = ({ library, context }) => {
      * @name BatchEncoder#decode
      * @param {Object} options Options
      * @param {PlainText} options.plainText Data to decode
-     * @param {Boolean} [options.signed=true] By default, return an Int32Array. If false, return a Uint32Array
-     * @param {Vector} [options.vector] Deprecated: Destination to store the decoded result
+     * @param {Boolean} [options.signed=true] By default, decode as an Int32Array. If false, decode as an Uint32Array
      * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}]
-     * @returns {Int32Array|Uint32Array|undefined} Does not return a value if a Vector was passed, other wise
-     * returns the decoded values directly
+     * @returns {Int32Array|Uint32Array} TypedArray containing the decoded data
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
      * const batchEncoder = Morfix.BatchEncoder({ context })
      *
-     * const plainText = Morfix.PlainText()
-     * batchEncoder.encode({ array: Int32Array.from([1, 2, 3]), plainText: plain })
+     * const plainText = batchEncoder.encode({
+     *   array: Int32Array.from([1, 2, 3]),
+     *   signed: true // set to false to decode as a Uint32Array
+     * })
      *
      * const result = batchEncoder.decode({
      *   plainText
