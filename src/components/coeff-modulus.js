@@ -5,6 +5,7 @@ export const CoeffModulus = ({ library }) => {
   const _MaxBitCount = library.CoeffModulus.MaxBitCount
   const _BFVDefault = library.CoeffModulus.BFVDefault
   const _Create = library.CoeffModulus.Create
+  const _CreateFromArray = library.CoeffModulus.CreateFromArray
 
   /**
    * @implements CoeffModulus
@@ -57,12 +58,24 @@ export const CoeffModulus = ({ library }) => {
      * @name CoeffModulus.Create
      * @param {Object} options Options
      * @param {Number} options.polyModulusDegree Degree of the polynomial modulus
-     * @param {Vector} options.bitSizes Vector containing int32 values representing bit-sizes of primes
+     * @param {Vector|Int32Array} options.bitSizes Deprecated: Vector or an Int32Array containing values representing
+     * bit-sizes of primes
      * @returns {Vector<SmallModulus>} Vector containing SmallModulus primes
      */
     Create({ polyModulusDegree, bitSizes }) {
       try {
-        return _Create(polyModulusDegree, bitSizes.instance)
+        if (bitSizes.constructor === Object) {
+          console.warn(
+            'CoeffModulus.Create with `bitSizes` of type Vector has been deprecated since 3.2.0, use an Int32Array'
+          )
+          return _Create(polyModulusDegree, bitSizes.instance)
+        }
+        if (bitSizes.constructor === Int32Array) {
+          return _CreateFromArray(polyModulusDegree, bitSizes)
+        }
+        throw new Error(
+          'Unsupported argument type! `bitSizes` must be either an Int32Array or a Vector'
+        )
       } catch (e) {
         throw _Exception.safe({ error: e })
       }

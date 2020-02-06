@@ -11,6 +11,48 @@ export const BatchEncoder = ({ library, context }) => {
     throw _Exception.safe({ error: e })
   }
 
+  const encode = ({ array, vector, plainText, signed = true }) => {
+    try {
+      if (vector) {
+        if (signed) {
+          _instance.encodeVectorInt32(vector.instance, plainText.instance)
+          return
+        }
+        _instance.encodeVectorUInt32(vector.instance, plainText.instance)
+        return
+      }
+      switch (array.constructor) {
+        case Int32Array:
+          return _instance.encode(array, plainText.instance, true)
+        case Uint32Array:
+          return _instance.encode(array, plainText.instance, false)
+        default:
+          throw new Error(
+            'Unsupported array type! `array` must be of type Int32Array or Uint32Array.'
+          )
+      }
+    } catch (e) {
+      throw _Exception.safe({ error: e })
+    }
+  }
+
+  const decode = ({
+    plainText,
+    vector,
+    signed = true,
+    pool = _MemoryPoolHandle.global
+  }) => {
+    if (vector) {
+      if (signed) {
+        _instance.decodeVectorInt32(plainText.instance, vector.instance, pool)
+        return
+      }
+      _instance.decodeVectorUInt32(plainText.instance, vector.instance, pool)
+      return
+    }
+    return _instance.decode(plainText.instance, signed, pool)
+  }
+
   /**
    * @implements BatchEncoder
    */
@@ -75,6 +117,7 @@ export const BatchEncoder = ({ library, context }) => {
      * If the destination PlainText overlaps the input values in memory, the behavior of
      * this function is undefined.
      *
+     * @deprecated since version 3.2.0
      * @function
      * @name BatchEncoder#encodeVectorInt32
      * @param {Object} options Options
@@ -90,11 +133,8 @@ export const BatchEncoder = ({ library, context }) => {
      * batchEncoder.encodeVectorInt32({ vector: vectorInt32, plainText: plain })
      */
     encodeVectorInt32({ vector, plainText }) {
-      try {
-        _instance.encodeVectorInt32(vector.instance, plainText.instance)
-      } catch (e) {
-        throw _Exception.safe({ error: e })
-      }
+      console.warn('encodeVectorInt32 has been deprecated since 3.2.0')
+      encode({ vector, plainText })
     },
 
     /**
@@ -109,6 +149,7 @@ export const BatchEncoder = ({ library, context }) => {
      * If the destination PlainText overlaps the input values in memory, the behavior of
      * this function is undefined.
      *
+     * @deprecated since version 3.2.0
      * @function
      * @name BatchEncoder#encodeVectorUInt32
      * @param {Object} options Options
@@ -124,11 +165,8 @@ export const BatchEncoder = ({ library, context }) => {
      * batchEncoder.encodeVectorInt32({ vector: vectorUint32, plainText: plain })
      */
     encodeVectorUInt32({ vector, plainText }) {
-      try {
-        _instance.encodeVectorUInt32(vector.instance, plainText.instance)
-      } catch (e) {
-        throw _Exception.safe({ error: e })
-      }
+      console.warn('encodeVectorUInt32 has been deprecated since 3.2.0')
+      encode({ vector, plainText, signed: false })
     },
 
     /**
@@ -139,6 +177,7 @@ export const BatchEncoder = ({ library, context }) => {
      * for the encryption parameters. Dynamic memory allocations in the process are
      * allocated from the memory pool pointed to by the given MemoryPoolHandle.
      *
+     * @deprecated since version 3.2.0
      * @function
      * @name BatchEncoder#decodeVectorInt32
      * @param {Object} options Options
@@ -162,11 +201,8 @@ export const BatchEncoder = ({ library, context }) => {
      * })
      */
     decodeVectorInt32({ plainText, vector, pool = _MemoryPoolHandle.global }) {
-      try {
-        _instance.decodeVectorInt32(plainText.instance, vector.instance, pool)
-      } catch (e) {
-        throw _Exception.safe({ error: e })
-      }
+      console.warn('decodeVectorInt32 has been deprecated since 3.2.0')
+      decode({ plainText, vector, pool })
     },
 
     /**
@@ -177,6 +213,7 @@ export const BatchEncoder = ({ library, context }) => {
      * for the encryption parameters. Dynamic memory allocations in the process are
      * allocated from the memory pool pointed to by the given MemoryPoolHandle.
      *
+     * @deprecated since version 3.2.0
      * @function
      * @name BatchEncoder#decodeVectorUInt32
      * @param {Object} options Options
@@ -200,12 +237,74 @@ export const BatchEncoder = ({ library, context }) => {
      * })
      */
     decodeVectorUInt32({ plainText, vector, pool = _MemoryPoolHandle.global }) {
-      try {
-        _instance.decodeVectorUInt32(plainText.instance, vector.instance, pool)
-      } catch (e) {
-        throw _Exception.safe({ error: e })
-      }
+      console.warn('decodeVectorUInt32 has been deprecated since 3.2.0')
+      decode({ plainText, vector, pool, signed: false })
     },
+
+    /**
+     * Creates a PlainText from a given matrix. This function "batches" a given matrix
+     * of either signed or unsigned integers modulo the PlainText modulus into a PlainText element, and stores
+     * the result in the destination parameter. The input array must have size at most equal
+     * to the degree of the polynomial modulus. The first half of the elements represent the
+     * first row of the matrix, and the second half represent the second row. The numbers
+     * in the matrix can be at most equal to the PlainText modulus for it to represent
+     * a valid PlainText.
+     *
+     * If the destination PlainText overlaps the input values in memory, the behavior of
+     * this function is undefined.
+     *
+     * @function
+     * @name BatchEncoder#encode
+     * @param {Object} options Options
+     * @param {Int32Array|Uint32Array} options.array Data to encode
+     * @param {Vector} [options.vector] Deprecated: Data to encode
+     * @param {String} [options.helper] Deprecated: Required hint for the Vector type
+     * @param {PlainText} options.plainText Destination to store the encoded result
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const batchEncoder = Morfix.BatchEncoder({ context })
+     * const plainText = Morfix.PlainText()
+     *
+     * batchEncoder.encode({
+     *   array: Int32Array.from([1, -2, 3]),
+     *   plainText
+     * })
+     */
+    encode: options => encode(options),
+
+    /**
+     * Inverse of encode. This function "unbatches" a given PlainText into a matrix
+     * of signed or unsigned integers modulo the PlainText modulus, and stores the result in the destination
+     * parameter. The input PlainText must have degrees less than the polynomial modulus,
+     * and coefficients less than the PlainText modulus, i.e. it must be a valid PlainText
+     * for the encryption parameters. Dynamic memory allocations in the process are
+     * allocated from the memory pool pointed to by the given MemoryPoolHandle.
+     *
+     * @function
+     * @name BatchEncoder#decode
+     * @param {Object} options Options
+     * @param {PlainText} options.plainText Data to decode
+     * @param {Boolean} [options.signed=true] By default, return an Int32Array. If false, return a Uint32Array
+     * @param {Vector} [options.vector] Deprecated: Destination to store the decoded result
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}]
+     * @returns {Int32Array|Uint32Array|undefined} Does not return a value if a Vector was passed, other wise
+     * returns the decoded values directly
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const batchEncoder = Morfix.BatchEncoder({ context })
+     *
+     * const plainText = Morfix.PlainText()
+     * batchEncoder.encode({ array: Int32Array.from([1, 2, 3]), plainText: plain })
+     *
+     * const result = batchEncoder.decode({
+     *   plainText
+     * })
+     */
+    decode: options => decode(options),
 
     /**
      * The total number of batching slots available to hold data
