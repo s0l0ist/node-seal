@@ -11,12 +11,11 @@ describe('encrypt on CKKS', () => {
         polyModulusDegree: 16384
       })
 
-      // Create a suitable vector of CoeffModulus primes (we use default set)
+      // Create a suitable set of CoeffModulus primes (we use default set)
       parms.setCoeffModulus({
         coeffModulus: Morfix.CoeffModulus.Create({
           polyModulusDegree: 16384,
-          bitSizes: Morfix.Vector({array: new Int32Array([60,39,39,39,39,39,39,39,39,60]) }),
-          securityLevel: Morfix.SecurityLevel.tc128
+          bitSizes: Int32Array.from([60,39,39,39,39,39,39,39,39,60])
         })
       })
 
@@ -52,49 +51,38 @@ describe('encrypt on CKKS', () => {
         length: 8192
       }).map((x, i) =>  i)
 
-      // Convert data to a c++ 'vector'
-      const vector = Morfix.Vector({array})
-
       // Create a plainText variable and encode the vector to it
       const plainText = Morfix.PlainText()
 
-      encoder.encodeVectorDouble({
-        vector: vector,
+      encoder.encode({
+        array,
         scale: Math.pow(2, 39),
-        plainText: plainText
+        plainText
       })
 
       // Create a cipherText variable and encrypt the plainText to it
       const cipherText = Morfix.CipherText()
       encryptor.encrypt({
-        plainText: plainText,
-        cipherText: cipherText
+        plainText,
+        cipherText
       })
 
       // Create a new plainText variable to store the decrypted cipherText
       const decryptedPlainText = Morfix.PlainText()
       decryptor.decrypt({
-        cipherText: cipherText,
+        cipherText,
         plainText: decryptedPlainText
       })
 
-      // Create a c++ vector to store the decoded result
-      const decodeVector = Morfix.Vector({array: new Float64Array() })
-
-      // Decode the PlainText to the c++ vector
-      encoder.decodeVectorDouble({
-        plainText: decryptedPlainText,
-        vector: decodeVector
+      // Decode the PlainText
+      const decodedArray = encoder.decode({
+        plainText: decryptedPlainText
       })
 
-      // Convert the vector to a JS array
-      const decryptedArray = decodeVector.toArray()
-
-      expect(decryptedArray).toBeInstanceOf(Float64Array)
-
+      expect(decodedArray).toBeInstanceOf(Float64Array)
       // Hacks to get quick approximate values. Convert ±0 to 0 by adding 0.
       const approxValues = array.map(x => 0 + Math.round(x))
-      const approxDecrypted = decryptedArray.map(x => 0 + Math.round(x))
+      const approxDecrypted = decodedArray.map(x => 0 + Math.round(x))
       // Check values
       expect(approxDecrypted).toEqual(approxValues)
 
