@@ -36,7 +36,7 @@ describe('relinkey on BFV', () => {
       expect(context.parametersSet).toBe(true)
 
       const keyGenerator = Morfix.KeyGenerator({
-        context: context
+        context
       })
 
       const spyGenRelinKeys = jest.spyOn(keyGenerator, 'genRelinKeys')

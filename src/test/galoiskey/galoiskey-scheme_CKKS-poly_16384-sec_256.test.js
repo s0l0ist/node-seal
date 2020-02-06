@@ -28,7 +28,7 @@ describe('galoiskey on CKKS', () => {
       expect(context.parametersSet).toBe(true)
 
       const keyGenerator = Morfix.KeyGenerator({
-        context: context
+        context
       })
 
       const spyGenGaloisKeys = jest.spyOn(keyGenerator, 'genGaloisKeys')
