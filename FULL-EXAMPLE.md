@@ -9,9 +9,7 @@ CommonJS (but also works with `import`)
 
   // Using CommonJS for RunKit
   const { Seal } = require('node-seal')
-
   const Morfix = await Seal
-
   const parms = Morfix.EncryptionParameters({
     schemeType: Morfix.SchemeType.BFV
   })
@@ -20,12 +18,11 @@ CommonJS (but also works with `import`)
     polyModulusDegree: 4096
   })
 
-  // Create a suitable vector of CoeffModulus primes
+  // Create a suitable set of CoeffModulus primes
   parms.setCoeffModulus({
     coeffModulus: Morfix.CoeffModulus.Create({
       polyModulusDegree: 4096,
-      bitSizes: Morfix.Vector({array: new Int32Array([36,36,37]) }),
-      securityLevel: Morfix.SecurityLevel.tc128
+      bitSizes: Int32Array.from([36,36,37])
     })
   })
 
@@ -48,65 +45,57 @@ CommonJS (but also works with `import`)
   }
 
   const encoder = Morfix.BatchEncoder({
-    context: context
+    context
   })
 
   const keyGenerator = Morfix.KeyGenerator({
-    context: context
+    context
   })
 
   const publicKey = keyGenerator.getPublicKey()
   const secretKey = keyGenerator.getSecretKey()
   const encryptor = Morfix.Encryptor({
-    context: context,
-    publicKey: publicKey
+    context,
+    publicKey
   })
   const decryptor = Morfix.Decryptor({
-    context: context,
-    secretKey: secretKey
+    context,
+    secretKey
+  })
+  const evaluator = Morfix.Evaluator({
+  	context
   })
 
   // Create data to be encrypted
-  const array = Int32Array.from({
-    length: 4096
-  }).map((x, i) =>  i)
+  const array = Int32Array.from([1,2,3,4,5])
 
-  // Convert data to a c++ 'vector'
-  const vector = Morfix.Vector({array})
-
-  // Create a plainText variable and encode the vector to it
-  const plainText = Morfix.PlainText()
-
-  encoder.encodeVectorInt32({
-    vector: vector,
-    plainText: plainText
+  // Encode the Array
+  const plainText = encoder.encode({
+    array
   })
 
-  // Create a cipherText variable and encrypt the plainText to it
-  const cipherText = Morfix.CipherText()
-  encryptor.encrypt({
-    plainText: plainText,
-    cipherText: cipherText
+  // Encrypt the PlainText
+  const cipherText = encryptor.encrypt({
+    plainText
   })
 
-  // Create a new plainText variable to store the decrypted cipherText
-  const decryptedPlainText = Morfix.PlainText()
-  decryptor.decrypt({
-    cipherText: cipherText,
+  // Add the CipherText to itself and overwrite its data with the sum
+  evaluator.add({
+    a: cipherText,
+    b: cipherText,
+    destination: cipherText
+  }) 
+
+  // Decrypt the CipherText
+  const decryptedPlainText = decryptor.decrypt({
+    cipherText
+  })
+
+  // Decode the PlainText
+  const decodedArray = encoder.decode({
     plainText: decryptedPlainText
   })
 
-  // Create a c++ vector to store the decoded result
-  const decodeVector = Morfix.Vector({array: new Int32Array() })
-
-  // Decode the plaintext to the c++ vector
-  encoder.decodeVectorInt32({
-    plainText: decryptedPlainText,
-    vector: decodeVector
-  })
-
-  // Convert the vector to a JS array
-  const decryptedArray = decodeVector.toArray()
-  console.log('decryptedArray', decryptedArray)
+  console.log('decodedArray', decodedArray)
 })()
 ```
