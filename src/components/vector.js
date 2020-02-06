@@ -1,6 +1,9 @@
 import { Exception } from './exception'
 
 export const Vector = ({ library, array = new Int32Array(0) }) => {
+  console.warn(
+    'Creating vectors is no longer necessary and has been deprecated since 3.2.0'
+  )
   const _Exception = Exception({ library })
   const _vecFromArrayInt32 = library.vecFromArrayInt32
   const _vecFromArrayUInt32 = library.vecFromArrayUInt32
