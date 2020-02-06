@@ -96,22 +96,22 @@ const genTests = (verb) => {
       expect(context.parametersSet).toBe(true)
 
       const encoder = ${ENCODERS_CONSTRUCTOR[SCHEME_TYPES[schemeType]]}({
-        context: context
+        context
       })
 
       const keyGenerator = Morfix.KeyGenerator({
-        context: context
+        context
       })
 
       const publicKey = keyGenerator.getPublicKey()
       const secretKey = keyGenerator.getSecretKey()
       const encryptor = Morfix.Encryptor({
-        context: context,
-        publicKey: publicKey
+        context,
+        publicKey
       })
       const decryptor = Morfix.Decryptor({
-        context: context,
-        secretKey: secretKey
+        context,
+        secretKey
       })
 `)
 
@@ -123,32 +123,24 @@ const genTests = (verb) => {
       }).map((x, i) =>  i)
 `)
 
-          code.push(`
-      // Create a plainText variable and encode the vector to it
-      const plainText = Morfix.PlainText()
-`)
 
           // If BFV don't include the scale
           // Encode the data
           code.push(`
-      encoder.${ENCODE_ACTIONS_CONSTRUCTOR[SCHEME_TYPES[schemeType]][TYPES[type]]}({
-        array,${schemeType === SCHEME_TYPES.CKKS ? `\n        scale: Math.pow(2, ${Math.min(...CKKS_COEFF_MOD_BIT_SIZES[SECURITY_LEVELS[secLevel]][POLYMODULUS_DEGREES[polyModDeg]])}),` : ''}
-        plainText${SCHEME_TYPES[schemeType] === SCHEME_TYPES.BFV ? TYPES[type] === TYPES.INT32 ? '' : ',\n        signed: false' : ''}
+      // Encode the Array
+      const plainText = encoder.${ENCODE_ACTIONS_CONSTRUCTOR[SCHEME_TYPES[schemeType]][TYPES[type]]}({
+        array${schemeType === SCHEME_TYPES.CKKS ? `,\n        scale: Math.pow(2, ${Math.min(...CKKS_COEFF_MOD_BIT_SIZES[SECURITY_LEVELS[secLevel]][POLYMODULUS_DEGREES[polyModDeg]])})` : ''}${SCHEME_TYPES[schemeType] === SCHEME_TYPES.BFV ? TYPES[type] === TYPES.INT32 ? '' : ',\n        signed: false' : ''}
       })
 `)
           code.push(`
-      // Create a cipherText variable and encrypt the plainText to it
-      const cipherText = Morfix.CipherText()
-      encryptor.encrypt({
-        plainText,
-        cipherText
+      // Encrypt the PlainText
+      const cipherText = encryptor.encrypt({
+        plainText
       })
 
-      // Create a new plainText variable to store the decrypted cipherText
-      const decryptedPlainText = Morfix.PlainText()
-      decryptor.decrypt({
-        cipherText,
-        plainText: decryptedPlainText
+      // Decrypt the CipherText
+      const decryptedPlainText = decryptor.decrypt({
+        cipherText
       })
 
       // Decode the PlainText

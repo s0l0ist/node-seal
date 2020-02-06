@@ -87,7 +87,7 @@ const genTests = (verb) => {
       expect(context.parametersSet).toBe(true)
 
       const keyGenerator = Morfix.KeyGenerator({
-        context: context
+        context
       })
 
       const spyGenRelinKeys = jest.spyOn(keyGenerator, 'genRelinKeys')

@@ -36,7 +36,7 @@ describe('keypair on BFV', () => {
       expect(context.parametersSet).toBe(true)
 
       const keyGenerator = Morfix.KeyGenerator({
-        context: context
+        context
       })
 
       const spyGetSecretKey = jest.spyOn(keyGenerator, 'getSecretKey')
@@ -51,7 +51,7 @@ describe('keypair on BFV', () => {
       const spySaveSecretKey = jest.spyOn(secretKey, 'save')
       const secretKeyBase64 = secretKey.save()
       expect(spySaveSecretKey).toHaveBeenCalled()
-      
+
       const spySavePublicKey = jest.spyOn(publicKey, 'save')
       const publicKeyBase64 = publicKey.save()
       expect(spySavePublicKey).toHaveBeenCalled()

@@ -1,10 +1,11 @@
 import { Exception } from './exception'
 import { MemoryPoolHandle } from './memory-pool-handle'
+import { CipherText } from './cipher-text'
 
 export const Encryptor = ({ library, context, publicKey }) => {
   const _Exception = Exception({ library })
   const _MemoryPoolHandle = MemoryPoolHandle({ library })
-
+  const _library = library
   let _instance = null
   try {
     _instance = new library.Encryptor(context.instance, publicKey.instance)
@@ -73,12 +74,20 @@ export const Encryptor = ({ library, context, publicKey }) => {
      * @name Encryptor#encrypt
      * @param {Object} options Options
      * @param {PlainText} options.plainText PlainText to encrypt
-     * @param {CipherText} options.cipherText CipherText destination to store the result
+     * @param {CipherText} [options.cipherText] CipherText destination to store the encrypted result
      * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {CipherText|undefined} Returns undefined if a CipherText was specified. Otherwise returns a
+     * CipherText containng the enrypted result
      */
     encrypt({ plainText, cipherText, pool = _MemoryPoolHandle.global }) {
       try {
-        _instance.encrypt(plainText.instance, cipherText.instance, pool)
+        if (cipherText) {
+          _instance.encrypt(plainText.instance, cipherText.instance, pool)
+          return
+        }
+        const cipher = CipherText({ library: _library })
+        _instance.encrypt(plainText.instance, cipher.instance, pool)
+        return cipher
       } catch (e) {
         throw _Exception.safe({ error: e })
       }

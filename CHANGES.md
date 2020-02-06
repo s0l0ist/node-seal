@@ -18,6 +18,18 @@ Deprecated:
 - Creating a `Vector` is now obsolete, however it is still available.
 - `CoeffModulus.Create` now accepts `bitSizes` as an Int32Array in addition to the legacy Vector type.
 
+## Version 3.1.1
+
+Some methods now accept optional parameters and if omitted, 
+will return an instance for you. This change allows more compact
+syntax.
+
+Feat:
+- `BatchEncoder.encoder` returns a `PlainText` if one is not specified in the arguments.
+- `CKKSEncoder.encoder` returns a `PlainText` if one is not specified in the arguments.
+- `Encryptor.encrypt` returns a `CipherText` if one is not specified in the arguments.
+- `Decryptor.decrypt` returns a `PlainText` if one is not specified in the arguments.
+
 ## Version 3.1.0
 
 Fix:
