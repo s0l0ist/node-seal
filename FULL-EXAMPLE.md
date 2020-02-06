@@ -63,7 +63,7 @@ CommonJS (but also works with `import`)
     secretKey
   })
   const evaluator = Morfix.Evaluator({
-  	context
+    context
   })
 
   // Create data to be encrypted
