@@ -15,7 +15,7 @@ Deprecated:
   a either an Int32Array or Uint32Array with the results. 
 - In `CKKSEncode`, replace `decodeVectorDouble` with `CKKSEncode.decode`. This method returns
   a Float64Array with the results.
-- Creating a `Vector`is now deprecated.
+- Creating a `Vector` is now obsolete, however it is still available.
 - `CoeffModulus.Create` now accepts `bitSizes` as an Int32Array in addition to the legacy Vector type.
 
 ## Version 3.1.0
