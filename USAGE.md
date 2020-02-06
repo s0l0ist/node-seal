@@ -90,7 +90,7 @@ encParms.setCoeffModulus({
 encParms.setPlainModulus({
   plainModulus: Morfix.PlainModulus.Batching({
     polyModulusDegree: 4096,
-    bitSize: 20,
+    bitSize: 20
   })
 })
 ```
