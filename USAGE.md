@@ -153,7 +153,7 @@ const galoisKey = keyGenerator.genGaloisKeys()
 const secretBase64Key = secretKey.save()
 const publicBase64Key = publicKey.save()
 const relinBase64Key = relinKey.save()
-// Please note savinig Galois keys can take an even longer time and the output is **very** large.
+// Please note saving Galois keys can take an even longer time and the output is **very** large.
 const galoisBase64Key = galoisKey.save()
 
 // Loading a key from a base64 string is the same for each type of key
