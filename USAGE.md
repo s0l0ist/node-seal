@@ -86,11 +86,6 @@ encParms.setCoeffModulus({
   })
 })
 
-// Assign Coefficient Modulus
-encParms.setCoeffModulus({
-  coeffModulus: coeffModulusVector
-})
-
 // Assign a PlainModulus (only for BFV scheme type)
 encParms.setPlainModulus({
   plainModulus: Morfix.PlainModulus.Batching({
@@ -202,7 +197,7 @@ const keyGenerator = Morfix.KeyGenerator({
 ### Variables
 
 Variables hold data we are manipulating. PlainTexts store encoded values of the human readable data that we
- provide. CipherTexts store encrypted values of the encoded PlainText.
+ provide. CipherTexts store encrypted values of the encoded PlainText. Homomorphic operations occur on CipherTexts.
 
 ```
 ////////////////////////
@@ -226,7 +221,7 @@ const uploadedPlain = Morfix.PlainText()
 uploadedPlain.load({ context, encoded: plainAbase64 })
 
 // Saving
-... after some encoding...
+... after some encryption...
 const cipherAbase64 = cipherA.save() // Saves as a base64 string.
 
 // Loading. Create an empty instance, then use the following method
