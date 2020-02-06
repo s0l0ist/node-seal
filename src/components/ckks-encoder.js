@@ -172,7 +172,8 @@ export const CKKSEncoder = ({ library, context }) => {
      * const ckksEncoder = Morfix.CKKSEncoder({ context })
      *
      * const plainText = ckksEncoder.encode({
-     *   array: Float64Array.from([1.11, -2.222, 3.333])
+     *   array: Float64Array.from([1.11, -2.222, 3.333]),
+     *   scale: Math.pow(2, 20)
      * })
      */
     encode: options => encode(options),
