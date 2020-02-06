@@ -10,16 +10,15 @@ describe.skip('keypair on BFV', () => {
       parms.setPolyModulusDegree({
         polyModulusDegree: 4096
       })
-        
-      // Create a suitable vector of CoeffModulus primes
+
+      // Create a suitable set of CoeffModulus primes
       parms.setCoeffModulus({
         coeffModulus: Morfix.CoeffModulus.Create({
           polyModulusDegree: 4096,
-          bitSizes: Morfix.Vector({array: new Int32Array([58]) }),
-          securityLevel: Morfix.SecurityLevel.tc256
+          bitSizes: Int32Array.from([58])
         })
       })
-      
+
       // Set the PlainModulus to a prime of bitSize 20.
       parms.setPlainModulus({
         plainModulus: Morfix.PlainModulus.Batching({
@@ -27,7 +26,7 @@ describe.skip('keypair on BFV', () => {
           bitSize: 20
         })
       })
-      
+
       const context = Morfix.Context({
         encryptionParams: parms,
         expandModChain: true,
@@ -39,16 +38,16 @@ describe.skip('keypair on BFV', () => {
       const keyGenerator = Morfix.KeyGenerator({
         context: context
       })
-      
+
       const spyGetSecretKey = jest.spyOn(keyGenerator, 'getSecretKey')
       const secretKey = keyGenerator.getSecretKey()
       expect(spyGetSecretKey).toHaveBeenCalled()
-      
+
       const spyGetPublicKey = jest.spyOn(keyGenerator, 'getPublicKey')
       const publicKey = keyGenerator.getPublicKey()
       expect(spyGetPublicKey).toHaveBeenCalled()
 
-      
+
       const spySaveSecretKey = jest.spyOn(secretKey, 'save')
       const secretKeyBase64 = secretKey.save()
       expect(spySaveSecretKey).toHaveBeenCalled()
@@ -61,7 +60,7 @@ describe.skip('keypair on BFV', () => {
       const spyLoadSecretKey = jest.spyOn(secretKey, 'load')
       secretKey.load({context, encoded: secretKeyBase64})
       expect(spyLoadSecretKey).toHaveBeenCalled()
-      
+
       const spyLoadPublicKey = jest.spyOn(publicKey, 'load')
       publicKey.load({context, encoded: publicKeyBase64})
       expect(spyLoadPublicKey).toHaveBeenCalled()

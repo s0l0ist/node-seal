@@ -11,12 +11,11 @@ describe('encrypt on BFV', () => {
         polyModulusDegree: 4096
       })
 
-      // Create a suitable vector of CoeffModulus primes
+      // Create a suitable set of CoeffModulus primes
       parms.setCoeffModulus({
         coeffModulus: Morfix.CoeffModulus.Create({
           polyModulusDegree: 4096,
-          bitSizes: Morfix.Vector({array: new Int32Array([25,25,25]) }),
-          securityLevel: Morfix.SecurityLevel.tc192
+          bitSizes: Int32Array.from([25,25,25])
         })
       })
 
@@ -60,46 +59,38 @@ describe('encrypt on BFV', () => {
         length: 4096
       }).map((x, i) =>  i)
 
-      // Convert data to a c++ 'vector'
-      const vector = Morfix.Vector({array})
-
       // Create a plainText variable and encode the vector to it
       const plainText = Morfix.PlainText()
 
-      encoder.encodeVectorUInt32({
-        vector: vector,
-        plainText: plainText
+      encoder.encode({
+        array,
+        plainText,
+        signed: false
       })
 
       // Create a cipherText variable and encrypt the plainText to it
       const cipherText = Morfix.CipherText()
       encryptor.encrypt({
-        plainText: plainText,
-        cipherText: cipherText
+        plainText,
+        cipherText
       })
 
       // Create a new plainText variable to store the decrypted cipherText
       const decryptedPlainText = Morfix.PlainText()
       decryptor.decrypt({
-        cipherText: cipherText,
+        cipherText,
         plainText: decryptedPlainText
       })
 
-      // Create a c++ vector to store the decoded result
-      const decodeVector = Morfix.Vector({array: new Uint32Array() })
-
-      // Decode the PlainText to the c++ vector
-      encoder.decodeVectorUInt32({
+      // Decode the PlainText
+      const decodedArray = encoder.decode({
         plainText: decryptedPlainText,
-        vector: decodeVector
+        signed: false
       })
 
-      // Convert the vector to a JS array
-      const decryptedArray = decodeVector.toArray()
-
-      expect(decryptedArray).toBeInstanceOf(Uint32Array)
+      expect(decodedArray).toBeInstanceOf(Uint32Array)
       // Check values
-      expect(decryptedArray).toEqual(array)
+      expect(decodedArray).toEqual(array)
     })
   })
 })
