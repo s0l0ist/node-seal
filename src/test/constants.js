@@ -127,21 +127,21 @@ const TYPES_CONSTRUCTOR = {
 
 const ENCODE_ACTIONS_CONSTRUCTOR = {
   [SCHEME_TYPES.BFV]: {
-    [TYPES.INT32]: 'encodeVectorInt32',
-    [TYPES.UINT32]: 'encodeVectorUInt32'
+    [TYPES.INT32]: 'encode',
+    [TYPES.UINT32]: 'encode'
   },
   [SCHEME_TYPES.CKKS]: {
-    [TYPES.FLOAT]: 'encodeVectorDouble'
+    [TYPES.FLOAT]: 'encode'
   }
 }
 
 const DECODE_ACTIONS_CONSTRUCTOR = {
   [SCHEME_TYPES.BFV]: {
-    [TYPES.INT32]: 'decodeVectorInt32',
-    [TYPES.UINT32]: 'decodeVectorUInt32'
+    [TYPES.INT32]: 'decode',
+    [TYPES.UINT32]: 'decode'
   },
   [SCHEME_TYPES.CKKS]: {
-    [TYPES.FLOAT]: 'decodeVectorDouble'
+    [TYPES.FLOAT]: 'decode'
   }
 }
 

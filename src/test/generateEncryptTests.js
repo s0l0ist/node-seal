@@ -51,19 +51,18 @@ const genTests = (verb) => {
       parms.setPolyModulusDegree({
         polyModulusDegree: ${POLYMODULUS_DEGREES[polyModDeg]}
       })
-        `)
+`)
 
           if (schemeType === SCHEME_TYPES.BFV) {
             code.push(`
-      // Create a suitable vector of CoeffModulus primes
+      // Create a suitable set of CoeffModulus primes
       parms.setCoeffModulus({
         coeffModulus: Morfix.CoeffModulus.Create({
           polyModulusDegree: ${POLYMODULUS_DEGREES[polyModDeg]},
-          bitSizes: Morfix.Vector({array: new Int32Array([${BFV_COEFF_MOD_BIT_SIZES[SECURITY_LEVELS[secLevel]][POLYMODULUS_DEGREES[polyModDeg]]}]) }),
-          securityLevel: ${SECURITY_LEVELS_CONSTRUCTOR[SECURITY_LEVELS[secLevel]]}
+          bitSizes: Int32Array.from([${BFV_COEFF_MOD_BIT_SIZES[SECURITY_LEVELS[secLevel]][POLYMODULUS_DEGREES[polyModDeg]]}])
         })
       })
-      
+
       // Set the PlainModulus to a prime of bitSize 20.
       parms.setPlainModulus({
         plainModulus: Morfix.PlainModulus.Batching({
@@ -71,20 +70,19 @@ const genTests = (verb) => {
           bitSize: 20
         })
       })
-      `)
+`)
           }
 
           if (schemeType === SCHEME_TYPES.CKKS) {
             code.push(`
-      // Create a suitable vector of CoeffModulus primes (we use default set)
+      // Create a suitable set of CoeffModulus primes (we use default set)
       parms.setCoeffModulus({
         coeffModulus: Morfix.CoeffModulus.Create({
           polyModulusDegree: ${POLYMODULUS_DEGREES[polyModDeg]},
-          bitSizes: Morfix.Vector({array: new Int32Array([${CKKS_COEFF_MOD_BIT_SIZES[SECURITY_LEVELS[secLevel]][POLYMODULUS_DEGREES[polyModDeg]]}]) }),
-          securityLevel: ${SECURITY_LEVELS_CONSTRUCTOR[SECURITY_LEVELS[secLevel]]}
+          bitSizes: Int32Array.from([${CKKS_COEFF_MOD_BIT_SIZES[SECURITY_LEVELS[secLevel]][POLYMODULUS_DEGREES[polyModDeg]]}])
         })
       })
-      `)
+`)
           }
 
 
@@ -115,7 +113,7 @@ const genTests = (verb) => {
         context: context,
         secretKey: secretKey
       })
-      `)
+`)
 
           // Data to encode
           code.push(`
@@ -123,64 +121,54 @@ const genTests = (verb) => {
       const array = ${TYPES_CONSTRUCTOR[SCHEME_TYPES[schemeType]][TYPES[type]]}.from({
         length: ${ARRAY_SIZES[SCHEME_TYPES[schemeType]][POLYMODULUS_DEGREES[polyModDeg]]}
       }).map((x, i) =>  i)
-      `)
-          // Create Vector and PlainText
-          code.push(`
-      // Convert data to a c++ 'vector'
-      const vector = Morfix.Vector({array})
+`)
 
+          code.push(`
       // Create a plainText variable and encode the vector to it
       const plainText = Morfix.PlainText()
-      `)
+`)
 
           // If BFV don't include the scale
           // Encode the data
           code.push(`
       encoder.${ENCODE_ACTIONS_CONSTRUCTOR[SCHEME_TYPES[schemeType]][TYPES[type]]}({
-        vector: vector,${schemeType === SCHEME_TYPES.CKKS ? `\n        scale: Math.pow(2, ${Math.min(...CKKS_COEFF_MOD_BIT_SIZES[SECURITY_LEVELS[secLevel]][POLYMODULUS_DEGREES[polyModDeg]])}),` : ''}
-        plainText: plainText
+        array,${schemeType === SCHEME_TYPES.CKKS ? `\n        scale: Math.pow(2, ${Math.min(...CKKS_COEFF_MOD_BIT_SIZES[SECURITY_LEVELS[secLevel]][POLYMODULUS_DEGREES[polyModDeg]])}),` : ''}
+        plainText${SCHEME_TYPES[schemeType] === SCHEME_TYPES.BFV ? TYPES[type] === TYPES.INT32 ? '' : ',\n        signed: false' : ''}
       })
-      `)
+`)
           code.push(`
       // Create a cipherText variable and encrypt the plainText to it
       const cipherText = Morfix.CipherText()
       encryptor.encrypt({
-        plainText: plainText,
-        cipherText: cipherText
+        plainText,
+        cipherText
       })
 
       // Create a new plainText variable to store the decrypted cipherText
       const decryptedPlainText = Morfix.PlainText()
       decryptor.decrypt({
-        cipherText: cipherText,
+        cipherText,
         plainText: decryptedPlainText
       })
 
-      // Create a c++ vector to store the decoded result
-      const decodeVector = Morfix.Vector({array: new ${TYPES_CONSTRUCTOR[SCHEME_TYPES[schemeType]][TYPES[type]]}() })
-
-      // Decode the PlainText to the c++ vector
-      encoder.${DECODE_ACTIONS_CONSTRUCTOR[SCHEME_TYPES[schemeType]][TYPES[type]]}({
-        plainText: decryptedPlainText,
-        vector: decodeVector
+      // Decode the PlainText
+      const decodedArray = encoder.${DECODE_ACTIONS_CONSTRUCTOR[SCHEME_TYPES[schemeType]][TYPES[type]]}({
+        plainText: decryptedPlainText${SCHEME_TYPES[schemeType] === SCHEME_TYPES.BFV ? TYPES[type] === TYPES.INT32 ? '' : ',\n        signed: false' : ''}
       })
 
-      // Convert the vector to a JS array
-      const decryptedArray = decodeVector.toArray()
-
-      expect(decryptedArray).toBeInstanceOf(${TYPES_CONSTRUCTOR[SCHEME_TYPES[schemeType]][TYPES[type]]})
-      ${schemeType === SCHEME_TYPES.CKKS ? `
-      // Hacks to get quick approximate values. Convert ±0 to 0 by adding 0.
+      expect(decodedArray).toBeInstanceOf(${TYPES_CONSTRUCTOR[SCHEME_TYPES[schemeType]][TYPES[type]]})
+      ${schemeType === SCHEME_TYPES.CKKS ? `// Hacks to get quick approximate values. Convert ±0 to 0 by adding 0.
       const approxValues = array.map(x => 0 + Math.round(x))
-      const approxDecrypted = decryptedArray.map(x => 0 + Math.round(x))
+      const approxDecrypted = decodedArray.map(x => 0 + Math.round(x))
       // Check values
       expect(approxDecrypted).toEqual(approxValues)
-      ` : 
+` : 
       `// Check values
-      expect(decryptedArray).toEqual(array)`}
+      expect(decodedArray).toEqual(array)`}
     })
   })
-})`)
+})
+`)
           fs.mkdirSync(`${process.cwd()}/${folderName}/`, {recursive: true})
           fs.writeFileSync(`./${folderName}/${fileName}`, code.join(''))
         }

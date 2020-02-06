@@ -42,19 +42,18 @@ const genTests = (verb) => {
       parms.setPolyModulusDegree({
         polyModulusDegree: ${POLYMODULUS_DEGREES[polyModDeg]}
       })
-        `)
+`)
 
-          if (schemeType === SCHEME_TYPES.BFV) {
-            code.push(`
-      // Create a suitable vector of CoeffModulus primes
+        if (schemeType === SCHEME_TYPES.BFV) {
+          code.push(`
+      // Create a suitable set of CoeffModulus primes
       parms.setCoeffModulus({
         coeffModulus: Morfix.CoeffModulus.Create({
           polyModulusDegree: ${POLYMODULUS_DEGREES[polyModDeg]},
-          bitSizes: Morfix.Vector({array: new Int32Array([${BFV_COEFF_MOD_BIT_SIZES[SECURITY_LEVELS[secLevel]][POLYMODULUS_DEGREES[polyModDeg]]}]) }),
-          securityLevel: ${SECURITY_LEVELS_CONSTRUCTOR[SECURITY_LEVELS[secLevel]]}
+          bitSizes: Int32Array.from([${BFV_COEFF_MOD_BIT_SIZES[SECURITY_LEVELS[secLevel]][POLYMODULUS_DEGREES[polyModDeg]]}])
         })
       })
-      
+
       // Set the PlainModulus to a prime of bitSize 20.
       parms.setPlainModulus({
         plainModulus: Morfix.PlainModulus.Batching({
@@ -62,22 +61,20 @@ const genTests = (verb) => {
           bitSize: 20
         })
       })
-      `)
-          }
+`)
+        }
 
-          if (schemeType === SCHEME_TYPES.CKKS) {
-            code.push(`
-      // Create a suitable vector of CoeffModulus primes (we use default set)
+        if (schemeType === SCHEME_TYPES.CKKS) {
+          code.push(`
+      // Create a suitable set of CoeffModulus primes (we use default set)
       parms.setCoeffModulus({
         coeffModulus: Morfix.CoeffModulus.Create({
           polyModulusDegree: ${POLYMODULUS_DEGREES[polyModDeg]},
-          bitSizes: Morfix.Vector({array: new Int32Array([${CKKS_COEFF_MOD_BIT_SIZES[SECURITY_LEVELS[secLevel]][POLYMODULUS_DEGREES[polyModDeg]]}]) }),
-          securityLevel: ${SECURITY_LEVELS_CONSTRUCTOR[SECURITY_LEVELS[secLevel]]}
+          bitSizes: Int32Array.from([${CKKS_COEFF_MOD_BIT_SIZES[SECURITY_LEVELS[secLevel]][POLYMODULUS_DEGREES[polyModDeg]]}])
         })
       })
-      `)
-          }
-
+`)
+        }
 
           code.push(`
       const context = Morfix.Context({
@@ -91,21 +88,22 @@ const genTests = (verb) => {
       const keyGenerator = Morfix.KeyGenerator({
         context: context
       })
-      
+
       const spyGenGaloisKeys = jest.spyOn(keyGenerator, 'genGaloisKeys')
       const galoisKeys = keyGenerator.genGaloisKeys()
       expect(spyGenGaloisKeys).toHaveBeenCalled()
-      
+
       const spySaveGaloisKeys = jest.spyOn(galoisKeys, 'save')
       const base64 = galoisKeys.save()
       expect(spySaveGaloisKeys).toHaveBeenCalled()
-      
+
       const spyLoadGaloisKeys = jest.spyOn(galoisKeys, 'load')
       galoisKeys.load({context, encoded: base64})
       expect(spyLoadGaloisKeys).toHaveBeenCalled()
     })
   })
-})`)
+})
+`)
           fs.mkdirSync(`${process.cwd()}/${folderName}/`, {recursive: true})
           fs.writeFileSync(`./${folderName}/${fileName}`, code.join(''))
       }

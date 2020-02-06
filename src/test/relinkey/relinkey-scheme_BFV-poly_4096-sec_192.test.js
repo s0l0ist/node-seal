@@ -10,16 +10,15 @@ describe('relinkey on BFV', () => {
       parms.setPolyModulusDegree({
         polyModulusDegree: 4096
       })
-        
-      // Create a suitable vector of CoeffModulus primes
+
+      // Create a suitable set of CoeffModulus primes
       parms.setCoeffModulus({
         coeffModulus: Morfix.CoeffModulus.Create({
           polyModulusDegree: 4096,
-          bitSizes: Morfix.Vector({array: new Int32Array([25,25,25]) }),
-          securityLevel: Morfix.SecurityLevel.tc192
+          bitSizes: Int32Array.from([25,25,25])
         })
       })
-      
+
       // Set the PlainModulus to a prime of bitSize 20.
       parms.setPlainModulus({
         plainModulus: Morfix.PlainModulus.Batching({
@@ -27,7 +26,7 @@ describe('relinkey on BFV', () => {
           bitSize: 20
         })
       })
-      
+
       const context = Morfix.Context({
         encryptionParams: parms,
         expandModChain: true,
@@ -39,15 +38,15 @@ describe('relinkey on BFV', () => {
       const keyGenerator = Morfix.KeyGenerator({
         context: context
       })
-      
+
       const spyGenRelinKeys = jest.spyOn(keyGenerator, 'genRelinKeys')
       const relinKeys = keyGenerator.genRelinKeys()
       expect(spyGenRelinKeys).toHaveBeenCalled()
-      
+
       const spySaveRelinKeys = jest.spyOn(relinKeys, 'save')
       const base64 = relinKeys.save()
       expect(spySaveRelinKeys).toHaveBeenCalled()
-      
+
       const spyLoadRelinKeys = jest.spyOn(relinKeys, 'load')
       relinKeys.load({context, encoded: base64})
       expect(spyLoadRelinKeys).toHaveBeenCalled()
