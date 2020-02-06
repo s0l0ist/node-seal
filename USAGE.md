@@ -72,21 +72,18 @@ const encParms = Morfix.EncryptionParameters({
   schemeType: Morfix.SchemeType.BFV
 })
 
+
 // Assign Poly Modulus Degree
 encParms.setPolyModulusDegree({
   polyModulusDegree: 4096
 })
 
-// Create a C++ vector from JS string of integers representing bit-lengths of primes
-const bitSizesVector = Morfix.Vector({
-  array: new Int32Array([36,36,37])
-})
-
-// Create a suitable set of CoeffModulus primes from the vector
-const coeffModulusVector = Morfix.CoeffModulus.Create({
-  polyModulusDegree: 4096,
-  bitSizes: bitSizesVector,
-  securityLevel: Morfix.SecurityLevel.tc128
+// Create a suitable set of CoeffModulus primes
+encParms.setCoeffModulus({
+  coeffModulus: Morfix.CoeffModulus.Create({
+    polyModulusDegree: 4096,
+    bitSizes: Int32Array.from([36,36,37])
+  })
 })
 
 // Assign Coefficient Modulus
@@ -141,11 +138,33 @@ You may generate a new Public Key (or even Relin/Galois Keys) from an existing S
 // Keys
 ////////////////////////
 
-// Create a new KeyGenerator (creates a new keypair)
+// Create a new KeyGenerator (creates a new keypair internally)
 const keyGenerator = Morfix.KeyGenerator({ 
   context
 })
 
+const secretKey = keyGenerator.getSecretKey()
+const publicKey = keyGenerator.getPublicKey()
+const relinKey = keyGenerator.genRelinKeys()
+// Generating Galois keys takes a while compared to the others
+const galoisKey = keyGenerator.genGaloisKeys()
+
+// Saving a key to a string is the same for each type of key
+const secretBase64Key = secretKey.save()
+const publicBase64Key = publicKey.save()
+const relinBase64Key = relinKey.save()
+// Please note savinig Galois keys can take an even longer time and the output is **very** large.
+const galoisBase64Key = galoisKey.save()
+
+// Loading a key from a base64 string is the same for each type of key
+// Load from the base64 encoded string
+const UploadedSecretKey = Morfix.SecretKey()
+UploadedSecretKey.load({ context, encoded: secretBase64Key })
+...
+
+
+// NOTE
+//
 // A KeyGenerator can also be instantiated with existing keys. This allows you to generate
 // new Relin/Galois keys with a previously generated SecretKey.
 
@@ -153,7 +172,7 @@ const keyGenerator = Morfix.KeyGenerator({
 const UploadedSecretKey = Morfix.SecretKey()
 
 // Load from the base64 encoded string
-UploadedSecretKey.load({ context, encoded: <(base64 string from the saved key)> })
+UploadedSecretKey.load({ context, encoded: secretBase64Key })
 
 // Create a new KeyGenerator (use uploaded secretKey)
 const keyGenerator = Morfix.KeyGenerator({ 
@@ -168,7 +187,7 @@ const keyGenerator = Morfix.KeyGenerator({
 const UploadedPublicKey = Morfix.PublicKey()
 
 // Load from the base64 encoded string
-UploadedPublicKey.load({ context, encoded: <(base64 string from the saved key)> })
+UploadedPublicKey.load({ context, encoded: publicBase64Key })
 
 // Create a new KeyGenerator (use both uploaded keys)
 const keyGenerator = Morfix.KeyGenerator({ 
@@ -176,47 +195,8 @@ const keyGenerator = Morfix.KeyGenerator({
   secretKey: UploadedSecretKey,
   publicKey: UploadedPublicKey
 })
-```
 
-#### Relin Keys
 
-Can be generated, saved to a base64 string, or loaded from a base64 string.
-
-```
-// Create a new KeyGenerator (creates a new keypair)
-const keyGenerator = Morfix.KeyGenerator({ 
-  context
-})
-
-// Create the RelinKey from the KeyGenerator
-const relinKey = keyGenerator.genRelinKeys()
-
-// Uploading a RelinKey: first, create an empty RelinKey to load
-const uploadedRelinKey = Morfix.RelinKey()
-
-// Load from the base64 encoded string
-uploadedRelinKey.load({ context, encoded: <(base64 string from the saved key)> })
-```
-
-#### Galois Keys
-
-Can be generated, saved to a base64 string, or loaded from a base64 string.
-Please note generating Galois keys can take a long time and the output is **very** large.
-
-```
-// Create a new KeyGenerator (creates a new keypair)
-const keyGenerator = Morfix.KeyGenerator({ 
-  context
-})
-
-// Create the GaloisKey from the KeyGenerator
-const galoisKey = keyGenerator.genGaloisKeys()
-
-// Uploading a GaloisKey: first, create an empty GaloisKey to load
-const uploadedGaloisKey = Morfix.GaloisKey()
-
-// Load from the base64 encoded string
-uploadedGaloisKey.load({ context, encoded: <(base64 string from the saved key)> })
 ```
 
 ### Variables
@@ -237,14 +217,21 @@ const plainB = Morfix.PlainText()
 const cipherA = Morfix.CipherText()
 const cipherB = Morfix.CipherText()
 
-// Saving / Loading
-const plainAbase64 = plainA.save() // Saves as a base64 string
-const uploadedPlain = Morfix.PlainText()
-uploadedPlain.load({ context, encoded: <(base64 string from the saved variable)> })
+// Saving
+... after some encoding...
+const plainAbase64 = plainA.save() // Saves as a base64 string.
 
-const cipherAbase64 = cipherA.save() // Saves as a base64 string
-const uploadedCipher = Morfix.CipherText()
-uploadedCipher.load({ context, encoded: <(base64 string from the saved variable)> })
+// Loading. Create an empty instance, then use the following method
+const uploadedPlain = Morfix.PlainText()
+uploadedPlain.load({ context, encoded: plainAbase64 })
+
+// Saving
+... after some encoding...
+const cipherAbase64 = cipherA.save() // Saves as a base64 string.
+
+// Loading. Create an empty instance, then use the following method
+const uploadedCipherText = Morfix.CipherText()
+uploadedCipherText.load({ context, encoded: cipherAbase64 })
 ```
 
 ### Instances
@@ -253,8 +240,8 @@ To perform homomorphic evaluations, we need to construct a few helpers:
 
 * **Evaluator:** Used to perform HE operations.
 * **Encoder:** Used to encode to a PlainText or decode a PlainText.
-* **encryptor:** Used to encrypt a PlainText to a CipherText.
-* **decryptor:** Used to decrypt a CipherText to a PlainText.
+* **Encryptor:** Used to encrypt a PlainText to a CipherText.
+* **Decryptor:** Used to decrypt a CipherText to a PlainText.
 
 ```
 ////////////////////////
@@ -285,23 +272,6 @@ const decryptor = Morfix.Decryptor({
 
 ### Functions
 
-Now, we're ready for performing HE operations! You will notice the usage of `Vector` which comes from C++. For the sake
-of simplicity, you can think of them like arrays, but we need to convert JS TypedArrays to C++ Vectors using the
- following constructor:
- 
-```
-//const vector = Morfix.Vector({ array: <typed array of values> })
-const vector = Morfix.Vector({ array: Int32Array.from([1,2,3]) })
-
-// Get a JS TypedArray. 
-// Will automatically convert to the original type, Int32Array.
-const arr = vector.toArray()
-
-console.log(arr.constructor)
-// [Function: Int32Array]
-
-```
-
 We show homomorphic addition, but more functions are available and the code can
 be generated from the [demo](https://morfix.io/sandbox).
 
@@ -311,38 +281,33 @@ be generated from the [demo](https://morfix.io/sandbox).
 ////////////////////////
 
 // Encode data to a PlainText
-batchEncoder.encodeVectorInt32({
-  vector: Morfix.Vector({ array: new Int32Array([1,2,3]) }),
-  plainText: plainA
+const plainTextA = batchEncoder.encode({
+  array: Int32Array.from([1,2,3])
 })
 
 // Encrypt a PlainText
-encryptor.encrypt({
-  plainText: plainA,
-  cipherText: cipherA
+const cipherTextA = encryptor.encrypt({
+  plainText: plainTextA
 })    
 
 // Add CipherText B to CipherText A and store the sum in a destination CipherText
+const cipherTextD = Morfix.CipherText()
+
 evaluator.add({
-  a: cipherA,
-  b: cipherA,
-  destination: cipherB
+  a: cipherTextA,
+  b: cipherTextA,
+  destination: cipherTextD
 })    
 
 // Decrypt a CipherText
-decryptor.decrypt({
-  cipherText: cipherB,
-  plainText: plainB
+const plainTextD = decryptor.decrypt({
+  cipherText: cipherTextD
 })    
 
-// Decode data from a PlainText
-// Create a vector to store the decoded PlainText
-const destinationVector_plainB = Morfix.Vector({ array: new Int32Array() })
-
-batchEncoder.decodeVectorInt32({
-  plainText: plainB,
-  vector: destinationVector_plainB
+const decoded = batchEncoder.decode({
+  plainText: plainTextD,
+  signed: true // Defaults to true for returning an Int32Array, set to false if you want a Uint32Array
 })
 
-console.log('decoded', destinationVector_plainB.toArray() )
+console.log('decoded', decoded )
 ```
