@@ -1,6 +1,7 @@
 import { Exception } from './exception'
 import { MemoryPoolHandle } from './memory-pool-handle'
 import { PlainText } from './plain-text'
+import { Vector } from './vector'
 
 export const BatchEncoder = ({ library, context }) => {
   const _Exception = Exception({ library })
@@ -66,7 +67,30 @@ export const BatchEncoder = ({ library, context }) => {
       _instance.decodeVectorUInt32(plainText.instance, vector.instance, pool)
       return
     }
-    return _instance.decode(plainText.instance, signed, pool)
+
+    if (signed) {
+      const tempVect = Vector({
+        library: _library,
+        array: new Int32Array(0),
+        internal: true
+      })
+      const instance = _instance.decodeInt32(plainText.instance, pool)
+      tempVect.inject({ instance })
+      const tempArr = tempVect.toArray()
+      tempVect.delete()
+      return tempArr
+    }
+
+    const tempVect = Vector({
+      library: _library,
+      array: new Uint32Array(0),
+      internal: true
+    })
+    const instance = _instance.decodeUInt32(plainText.instance, pool)
+    tempVect.inject({ instance })
+    const tempArr = tempVect.toArray()
+    tempVect.delete()
+    return tempArr
   }
 
   /**

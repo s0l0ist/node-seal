@@ -953,6 +953,7 @@ export const SEAL = ({ options }) => {
      * @description
      * Create an instance of a C++ Vector
      *
+     * @deprecated since version 3.2.0
      * @function
      * @name SEAL#Vector
      * @param {Object} options Options
