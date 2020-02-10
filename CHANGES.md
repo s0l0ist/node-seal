@@ -12,7 +12,7 @@ Fix:
   
 ## Version 3.2.1
 
-Fix: 
+Feat: 
 - `Encryptor.encrypt`/`Decryptor.decrypt` now accept optional cipherText and plainText 
   parameters respectively. If provided, the methods will modify in place and return undefined.
   Otherwise, the methods will return a new instance of cipherText and plainText respectively. 
