@@ -1,6 +1,7 @@
 import { Exception } from './exception'
 import { MemoryPoolHandle } from './memory-pool-handle'
 import { PlainText } from './plain-text'
+import { Vector } from './vector'
 
 export const CKKSEncoder = ({ library, context }) => {
   const _Exception = Exception({ library })
@@ -53,7 +54,16 @@ export const CKKSEncoder = ({ library, context }) => {
       _instance.decodeVectorDouble(plainText.instance, vector.instance, pool)
       return
     }
-    return _instance.decode(plainText.instance, pool)
+    const tempVect = Vector({
+      library: _library,
+      array: new Float64Array(0),
+      internal: true
+    })
+    const instance = _instance.decodeDouble(plainText.instance, pool)
+    tempVect.inject({ instance })
+    const tempArr = tempVect.toArray()
+    tempVect.delete()
+    return tempArr
   }
 
   /**
