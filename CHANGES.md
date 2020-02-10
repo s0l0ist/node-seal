@@ -3,6 +3,13 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 3.2.1
+
+Fix: 
+- Both `BatchEncoder` and `CKKSEncoder` methods for `decode` have been re-written to
+  use vectors internally to prevent possible data loss on memory views when a C++
+  object gets dereferenced.
+
 ## Version 3.2.0
 
 Feat:
