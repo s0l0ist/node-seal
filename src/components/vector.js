@@ -1,9 +1,15 @@
 import { Exception } from './exception'
 
-export const Vector = ({ library, array = new Int32Array(0) }) => {
-  console.warn(
-    'Creating vectors is no longer necessary and has been deprecated since 3.2.0'
-  )
+export const Vector = ({
+  library,
+  array = new Int32Array(0),
+  internal = false
+}) => {
+  if (!internal) {
+    console.warn(
+      'Creating vectors is no longer necessary and has been deprecated since 3.2.0'
+    )
+  }
   const _Exception = Exception({ library })
   const _vecFromArrayInt32 = library.vecFromArrayInt32
   const _vecFromArrayUInt32 = library.vecFromArrayUInt32
@@ -19,21 +25,16 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
   const _type = array.constructor
   const _fromArray = ({ array }) => {
     try {
-      let vec = null
-      switch (array.constructor) {
-        case Int32Array:
-          vec = _vecFromArrayInt32(array)
-          break
-        case Uint32Array:
-          vec = _vecFromArrayUInt32(array)
-          break
-        case Float64Array:
-          vec = _vecFromArrayDouble(array)
-          break
-        default:
-          throw new Error('Unsupported vector type!')
+      if (array.constructor === Int32Array) {
+        return _vecFromArrayInt32(array)
       }
-      return vec
+      if (array.constructor === Uint32Array) {
+        return _vecFromArrayUInt32(array)
+      }
+      if (array.constructor === Float64Array) {
+        return _vecFromArrayDouble(array)
+      }
+      throw new Error('Unsupported vector type!')
     } catch (e) {
       throw _Exception.safe({ error: e })
     }
@@ -127,16 +128,15 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      */
     printMatrix({ rowSize }) {
       try {
-        switch (_type) {
-          case Int32Array:
-            _printMatrixInt32(_instance, rowSize)
-            break
-          case Uint32Array:
-            _printMatrixUInt32(_instance, rowSize)
-            break
-          default:
-            throw new Error('Unsupported matrix type!')
+        if (_type === Int32Array) {
+          _printMatrixInt32(_instance, rowSize)
+          return
         }
+        if (_type === Uint32Array) {
+          _printMatrixUInt32(_instance, rowSize)
+          return
+        }
+        throw new Error('Unsupported matrix type!')
       } catch (e) {
         throw _Exception.safe({ error: e })
       }
@@ -155,19 +155,19 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      */
     printVector({ printSize = 4, precision = 5 } = {}) {
       try {
-        switch (_type) {
-          case Int32Array:
-            _printVectorInt32(_instance, printSize, precision)
-            break
-          case Uint32Array:
-            _printVectorUInt32(_instance, printSize, precision)
-            break
-          case Float64Array:
-            _printVectorDouble(_instance, printSize, precision)
-            break
-          default:
-            throw new Error('Unsupported vector type!')
+        if (_type === Int32Array) {
+          _printVectorInt32(_instance, printSize, precision)
+          return
         }
+        if (_type === Uint32Array) {
+          _printVectorUInt32(_instance, printSize, precision)
+          return
+        }
+        if (_type === Float64Array) {
+          _printVectorDouble(_instance, printSize, precision)
+          return
+        }
+        throw new Error('Unsupported vector type!')
       } catch (e) {
         throw _Exception.safe({ error: e })
       }
@@ -229,21 +229,16 @@ export const Vector = ({ library, array = new Int32Array(0) }) => {
      */
     toArray() {
       try {
-        let arr = null
-        switch (_type) {
-          case Int32Array:
-            arr = _jsArrayInt32FromVec(_instance)
-            break
-          case Uint32Array:
-            arr = _jsArrayUint32FromVec(_instance)
-            break
-          case Float64Array:
-            arr = _jsArrayDoubleFromVec(_instance)
-            break
-          default:
-            throw new Error('Unsupported vector type!')
+        if (_type === Int32Array) {
+          return Int32Array.from(_jsArrayInt32FromVec(_instance))
         }
-        return arr
+        if (_type === Uint32Array) {
+          return Uint32Array.from(_jsArrayUint32FromVec(_instance))
+        }
+        if (_type === Float64Array) {
+          return Float64Array.from(_jsArrayDoubleFromVec(_instance))
+        }
+        throw new Error('Unsupported vector type!')
       } catch (e) {
         throw _Exception.safe({ error: e })
       }

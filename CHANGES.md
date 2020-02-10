@@ -3,6 +3,20 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 3.2.2
+
+Fix: 
+- Both `BatchEncoder` and `CKKSEncoder` methods for `decode` have been re-written to
+  use vectors internally to prevent possible data loss on memory views when a C++
+  object gets dereferenced.
+  
+## Version 3.2.1
+
+Fix: 
+- `Encryptor.encrypt`/`Decryptor.decrypt` now accept optional cipherText and plainText 
+  parameters respectively. If provided, the methods will modify in place and return undefined.
+  Otherwise, the methods will return a new instance of cipherText and plainText respectively. 
+
 ## Version 3.2.0
 
 Feat:
