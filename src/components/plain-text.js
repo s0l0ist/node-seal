@@ -66,6 +66,23 @@ export const PlainText = ({ library }) => {
     },
 
     /**
+     * Allocates enough memory to accommodate the backing array of a plaintext
+     * with given capacity.
+     *
+     * @function
+     * @name PlainText#reserve
+     * @param {Object} options Options
+     * @param {Number} options.capacity The capacity to reserve
+     */
+    reserve({ capacity }) {
+      try {
+        return _instance.reserve(capacity)
+      } catch (e) {
+        throw _Exception.safe({ error: e })
+      }
+    },
+
+    /**
      * Allocates enough memory to accommodate the backing array of the current
      * PlainText and copies it over to the new location. This function is meant
      * to reduce the memory use of the PlainText to smallest possible and can be
@@ -77,6 +94,37 @@ export const PlainText = ({ library }) => {
     shrinkToFit() {
       try {
         return _instance.shrinkToFit()
+      } catch (e) {
+        throw _Exception.safe({ error: e })
+      }
+    },
+
+    /**
+     * Resets the PlainText. This function releases any memory allocated by the
+     * PlainText, returning it to the memory pool.
+     *
+     * @function
+     * @name PlainText#release
+     */
+    release() {
+      try {
+        return _instance.release()
+      } catch (e) {
+        throw _Exception.safe({ error: e })
+      }
+    },
+
+    /**
+     * Resizes the PlainText to have a given coefficient count. The PlainText
+     * is automatically reallocated if the new coefficient count does not fit in
+     * the current capacity.
+     *
+     * @function
+     * @name PlainText#resize
+     */
+    resize() {
+      try {
+        return _instance.resize()
       } catch (e) {
         throw _Exception.safe({ error: e })
       }
