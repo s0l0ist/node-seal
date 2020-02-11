@@ -66,6 +66,62 @@ export const CipherText = ({ library }) => {
     },
 
     /**
+     * Allocates enough memory to accommodate the backing array of a ciphertext
+     * with given capacity. In addition to the capacity, the allocation size is
+     * determined by the current encryption parameters.
+     *
+     * @function
+     * @name CipherText#reserve
+     * @param {Object} options Options
+     * @param {Number} options.capacity The capacity to reserve
+     */
+    reserve({ capacity }) {
+      try {
+        return _instance.reserve(capacity)
+      } catch (e) {
+        throw _Exception.safe({ error: e })
+      }
+    },
+
+    /**
+     * Resizes the CipherText to given size, reallocating if the capacity
+     * of the CipherText is too small.
+     *
+     * This function is mainly intended for internal use and is called
+     * automatically by functions such as Evaluator.multiply and
+     * Evaluator.relinearize. A normal user should never have a reason
+     * to manually resize a CipherText.
+     *
+     * @function
+     * @name CipherText#resize
+     * @param {Object} options Options
+     * @param {Number} options.size The new size
+     */
+    resize({ size }) {
+      try {
+        return _instance.resize(size)
+      } catch (e) {
+        throw _Exception.safe({ error: e })
+      }
+    },
+
+    /**
+     * Resets the CipherText. This function releases any memory allocated
+     * by the CipherText, returning it to the memory pool. It also sets all
+     * encryption parameter specific size information to zero.
+     *
+     * @function
+     * @name CipherText#release
+     */
+    release() {
+      try {
+        return _instance.release()
+      } catch (e) {
+        throw _Exception.safe({ error: e })
+      }
+    },
+
+    /**
      * The number of primes in the coefficient modulus of the
      * associated encryption parameters. This directly affects the
      * allocation size of the CipherText.
