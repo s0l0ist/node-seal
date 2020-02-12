@@ -187,9 +187,16 @@ export const SEAL = ({ options }) => {
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const polyModulusDegree = 4096
-     * const bitSizes = Morfix.Vector({ array: Int32Array.from([36, 36, 37]) })
-     * const coeffModulus = Morfix.CoeffModulus.Create({ polyModulusDegree, bitSizes })
+     * const encParms = Morfix.EncryptionParameters({
+     *   schemeType: Morfix.SchemeType.BFV
+     * })
+     * ...
+     * const coeffModulus = Morfix.CoeffModulus.Create({
+     *   polyModulusDegree: 4096
+     *   bitSizes: Int32Array.from([36, 36, 37])
+     * })
+     *
+     * encParms.setCoeffModulus({ coeffModulus })
      */
     get CoeffModulus() {
       return _CoeffModulus
