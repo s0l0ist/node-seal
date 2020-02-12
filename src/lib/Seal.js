@@ -192,7 +192,7 @@ export const SEAL = ({ options }) => {
      * })
      * ...
      * const coeffModulus = Morfix.CoeffModulus.Create({
-     *   polyModulusDegree: 4096
+     *   polyModulusDegree: 4096,
      *   bitSizes: Int32Array.from([36, 36, 37])
      * })
      *
