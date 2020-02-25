@@ -1,16 +1,11 @@
-import { Exception } from './exception'
-import { ParmsIdType } from './parms-id-type'
-import { ContextData } from './context-data'
-
-export const Context = ({
-  library,
+export const Context = library => (Exception, ParmsIdType, ContextData) => (
   encryptionParams,
   expandModChain,
   securityLevel
-}) => {
-  const _Exception = Exception({ library })
+) => {
+  // Static methods
   const _printContext = library.printContext
-  const _library = library
+
   let _instance = null
   try {
     _instance = new library.SEALContext(
@@ -19,7 +14,7 @@ export const Context = ({
       securityLevel
     )
   } catch (e) {
-    throw _Exception.safe({ error: e })
+    throw Exception.safe(e)
   }
 
   /**
@@ -48,10 +43,9 @@ export const Context = ({
      * @private
      * @function
      * @name Context#inject
-     * @param {Object} options Options
-     * @param {instance} options.instance WASM instance
+     * @param {instance} instance WASM instance
      */
-    inject({ instance }) {
+    inject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -84,7 +78,7 @@ export const Context = ({
       try {
         _printContext(_instance)
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -95,18 +89,17 @@ export const Context = ({
      *
      * @function
      * @name Context#getContextData
-     * @param {Object} options Options
-     * @param {ParmsIdType} options.parmsId Specific id to return ContextData for
+     * @param {ParmsIdType} parmsId Specific id to return ContextData for
      * @returns {ContextData} ContextData corresponding to encryption parameters
      */
     getContextData({ parmsId }) {
       try {
         const instance = _instance.getContextData(parmsId.instance)
-        const contextData = ContextData({ library: _library })
-        contextData.inject({ instance })
+        const contextData = ContextData()
+        contextData.inject(instance)
         return contextData
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -120,11 +113,11 @@ export const Context = ({
     get keyContextData() {
       try {
         const instance = _instance.keyContextData()
-        const contextData = ContextData({ library: _library })
-        contextData.inject({ instance })
+        const contextData = ContextData()
+        contextData.inject(instance)
         return contextData
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -138,11 +131,11 @@ export const Context = ({
     get firstContextData() {
       try {
         const instance = _instance.firstContextData()
-        const contextData = ContextData({ library: _library })
-        contextData.inject({ instance })
+        const contextData = ContextData()
+        contextData.inject(instance)
         return contextData
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -156,11 +149,11 @@ export const Context = ({
     get lastContextData() {
       try {
         const instance = _instance.lastContextData()
-        const contextData = ContextData({ library: _library })
-        contextData.inject({ instance })
+        const contextData = ContextData()
+        contextData.inject(instance)
         return contextData
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -185,8 +178,8 @@ export const Context = ({
      */
     get keyParmsId() {
       const instance = _instance.keyParmsId()
-      const parmsId = ParmsIdType({ library: _library })
-      parmsId.inject({ instance })
+      const parmsId = ParmsIdType()
+      parmsId.inject(instance)
       return parmsId
     },
 
@@ -199,8 +192,8 @@ export const Context = ({
      */
     get firstParmsId() {
       const instance = _instance.firstParmsId()
-      const parmsId = ParmsIdType({ library: _library })
-      parmsId.inject({ instance })
+      const parmsId = ParmsIdType()
+      parmsId.inject(instance)
       return parmsId
     },
 
@@ -213,8 +206,8 @@ export const Context = ({
      */
     get lastParmsId() {
       const instance = _instance.lastParmsId()
-      const parmsId = ParmsIdType({ library: _library })
-      parmsId.inject({ instance })
+      const parmsId = ParmsIdType()
+      parmsId.inject(instance)
       return parmsId
     },
 
