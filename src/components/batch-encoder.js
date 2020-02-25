@@ -1,96 +1,14 @@
-import { Exception } from './exception'
-import { MemoryPoolHandle } from './memory-pool-handle'
-import { PlainText } from './plain-text'
-import { Vector } from './vector'
-
-export const BatchEncoder = ({ library, context }) => {
-  const _Exception = Exception({ library })
-  const _MemoryPoolHandle = MemoryPoolHandle({ library })
-  const _library = library
+export const BatchEncoder = library => (
+  Exception,
+  MemoryPoolHandle,
+  PlainText,
+  Vector
+) => context => {
   let _instance = null
   try {
     _instance = new library.BatchEncoder(context.instance)
   } catch (e) {
-    throw _Exception.safe({ error: e })
-  }
-
-  const encode = ({ array, vector, plainText, signed = true }) => {
-    try {
-      if (vector) {
-        if (signed) {
-          _instance.encodeVectorInt32(vector.instance, plainText.instance)
-          return
-        }
-        _instance.encodeVectorUInt32(vector.instance, plainText.instance)
-        return
-      }
-
-      if (array.constructor === Int32Array) {
-        if (plainText) {
-          _instance.encode(array, plainText.instance, true)
-          return
-        }
-        const plain = PlainText({ library: _library })
-        _instance.encode(array, plain.instance, true)
-        return plain
-      }
-
-      if (array.constructor === Uint32Array) {
-        if (plainText) {
-          _instance.encode(array, plainText.instance, false)
-          return
-        }
-        const plain = PlainText({ library: _library })
-        _instance.encode(array, plain.instance, false)
-        return plain
-      }
-
-      throw new Error(
-        'Unsupported array type! `array` must be of type Int32Array or Uint32Array.'
-      )
-    } catch (e) {
-      throw _Exception.safe({ error: e })
-    }
-  }
-
-  const decode = ({
-    plainText,
-    vector,
-    signed = true,
-    pool = _MemoryPoolHandle.global
-  }) => {
-    if (vector) {
-      if (signed) {
-        _instance.decodeVectorInt32(plainText.instance, vector.instance, pool)
-        return
-      }
-      _instance.decodeVectorUInt32(plainText.instance, vector.instance, pool)
-      return
-    }
-
-    if (signed) {
-      const tempVect = Vector({
-        library: _library,
-        array: new Int32Array(0),
-        internal: true
-      })
-      const instance = _instance.decodeInt32(plainText.instance, pool)
-      tempVect.inject({ instance })
-      const tempArr = tempVect.toArray()
-      tempVect.delete()
-      return tempArr
-    }
-
-    const tempVect = Vector({
-      library: _library,
-      array: new Uint32Array(0),
-      internal: true
-    })
-    const instance = _instance.decodeUInt32(plainText.instance, pool)
-    tempVect.inject({ instance })
-    const tempArr = tempVect.toArray()
-    tempVect.delete()
-    return tempArr
+    throw Exception.safe(e)
   }
 
   /**
@@ -119,10 +37,9 @@ export const BatchEncoder = ({ library, context }) => {
      * @private
      * @function
      * @name BatchEncoder#inject
-     * @param {Object} options Options
-     * @param {instance} options.instance WASM instance
+     * @param {instance} instance WASM instance
      */
-    inject({ instance }) {
+    inject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -160,21 +77,19 @@ export const BatchEncoder = ({ library, context }) => {
      * @deprecated since version 3.2.0
      * @function
      * @name BatchEncoder#encodeVectorInt32
-     * @param {Object} options Options
-     * @param {Vector} options.vector Data to encode
-     * @param {PlainText} options.plainText Destination to store the encoded result
+     * @param {Vector} vector Data to encode
+     * @param {PlainText} plainText Destination to store the encoded result
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const batchEncoder = Morfix.BatchEncoder({ context })
+     * const batchEncoder = Morfix.BatchEncoder(context)
      * const vectorInt32 = Morfix.Vector({ array: Int32Array.from([1, 2, 3]) })
      * const plain = Morfix.PlainText()
      * batchEncoder.encodeVectorInt32({ vector: vectorInt32, plainText: plain })
      */
-    encodeVectorInt32({ vector, plainText }) {
-      console.warn('encodeVectorInt32 has been deprecated since 3.2.0')
-      encode({ vector, plainText })
+    encodeVectorInt32() {
+      throw new Error('encodeVectorInt32 has been deprecated since 3.2.0')
     },
 
     /**
@@ -192,21 +107,19 @@ export const BatchEncoder = ({ library, context }) => {
      * @deprecated since version 3.2.0
      * @function
      * @name BatchEncoder#encodeVectorUInt32
-     * @param {Object} options Options
-     * @param {Vector} options.vector Data to encode
-     * @param {PlainText} options.plainText Destination to store the encoded result
+     * @param {Vector} vector Data to encode
+     * @param {PlainText} plainText Destination to store the encoded result
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const batchEncoder = Morfix.BatchEncoder({ context })
+     * const batchEncoder = Morfix.BatchEncoder(context)
      * const vectorUint32 = Morfix.Vector({ array: Uint32Array.from([1, 2, 3]) })
      * const plain = Morfix.PlainText()
      * batchEncoder.encodeVectorInt32({ vector: vectorUint32, plainText: plain })
      */
-    encodeVectorUInt32({ vector, plainText }) {
-      console.warn('encodeVectorUInt32 has been deprecated since 3.2.0')
-      encode({ vector, plainText, signed: false })
+    encodeVectorUInt32() {
+      throw new Error('encodeVectorUInt32 has been deprecated since 3.2.0')
     },
 
     /**
@@ -220,15 +133,14 @@ export const BatchEncoder = ({ library, context }) => {
      * @deprecated since version 3.2.0
      * @function
      * @name BatchEncoder#decodeVectorInt32
-     * @param {Object} options Options
-     * @param {PlainText} options.plainText Data to decode
-     * @param {Vector} options.vector Destination to store the decoded result
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}]
+     * @param {PlainText} plainText Data to decode
+     * @param {Vector} vector Destination to store the decoded result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}]
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const batchEncoder = Morfix.BatchEncoder({ context })
+     * const batchEncoder = Morfix.BatchEncoder(context)
      *
      * const vectorInt32 = Morfix.Vector({ array: Int32Array.from([1, 2, 3]) })
      * const plain = Morfix.PlainText()
@@ -240,9 +152,8 @@ export const BatchEncoder = ({ library, context }) => {
      *   vector: decodedVector
      * })
      */
-    decodeVectorInt32({ plainText, vector, pool = _MemoryPoolHandle.global }) {
-      console.warn('decodeVectorInt32 has been deprecated since 3.2.0')
-      decode({ plainText, vector, pool })
+    decodeVectorInt32() {
+      throw new Error('decodeVectorInt32 has been deprecated since 3.2.0')
     },
 
     /**
@@ -256,15 +167,14 @@ export const BatchEncoder = ({ library, context }) => {
      * @deprecated since version 3.2.0
      * @function
      * @name BatchEncoder#decodeVectorUInt32
-     * @param {Object} options Options
-     * @param {PlainText} options.plainText Data to decode
-     * @param {Vector} options.vector Destination to store the decoded result
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}]
+     * @param {PlainText} plainText Data to decode
+     * @param {Vector} vector Destination to store the decoded result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}]
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const batchEncoder = Morfix.BatchEncoder({ context })
+     * const batchEncoder = Morfix.BatchEncoder(context)
      *
      * const vectorUint32 = Morfix.Vector({ array: Uint32Array.from([1, 2, 3]) })
      * const plain = Morfix.PlainText()
@@ -276,9 +186,8 @@ export const BatchEncoder = ({ library, context }) => {
      *   vector: decodedVector
      * })
      */
-    decodeVectorUInt32({ plainText, vector, pool = _MemoryPoolHandle.global }) {
-      console.warn('decodeVectorUInt32 has been deprecated since 3.2.0')
-      decode({ plainText, vector, pool, signed: false })
+    decodeVectorUInt32() {
+      throw new Error('decodeVectorUInt32 has been deprecated since 3.2.0')
     },
 
     /**
@@ -295,21 +204,46 @@ export const BatchEncoder = ({ library, context }) => {
      *
      * @function
      * @name BatchEncoder#encode
-     * @param {Object} options Options
-     * @param {Int32Array|Uint32Array} options.array Data to encode
-     * @param {PlainText} [options.plainText] Destination to store the encoded result
-     * @returns {PlainText} PlainText holding the encoded data
+     * @param {Int32Array|Uint32Array} array Data to encode
+     * @param {PlainText} [plainText=null] Destination to store the encoded result
+     * @returns {PlainText|undefined} A new PlainText holding the encoded data or undefined if one was provided
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const batchEncoder = Morfix.BatchEncoder({ context })
+     * const batchEncoder = Morfix.BatchEncoder(context)
      *
-     * const plainText = batchEncoder.encode({
-     *   array: Int32Array.from([1, -2, 3])
-     * })
+     * const plainText = batchEncoder.encode(Int32Array.from([1, -2, 3]))
      */
-    encode: options => encode(options),
+    encode(array, plainText = null) {
+      try {
+        if (array.constructor === Int32Array) {
+          if (plainText) {
+            _instance.encode(array, plainText.instance, true)
+            return
+          }
+          const plain = PlainText()
+          _instance.encode(array, plain.instance, true)
+          return plain
+        }
+
+        if (array.constructor === Uint32Array) {
+          if (plainText) {
+            _instance.encode(array, plainText.instance, false)
+            return
+          }
+          const plain = PlainText()
+          _instance.encode(array, plain.instance, false)
+          return plain
+        }
+
+        throw new Error(
+          'Unsupported array type! `array` must be of type Int32Array or Uint32Array.'
+        )
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
 
     /**
      * Inverse of encode. This function "unbatches" a given PlainText into a matrix
@@ -321,27 +255,39 @@ export const BatchEncoder = ({ library, context }) => {
      *
      * @function
      * @name BatchEncoder#decode
-     * @param {Object} options Options
-     * @param {PlainText} options.plainText Data to decode
-     * @param {Boolean} [options.signed=true] By default, decode as an Int32Array. If false, decode as an Uint32Array
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}]
+     * @param {PlainText} plainText Data to decode
+     * @param {Boolean} [signed=true] By default, decode as an Int32Array. If false, decode as an Uint32Array
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}]
      * @returns {Int32Array|Uint32Array} TypedArray containing the decoded data
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const batchEncoder = Morfix.BatchEncoder({ context })
+     * const batchEncoder = Morfix.BatchEncoder(context)
      *
-     * const plainText = batchEncoder.encode({
-     *   array: Int32Array.from([1, 2, 3]),
-     *   signed: true // set to false to decode as a Uint32Array
-     * })
+     * const plainText = batchEncoder.encode(Int32Array.from([1, -2, 3]))
+     * const plainTextU = batchEncoder.encode(Unt32Array.from([1, 2, 3]))
      *
-     * const result = batchEncoder.decode({
-     *   plainText
-     * })
+     * const result = batchEncoder.decode(plainText)
+     * const resultU = batchEncoder.decode(plainTextU, false) // To decode as an Uint32Array
      */
-    decode: options => decode(options),
+    decode(plainText, signed = true, pool = MemoryPoolHandle.global) {
+      if (signed) {
+        const tempVect = Vector(new Int32Array(0))
+        const instance = _instance.decodeInt32(plainText.instance, pool)
+        tempVect.inject(instance)
+        const tempArr = tempVect.toArray()
+        tempVect.delete()
+        return tempArr
+      }
+
+      const tempVect = Vector(new Uint32Array(0))
+      const instance = _instance.decodeUInt32(plainText.instance, pool)
+      tempVect.inject(instance)
+      const tempArr = tempVect.toArray()
+      tempVect.delete()
+      return tempArr
+    },
 
     /**
      * The total number of batching slots available to hold data

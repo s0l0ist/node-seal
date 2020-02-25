@@ -1,37 +1,103 @@
-export const SEAL = ({ options }) => {
-  const _BatchEncoder = options.BatchEncoder
-  const _CipherText = options.CipherText
-  const _CKKSEncoder = options.CKKSEncoder
-  const _Context = options.Context
-  const _Decryptor = options.Decryptor
-  const _EncryptionParameters = options.EncryptionParameters
-  const _Encryptor = options.Encryptor
-  const _Evaluator = options.Evaluator
-  const _GaloisKeys = options.GaloisKeys
-  const _IntegerEncoder = options.IntegerEncoder
-  const _KeyGenerator = options.KeyGenerator
-  const _Library = options.Library
-  const _PlainText = options.PlainText
-  const _PublicKey = options.PublicKey
-  const _RelinKeys = options.RelinKeys
-  const _SecretKey = options.SecretKey
-  const _SmallModulus = options.SmallModulus
-  const _Vector = options.Vector
+import { pipe } from './util'
 
-  // Singletons
-  const _CoeffModulus = options.CoeffModulus({ library: _Library.instance })
-  const _ComprModeType = options.ComprModeType({
-    library: _Library.instance
-  })
-  const _Exception = options.Exception({ library: _Library.instance })
-  const _MemoryPoolHandle = options.MemoryPoolHandle({
-    library: _Library.instance
-  })
-  const _PlainModulus = options.PlainModulus({ library: _Library.instance })
-  const _SecurityLevel = options.SecurityLevel({
-    library: _Library.instance
-  })
-  const _SchemeType = options.SchemeType({ library: _Library.instance })
+export const SEAL = factories => {
+  // Call a component with arguments
+  const call = args => x => {
+    return x(...args)
+  }
+  const addDeps = (...deps) => pipe(call(deps))
+
+  // Instantiate the singletons
+  const { Exception } = factories
+  const CoeffModulus = addDeps(Exception)(factories.CoeffModulus)
+  const ComprModeType = addDeps(Exception)(factories.ComprModeType)
+  const MemoryPoolHandle = addDeps(Exception)(factories.MemoryPoolHandle)
+  const PlainModulus = addDeps(Exception)(factories.PlainModulus)
+  const SchemeType = addDeps(Exception)(factories.SchemeType)
+  const SecurityLevel = addDeps(Exception)(factories.SecurityLevel)
+
+  // Instance types
+  const ParmsIdType = addDeps(Exception)(factories.ParmsIdType())
+
+  const PlainText = addDeps(
+    Exception,
+    ComprModeType,
+    ParmsIdType
+  )(factories.PlainText)
+
+  const CipherText = addDeps(
+    Exception,
+    ComprModeType,
+    ParmsIdType
+  )(factories.CipherText)
+
+  const Vector = addDeps(Exception)(factories.Vector)
+
+  const BatchEncoder = addDeps(
+    Exception,
+    MemoryPoolHandle,
+    PlainText,
+    Vector
+  )(factories.BatchEncoder)
+
+  const CKKSEncoder = addDeps(
+    Exception,
+    MemoryPoolHandle,
+    PlainText,
+    Vector
+  )(factories.CKKSEncoder)
+
+  const EncryptionParameterQualifiers = addDeps(Exception)(
+    factories.EncryptionParameterQualifiers
+  )
+
+  const SmallModulus = addDeps(Exception, ComprModeType)(factories.SmallModulus)
+
+  const EncryptionParameters = addDeps(
+    Exception,
+    ComprModeType,
+    SmallModulus
+  )(factories.EncryptionParameters)
+
+  const ContextData = addDeps(
+    Exception,
+    EncryptionParameters,
+    ParmsIdType,
+    EncryptionParameterQualifiers
+  )(factories.ContextData)
+
+  const Context = addDeps(
+    Exception,
+    ParmsIdType,
+    ContextData
+  )(factories.Context)
+
+  const Decryptor = addDeps(Exception, PlainText)(factories.Decryptor)
+
+  const Encryptor = addDeps(
+    Exception,
+    MemoryPoolHandle,
+    CipherText
+  )(factories.Encryptor)
+
+  const Evaluator = addDeps(
+    Exception,
+    MemoryPoolHandle,
+    CipherText,
+    PlainText
+  )(factories.Evaluator)
+  const PublicKey = addDeps(Exception, ComprModeType)(factories.PublicKey)
+  const SecretKey = addDeps(Exception, ComprModeType)(factories.SecretKey)
+  const RelinKeys = addDeps(Exception, ComprModeType)(factories.RelinKeys)
+  const GaloisKeys = addDeps(Exception, ComprModeType)(factories.GaloisKeys)
+  const IntegerEncoder = addDeps(Exception, PlainText)(factories.IntegerEncoder)
+  const KeyGenerator = addDeps(
+    Exception,
+    PublicKey,
+    SecretKey,
+    RelinKeys,
+    GaloisKeys
+  )(factories.KeyGenerator)
 
   /**
    * @implements SEAL
@@ -55,7 +121,7 @@ export const SEAL = ({ options }) => {
      * Mathematically speaking, if the polynomial modulus is X^N+1, N is a power of two, and
      * PlainModulus is a prime number T such that 2N divides T-1, then integers modulo T
      * contain a primitive 2N-th root of unity and the polynomial X^N+1 splits into n distinct
-     * linear factors as X^N+1 = (X-a_1)*...*(X-a_N) mod T, where the constants a_1, ..., a_n
+     * linear factors as X^N+1 = (X-a_1)*...*(X-a_N) mod T, where the constants a1, ..., a_n
      * are all the distinct primitive 2N-th roots of unity in integers modulo T. The Chinese
      * Remainder Theorem (CRT) states that the PlainText space Z_T[X]/(X^N+1) in this case is
      * isomorphic (as an algebra) to the N-fold direct product of fields Z_T. The isomorphism
@@ -75,18 +141,15 @@ export const SEAL = ({ options }) => {
      *
      * @function
      * @name SEAL#BatchEncoder
-     * @param {Object} options Options
-     * @param {Context} options.context Encryption context
+     * @param {Context} context Encryption context
      * @returns {BatchEncoder}
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const batchEncoder = Morfix.BatchEncoder({ context })
+     * const batchEncoder = Morfix.BatchEncoder(context)
      */
-    BatchEncoder({ context }) {
-      return _BatchEncoder({ library: _Library.instance, context })
-    },
+    BatchEncoder: context => BatchEncoder(context),
 
     /**
      * @description
@@ -119,6 +182,7 @@ export const SEAL = ({ options }) => {
      *
      * @function
      * @name SEAL#CipherText
+     * @param {CipherText} [instance=null] A WASM instance
      * @returns {CipherText} An empty CipherText instance
      * @example
      * import { Seal } from 'node-seal'
@@ -126,9 +190,7 @@ export const SEAL = ({ options }) => {
      * ...
      * const cipherText = Morfix.CipherText()
      */
-    CipherText() {
-      return _CipherText({ library: _Library.instance })
-    },
+    CipherText: (instance = null) => CipherText(instance),
 
     /**
      * @description
@@ -155,18 +217,15 @@ export const SEAL = ({ options }) => {
      *
      * @function
      * @name SEAL#CKKSEncoder
-     * @param {Object} options Options
-     * @param {Context} options.context Encryption context
+     * @param {Context} context Encryption context
      * @returns {CKKSEncoder} An encoder used for the CKKS scheme type
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const ckksEncoder = Morfix.CKKSEncoder({ context })
+     * const ckksEncoder = Morfix.CKKSEncoder(context)
      */
-    CKKSEncoder({ context }) {
-      return _CKKSEncoder({ library: _Library.instance, context })
-    },
+    CKKSEncoder: context => CKKSEncoder(context),
 
     /**
      * @description
@@ -187,20 +246,13 @@ export const SEAL = ({ options }) => {
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const encParms = Morfix.EncryptionParameters({
-     *   schemeType: Morfix.SchemeType.BFV
-     * })
+     * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
      * ...
-     * const coeffModulus = Morfix.CoeffModulus.Create({
-     *   polyModulusDegree: 4096,
-     *   bitSizes: Int32Array.from([36, 36, 37])
-     * })
+     * const coeffModulus = Morfix.CoeffModulus.Create(4096, Int32Array.from([36, 36, 37])
      *
-     * encParms.setCoeffModulus({ coeffModulus })
+     * encParms.setCoeffModulus(coeffModulus)
      */
-    get CoeffModulus() {
-      return _CoeffModulus
-    },
+    CoeffModulus,
 
     /**
      * @description
@@ -218,16 +270,14 @@ export const SEAL = ({ options }) => {
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const keyGenerator = Morfix.KeyGenerator({ context })
+     * const keyGenerator = Morfix.KeyGenerator(context)
      * const secretKey = keyGenerator.getSecretKey()
      * const base64 = secretKey.save() // Defaults to ComprModeType.deflate
      *
-     * // Manually specify the compression type
-     * // const base64 = secretKey.save({ compression: Morfix.ComprModeType.none })
+     * // Manually disable compression
+     * // const base64 = secretKey.save(Morfix.ComprModeType.none)
      */
-    get ComprModeType() {
-      return _ComprModeType
-    },
+    ComprModeType,
 
     /**
      * @description
@@ -268,25 +318,19 @@ export const SEAL = ({ options }) => {
      *
      * @function
      * @name SEAL#Context
-     * @param {Object} options Options
-     * @param {EncryptionParameters} options.encryptionParams A set of specific encryption parameters
-     * @param {boolean} options.expandModChain Determines whether or not to enable modulus switching
-     * @param {SecurityLevel} options.securityLevel The security strength in bits.
+     * @param {EncryptionParameters} encryptionParams A set of specific encryption parameters
+     * @param {boolean} expandModChain Determines whether or not to enable modulus switching
+     * @param {SecurityLevel} securityLevel The security strength in bits.
      * @returns {Context} An encryption context to be used for all operations
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
+     * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
      * ...
-     * const context = Morfix.Context({ encryptionParams, expandModChain, securityLevel })
+     * const context = Morfix.Context(encParms, true, Morfix.SecurityLevel.tc128)
      */
-    Context({ encryptionParams, expandModChain, securityLevel }) {
-      return _Context({
-        library: _Library.instance,
-        encryptionParams,
-        expandModChain,
-        securityLevel
-      })
-    },
+    Context: (encryptionParams, expandModChain, securityLevel) =>
+      Context(encryptionParams, expandModChain, securityLevel),
 
     /**
      * @description
@@ -318,19 +362,16 @@ export const SEAL = ({ options }) => {
      *
      * @function
      * @name SEAL#Decryptor
-     * @param {Object} options Options
-     * @param {Context} options.context Encryption context
-     * @param {SecretKey} options.secretKey SecretKey to be used for decryption
+     * @param {Context} context Encryption context
+     * @param {SecretKey} secretKey SecretKey to be used for decryption
      * @returns {Decryptor} A Decryptor instance that can be used to decrypt CipherTexts
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const decryptor = Morfix.Decryptor({ context, secretKey })
+     * const decryptor = Morfix.Decryptor(context, secretKey)
      */
-    Decryptor({ context, secretKey }) {
-      return _Decryptor({ library: _Library.instance, context, secretKey })
-    },
+    Decryptor: (context, secretKey) => Decryptor(context, secretKey),
 
     /**
      * @description
@@ -371,21 +412,15 @@ export const SEAL = ({ options }) => {
      *
      * @function
      * @name SEAL#EncryptionParameters
-     * @param {Object} options Options
-     * @param {SchemeType} options.schemeType The desired scheme type to use
+     * @param {SchemeType} schemeType The desired scheme type to use
      * @returns {EncryptionParameters} A set of encryption parameters based from the scheme type
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const encParms = Morfix.EncryptionParameters({ schemeType })
+     * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
      */
-    EncryptionParameters({ schemeType }) {
-      return _EncryptionParameters({
-        library: _Library.instance,
-        schemeType
-      })
-    },
+    EncryptionParameters: schemeType => EncryptionParameters(schemeType),
 
     /**
      * @description
@@ -418,19 +453,16 @@ export const SEAL = ({ options }) => {
      *
      * @function
      * @name SEAL#Encryptor
-     * @param {Object} options Options
-     * @param {Context} options.context Encryption context
-     * @param {PublicKey} options.publicKey PublicKey to be used for encryption
+     * @param {Context} context Encryption context
+     * @param {PublicKey} publicKey PublicKey to be used for encryption
      * @returns {Encryptor} An Encryptor instance that can be used to encrypt PlainTexts
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const encryptor = Morfix.Encryptor({ context, publicKey })
+     * const encryptor = Morfix.Encryptor(context, publicKey)
      */
-    Encryptor({ context, publicKey }) {
-      return _Encryptor({ library: _Library.instance, context, publicKey })
-    },
+    Encryptor: (context, publicKey) => Encryptor(context, publicKey),
 
     /**
      * @description
@@ -499,18 +531,15 @@ export const SEAL = ({ options }) => {
      *
      * @function
      * @name SEAL#Evaluator
-     * @param {Object} options Options
-     * @param {Context} options.context Encryption context
+     * @param {Context} context Encryption context
      * @returns {Evaluator} An evaluator instance to be used to perform homomorphic evaluations
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const evaluator = Morfix.Evaluator({ context })
+     * const evaluator = Morfix.Evaluator(context)
      */
-    Evaluator({ context }) {
-      return _Evaluator({ library: _Library.instance, context })
-    },
+    Evaluator: context => Evaluator(context),
 
     /**
      * @description
@@ -527,12 +556,10 @@ export const SEAL = ({ options }) => {
      * try {
      *   <WASM method which is throwing>
      * } catch (e) {
-     *   throw Morfix.Exception.safe({ error: e})
+     *   throw Morfix.Exception.safe(e)
      * }
      */
-    get Exception() {
-      return _Exception
-    },
+    Exception,
 
     /**
      *
@@ -566,15 +593,13 @@ export const SEAL = ({ options }) => {
      * ...
      * // Generate an empty key and load from a base64 string
      * const galoisKeys = Morfix.GaloisKeys()
-     * galoisKeys.load({ context, encoded: <base64 string>})
+     * galoisKeys.load(context, <base64 string>)
      *
      * // Or generate them from a KeyGenerator
-     * const keyGenerator = Morfix.KeyGenerator({ context })
+     * const keyGenerator = Morfix.KeyGenerator(context)
      * const galoisKeys = keyGenerator.genGaloisKeys()
      */
-    GaloisKeys() {
-      return _GaloisKeys({ library: _Library.instance })
-    },
+    GaloisKeys: () => GaloisKeys(),
 
     /**
      * @description
@@ -597,18 +622,15 @@ export const SEAL = ({ options }) => {
      *
      * @function
      * @name SEAL#IntegerEncoder
-     * @param {Object} options Options
-     * @param {Context} options.context Encryption context
+     * @param {Context} context Encryption context
      * @returns {IntegerEncoder} An IntegerEncoder to be used for encoding only integers to PlainTexts
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const integerEncoder = Morfix.IntegerEncoder({ context })
+     * const integerEncoder = Morfix.IntegerEncoder(context)
      */
-    IntegerEncoder({ context }) {
-      return _IntegerEncoder({ library: _Library.instance, context })
-    },
+    IntegerEncoder: context => IntegerEncoder(context),
 
     /**
      * @description
@@ -624,32 +646,25 @@ export const SEAL = ({ options }) => {
      *
      * @function
      * @name SEAL#KeyGenerator
-     * @param {Object} options Options
-     * @param {Context} options.context Encryption context
-     * @param {SecretKey} [options.secretKey=null] Previously generated SecretKey
-     * @param {PublicKey} [options.publicKey=null] Previously generated PublicKey
+     * @param {Context} context Encryption context
+     * @param {SecretKey} [secretKey=null] Previously generated SecretKey
+     * @param {PublicKey} [publicKey=null] Previously generated PublicKey
      * @returns {KeyGenerator} A KeyGenerator to be used to generate keys depending on how it was initialized
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
      * // Creating a KeyGenerator automatically creates an internal Secret and Public key pair
-     * const keyGenerator = Morfix.KeyGenerator({ context })
+     * const keyGenerator = Morfix.KeyGenerator(context)
      *
      * // Optionally, pass in an existing SecetKey
-     * const keyGenerator = Morfix.KeyGenerator({ context, secretKey: someSecretKey })
+     * const keyGenerator = Morfix.KeyGenerator(context, secretKey)
      *
-     * // In addition, pass in an existing PublicKey with SecetKey to avoid unnecessary key generation
-     * const keyGenerator = Morfix.KeyGenerator({ context, secretKey: someSecretKey, publicKey: somePublicKey })
+     * // In addition, pass in an existing PublicKey with a SecetKey to avoid unnecessary key generation
+     * const keyGenerator = Morfix.KeyGenerator(context, secretKey, publicKey)
      */
-    KeyGenerator({ context, secretKey = null, publicKey = null }) {
-      return _KeyGenerator({
-        library: _Library.instance,
-        context,
-        secretKey,
-        publicKey
-      })
-    },
+    KeyGenerator: (context, secretKey = null, publicKey = null) =>
+      KeyGenerator(context, secretKey, publicKey),
 
     /**
      * @description
@@ -703,12 +718,10 @@ export const SEAL = ({ options }) => {
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const encryptor = Morfix.Encryptor({ context, publicKey })
-     * encryptor.encrypt({ plainText, cipherText, pool: Morfix.MemoryPoolHandle.global })
+     * const encryptor = Morfix.Encryptor(context, publicKey)
+     * encryptor.encrypt(plainText, cipherText, Morfix.MemoryPoolHandle.global)
      */
-    get MemoryPoolHandle() {
-      return _MemoryPoolHandle
-    },
+    MemoryPoolHandle,
 
     /**
      * @description
@@ -721,11 +734,11 @@ export const SEAL = ({ options }) => {
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const smallModulus = Morfix.PlainModulus.Batching({ polyModulusDegree, bitSize })
+     * const polyModulusDegree = 4096
+     * const bitSize = 20
+     * const smallModulus = Morfix.PlainModulus.Batching(polyModulusDegree, bitSize)
      */
-    get PlainModulus() {
-      return _PlainModulus
-    },
+    PlainModulus,
 
     /**
      * @description
@@ -761,6 +774,7 @@ export const SEAL = ({ options }) => {
      *
      * @function
      * @name SEAL#PlainText
+     * @param {PlainText} [instance=null] A WASM instance
      * @returns {PlainText} An empty PlainText instance
      * @example
      * import { Seal } from 'node-seal'
@@ -768,9 +782,7 @@ export const SEAL = ({ options }) => {
      * ...
      * const plainText = Morfix.PlainText()
      */
-    PlainText() {
-      return _PlainText({ library: _Library.instance })
-    },
+    PlainText: (instance = null) => PlainText(instance),
 
     /**
      * @description
@@ -795,15 +807,13 @@ export const SEAL = ({ options }) => {
      * ...
      * // Generate an empty key and load from a base64 string
      * const publicKey = Morfix.PublicKey()
-     * publicKey.load({ context, encoded: <base64 string>})
+     * publicKey.load(context, <base64 string>)
      *
      * // Or generate them from a KeyGenerator
-     * const keyGenerator = Morfix.KeyGenerator({ context })
+     * const keyGenerator = Morfix.KeyGenerator(context)
      * const publicKey = keyGenerator.getPublicKey()
      */
-    PublicKey() {
-      return _PublicKey({ library: _Library.instance })
-    },
+    PublicKey: () => PublicKey,
 
     /**
      * @description
@@ -851,15 +861,13 @@ export const SEAL = ({ options }) => {
      * ...
      * // Generate an empty key and load from a base64 string
      * const relinKeys = Morfix.RelinKeys()
-     * relinKeys.load({ context, encoded: <base64 string>})
+     * relinKeys.load(context, <base64 string>)
      *
      * // Or generate them from a KeyGenerator
-     * const keyGenerator = Morfix.KeyGenerator({ context })
+     * const keyGenerator = Morfix.KeyGenerator(context)
      * const relinKeys = keyGenerator.genRelinKeys()
      */
-    RelinKeys() {
-      return _RelinKeys({ library: _Library.instance })
-    },
+    RelinKeys: () => RelinKeys,
 
     /**
      * @description
@@ -872,11 +880,9 @@ export const SEAL = ({ options }) => {
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const encParms = Morfix.EncryptionParameters({ schemeType: Morfix.SchemeType.BFV })
+     * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
      */
-    get SchemeType() {
-      return _SchemeType
-    },
+    SchemeType,
 
     /**
      * @description
@@ -901,15 +907,13 @@ export const SEAL = ({ options }) => {
      * ...
      * // Generate an empty key and load from a base64 string
      * const secretKey = Morfix.SecretKey()
-     * secretKey.load({ context, encoded: <base64 string>})
+     * secretKey.load(context, <base64 string>)
      *
      * // Or generate them from a KeyGenerator
-     * const keyGenerator = Morfix.KeyGenerator({ context })
+     * const keyGenerator = Morfix.KeyGenerator(context)
      * const secretKey = keyGenerator.getSecretKey()
      */
-    SecretKey() {
-      return _SecretKey({ library: _Library.instance })
-    },
+    SecretKey: () => SecretKey,
 
     /**
      * @description
@@ -927,16 +931,10 @@ export const SEAL = ({ options }) => {
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const encParms = Morfix.EncryptionParameters({ schemeType: Morfix.SchemeType.BFV })
-     * const context = Morfix.Context({
-     *   encryptionParams: encParms,
-     *   expandModChain: true,
-     *   securityLevel: Morfix.SecurityLevel.tc128
-     *   })
+     * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+     * const context = Morfix.Context(encParms, true, Morfix.SecurityLevel.tc128)
      */
-    get SecurityLevel() {
-      return _SecurityLevel
-    },
+    SecurityLevel,
 
     /**
      * @description
@@ -950,32 +948,27 @@ export const SEAL = ({ options }) => {
      * const Morfix = await Seal
      * ...
      * const smallModulus = Morfix.SmallModulus()
-     * smallModulus.setValue({ value: '5'})
+     * smallModulus.setValue('5')
      */
-    SmallModulus() {
-      return _SmallModulus({ library: _Library.instance })
-    },
+    SmallModulus: () => SmallModulus(),
 
     /**
      * @description
      * Create an instance of a C++ Vector
      *
-     * @deprecated since version 3.2.0
+     * @private
      * @function
      * @name SEAL#Vector
-     * @param {Object} options Options
-     * @param {Int32Array|Uint32Array|Float64Array} options.array Typed Array of data
+     * @param {Int32Array|Uint32Array|Float64Array} array Typed Array of data
      * @returns {Vector} Vector containing the typed data
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const vectorInt32 = Morfix.Vector({ array: Int32Array.from([1, 2, 3]) })
-     * const vectorUint32 = Morfix.Vector({ array: Uint32Array.from([1, 2, 3]) })
-     * const vectorFloat64 = Morfix.Vector({ array: Float64Array.from([1.11, 2.22, 3.33]) })
+     * const vectorInt32 = Morfix.Vector(Int32Array.from([1, 2, 3]))
+     * const vectorUint32 = Morfix.Vector(Uint32Array.from([1, 2, 3]))
+     * const vectorFloat64 = Morfix.Vector(Float64Array.from([1.11, 2.22, 3.33]))
      */
-    Vector({ array }) {
-      return _Vector({ library: _Library.instance, array })
-    }
+    Vector: array => Vector(array)
   }
 }

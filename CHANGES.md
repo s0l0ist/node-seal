@@ -3,6 +3,31 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 4.0.0
+
+Complete refactor to allow use of functional composition.
+
+Breaking:
+- All functions which used to take an argument with an object containing named parameters have been 
+  replaced with just their named parameters. Ex: `instance.function({ param1, param2 })` have now 
+  become `instance.function(param1, param2)`.
+- `Vector` is now _private_ for use inside this library
+
+Feat: 
+- `PlainText` and `CipherText` variables take an optional constructor parameter
+- All evaluator methods accept an optional destination parameter. If one is supplied, the evaluation's
+  result well be stored there. Otherwise, a new variable containing the result will be returned. Ex:
+  ```
+  // With optional destination
+  const destinationCipher = Morfix.CipherText()
+  evaluator.add(cipherTextA, cipherTextB, destinationCipher)`
+  
+  // Without destination
+  const resultCipher = evaluator.add(cipherTextA, cipherTextB)
+  
+  // destinationCipher and resultCipher contain the same encrypted result
+  ```
+  
 ## Version 3.2.4
 
 Chore:

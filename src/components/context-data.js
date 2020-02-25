@@ -1,11 +1,10 @@
-import { Exception } from './exception'
-import { EncryptionParameters } from './encryption-parameters'
-import { ParmsIdType } from './parms-id-type'
-import { EncryptionParameterQualifiers } from './encryption-parameter-qualifiers'
-
-export const ContextData = ({ library }) => {
-  const _Exception = Exception({ library })
-  const _library = library
+// eslint-disable-next-line no-unused-vars
+export const ContextData = library => (
+  Exception,
+  EncryptionParameters,
+  ParmsIdType,
+  EncryptionParameterQualifiers
+) => () => {
   let _instance = null
 
   /**
@@ -34,10 +33,9 @@ export const ContextData = ({ library }) => {
      * @private
      * @function
      * @name ContextData#inject
-     * @param {Object} options Options
-     * @param {instance} options.instance WASM instance
+     * @param {instance} instance WASM instance
      */
-    inject({ instance }) {
+    inject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -70,14 +68,11 @@ export const ContextData = ({ library }) => {
     get parms() {
       try {
         const instance = _instance.parms()
-        const encryptionParameters = EncryptionParameters({
-          library: _library,
-          suppressWarning: true
-        })
-        encryptionParameters.inject({ instance })
+        const encryptionParameters = EncryptionParameters(true)
+        encryptionParameters.inject(instance)
         return encryptionParameters
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -91,11 +86,11 @@ export const ContextData = ({ library }) => {
     get parmsId() {
       try {
         const instance = _instance.parmsId()
-        const parmsId = ParmsIdType({ library: _library })
-        parmsId.inject({ instance })
+        const parmsId = ParmsIdType()
+        parmsId.inject(instance)
         return parmsId
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -112,13 +107,11 @@ export const ContextData = ({ library }) => {
     get qualifiers() {
       try {
         const instance = _instance.qualifiers()
-        const encryptionParameterQualifiers = EncryptionParameterQualifiers({
-          library: _library
-        })
-        encryptionParameterQualifiers.inject({ instance })
+        const encryptionParameterQualifiers = EncryptionParameterQualifiers()
+        encryptionParameterQualifiers.inject(instance)
         return encryptionParameterQualifiers
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -133,7 +126,7 @@ export const ContextData = ({ library }) => {
       try {
         return _instance.totalCoeffModulusBitCount()
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -149,11 +142,11 @@ export const ContextData = ({ library }) => {
     get prevContextData() {
       try {
         const instance = _instance.prevContextData()
-        const contextData = ContextData({ library: _library })
-        contextData.inject({ instance })
+        const contextData = ContextData()
+        contextData.inject(instance)
         return contextData
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -169,11 +162,11 @@ export const ContextData = ({ library }) => {
     get nextContextData() {
       try {
         const instance = _instance.nextContextData()
-        const contextData = ContextData({ library: _library })
-        contextData.inject({ instance })
+        const contextData = ContextData()
+        contextData.inject(instance)
         return contextData
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -189,7 +182,7 @@ export const ContextData = ({ library }) => {
       try {
         return _instance.chainIndex()
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     }
   }

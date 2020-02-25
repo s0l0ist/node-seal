@@ -1,10 +1,7 @@
-import { Exception } from './exception'
-
-export const CoeffModulus = ({ library }) => {
-  const _Exception = Exception({ library })
+export const CoeffModulus = library => Exception => {
+  // Static methods
   const _MaxBitCount = library.CoeffModulus.MaxBitCount
   const _BFVDefault = library.CoeffModulus.BFVDefault
-  const _Create = library.CoeffModulus.Create
   const _CreateFromArray = library.CoeffModulus.CreateFromArray
 
   /**
@@ -20,16 +17,15 @@ export const CoeffModulus = ({ library }) => {
      *
      * @function
      * @name CoeffModulus.MaxBitCount
-     * @param {Object} options Options
-     * @param {Number} options.polyModulusDegree Degree of the polynomial modulus
-     * @param {SecurityLevel} options.securityLevel Security Level
+     * @param {Number} polyModulusDegree Degree of the polynomial modulus
+     * @param {SecurityLevel} securityLevel Security Level
      * @returns {Number} Maximum bit count
      */
-    MaxBitCount({ polyModulusDegree, securityLevel }) {
+    MaxBitCount(polyModulusDegree, securityLevel) {
       try {
         return _MaxBitCount(polyModulusDegree, securityLevel)
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -38,16 +34,15 @@ export const CoeffModulus = ({ library }) => {
      *
      * @function
      * @name CoeffModulus.BFVDefault
-     * @param {Object} options Options
-     * @param {Number} options.polyModulusDegree Degree of the polynomial modulus
-     * @param {SecurityLevel} options.securityLevel Security Level
+     * @param {Number} polyModulusDegree Degree of the polynomial modulus
+     * @param {SecurityLevel} securityLevel Security Level
      * @returns {Vector<SmallModulus>} Vector containing SmallModulus primes
      */
-    BFVDefault({ polyModulusDegree, securityLevel }) {
+    BFVDefault(polyModulusDegree, securityLevel) {
       try {
         return _BFVDefault(polyModulusDegree, securityLevel)
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -56,28 +51,26 @@ export const CoeffModulus = ({ library }) => {
      *
      * @function
      * @name CoeffModulus.Create
-     * @param {Object} options Options
-     * @param {Number} options.polyModulusDegree Degree of the polynomial modulus
-     * @param {Vector|Int32Array} options.bitSizes Deprecated: Vector or an Int32Array containing values representing
+     * @param {Number} polyModulusDegree Degree of the polynomial modulus
+     * @param {Int32Array} bitSizes Int32Array containing values representing
      * bit-sizes of primes
      * @returns {Vector<SmallModulus>} Vector containing SmallModulus primes
      */
-    Create({ polyModulusDegree, bitSizes }) {
+    Create(polyModulusDegree, bitSizes) {
       try {
         if (bitSizes.constructor === Object) {
-          console.warn(
+          throw new Error(
             'CoeffModulus.Create with `bitSizes` of type Vector has been deprecated since 3.2.0, use an Int32Array'
           )
-          return _Create(polyModulusDegree, bitSizes.instance)
         }
         if (bitSizes.constructor === Int32Array) {
           return _CreateFromArray(polyModulusDegree, bitSizes)
         }
         throw new Error(
-          'Unsupported argument type! `bitSizes` must be either an Int32Array or a Vector'
+          'Unsupported argument type! `bitSizes` must be either an Int32Array'
         )
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     }
   }

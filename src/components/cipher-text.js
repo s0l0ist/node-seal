@@ -1,16 +1,15 @@
-import { Exception } from './exception'
-import { ComprModeType } from './compr-mode-type'
-import { ParmsIdType } from './parms-id-type'
-
-export const CipherText = ({ library }) => {
-  const _Exception = Exception({ library })
-  const _ComprModeType = ComprModeType({ library })
-  const _library = library
-  let _instance = null
-  try {
-    _instance = new library.Ciphertext()
-  } catch (e) {
-    throw _Exception.safe({ error: e })
+export const CipherText = library => (
+  Exception,
+  ComprModeType,
+  ParmsIdType
+) => (instance = null) => {
+  let _instance = instance
+  if (!instance) {
+    try {
+      _instance = new library.Ciphertext()
+    } catch (e) {
+      throw Exception.safe(e)
+    }
   }
 
   /**
@@ -39,10 +38,9 @@ export const CipherText = ({ library }) => {
      * @private
      * @function
      * @name CipherText#inject
-     * @param {Object} options Options
-     * @param {instance} options.instance WASM instance
+     * @param {instance} instance WASM instance
      */
-    inject({ instance }) {
+    inject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -72,14 +70,13 @@ export const CipherText = ({ library }) => {
      *
      * @function
      * @name CipherText#reserve
-     * @param {Object} options Options
-     * @param {Number} options.capacity The capacity to reserve
+     * @param {Number} capacity The capacity to reserve
      */
-    reserve({ capacity }) {
+    reserve(capacity) {
       try {
         return _instance.reserve(capacity)
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -94,14 +91,13 @@ export const CipherText = ({ library }) => {
      *
      * @function
      * @name CipherText#resize
-     * @param {Object} options Options
-     * @param {Number} options.size The new size
+     * @param {Number} size The new size
      */
-    resize({ size }) {
+    resize(size) {
       try {
         return _instance.resize(size)
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -117,7 +113,7 @@ export const CipherText = ({ library }) => {
       try {
         return _instance.release()
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -207,8 +203,8 @@ export const CipherText = ({ library }) => {
      */
     get parmsId() {
       const instance = _instance.parmsId()
-      const parmsId = ParmsIdType({ library: _library })
-      parmsId.inject({ instance })
+      const parmsId = ParmsIdType()
+      parmsId.inject(instance)
       return parmsId
     },
 
@@ -241,15 +237,14 @@ export const CipherText = ({ library }) => {
      *
      * @function
      * @name CipherText#save
-     * @param {Object} options Options
-     * @param {ComprModeType} [options.compression={@link ComprModeType.deflate}] The compression mode to use
+     * @param {ComprModeType} [compression={@link ComprModeType.deflate}] The compression mode to use
      * @returns {String} base64 encoded string
      */
-    save({ compression = _ComprModeType.deflate } = {}) {
+    save(compression = ComprModeType.deflate) {
       try {
         return _instance.saveToString(compression)
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -258,15 +253,14 @@ export const CipherText = ({ library }) => {
      *
      * @function
      * @name CipherText#load
-     * @param {Object} options Options
-     * @param {Context} options.context Encryption context to enforce
-     * @param {String} options.encoded base64 encoded string
+     * @param {Context} context Encryption context to enforce
+     * @param {String} encoded base64 encoded string
      */
-    load({ context, encoded }) {
+    load(context, encoded) {
       try {
         _instance.loadFromString(context.instance, encoded)
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     }
   }

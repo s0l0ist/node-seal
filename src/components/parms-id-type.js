@@ -1,12 +1,9 @@
-import { Exception } from './exception'
-
-export const ParmsIdType = ({ library }) => {
-  const _Exception = Exception({ library })
+export const ParmsIdType = library => Exception => () => {
   let _instance = null
   try {
     _instance = new library.ParmsIdType()
   } catch (e) {
-    throw _Exception.safe({ error: e })
+    throw Exception.safe(e)
   }
 
   /**
@@ -35,10 +32,9 @@ export const ParmsIdType = ({ library }) => {
      * @private
      * @function
      * @name ParmsIdType#inject
-     * @param {Object} options Options
-     * @param {instance} options.instance WASM instance
+     * @param {instance} instance WASM instance
      */
-    inject({ instance }) {
+    inject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -74,7 +70,7 @@ export const ParmsIdType = ({ library }) => {
         // eslint-disable-next-line no-undef
         return values.split(',').map(x => BigInt(x))
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     }
   }

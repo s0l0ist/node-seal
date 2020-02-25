@@ -1,17 +1,10 @@
-import { Exception } from './exception'
-import { PublicKey } from './public-key'
-import { SecretKey } from './secret-key'
-import { RelinKeys } from './relin-keys'
-import { GaloisKeys } from './galois-keys'
-
-export const KeyGenerator = ({
-  library,
-  context,
-  secretKey = null,
-  publicKey = null
-}) => {
-  const _Exception = Exception({ library })
-  const _library = library
+export const KeyGenerator = library => (
+  Exception,
+  PublicKey,
+  SecretKey,
+  RelinKeys,
+  GaloisKeys
+) => (context, secretKey = null, publicKey = null) => {
   const constructInstance = (secretKey, publicKey) => {
     try {
       if (secretKey && publicKey) {
@@ -26,7 +19,7 @@ export const KeyGenerator = ({
       }
       return new library.KeyGenerator(context.instance)
     } catch (e) {
-      throw _Exception.safe({ error: e })
+      throw Exception.safe(e)
     }
   }
   let _instance = constructInstance(secretKey, publicKey)
@@ -57,10 +50,9 @@ export const KeyGenerator = ({
      * @private
      * @function
      * @name KeyGenerator#inject
-     * @param {Object} options Options
-     * @param {instance} options.instance WASM instance
+     * @param {instance} instance WASM instance
      */
-    inject({ instance }) {
+    inject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -93,11 +85,11 @@ export const KeyGenerator = ({
     getSecretKey() {
       try {
         const instance = _instance.getSecretKey()
-        const key = SecretKey({ library: _library })
-        key.inject({ instance })
+        const key = SecretKey()
+        key.inject(instance)
         return key
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -111,11 +103,12 @@ export const KeyGenerator = ({
     getPublicKey() {
       try {
         const instance = _instance.getPublicKey()
-        const key = PublicKey({ library: _library })
-        key.inject({ instance })
+        const key = PublicKey()
+        key.inject(instance)
         return key
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        console.log('e', e)
+        throw Exception.safe(e)
       }
     },
 
@@ -129,11 +122,11 @@ export const KeyGenerator = ({
     genRelinKeys() {
       try {
         const instance = _instance.createRelinKeys()
-        const key = RelinKeys({ library: _library })
-        key.inject({ instance })
+        const key = RelinKeys()
+        key.inject(instance)
         return key
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -147,11 +140,11 @@ export const KeyGenerator = ({
     genGaloisKeys() {
       try {
         const instance = _instance.createGaloisKeys()
-        const key = GaloisKeys({ library: _library })
-        key.inject({ instance })
+        const key = GaloisKeys()
+        key.inject(instance)
         return key
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     }
   }
