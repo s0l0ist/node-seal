@@ -1,9 +1,14 @@
-export const GaloisKeys = library => (Exception, ComprModeType) => () => {
-  let _instance = null
-  try {
-    _instance = new library.GaloisKeys()
-  } catch (e) {
-    throw Exception.safe(e)
+export const GaloisKeys = library => (Exception, ComprModeType) => (
+  instance = null
+) => {
+  let _instance = instance
+
+  if (!instance) {
+    try {
+      _instance = new library.GaloisKeys()
+    } catch (e) {
+      throw Exception.safe(e)
+    }
   }
 
   /**

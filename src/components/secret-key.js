@@ -1,9 +1,14 @@
-export const SecretKey = library => (Exception, ComprModeType) => () => {
-  let _instance = null
-  try {
-    _instance = new library.SecretKey()
-  } catch (e) {
-    throw Exception.safe(e)
+export const SecretKey = library => (Exception, ComprModeType) => (
+  instance = null
+) => {
+  let _instance = instance
+
+  if (!instance) {
+    try {
+      _instance = new library.SecretKey()
+    } catch (e) {
+      throw Exception.safe(e)
+    }
   }
 
   /**

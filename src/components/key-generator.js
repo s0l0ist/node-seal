@@ -84,10 +84,7 @@ export const KeyGenerator = library => (
      */
     getSecretKey() {
       try {
-        const instance = _instance.getSecretKey()
-        const key = SecretKey()
-        key.inject(instance)
-        return key
+        return SecretKey(_instance.getSecretKey())
       } catch (e) {
         throw Exception.safe(e)
       }
@@ -102,12 +99,8 @@ export const KeyGenerator = library => (
      */
     getPublicKey() {
       try {
-        const instance = _instance.getPublicKey()
-        const key = PublicKey()
-        key.inject(instance)
-        return key
+        return PublicKey(_instance.getPublicKey())
       } catch (e) {
-        console.log('e', e)
         throw Exception.safe(e)
       }
     },
@@ -121,10 +114,7 @@ export const KeyGenerator = library => (
      */
     genRelinKeys() {
       try {
-        const instance = _instance.createRelinKeys()
-        const key = RelinKeys()
-        key.inject(instance)
-        return key
+        return RelinKeys(_instance.createRelinKeys())
       } catch (e) {
         throw Exception.safe(e)
       }
@@ -139,10 +129,7 @@ export const KeyGenerator = library => (
      */
     genGaloisKeys() {
       try {
-        const instance = _instance.createGaloisKeys()
-        const key = GaloisKeys()
-        key.inject(instance)
-        return key
+        return GaloisKeys(_instance.createGaloisKeys())
       } catch (e) {
         throw Exception.safe(e)
       }

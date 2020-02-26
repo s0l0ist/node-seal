@@ -513,11 +513,7 @@ export const Evaluator = library => (
           return
         }
         const temp = CipherText()
-        _instance.addPlain(
-          encrypted.instance,
-          plain.instance,
-          destination.instance
-        )
+        _instance.addPlain(encrypted.instance, plain.instance, temp.instance)
         return temp
       } catch (e) {
         throw Exception.safe(e)
