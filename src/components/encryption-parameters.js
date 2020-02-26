@@ -1,15 +1,8 @@
-import { Exception } from './exception'
-import { ComprModeType } from './compr-mode-type'
-import { SmallModulus } from './small-modulus'
-
-export const EncryptionParameters = ({
-  library,
-  schemeType,
-  suppressWarning = false
-}) => {
-  const _Exception = Exception({ library })
-  const _ComprModeType = ComprModeType({ library })
-  const _library = library
+export const EncryptionParameters = library => (
+  Exception,
+  ComprModeType,
+  SmallModulus
+) => (schemeType, suppressWarning = false) => {
   let _instance = null
 
   // Normal users must supply a schemeType. If no schemeType is passed in,
@@ -19,7 +12,7 @@ export const EncryptionParameters = ({
     try {
       _instance = new library.EncryptionParameters(schemeType)
     } catch (e) {
-      throw _Exception.safe({ error: e })
+      throw Exception.safe(e)
     }
   }
 
@@ -58,10 +51,9 @@ export const EncryptionParameters = ({
      * @private
      * @function
      * @name EncryptionParameters#inject
-     * @param {Object} options Options
-     * @param {instance} options.instance WASM instance
+     * @param {instance} instance WASM instance
      */
-    inject({ instance }) {
+    inject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -94,14 +86,13 @@ export const EncryptionParameters = ({
      *
      * @function
      * @name EncryptionParameters#setPolyModulusDegree
-     * @param {Object} options Options
-     * @param {Number} options.polyModulusDegree The degree of the polynomial modulus
+     * @param {Number} polyModulusDegree The degree of the polynomial modulus
      */
-    setPolyModulusDegree({ polyModulusDegree }) {
+    setPolyModulusDegree(polyModulusDegree) {
       try {
         _instance.setPolyModulusDegree(polyModulusDegree)
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -116,14 +107,13 @@ export const EncryptionParameters = ({
      *
      * @function
      * @name EncryptionParameters#setCoeffModulus
-     * @param {Object} options Options
-     * @param {Vector} options.coeffModulus Vector of SmallModulus primes
+     * @param {Vector} coeffModulus Vector of SmallModulus primes
      */
-    setCoeffModulus({ coeffModulus }) {
+    setCoeffModulus(coeffModulus) {
       try {
         _instance.setCoeffModulus(coeffModulus)
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -138,14 +128,13 @@ export const EncryptionParameters = ({
      *
      * @function
      * @name EncryptionParameters#setPlainModulus
-     * @param {Object} options Options
-     * @param {SmallModulus} options.plainModulus PlainText modulus parameter
+     * @param {SmallModulus} plainModulus PlainText modulus parameter
      */
-    setPlainModulus({ plainModulus }) {
+    setPlainModulus(plainModulus) {
       try {
         _instance.setPlainModulus(plainModulus)
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -187,7 +176,7 @@ export const EncryptionParameters = ({
         vectorSmallModulus.delete()
         return array
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -200,8 +189,8 @@ export const EncryptionParameters = ({
      */
     get plainModulus() {
       const instance = _instance.plainModulus()
-      const smallModulus = SmallModulus({ library: _library })
-      smallModulus.inject({ instance })
+      const smallModulus = SmallModulus()
+      smallModulus.inject(instance)
       return smallModulus
     },
 
@@ -210,15 +199,14 @@ export const EncryptionParameters = ({
      *
      * @function
      * @name EncryptionParameters#save
-     * @param {Object} options Options
-     * @param {ComprModeType} [options.compression={@link ComprModeType.deflate}] The compression mode to use
+     * @param {ComprModeType} [compression={@link ComprModeType.deflate}] The compression mode to use
      * @returns {String} base64 encoded string
      */
-    save({ compression = _ComprModeType.deflate } = {}) {
+    save(compression = ComprModeType.deflate) {
       try {
         return _instance.saveToString(compression)
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -227,14 +215,13 @@ export const EncryptionParameters = ({
      *
      * @function
      * @name EncryptionParameters#load
-     * @param {Object} options Options
-     * @param {String} options.encoded base64 encoded string
+     * @param {String} encoded base64 encoded string
      */
-    load({ encoded }) {
+    load(encoded) {
       try {
         _instance.loadFromString(encoded)
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     }
   }

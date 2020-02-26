@@ -32,60 +32,40 @@ const genTests = (verb) => {
     test('${SECURITY_LEVELS[secLevel]}-bit security', async () => {
       const { Seal } = require('../../index.js')
       const Morfix = await Seal
-      const parms = Morfix.EncryptionParameters({
-        schemeType: ${SCHEME_TYPES_CONSTRUCTOR[schemeType]}
-      })
+      const schemeType = ${SCHEME_TYPES_CONSTRUCTOR[schemeType]}
+      const securityLevel = ${SECURITY_LEVELS_CONSTRUCTOR[SECURITY_LEVELS[secLevel]]}
+      const polyModulusDegree = ${POLYMODULUS_DEGREES[polyModDeg]}
+      const bitSizes = [${BFV_COEFF_MOD_BIT_SIZES[SECURITY_LEVELS[secLevel]][POLYMODULUS_DEGREES[polyModDeg]]}]${schemeType === SCHEME_TYPES.BFV ? '\n      const bitSize = 20' : ''}
 
-      parms.setPolyModulusDegree({
-        polyModulusDegree: ${POLYMODULUS_DEGREES[polyModDeg]}
-      })
+      const parms = Morfix.EncryptionParameters(schemeType)
+
+      parms.setPolyModulusDegree(polyModulusDegree)
+
+      // Create a suitable set of CoeffModulus primes
+      parms.setCoeffModulus(
+        Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes))
+      )
 `)
 
         if (schemeType === SCHEME_TYPES.BFV) {
           code.push(`
-      // Create a suitable set of CoeffModulus primes
-      parms.setCoeffModulus({
-        coeffModulus: Morfix.CoeffModulus.Create({
-          polyModulusDegree: ${POLYMODULUS_DEGREES[polyModDeg]},
-          bitSizes: Int32Array.from([${BFV_COEFF_MOD_BIT_SIZES[SECURITY_LEVELS[secLevel]][POLYMODULUS_DEGREES[polyModDeg]]}])
-        })
-      })
-
       // Set the PlainModulus to a prime of bitSize 20.
-      parms.setPlainModulus({
-        plainModulus: Morfix.PlainModulus.Batching({
-          polyModulusDegree: ${POLYMODULUS_DEGREES[polyModDeg]},
-          bitSize: 20
-        })
-      })
+      parms.setPlainModulus(
+        Morfix.PlainModulus.Batching(polyModulusDegree, bitSize)
+      )
 `)
         }
 
-        if (schemeType === SCHEME_TYPES.CKKS) {
-          code.push(`
-      // Create a suitable set of CoeffModulus primes (we use default set)
-      parms.setCoeffModulus({
-        coeffModulus: Morfix.CoeffModulus.Create({
-          polyModulusDegree: ${POLYMODULUS_DEGREES[polyModDeg]},
-          bitSizes: Int32Array.from([${CKKS_COEFF_MOD_BIT_SIZES[SECURITY_LEVELS[secLevel]][POLYMODULUS_DEGREES[polyModDeg]]}])
-        })
-      })
-`)
-        }
-
-
-          code.push(`
-      const context = Morfix.Context({
-        encryptionParams: parms,
-        expandModChain: true,
-        securityLevel: ${SECURITY_LEVELS_CONSTRUCTOR[SECURITY_LEVELS[secLevel]]}
-      })
+        code.push(`
+      const context = Morfix.Context(
+        parms,
+        true,
+        securityLevel
+      )
 
       expect(context.parametersSet).toBe(true)
 
-      const keyGenerator = Morfix.KeyGenerator({
-        context
-      })
+      const keyGenerator = Morfix.KeyGenerator(context)
 
       const spyGetSecretKey = jest.spyOn(keyGenerator, 'getSecretKey')
       const secretKey = keyGenerator.getSecretKey()
@@ -106,11 +86,11 @@ const genTests = (verb) => {
 
 
       const spyLoadSecretKey = jest.spyOn(secretKey, 'load')
-      secretKey.load({context, encoded: secretKeyBase64})
+      secretKey.load(context, secretKeyBase64)
       expect(spyLoadSecretKey).toHaveBeenCalled()
 
       const spyLoadPublicKey = jest.spyOn(publicKey, 'load')
-      publicKey.load({context, encoded: publicKeyBase64})
+      publicKey.load(context, publicKeyBase64)
       expect(spyLoadPublicKey).toHaveBeenCalled()
     })
   })

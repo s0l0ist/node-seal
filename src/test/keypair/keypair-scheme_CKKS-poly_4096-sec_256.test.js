@@ -3,33 +3,29 @@ describe.skip('keypair on CKKS', () => {
     test('256-bit security', async () => {
       const { Seal } = require('../../index.js')
       const Morfix = await Seal
-      const parms = Morfix.EncryptionParameters({
-        schemeType: Morfix.SchemeType.CKKS
-      })
+      const schemeType = Morfix.SchemeType.CKKS
+      const securityLevel = Morfix.SecurityLevel.tc256
+      const polyModulusDegree = 4096
+      const bitSizes = [58]
 
-      parms.setPolyModulusDegree({
-        polyModulusDegree: 4096
-      })
+      const parms = Morfix.EncryptionParameters(schemeType)
 
-      // Create a suitable set of CoeffModulus primes (we use default set)
-      parms.setCoeffModulus({
-        coeffModulus: Morfix.CoeffModulus.Create({
-          polyModulusDegree: 4096,
-          bitSizes: Int32Array.from([58])
-        })
-      })
+      parms.setPolyModulusDegree(polyModulusDegree)
 
-      const context = Morfix.Context({
-        encryptionParams: parms,
-        expandModChain: true,
-        securityLevel: Morfix.SecurityLevel.tc256
-      })
+      // Create a suitable set of CoeffModulus primes
+      parms.setCoeffModulus(
+        Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes))
+      )
+
+      const context = Morfix.Context(
+        parms,
+        true,
+        securityLevel
+      )
 
       expect(context.parametersSet).toBe(true)
 
-      const keyGenerator = Morfix.KeyGenerator({
-        context
-      })
+      const keyGenerator = Morfix.KeyGenerator(context)
 
       const spyGetSecretKey = jest.spyOn(keyGenerator, 'getSecretKey')
       const secretKey = keyGenerator.getSecretKey()
@@ -50,11 +46,11 @@ describe.skip('keypair on CKKS', () => {
 
 
       const spyLoadSecretKey = jest.spyOn(secretKey, 'load')
-      secretKey.load({context, encoded: secretKeyBase64})
+      secretKey.load(context, secretKeyBase64)
       expect(spyLoadSecretKey).toHaveBeenCalled()
 
       const spyLoadPublicKey = jest.spyOn(publicKey, 'load')
-      publicKey.load({context, encoded: publicKeyBase64})
+      publicKey.load(context, publicKeyBase64)
       expect(spyLoadPublicKey).toHaveBeenCalled()
     })
   })

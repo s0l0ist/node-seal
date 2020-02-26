@@ -67,32 +67,26 @@ Example:
 // Encryption Parameters
 ////////////////////////
 
-// Create a new EncryptionParameters
-const encParms = Morfix.EncryptionParameters({
-  schemeType: Morfix.SchemeType.BFV
-})
+const schemeType = Morfix.SchemeType.BFV
+const securityLevel = Morfix.SecurityLevel.tc128
+const polyModulusDegree = 4096
+const bitSizes = [36,36,37]
+const bitSize = 20
 
+const encParms = Morfix.EncryptionParameters(schemeType)
 
-// Assign Poly Modulus Degree
-encParms.setPolyModulusDegree({
-  polyModulusDegree: 4096
-})
+// Set the PolyModulusDegree
+encParms.setPolyModulusDegree(polyModulusDegree)
 
 // Create a suitable set of CoeffModulus primes
-encParms.setCoeffModulus({
-  coeffModulus: Morfix.CoeffModulus.Create({
-    polyModulusDegree: 4096,
-    bitSizes: Int32Array.from([36,36,37])
-  })
-})
+encParms.setCoeffModulus(
+  Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes))
+)
 
-// Assign a PlainModulus (only for BFV scheme type)
-encParms.setPlainModulus({
-  plainModulus: Morfix.PlainModulus.Batching({
-    polyModulusDegree: 4096,
-    bitSize: 20
-  })
-})
+// Set the PlainModulus to a prime of bitSize 20.
+encParms.setPlainModulus(
+  Morfix.PlainModulus.Batching(polyModulusDegree, bitSize)
+)
 ```
 
 ### Context
@@ -105,13 +99,12 @@ other instances which execute within the same **context** as the encryption para
 ////////////////////////
 
 // Create a new Context
-const context = Morfix.Context({
-  encryptionParams: encParms,
-  expandModChain: true,
-  securityLevel: Morfix.SecurityLevel.tc128 // Enforces a 128-bit security context
-})
+const context = Morfix.Context(
+  parms, // Encryption Parameters
+  true, // ExpandModChain
+  securityLevel // Enforce a security level
+)
 
-// Helper to check if the Context was created successfully
 if (!context.parametersSet) {
   throw new Error('Could not set the parameters in the given context. Please try different encryption parameters.')
 }
@@ -134,9 +127,7 @@ You may generate a new Public Key (or even Relin/Galois Keys) from an existing S
 ////////////////////////
 
 // Create a new KeyGenerator (creates a new keypair internally)
-const keyGenerator = Morfix.KeyGenerator({ 
-  context
-})
+const keyGenerator = Morfix.KeyGenerator(context)
 
 const secretKey = keyGenerator.getSecretKey()
 const publicKey = keyGenerator.getPublicKey()
@@ -154,7 +145,7 @@ const galoisBase64Key = galoisKey.save()
 // Loading a key from a base64 string is the same for each type of key
 // Load from the base64 encoded string
 const UploadedSecretKey = Morfix.SecretKey()
-UploadedSecretKey.load({ context, encoded: secretBase64Key })
+UploadedSecretKey.load(context, secretBase64Key)
 ...
 
 
@@ -167,13 +158,10 @@ UploadedSecretKey.load({ context, encoded: secretBase64Key })
 const UploadedSecretKey = Morfix.SecretKey()
 
 // Load from the base64 encoded string
-UploadedSecretKey.load({ context, encoded: secretBase64Key })
+UploadedSecretKey.load(context, secretBase64Key)
 
 // Create a new KeyGenerator (use uploaded secretKey)
-const keyGenerator = Morfix.KeyGenerator({ 
-  context,
-  secretKey: UploadedSecretKey
-})
+const keyGenerator = Morfix.KeyGenerator(context, UploadedSecretKey)
 
 // Similarly, you may also create a KeyGenerator with a PublicKey. However, the benefit is purley to
 // save time by not generating a new PublicKey
@@ -182,14 +170,10 @@ const keyGenerator = Morfix.KeyGenerator({
 const UploadedPublicKey = Morfix.PublicKey()
 
 // Load from the base64 encoded string
-UploadedPublicKey.load({ context, encoded: publicBase64Key })
+UploadedPublicKey.load(context, publicBase64Key)
 
 // Create a new KeyGenerator (use both uploaded keys)
-const keyGenerator = Morfix.KeyGenerator({ 
-  context,
-  secretKey: UploadedSecretKey,
-  publicKey: UploadedPublicKey
-})
+const keyGenerator = Morfix.KeyGenerator(context, UploadedSecretKey, UploadedPublicKey)
 
 
 ```
@@ -218,7 +202,7 @@ const plainAbase64 = plainA.save() // Saves as a base64 string.
 
 // Loading. Create an empty instance, then use the following method
 const uploadedPlain = Morfix.PlainText()
-uploadedPlain.load({ context, encoded: plainAbase64 })
+uploadedPlain.load(context, plainAbase64)
 
 // Saving
 ... after some encryption...
@@ -226,7 +210,7 @@ const cipherAbase64 = cipherA.save() // Saves as a base64 string.
 
 // Loading. Create an empty instance, then use the following method
 const uploadedCipherText = Morfix.CipherText()
-uploadedCipherText.load({ context, encoded: cipherAbase64 })
+uploadedCipherText.load(context, cipherAbase64)
 ```
 
 ### Instances
@@ -244,25 +228,19 @@ To perform homomorphic evaluations, we need to construct a few helpers:
 ////////////////////////
 
 // Create an Evaluator which will allow HE functions to execute
-const evaluator = Morfix.Evaluator({ context })
+const evaluator = Morfix.Evaluator(context)
 
 // Create a BatchEncoder (only BFV SchemeType)
-const encoder = Morfix.BatchEncoder({ context })
+const encoder = Morfix.BatchEncoder(context)
 
 // Or a CKKSEncoder (only CKKS SchemeType)
-// const encoder = Morfix.CKKSEncoder({ context })
+// const encoder = Morfix.CKKSEncoder(context)
 
 // Create an Encryptor to encrypt PlainTexts
-const encryptor = Morfix.Encryptor({
-  context,
-  publicKey
-})
+const encryptor = Morfix.Encryptor(context, publicKey)
 
 // Create a Decryptor to decrypt CipherTexts
-const decryptor = Morfix.Decryptor({
-  context,
-  secretKey
-})
+const decryptor = Morfix.Decryptor(context, secretKey)
 ```
 
 ### Functions
@@ -286,18 +264,18 @@ be generated from the [demo](https://morfix.io/sandbox).
 // 
 // //... some time later ...
 //
-// batchEncoder.encode({
-//   array: Int32Array.from([1,2,3]), // This could also be a Uint32Array
-//   plainText: plainTextA
-// })
+// batchEncoder.encode(
+//   Int32Array.from([1,2,3]), // This could also be a Uint32Array
+//   plainTextA
+// )
 // 
 // ... plainTextA contains the encoded array parameter
 //
 
 // Encode data to a PlainText
-const plainTextA = batchEncoder.encode({
-  array: Int32Array.from([1,2,3]) // This could also be a Uint32Array
-})
+const plainTextA = batchEncoder.encode(
+  Int32Array.from([1,2,3]) // This could also be a Uint32Array
+)
 
 
 
@@ -313,40 +291,32 @@ const plainTextA = batchEncoder.encode({
 // 
 // //... some time later ...
 //
-// encryptor.encrypt({
-//   plainText: plainTextA,
-//   cipherText: cipherTextA
-// })
+// encryptor.encrypt(
+//   plainTextA,
+//   cipherTextA
+// )
 // 
 // ... cipherTextA contains the encrypted plainText parameter
 //
 
 // Encrypt a PlainText
-const cipherTextA = encryptor.encrypt({
-  plainText: plainTextA
-})    
+const cipherTextA = encryptor.encrypt(plainTextA)    
 
 // Add CipherText B to CipherText A and store the sum in a destination CipherText
 const cipherTextD = Morfix.CipherText()
 
-evaluator.add({
-  a: cipherTextA,
-  b: cipherTextA,
-  destination: cipherTextD
-})    
+evaluator.add(cipherTextA, cipherTextA, cipherTextD) 
 
 // Decrypt a CipherText
-const plainTextD = decryptor.decrypt({
-  cipherText: cipherTextD
-})    
+const plainTextD = decryptor.decrypt(cipherTextD)    
 
 // `signed` defaults to 'true' if not specified and will return an Int32Array.
 // If you have encrypted a Uint32Array and wish to decrypt it, set 
 // this to false.
-const decoded = batchEncoder.decode({
-  plainText: plainTextD
-  // signed: true 
-})
+const decoded = batchEncoder.decode(
+  plainTextD
+  true // Can be omitted since this defaults to true.
+)
 
 console.log('decoded', decoded )
 ```

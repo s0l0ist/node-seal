@@ -3,33 +3,29 @@ describe('relinkey on CKKS', () => {
     test('256-bit security', async () => {
       const { Seal } = require('../../index.js')
       const Morfix = await Seal
-      const parms = Morfix.EncryptionParameters({
-        schemeType: Morfix.SchemeType.CKKS
-      })
+      const schemeType = Morfix.SchemeType.CKKS
+      const securityLevel = Morfix.SecurityLevel.tc256
+      const polyModulusDegree = 16384
+      const bitSizes = [47,47,47,48,48]
 
-      parms.setPolyModulusDegree({
-        polyModulusDegree: 16384
-      })
+      const parms = Morfix.EncryptionParameters(schemeType)
 
-      // Create a suitable set of CoeffModulus primes (we use default set)
-      parms.setCoeffModulus({
-        coeffModulus: Morfix.CoeffModulus.Create({
-          polyModulusDegree: 16384,
-          bitSizes: Int32Array.from([60,39,39,39,60])
-        })
-      })
+      parms.setPolyModulusDegree(polyModulusDegree)
 
-      const context = Morfix.Context({
-        encryptionParams: parms,
-        expandModChain: true,
-        securityLevel: Morfix.SecurityLevel.tc256
-      })
+      // Create a suitable set of CoeffModulus primes
+      parms.setCoeffModulus(
+        Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes))
+      )
+
+      const context = Morfix.Context(
+        parms,
+        true,
+        securityLevel
+      )
 
       expect(context.parametersSet).toBe(true)
 
-      const keyGenerator = Morfix.KeyGenerator({
-        context
-      })
+      const keyGenerator = Morfix.KeyGenerator(context)
 
       const spyGenRelinKeys = jest.spyOn(keyGenerator, 'genRelinKeys')
       const relinKeys = keyGenerator.genRelinKeys()
@@ -40,7 +36,7 @@ describe('relinkey on CKKS', () => {
       expect(spySaveRelinKeys).toHaveBeenCalled()
 
       const spyLoadRelinKeys = jest.spyOn(relinKeys, 'load')
-      relinKeys.load({context, encoded: base64})
+      relinKeys.load(context, base64)
       expect(spyLoadRelinKeys).toHaveBeenCalled()
     })
   })

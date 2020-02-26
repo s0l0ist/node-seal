@@ -1,8 +1,8 @@
-import { Exception } from './exception'
-
-export const EncryptionParameterQualifiers = ({ library }) => {
-  const _Exception = Exception({ library })
-  let _instance = null
+// eslint-disable-next-line no-unused-vars
+export const EncryptionParameterQualifiers = library => Exception => (
+  instance = null
+) => {
+  let _instance = instance
 
   /**
    * @implements EncryptionParameterQualifiers
@@ -30,10 +30,9 @@ export const EncryptionParameterQualifiers = ({ library }) => {
      * @private
      * @function
      * @name EncryptionParameterQualifiers#inject
-     * @param {Object} options Options
-     * @param {instance} options.instance WASM instance
+     * @param {instance} instance WASM instance
      */
-    inject({ instance }) {
+    inject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -68,7 +67,7 @@ export const EncryptionParameterQualifiers = ({ library }) => {
       try {
         return _instance.parametersSet
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -89,7 +88,7 @@ export const EncryptionParameterQualifiers = ({ library }) => {
       try {
         return _instance.usingFFT
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -111,7 +110,7 @@ export const EncryptionParameterQualifiers = ({ library }) => {
       try {
         return _instance.usingNTT
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -134,7 +133,7 @@ export const EncryptionParameterQualifiers = ({ library }) => {
       try {
         return _instance.usingBatching
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -154,7 +153,7 @@ export const EncryptionParameterQualifiers = ({ library }) => {
       try {
         return _instance.usingFastPlainLift
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -171,7 +170,7 @@ export const EncryptionParameterQualifiers = ({ library }) => {
       try {
         return _instance.usingDescendingModulusChain
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -187,7 +186,7 @@ export const EncryptionParameterQualifiers = ({ library }) => {
       try {
         return _instance.securityLevel
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     }
   }

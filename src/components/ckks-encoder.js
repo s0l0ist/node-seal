@@ -1,69 +1,14 @@
-import { Exception } from './exception'
-import { MemoryPoolHandle } from './memory-pool-handle'
-import { PlainText } from './plain-text'
-import { Vector } from './vector'
-
-export const CKKSEncoder = ({ library, context }) => {
-  const _Exception = Exception({ library })
-  const _MemoryPoolHandle = MemoryPoolHandle({ library })
-  const _library = library
+export const CKKSEncoder = library => (
+  Exception,
+  MemoryPoolHandle,
+  PlainText,
+  Vector
+) => context => {
   let _instance = null
   try {
     _instance = new library.CKKSEncoder(context.instance)
   } catch (e) {
-    throw _Exception.safe({ error: e })
-  }
-
-  const encode = ({
-    array,
-    scale,
-    vector,
-    plainText,
-    pool = _MemoryPoolHandle.global
-  }) => {
-    try {
-      if (vector) {
-        _instance.encodeVectorDouble(
-          vector.instance,
-          scale,
-          plainText.instance,
-          pool
-        )
-        return
-      }
-      if (array.constructor === Float64Array) {
-        if (plainText) {
-          _instance.encode(array, scale, plainText.instance, pool)
-          return
-        }
-        const plain = PlainText({ library: _library })
-        _instance.encode(array, scale, plain.instance, pool)
-        return plain
-      } else {
-        throw new Error(
-          'Unsupported array type! `array` must be of type Float64Array.'
-        )
-      }
-    } catch (e) {
-      throw _Exception.safe({ error: e })
-    }
-  }
-
-  const decode = ({ plainText, vector, pool = _MemoryPoolHandle.global }) => {
-    if (vector) {
-      _instance.decodeVectorDouble(plainText.instance, vector.instance, pool)
-      return
-    }
-    const tempVect = Vector({
-      library: _library,
-      array: new Float64Array(0),
-      internal: true
-    })
-    const instance = _instance.decodeDouble(plainText.instance, pool)
-    tempVect.inject({ instance })
-    const tempArr = tempVect.toArray()
-    tempVect.delete()
-    return tempArr
+    throw Exception.safe(e)
   }
 
   /**
@@ -92,10 +37,9 @@ export const CKKSEncoder = ({ library, context }) => {
      * @private
      * @function
      * @name CKKSEncoder#inject
-     * @param {Object} options Options
-     * @param {instance} options.instance WASM instance
+     * @param {instance} instance WASM instance
      */
-    inject({ instance }) {
+    inject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -127,20 +71,13 @@ export const CKKSEncoder = ({ library, context }) => {
      * @deprecated since version 3.2.0
      * @function
      * @name CKKSEncoder#encodeVectorDouble
-     * @param {Object} options Options
-     * @param {Vector} options.vector Data to encode
-     * @param {Number} options.scale Scaling parameter defining encoding precision
-     * @param {PlainText} options.plainText Destination to store the encoded result
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @param {Vector} vector Data to encode
+     * @param {Number} scale Scaling parameter defining encoding precision
+     * @param {PlainText} plainText Destination to store the encoded result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
-    encodeVectorDouble({
-      vector,
-      scale,
-      plainText,
-      pool = _MemoryPoolHandle.global
-    }) {
-      console.warn('encodeVectorDouble has been deprecated since 3.2.0')
-      encode({ vector, scale, plainText, pool })
+    encodeVectorDouble() {
+      throw new Error('encodeVectorDouble has been deprecated since 3.2.0')
     },
 
     /**
@@ -151,14 +88,12 @@ export const CKKSEncoder = ({ library, context }) => {
      * @deprecated since version 3.2.0
      * @function
      * @name CKKSEncoder#decodeVectorDouble
-     * @param {Object} options Options
-     * @param {PlainText} options.plainText Data to decode
-     * @param {Vector} options.vector Destination to store the decoded result
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @param {PlainText} plainText Data to decode
+     * @param {Vector} vector Destination to store the decoded result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      */
-    decodeVectorDouble({ plainText, vector, pool = _MemoryPoolHandle.global }) {
-      console.warn('decodeVectorDouble has been deprecated since 3.2.0')
-      decode({ plainText, vector, pool })
+    decodeVectorDouble() {
+      throw new Error('decodeVectorDouble has been deprecated since 3.2.0')
     },
 
     /**
@@ -169,24 +104,38 @@ export const CKKSEncoder = ({ library, context }) => {
      *
      * @function
      * @name CKKSEncoder#encode
-     * @param {Object} options Options
-     * @param {Float64Array} options.array Data to encode
-     * @param {Number} options.scale Scaling parameter defining encoding precision
-     * @param {PlainText} [options.plainText] Destination to store the encoded result
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {PlainText} PlainText holding the encoded data
+     * @param {Float64Array} array Data to encode
+     * @param {Number} scale Scaling parameter defining encoding precision
+     * @param {PlainText} [plainText=null] Destination to store the encoded result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {PlainText|undefined} A new PlainText holding the encoded data or undefined if one was provided
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const ckksEncoder = Morfix.CKKSEncoder({ context })
+     * const ckksEncoder = Morfix.CKKSEncoder(context)
      *
-     * const plainText = ckksEncoder.encode({
-     *   array: Float64Array.from([1.11, -2.222, 3.333]),
-     *   scale: Math.pow(2, 20)
-     * })
+     * const plainText = ckksEncoder.encode(Float64Array.from([1.11, -2.222, 3.333]), Math.pow(2, 20))
      */
-    encode: options => encode(options),
+    encode(array, scale, plainText = null, pool = MemoryPoolHandle.global) {
+      try {
+        if (array.constructor === Float64Array) {
+          if (plainText) {
+            _instance.encode(array, scale, plainText.instance, pool)
+            return
+          }
+          const plain = PlainText()
+          _instance.encode(array, scale, plain.instance, pool)
+          return plain
+        } else {
+          throw new Error(
+            'Unsupported array type! `array` must be of type Float64Array.'
+          )
+        }
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
 
     /**
      * Decodes a plaintext polynomial into double-precision floating-point
@@ -195,24 +144,27 @@ export const CKKSEncoder = ({ library, context }) => {
      *
      * @function
      * @name CKKSEncoder#decode
-     * @param {Object} options Options
-     * @param {PlainText} options.plainText Data to decode
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @param {PlainText} plainText Data to decode
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {Float64Array} TypedArray containing the decoded data
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * ...
-     * const ckksEncoder = Morfix.CKKSEncoder({ context })
+     * const ckksEncoder = Morfix.CKKSEncoder(context)
      *
-     * const plainText = Morfix.PlainText()
-     * ckksEncoder.encode({ array: Float64Array.from([1, 2, 3]), plainText: plain })
+     * const plainText = ckksEncoder.encode(Float64Array.from([1, 2, 3]))
      *
-     * const result = batchEncoder.decode({
-     *   plainText
-     * })
+     * const result = batchEncoder.decode(plainText)
      */
-    decode: options => decode(options),
+    decode(plainText, pool = MemoryPoolHandle.global) {
+      const tempVect = Vector(new Float64Array(0))
+      const instance = _instance.decodeDouble(plainText.instance, pool)
+      tempVect.inject(instance)
+      const tempArr = tempVect.toArray()
+      tempVect.delete()
+      return tempArr
+    },
 
     /**
      * The total number of CKKS slots available to hold data

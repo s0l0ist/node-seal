@@ -1,16 +1,12 @@
-import { Exception } from './exception'
-import { ComprModeType } from './compr-mode-type'
-
-export const SmallModulus = ({ library }) => {
-  const _Exception = Exception({ library })
+export const SmallModulus = library => (Exception, ComprModeType) => () => {
+  // Static methods
   const _saveToString = library.SmallModulus.saveToString
   // const _createFromString = library.SmallModulus.createFromString
-  const _ComprModeType = ComprModeType({ library })
   let _instance = null
   try {
     _instance = new library.SmallModulus()
   } catch (e) {
-    throw _Exception.safe({ error: e })
+    throw Exception.safe(e)
   }
 
   /**
@@ -39,10 +35,9 @@ export const SmallModulus = ({ library }) => {
      * @private
      * @function
      * @name SmallModulus#inject
-     * @param {Object} options Options
-     * @param {instance} options.instance WASM instance
+     * @param {instance} instance WASM instance
      */
-    inject({ instance }) {
+    inject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -72,11 +67,11 @@ export const SmallModulus = ({ library }) => {
      * @name SmallModulus#setValue
      * @param {String} value String representation of a uint64 value
      */
-    setValue({ value }) {
+    setValue(value) {
       try {
         _instance.loadFromString(value + '')
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -130,15 +125,14 @@ export const SmallModulus = ({ library }) => {
      *
      * @function
      * @name SmallModulus#save
-     * @param {Object} options Options
-     * @param {ComprModeType} [options.compression={@link ComprModeType.deflate}] The compression mode to use
+     * @param {ComprModeType} [compression={@link ComprModeType.deflate}] The compression mode to use
      * @returns {String} Base64 encoded string
      */
-    save({ compression = _ComprModeType.deflate } = {}) {
+    save(compression = ComprModeType.deflate) {
       try {
         return _saveToString(compression)
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     }
   }

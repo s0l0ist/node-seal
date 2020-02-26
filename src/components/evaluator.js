@@ -1,14 +1,14 @@
-import { Exception } from './exception'
-import { MemoryPoolHandle } from './memory-pool-handle'
-
-export const Evaluator = ({ library, context }) => {
-  const _Exception = Exception({ library })
-  const _MemoryPoolHandle = MemoryPoolHandle({ library })
+export const Evaluator = library => (
+  Exception,
+  MemoryPoolHandle,
+  CipherText,
+  PlainText
+) => context => {
   let _instance = null
   try {
     _instance = new library.Evaluator(context.instance)
   } catch (e) {
-    throw _Exception.safe({ error: e })
+    throw Exception.safe(e)
   }
 
   /**
@@ -37,10 +37,9 @@ export const Evaluator = ({ library, context }) => {
      * @private
      * @function
      * @name Evaluator#inject
-     * @param {Object} options Options
-     * @param {instance} options.instance WASM instance
+     * @param {instance} instance WASM instance
      */
-    inject({ instance }) {
+    inject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -68,15 +67,21 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#negate
-     * @param {Object} options Options
-     * @param {CipherText} options.encrypted CipherText to negate
-     * @param {CipherText} options.destination CipherText to store the negated result
+     * @param {CipherText} encrypted CipherText to negate
+     * @param {CipherText} [destination=null] CipherText to store the negated results
+     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      */
-    negate({ encrypted, destination }) {
+    negate(encrypted, destination) {
       try {
-        _instance.negate(encrypted.instance, destination.instance)
+        if (destination) {
+          _instance.negate(encrypted.instance, destination.instance)
+          return
+        }
+        const temp = CipherText()
+        _instance.negate(encrypted.instance, temp.instance)
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -86,16 +91,22 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#add
-     * @param {Object} options Options
-     * @param {CipherText} options.a CipherText operand A
-     * @param {CipherText} options.b CipherText operand B
-     * @param {CipherText} options.destination CipherText destination to store the sum
+     * @param {CipherText} a CipherText operand A
+     * @param {CipherText} b CipherText operand B
+     * @param {CipherText} [destination=null] CipherText destination to store the sum
+     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      */
-    add({ a, b, destination }) {
+    add(a, b, destination) {
       try {
-        _instance.add(a.instance, b.instance, destination.instance)
+        if (destination) {
+          _instance.add(a.instance, b.instance, destination.instance)
+          return
+        }
+        const temp = CipherText()
+        _instance.add(a.instance, b.instance, temp.instance)
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -105,16 +116,22 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#sub
-     * @param {Object} options Options
-     * @param {CipherText} options.a CipherText operand A
-     * @param {CipherText} options.b CipherText operand B
-     * @param {CipherText} options.destination CipherText destination to store the difference
+     * @param {CipherText} a CipherText operand A
+     * @param {CipherText} b CipherText operand B
+     * @param {CipherText} [destination=null] CipherText destination to store the difference
+     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      */
-    sub({ a, b, destination }) {
+    sub(a, b, destination) {
       try {
-        _instance.sub(a.instance, b.instance, destination.instance)
+        if (destination) {
+          _instance.sub(a.instance, b.instance, destination.instance)
+          return
+        }
+        const temp = CipherText()
+        _instance.sub(a.instance, b.instance, temp.instance)
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -126,17 +143,23 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#multiply
-     * @param {Object} options Options
-     * @param {CipherText} options.a CipherText operand A
-     * @param {CipherText} options.b CipherText operand B
-     * @param {CipherText} options.destination CipherText destination to store the product
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @param {CipherText} a CipherText operand A
+     * @param {CipherText} b CipherText operand B
+     * @param {CipherText} [destination=null] CipherText destination to store the product
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      */
-    multiply({ a, b, destination, pool = _MemoryPoolHandle.global }) {
+    multiply(a, b, destination, pool = MemoryPoolHandle.global) {
       try {
-        _instance.multiply(a.instance, b.instance, destination.instance, pool)
+        if (destination) {
+          _instance.multiply(a.instance, b.instance, destination.instance, pool)
+          return
+        }
+        const temp = CipherText()
+        _instance.multiply(a.instance, b.instance, temp.instance, pool)
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -148,16 +171,22 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#square
-     * @param {Object} options Options
-     * @param {CipherText} options.encrypted CipherText to square
-     * @param {CipherText} options.destination CipherText destination to store the squared result
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @param {CipherText} encrypted CipherText to square
+     * @param {CipherText} [destination=null] CipherText destination to store the squared result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      */
-    square({ encrypted, destination, pool = _MemoryPoolHandle.global }) {
+    square(encrypted, destination, pool = MemoryPoolHandle.global) {
       try {
-        _instance.square(encrypted.instance, destination.instance, pool)
+        if (destination) {
+          _instance.square(encrypted.instance, destination.instance, pool)
+          return
+        }
+        const temp = CipherText()
+        _instance.square(encrypted.instance, temp.instance, pool)
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -170,27 +199,38 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#relinearize
-     * @param {Object} options Options
-     * @param {CipherText} options.encrypted CipherText to relinearize
-     * @param {RelinKeys} options.relinKeys RelinKey used to perform relinearization
-     * @param {CipherText} options.destination CipherText destination to store the relinearized result
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @param {CipherText} encrypted CipherText to relinearize
+     * @param {RelinKeys} relinKeys RelinKey used to perform relinearization
+     * @param {CipherText} [destination=null] CipherText destination to store the relinearized result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      */
-    relinearize({
+    relinearize(
       encrypted,
       relinKeys,
       destination,
-      pool = _MemoryPoolHandle.global
-    }) {
+      pool = MemoryPoolHandle.global
+    ) {
       try {
+        if (destination) {
+          _instance.relinearize(
+            encrypted.instance,
+            relinKeys.instance,
+            destination.instance,
+            pool
+          )
+          return
+        }
+        const temp = CipherText()
         _instance.relinearize(
           encrypted.instance,
           relinKeys.instance,
-          destination.instance,
+          temp.instance,
           pool
         )
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -202,24 +242,30 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#cipherModSwitchToNext
-     * @param {Object} options Options
-     * @param {CipherText} options.encrypted CipherText to switch its modulus down
-     * @param {CipherText} options.destination CipherText destination to store the switched result
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @param {CipherText} encrypted CipherText to switch its modulus down
+     * @param {CipherText} [destination=null] CipherText destination to store the switched result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      */
-    cipherModSwitchToNext({
+    cipherModSwitchToNext(
       encrypted,
       destination,
-      pool = _MemoryPoolHandle.global
-    }) {
+      pool = MemoryPoolHandle.global
+    ) {
       try {
-        _instance.cipherModSwitchToNext(
-          encrypted.instance,
-          destination.instance,
-          pool
-        )
+        if (destination) {
+          _instance.cipherModSwitchToNext(
+            encrypted.instance,
+            destination.instance,
+            pool
+          )
+          return
+        }
+        const temp = CipherText()
+        _instance.cipherModSwitchToNext(encrypted.instance, temp.instance, pool)
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -231,27 +277,38 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#cipherModSwitchTo
-     * @param {Object} options Options
-     * @param {CipherText} options.encrypted CipherText to switch its modulus down
-     * @param {ParmsIdType} options.parmsId Target parmsId to switch to
-     * @param {CipherText} options.destination CipherText destination to store the switched result
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @param {CipherText} encrypted CipherText to switch its modulus down
+     * @param {ParmsIdType} parmsId Target parmsId to switch to
+     * @param {CipherText} [destination=null] CipherText destination to store the switched result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      */
-    cipherModSwitchTo({
+    cipherModSwitchTo(
       encrypted,
       parmsId,
       destination,
-      pool = _MemoryPoolHandle.global
-    }) {
+      pool = MemoryPoolHandle.global
+    ) {
       try {
+        if (destination) {
+          _instance.cipherModSwitchTo(
+            encrypted.instance,
+            parmsId.instance,
+            destination.instance,
+            pool
+          )
+          return
+        }
+        const temp = CipherText()
         _instance.cipherModSwitchTo(
           encrypted.instance,
           parmsId.instance,
-          destination.instance,
+          temp.instance,
           pool
         )
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -261,15 +318,21 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#plainModSwitchToNext
-     * @param {Object} options Options
-     * @param {PlainText} options.plain PlainText to switch its modulus down
-     * @param {PlainText} options.destination PlainText destination to store the switched result
+     * @param {PlainText} plain PlainText to switch its modulus down
+     * @param {PlainText} [destination=null] PlainText destination to store the switched result
+     * @returns {PlainText|undefined} PlainText containing the result or undefined if a destination was supplied
      */
-    plainModSwitchToNext({ plain, destination }) {
+    plainModSwitchToNext(plain, destination) {
       try {
-        _instance.plainModSwitchToNext(plain.instance, destination.instance)
+        if (destination) {
+          _instance.plainModSwitchToNext(plain.instance, destination.instance)
+          return
+        }
+        const temp = PlainText()
+        _instance.plainModSwitchToNext(plain.instance, temp.instance)
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -280,20 +343,30 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#plainModSwitchTo
-     * @param {Object} options Options
-     * @param {PlainText} options.plain PlainText to switch its modulus down
-     * @param {ParmsIdType} options.parmsId Target parmsId to switch to
-     * @param {PlainText} options.destination PlainText destination to store the switched result
+     * @param {PlainText} plain PlainText to switch its modulus down
+     * @param {ParmsIdType} parmsId Target parmsId to switch to
+     * @param {PlainText} [destination=null] PlainText destination to store the switched result
+     * @returns {PlainText|undefined} PlainText containing the result or undefined if a destination was supplied
      */
-    plainModSwitchTo({ plain, parmsId, destination }) {
+    plainModSwitchTo(plain, parmsId, destination) {
       try {
+        if (destination) {
+          _instance.plainModSwitchTo(
+            plain.instance,
+            parmsId.instance,
+            destination.instance
+          )
+          return
+        }
+        const temp = PlainText()
         _instance.plainModSwitchTo(
           plain.instance,
           parmsId.instance,
-          destination.instance
+          temp.instance
         )
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -306,16 +379,26 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#rescaleToNext
-     * @param {Object} options Options
-     * @param {CipherText} options.encrypted CipherText to rescale
-     * @param {CipherText} options.destination CipherText destination to store the rescaled result
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @param {CipherText} encrypted CipherText to rescale
+     * @param {CipherText} [destination=null] CipherText destination to store the rescaled result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      */
-    rescaleToNext({ encrypted, destination, pool = _MemoryPoolHandle.global }) {
+    rescaleToNext(encrypted, destination, pool = MemoryPoolHandle.global) {
       try {
-        _instance.rescaleToNext(encrypted.instance, destination.instance, pool)
+        if (destination) {
+          _instance.rescaleToNext(
+            encrypted.instance,
+            destination.instance,
+            pool
+          )
+          return
+        }
+        const temp = CipherText()
+        _instance.rescaleToNext(encrypted.instance, temp.instance, pool)
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -328,27 +411,33 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#rescaleTo
-     * @param {Object} options Options
-     * @param {CipherText} options.encrypted CipherText to rescale
-     * @param {ParmsIdType} options.parmsId Target parmsId to rescale to
-     * @param {CipherText} options.destination CipherText destination to store the rescaled result
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @param {CipherText} encrypted CipherText to rescale
+     * @param {ParmsIdType} parmsId Target parmsId to rescale to
+     * @param {CipherText} [destination=null] CipherText destination to store the rescaled result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      */
-    rescaleTo({
-      encrypted,
-      parmsId,
-      destination,
-      pool = _MemoryPoolHandle.global
-    }) {
+    rescaleTo(encrypted, parmsId, destination, pool = MemoryPoolHandle.global) {
       try {
+        if (destination) {
+          _instance.rescaleTo(
+            encrypted.instance,
+            parmsId.instance,
+            destination.instance,
+            pool
+          )
+          return
+        }
+        const temp = CipherText()
         _instance.rescaleTo(
           encrypted.instance,
           parmsId.instance,
-          destination.instance,
+          temp.instance,
           pool
         )
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -362,30 +451,42 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#exponentiate
-     * @param {Object} options Options
-     * @param {CipherText} options.encrypted CipherText to exponentiate
-     * @param {Number} options.exponent Positive integer to exponentiate the CipherText
-     * @param {RelinKeys} options.relinKeys RelinKeys used to perform relinearization after each exponentiation
-     * @param {CipherText} options.destination CipherText destination to store the exponentiated result
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @param {CipherText} encrypted CipherText to exponentiate
+     * @param {Number} exponent Positive integer to exponentiate the CipherText
+     * @param {RelinKeys} relinKeys RelinKeys used to perform relinearization after each exponentiation
+     * @param {CipherText} [destination=null] CipherText destination to store the exponentiated result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      */
-    exponentiate({
+    exponentiate(
       encrypted,
       exponent,
       relinKeys,
       destination,
-      pool = _MemoryPoolHandle.global
-    }) {
+      pool = MemoryPoolHandle.global
+    ) {
       try {
+        if (destination) {
+          _instance.exponentiate(
+            encrypted.instance,
+            exponent,
+            relinKeys.instance,
+            destination.instance,
+            pool
+          )
+          return
+        }
+        const temp = CipherText()
         _instance.exponentiate(
           encrypted.instance,
           exponent,
           relinKeys.instance,
-          destination.instance,
+          temp.instance,
           pool
         )
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -396,20 +497,26 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#addPlain
-     * @param {Object} options Options
-     * @param {CipherText} options.encrypted CipherText operand A
-     * @param {PlainText} options.plain PlainText operand B
-     * @param {CipherText} options.destination CipherText destination to store the sum
+     * @param {CipherText} encrypted CipherText operand A
+     * @param {PlainText} plain PlainText operand B
+     * @param {CipherText} [destination=null] CipherText destination to store the sum
+     * @returns {PlainText|undefined} PlainText containing the result or undefined if a destination was supplied
      */
-    addPlain({ encrypted, plain, destination }) {
+    addPlain(encrypted, plain, destination) {
       try {
-        _instance.addPlain(
-          encrypted.instance,
-          plain.instance,
-          destination.instance
-        )
+        if (destination) {
+          _instance.addPlain(
+            encrypted.instance,
+            plain.instance,
+            destination.instance
+          )
+          return
+        }
+        const temp = CipherText()
+        _instance.addPlain(encrypted.instance, plain.instance, temp.instance)
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -420,20 +527,26 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#subPlain
-     * @param {Object} options Options
-     * @param {CipherText} options.encrypted CipherText operand A
-     * @param {PlainText} options.plain PlainText operand B
-     * @param {CipherText} options.destination CipherText destination to store the difference
+     * @param {CipherText} encrypted CipherText operand A
+     * @param {PlainText} plain PlainText operand B
+     * @param {CipherText} [destination=null] CipherText destination to store the difference
+     * @returns {PlainText|undefined} PlainText containing the result or undefined if a destination was supplied
      */
-    subPlain({ encrypted, plain, destination }) {
+    subPlain(encrypted, plain, destination) {
       try {
-        _instance.subPlain(
-          encrypted.instance,
-          plain.instance,
-          destination.instance
-        )
+        if (destination) {
+          _instance.subPlain(
+            encrypted.instance,
+            plain.instance,
+            destination.instance
+          )
+          return
+        }
+        const temp = CipherText()
+        _instance.subPlain(encrypted.instance, plain.instance, temp.instance)
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -446,27 +559,38 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#multiplyPlain
-     * @param {Object} options Options
-     * @param {CipherText} options.encrypted CipherText operand A
-     * @param {PlainText} options.plain PlainText operand B
-     * @param {CipherText} options.destination CipherText destination to store the product
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @param {CipherText} encrypted CipherText operand A
+     * @param {PlainText} plain PlainText operand B
+     * @param {CipherText} [destination=null] CipherText destination to store the product
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {PlainText|undefined} PlainText containing the result or undefined if a destination was supplied
      */
-    multiplyPlain({
+    multiplyPlain(
       encrypted,
       plain,
       destination,
-      pool = _MemoryPoolHandle.global
-    }) {
+      pool = MemoryPoolHandle.global
+    ) {
       try {
+        if (destination) {
+          _instance.multiplyPlain(
+            encrypted.instance,
+            plain.instance,
+            destination.instance,
+            pool
+          )
+          return
+        }
+        const temp = CipherText()
         _instance.multiplyPlain(
           encrypted.instance,
           plain.instance,
-          destination.instance,
+          temp.instance,
           pool
         )
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -485,27 +609,38 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#plainTransformToNtt
-     * @param {Object} options Options
-     * @param {PlainText} options.plain PlainText to transform
-     * @param {ParmsIdType} options.parmsId target parmsId to perform NTT transformation
-     * @param {PlainText} options.destinationNtt PlainText destination to store the transformed result
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @param {PlainText} plain PlainText to transform
+     * @param {ParmsIdType} parmsId target parmsId to perform NTT transformation
+     * @param {PlainText} [destinationNtt=null] PlainText destination to store the transformed result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {PlainText|undefined} PlainText containing the result or undefined if a destination was supplied
      */
-    plainTransformToNtt({
+    plainTransformToNtt(
       plain,
       parmsId,
       destinationNtt,
-      pool = _MemoryPoolHandle.global
-    }) {
+      pool = MemoryPoolHandle.global
+    ) {
       try {
+        if (destinationNtt) {
+          _instance.plainTransformToNtt(
+            plain.instance,
+            parmsId.instance,
+            destinationNtt.instance,
+            pool
+          )
+          return
+        }
+        const temp = PlainText()
         _instance.plainTransformToNtt(
           plain.instance,
           parmsId.instance,
-          destinationNtt.instance,
+          temp.instance,
           pool
         )
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -516,18 +651,24 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#cipherTransformToNtt
-     * @param {Object} options Options
-     * @param {CipherText} options.encrypted CipherText to transform
-     * @param {CipherText} options.destinationNtt CipherText destination to store the transformed result
+     * @param {CipherText} encrypted CipherText to transform
+     * @param {CipherText} [destinationNtt=null] CipherText destination to store the transformed result
+     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      */
-    cipherTransformToNtt({ encrypted, destinationNtt }) {
+    cipherTransformToNtt(encrypted, destinationNtt) {
       try {
-        _instance.cipherTransformToNtt(
-          encrypted.instance,
-          destinationNtt.instance
-        )
+        if (destinationNtt) {
+          _instance.cipherTransformToNtt(
+            encrypted.instance,
+            destinationNtt.instance
+          )
+          return
+        }
+        const temp = CipherText()
+        _instance.cipherTransformToNtt(encrypted.instance, temp.instance)
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -538,18 +679,24 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#cipherTransformFromNtt
-     * @param {Object} options Options
-     * @param {CipherText} options.encryptedNtt CipherText to transform
-     * @param {CipherText} options.destination CipherText destination to store the transformed result
+     * @param {CipherText} encryptedNtt CipherText to transform
+     * @param {CipherText} [destination=null] CipherText destination to store the transformed result
+     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      */
-    cipherTransformFromNtt({ encryptedNtt, destination }) {
+    cipherTransformFromNtt(encryptedNtt, destination) {
       try {
-        _instance.cipherTransformFromNtt(
-          encryptedNtt.instance,
-          destination.instance
-        )
+        if (destination) {
+          _instance.cipherTransformFromNtt(
+            encryptedNtt.instance,
+            destination.instance
+          )
+          return
+        }
+        const temp = CipherText()
+        _instance.cipherTransformToNtt(encryptedNtt.instance, temp.instance)
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -571,30 +718,42 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#applyGalois
-     * @param {Object} options Options
-     * @param {CipherText} options.encrypted CipherText to apply the automorphism
-     * @param {Number} options.galoisElt Number representing the Galois element
-     * @param {GaloisKeys} options.galoisKeys GaloisKeys used to perform rotations
-     * @param {CipherText} options.destination CipherText destination to store the result
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @param {CipherText} encrypted CipherText to apply the automorphism
+     * @param {Number} galoisElt Number representing the Galois element
+     * @param {GaloisKeys} galoisKeys GaloisKeys used to perform rotations
+     * @param {CipherText} [destination=null] CipherText destination to store the result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      */
-    applyGalois({
+    applyGalois(
       encrypted,
       galoisElt,
       galoisKeys,
       destination,
-      pool = _MemoryPoolHandle.global
-    }) {
+      pool = MemoryPoolHandle.global
+    ) {
       try {
+        if (destination) {
+          _instance.applyGalois(
+            encrypted.instance,
+            galoisElt,
+            galoisKeys.instance,
+            destination.instance,
+            pool
+          )
+          return
+        }
+        const temp = CipherText()
         _instance.applyGalois(
           encrypted.instance,
           galoisElt,
           galoisKeys.instance,
-          destination.instance,
+          temp.instance,
           pool
         )
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -610,30 +769,42 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#rotateRows
-     * @param {Object} options Options
-     * @param {CipherText} options.encrypted CipherText to rotate rows
-     * @param {Number} options.steps Int representing steps to rotate (negative = right, positive = left)
-     * @param {GaloisKeys} options.galoisKeys GaloisKeys used to perform rotations
-     * @param {CipherText} options.destination CipherText destination to store the rotated result
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @param {CipherText} encrypted CipherText to rotate rows
+     * @param {Number} steps Int representing steps to rotate (negative = right, positive = left)
+     * @param {GaloisKeys} galoisKeys GaloisKeys used to perform rotations
+     * @param {CipherText} [destination=null] CipherText destination to store the rotated result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      */
-    rotateRows({
+    rotateRows(
       encrypted,
       steps,
       galoisKeys,
       destination,
-      pool = _MemoryPoolHandle.global
-    }) {
+      pool = MemoryPoolHandle.global
+    ) {
       try {
+        if (destination) {
+          _instance.rotateRows(
+            encrypted.instance,
+            steps,
+            galoisKeys.instance,
+            destination.instance,
+            pool
+          )
+          return
+        }
+        const temp = CipherText()
         _instance.rotateRows(
           encrypted.instance,
           steps,
           galoisKeys.instance,
-          destination.instance,
+          temp.instance,
           pool
         )
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -648,27 +819,38 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#rotateColumns
-     * @param {Object} options Options
-     * @param {CipherText} options.encrypted CipherText to rotate columns
-     * @param {GaloisKeys} options.galoisKeys GaloisKeys used to perform rotations
-     * @param {CipherText} options.destination CipherText destination to store the rotated result
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @param {CipherText} encrypted CipherText to rotate columns
+     * @param {GaloisKeys} galoisKeys GaloisKeys used to perform rotations
+     * @param {CipherText} [destination=null] CipherText destination to store the rotated result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      */
-    rotateColumns({
+    rotateColumns(
       encrypted,
       galoisKeys,
       destination,
-      pool = _MemoryPoolHandle.global
-    }) {
+      pool = MemoryPoolHandle.global
+    ) {
       try {
+        if (destination) {
+          _instance.rotateColumns(
+            encrypted.instance,
+            galoisKeys.instance,
+            destination.instance,
+            pool
+          )
+          return
+        }
+        const temp = CipherText()
         _instance.rotateColumns(
           encrypted.instance,
           galoisKeys.instance,
-          destination.instance,
+          temp.instance,
           pool
         )
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -683,30 +865,42 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#rotateVector
-     * @param {Object} options Options
-     * @param {CipherText} options.encrypted CipherText to rotate the entire vector
-     * @param {Number} options.steps Int representing steps to rotate (negative = right, positive = left)
-     * @param {GaloisKeys} options.galoisKeys GaloisKeys used to perform rotations
-     * @param {CipherText} options.destination CipherText destination to store the rotated result
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @param {CipherText} encrypted CipherText to rotate the entire vector
+     * @param {Number} steps Int representing steps to rotate (negative = right, positive = left)
+     * @param {GaloisKeys} galoisKeys GaloisKeys used to perform rotations
+     * @param {CipherText} [destination=null] CipherText destination to store the rotated result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      */
-    rotateVector({
+    rotateVector(
       encrypted,
       steps,
       galoisKeys,
       destination,
-      pool = _MemoryPoolHandle.global
-    }) {
+      pool = MemoryPoolHandle.global
+    ) {
       try {
+        if (destination) {
+          _instance.rotateVector(
+            encrypted.instance,
+            steps,
+            galoisKeys.instance,
+            destination.instance,
+            pool
+          )
+          return
+        }
+        const temp = CipherText()
         _instance.rotateVector(
           encrypted.instance,
           steps,
           galoisKeys.instance,
-          destination.instance,
+          temp.instance,
           pool
         )
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -719,27 +913,38 @@ export const Evaluator = ({ library, context }) => {
      *
      * @function
      * @name Evaluator#complexConjugate
-     * @param {Object} options Options
-     * @param {CipherText} options.encrypted CipherText to complex conjugate
-     * @param {GaloisKeys} options.galoisKeys GaloisKeys used to perform rotations
-     * @param {CipherText} options.destination CipherText destination to store the conjugated result
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @param {CipherText} encrypted CipherText to complex conjugate
+     * @param {GaloisKeys} galoisKeys GaloisKeys used to perform rotations
+     * @param {CipherText} [destination=null] CipherText destination to store the conjugated result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      */
-    complexConjugate({
+    complexConjugate(
       encrypted,
       galoisKeys,
       destination,
-      pool = _MemoryPoolHandle.global
-    }) {
+      pool = MemoryPoolHandle.global
+    ) {
       try {
+        if (destination) {
+          _instance.complexConjugate(
+            encrypted.instance,
+            galoisKeys.instance,
+            destination.instance,
+            pool
+          )
+          return
+        }
+        const temp = CipherText()
         _instance.complexConjugate(
           encrypted.instance,
           galoisKeys.instance,
-          destination.instance,
+          temp.instance,
           pool
         )
+        return temp
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     }
   }

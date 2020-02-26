@@ -3,41 +3,35 @@ describe('keypair on BFV', () => {
     test('192-bit security', async () => {
       const { Seal } = require('../../index.js')
       const Morfix = await Seal
-      const parms = Morfix.EncryptionParameters({
-        schemeType: Morfix.SchemeType.BFV
-      })
+      const schemeType = Morfix.SchemeType.BFV
+      const securityLevel = Morfix.SecurityLevel.tc192
+      const polyModulusDegree = 4096
+      const bitSizes = [25,25,25]
+      const bitSize = 20
 
-      parms.setPolyModulusDegree({
-        polyModulusDegree: 4096
-      })
+      const parms = Morfix.EncryptionParameters(schemeType)
+
+      parms.setPolyModulusDegree(polyModulusDegree)
 
       // Create a suitable set of CoeffModulus primes
-      parms.setCoeffModulus({
-        coeffModulus: Morfix.CoeffModulus.Create({
-          polyModulusDegree: 4096,
-          bitSizes: Int32Array.from([25,25,25])
-        })
-      })
+      parms.setCoeffModulus(
+        Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes))
+      )
 
       // Set the PlainModulus to a prime of bitSize 20.
-      parms.setPlainModulus({
-        plainModulus: Morfix.PlainModulus.Batching({
-          polyModulusDegree: 4096,
-          bitSize: 20
-        })
-      })
+      parms.setPlainModulus(
+        Morfix.PlainModulus.Batching(polyModulusDegree, bitSize)
+      )
 
-      const context = Morfix.Context({
-        encryptionParams: parms,
-        expandModChain: true,
-        securityLevel: Morfix.SecurityLevel.tc192
-      })
+      const context = Morfix.Context(
+        parms,
+        true,
+        securityLevel
+      )
 
       expect(context.parametersSet).toBe(true)
 
-      const keyGenerator = Morfix.KeyGenerator({
-        context
-      })
+      const keyGenerator = Morfix.KeyGenerator(context)
 
       const spyGetSecretKey = jest.spyOn(keyGenerator, 'getSecretKey')
       const secretKey = keyGenerator.getSecretKey()
@@ -58,11 +52,11 @@ describe('keypair on BFV', () => {
 
 
       const spyLoadSecretKey = jest.spyOn(secretKey, 'load')
-      secretKey.load({context, encoded: secretKeyBase64})
+      secretKey.load(context, secretKeyBase64)
       expect(spyLoadSecretKey).toHaveBeenCalled()
 
       const spyLoadPublicKey = jest.spyOn(publicKey, 'load')
-      publicKey.load({context, encoded: publicKeyBase64})
+      publicKey.load(context, publicKeyBase64)
       expect(spyLoadPublicKey).toHaveBeenCalled()
     })
   })

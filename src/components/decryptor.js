@@ -1,14 +1,12 @@
-import { Exception } from './exception'
-import { PlainText } from './plain-text'
-
-export const Decryptor = ({ library, context, secretKey }) => {
-  const _Exception = Exception({ library })
-  const _library = library
+export const Decryptor = library => (Exception, PlainText) => (
+  context,
+  secretKey
+) => {
   let _instance = null
   try {
     _instance = new library.Decryptor(context.instance, secretKey.instance)
   } catch (e) {
-    throw _Exception.safe({ error: e })
+    throw Exception.safe(e)
   }
 
   /**
@@ -37,10 +35,9 @@ export const Decryptor = ({ library, context, secretKey }) => {
      * @private
      * @function
      * @name Decryptor#inject
-     * @param {Object} options Options
-     * @param {instance} options.instance WASM instance
+     * @param {instance} instance WASM instance
      */
-    inject({ instance }) {
+    inject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -68,23 +65,22 @@ export const Decryptor = ({ library, context, secretKey }) => {
      *
      * @function
      * @name Decryptor#decrypt
-     * @param {Object} options Options
-     * @param {CipherText} options.cipherText CipherText to decrypt
-     * @param {PlainText} [options.plainText] PlainText destination to store the decrypted result
+     * @param {CipherText} cipherText CipherText to decrypt
+     * @param {PlainText} [plainText=null] PlainText destination to store the decrypted result
      * @returns {PlainText|undefined} Returns undefined if a PlainText was specified. Otherwise returns a
      * PlainText containng the decrypted result
      */
-    decrypt({ cipherText, plainText }) {
+    decrypt(cipherText, plainText = null) {
       try {
         if (plainText) {
           _instance.decrypt(cipherText.instance, plainText.instance)
           return
         }
-        const plain = PlainText({ library: _library })
+        const plain = PlainText()
         _instance.decrypt(cipherText.instance, plain.instance)
         return plain
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -107,15 +103,14 @@ export const Decryptor = ({ library, context, secretKey }) => {
      *
      * @function
      * @name Decryptor#invariantNoiseBudget
-     * @param {Object} options Options
-     * @param {CipherText} options.cipherText CipherText to measure
+     * @param {CipherText} cipherText CipherText to measure
      * @returns {Number} Invariant noise budget (in bits)
      */
-    invariantNoiseBudget({ cipherText }) {
+    invariantNoiseBudget(cipherText) {
       try {
         return _instance.invariantNoiseBudget(cipherText.instance)
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     }
   }

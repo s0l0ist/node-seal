@@ -1,12 +1,9 @@
-import { Exception } from './exception'
-
-export const IntegerEncoder = ({ library, context }) => {
-  const _Exception = Exception({ library })
+export const IntegerEncoder = library => (Exception, PlainText) => context => {
   let _instance = null
   try {
     _instance = new library.IntegerEncoder(context.instance)
   } catch (e) {
-    throw _Exception.safe({ error: e })
+    throw Exception.safe(e)
   }
 
   /**
@@ -35,10 +32,9 @@ export const IntegerEncoder = ({ library, context }) => {
      * @private
      * @function
      * @name IntegerEncoder#inject
-     * @param {Object} options Options
-     * @param {instance} options.instance WASM instance
+     * @param {instance} instance WASM instance
      */
-    inject({ instance }) {
+    inject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -66,15 +62,21 @@ export const IntegerEncoder = ({ library, context }) => {
      *
      * @function
      * @name IntegerEncoder#encodeInt32
-     * @param {Object} options Options
-     * @param {Number} options.value Integer to encode
-     * @param {PlainText} options.destination PlainText to store the encoded data
+     * @param {Number} value Integer to encode
+     * @param {PlainText} [destination=null] PlainText to store the encoded data
+     * @returns {PlainText|undefined} PlainText containing the result or undefined if a destination was supplied
      */
-    encodeInt32({ value, destination }) {
+    encodeInt32(value, destination = null) {
       try {
-        _instance.encodeInt32(value, destination.instance)
+        if (destination) {
+          _instance.encodeInt32(value, destination.instance)
+          return
+        }
+        const tempPlain = PlainText()
+        _instance.encodeInt32(value, tempPlain.instance)
+        return tempPlain
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -83,15 +85,21 @@ export const IntegerEncoder = ({ library, context }) => {
      *
      * @function
      * @name IntegerEncoder#encodeUInt32
-     * @param {Object} options Options
-     * @param {Number} options.value Unsigned integer to encode
-     * @param {PlainText} options.destination PlainText to store the encoded data
+     * @param {Number} value Unsigned integer to encode
+     * @param {PlainText} [destination=null] PlainText to store the encoded data
+     * @returns {PlainText|undefined} PlainText containing the result or undefined if a destination was supplied
      */
-    encodeUInt32({ value, destination }) {
+    encodeUInt32(value, destination = null) {
       try {
-        _instance.encodeUInt32(value, destination.instance)
+        if (destination) {
+          _instance.encodeUInt32(value, destination.instance)
+          return
+        }
+        const tempPlain = PlainText()
+        _instance.encodeUInt32(value, tempPlain.instance)
+        return tempPlain
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
     /**
@@ -99,15 +107,14 @@ export const IntegerEncoder = ({ library, context }) => {
      *
      * @function
      * @name IntegerEncoder#decodeInt32
-     * @param {Object} options Options
-     * @param {PlainText} options.plainText PlainText to decode
+     * @param {PlainText} plainText PlainText to decode
      * @returns {Number} Int32 value
      */
-    decodeInt32({ plainText }) {
+    decodeInt32(plainText) {
       try {
         return _instance.decodeInt32(plainText.instance)
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -116,15 +123,14 @@ export const IntegerEncoder = ({ library, context }) => {
      *
      * @function
      * @name IntegerEncoder#decodeUInt32
-     * @param {Object} options Options
-     * @param {PlainText} options.plainText PlainText to decode
+     * @param {PlainText} plainText PlainText to decode
      * @returns {Number} Uint32 value
      */
-    decodeUInt32({ plainText }) {
+    decodeUInt32(plainText) {
       try {
         return _instance.decodeUInt32(plainText.instance)
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     }
   }
