@@ -4,8 +4,8 @@ export const ContextData = library => (
   EncryptionParameters,
   ParmsIdType,
   EncryptionParameterQualifiers
-) => () => {
-  let _instance = null
+) => (instance = null) => {
+  let _instance = instance
 
   /**
    * @implements ContextData
@@ -85,10 +85,7 @@ export const ContextData = library => (
      */
     get parmsId() {
       try {
-        const instance = _instance.parmsId()
-        const parmsId = ParmsIdType()
-        parmsId.inject(instance)
-        return parmsId
+        return ParmsIdType(_instance.parmsId())
       } catch (e) {
         throw Exception.safe(e)
       }
@@ -106,10 +103,7 @@ export const ContextData = library => (
      */
     get qualifiers() {
       try {
-        const instance = _instance.qualifiers()
-        const encryptionParameterQualifiers = EncryptionParameterQualifiers()
-        encryptionParameterQualifiers.inject(instance)
-        return encryptionParameterQualifiers
+        return EncryptionParameterQualifiers(_instance.qualifiers())
       } catch (e) {
         throw Exception.safe(e)
       }
@@ -141,10 +135,12 @@ export const ContextData = library => (
      */
     get prevContextData() {
       try {
-        const instance = _instance.prevContextData()
-        const contextData = ContextData()
-        contextData.inject(instance)
-        return contextData
+        return ContextData(library)(
+          Exception,
+          EncryptionParameters,
+          ParmsIdType,
+          EncryptionParameterQualifiers
+        )(_instance.prevContextData())
       } catch (e) {
         throw Exception.safe(e)
       }
@@ -161,10 +157,12 @@ export const ContextData = library => (
      */
     get nextContextData() {
       try {
-        const instance = _instance.nextContextData()
-        const contextData = ContextData()
-        contextData.inject(instance)
-        return contextData
+        return ContextData(library)(
+          Exception,
+          EncryptionParameters,
+          ParmsIdType,
+          EncryptionParameterQualifiers
+        )(_instance.nextContextData())
       } catch (e) {
         throw Exception.safe(e)
       }

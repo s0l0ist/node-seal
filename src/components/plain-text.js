@@ -70,7 +70,7 @@ export const PlainText = library => (Exception, ComprModeType, ParmsIdType) => (
      * @name PlainText#reserve
      * @param {Number} capacity The capacity to reserve
      */
-    reserve({ capacity }) {
+    reserve(capacity) {
       try {
         return _instance.reserve(capacity)
       } catch (e) {
@@ -248,10 +248,7 @@ export const PlainText = library => (Exception, ComprModeType, ParmsIdType) => (
      * @type {ParmsIdType}
      */
     get parmsId() {
-      const instance = _instance.parmsId()
-      const parmsId = ParmsIdType()
-      parmsId.inject(instance)
-      return parmsId
+      return ParmsIdType(_instance.parmsId())
     },
 
     /**

@@ -1,6 +1,8 @@
 // eslint-disable-next-line no-unused-vars
-export const EncryptionParameterQualifiers = library => Exception => () => {
-  let _instance = null
+export const EncryptionParameterQualifiers = library => Exception => (
+  instance = null
+) => {
+  let _instance = instance
 
   /**
    * @implements EncryptionParameterQualifiers

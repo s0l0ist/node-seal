@@ -1,8 +1,8 @@
-export const EncryptionParameters = library => ({
+export const EncryptionParameters = library => (
   Exception,
   ComprModeType,
   SmallModulus
-}) => (schemeType, suppressWarning = false) => {
+) => (schemeType, suppressWarning = false) => {
   let _instance = null
 
   // Normal users must supply a schemeType. If no schemeType is passed in,

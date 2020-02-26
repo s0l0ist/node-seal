@@ -1,9 +1,12 @@
-export const ParmsIdType = library => Exception => () => {
-  let _instance = null
-  try {
-    _instance = new library.ParmsIdType()
-  } catch (e) {
-    throw Exception.safe(e)
+export const ParmsIdType = library => Exception => (instance = null) => {
+  let _instance = instance
+
+  if (!instance) {
+    try {
+      _instance = new library.ParmsIdType()
+    } catch (e) {
+      throw Exception.safe(e)
+    }
   }
 
   /**
