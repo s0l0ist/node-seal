@@ -48,14 +48,14 @@ const genTests = (verb) => {
       const securityLevel = ${SECURITY_LEVELS_CONSTRUCTOR[SECURITY_LEVELS[secLevel]]}
       const polyModulusDegree = ${POLYMODULUS_DEGREES[polyModDeg]}
       const bitSizes = [${BFV_COEFF_MOD_BIT_SIZES[SECURITY_LEVELS[secLevel]][POLYMODULUS_DEGREES[polyModDeg]]}]${schemeType === SCHEME_TYPES.BFV ? '\n      const bitSize = 20' : ''}
-      
+
       const parms = Morfix.EncryptionParameters(schemeType)
 
       parms.setPolyModulusDegree(polyModulusDegree)
-      
+
       // Create a suitable set of CoeffModulus primes
       parms.setCoeffModulus(
-        Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes)) 
+        Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes))
       )
 `)
 
