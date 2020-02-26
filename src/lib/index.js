@@ -11,7 +11,7 @@ export const Seal = (async () => {
    * First, we initialize the library which loads from a WASM file/base64 string.
    * This file is loaded asynchronously and therefore we must wait
    * until it has fully initialized. The promise breaks when attempting to
-   * resolve the module...
+   * directly resolve the WASM module so we need a second stage...
    */
   const lib = Library(source)
   await lib.initialize()
