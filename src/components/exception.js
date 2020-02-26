@@ -1,4 +1,5 @@
-export const Exception = ({ library }) => {
+export const Exception = library => {
+  // Static methods
   const _getException = library.getException
 
   /**
@@ -15,11 +16,10 @@ export const Exception = ({ library }) => {
      *
      * @function
      * @name Exception.getHuman
-     * @param {Object} options Options
-     * @param {Number} options.pointer The integer pointer thrown from emscripten
+     * @param {Number} pointer The integer pointer thrown from emscripten
      * @returns {String} Human readable exception message
      */
-    getHuman({ pointer }) {
+    getHuman(pointer) {
       return _getException(pointer)
     },
 
@@ -28,13 +28,12 @@ export const Exception = ({ library }) => {
      *
      * @function
      * @name Exception.safe
-     * @param {Object} options Options
-     * @param {(Number|Error|String)} options.error Unsafe error to normalize
+     * @param {(Number|Error|String)} error Unsafe error to normalize
      * @returns {Error}
      */
-    safe({ error }) {
+    safe(error) {
       if (typeof error === 'number') {
-        return new Error(this.getHuman({ pointer: error }))
+        return new Error(this.getHuman(error))
       }
 
       if (error instanceof Error) {

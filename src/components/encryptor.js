@@ -1,16 +1,13 @@
-import { Exception } from './exception'
-import { MemoryPoolHandle } from './memory-pool-handle'
-import { CipherText } from './cipher-text'
-
-export const Encryptor = ({ library, context, publicKey }) => {
-  const _Exception = Exception({ library })
-  const _MemoryPoolHandle = MemoryPoolHandle({ library })
-  const _library = library
+export const Encryptor = library => (
+  Exception,
+  MemoryPoolHandle,
+  CipherText
+) => (context, publicKey) => {
   let _instance = null
   try {
     _instance = new library.Encryptor(context.instance, publicKey.instance)
   } catch (e) {
-    throw _Exception.safe({ error: e })
+    throw Exception.safe(e)
   }
 
   /**
@@ -39,10 +36,9 @@ export const Encryptor = ({ library, context, publicKey }) => {
      * @private
      * @function
      * @name Encryptor#inject
-     * @param {Object} options Options
-     * @param {instance} options.instance WASM instance
+     * @param {instance} instance WASM instance
      */
-    inject({ instance }) {
+    inject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -72,24 +68,23 @@ export const Encryptor = ({ library, context, publicKey }) => {
      *
      * @function
      * @name Encryptor#encrypt
-     * @param {Object} options Options
-     * @param {PlainText} options.plainText PlainText to encrypt
-     * @param {CipherText} [options.cipherText] CipherText destination to store the encrypted result
-     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @param {PlainText} plainText PlainText to encrypt
+     * @param {CipherText} [cipherText] CipherText destination to store the encrypted result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} Returns undefined if a CipherText was specified. Otherwise returns a
      * CipherText containng the enrypted result
      */
-    encrypt({ plainText, cipherText, pool = _MemoryPoolHandle.global }) {
+    encrypt(plainText, cipherText, pool = MemoryPoolHandle.global) {
       try {
         if (cipherText) {
           _instance.encrypt(plainText.instance, cipherText.instance, pool)
           return
         }
-        const cipher = CipherText({ library: _library })
+        const cipher = CipherText()
         _instance.encrypt(plainText.instance, cipher.instance, pool)
         return cipher
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     }
   }

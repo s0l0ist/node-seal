@@ -1,14 +1,14 @@
-import { Exception } from './exception'
-import { ComprModeType } from './compr-mode-type'
+export const SecretKey = library => (Exception, ComprModeType) => (
+  instance = null
+) => {
+  let _instance = instance
 
-export const SecretKey = ({ library }) => {
-  const _Exception = Exception({ library })
-  const _ComprModeType = ComprModeType({ library })
-  let _instance = null
-  try {
-    _instance = new library.SecretKey()
-  } catch (e) {
-    throw _Exception.safe({ error: e })
+  if (!instance) {
+    try {
+      _instance = new library.SecretKey()
+    } catch (e) {
+      throw Exception.safe(e)
+    }
   }
 
   /**
@@ -37,10 +37,9 @@ export const SecretKey = ({ library }) => {
      * @private
      * @function
      * @name SecretKey#inject
-     * @param {Object} options Options
-     * @param {instance} options.instance WASM instance
+     * @param {instance} instance WASM instance
      */
-    inject({ instance }) {
+    inject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -68,15 +67,14 @@ export const SecretKey = ({ library }) => {
      *
      * @function
      * @name SecretKey#save
-     * @param {Object} options Options
-     * @param {ComprModeType} [options.compression={@link ComprModeType.none}] The compression mode to use
+     * @param {ComprModeType} [compression={@link ComprModeType.none}] The compression mode to use
      * @returns {String} Base64 encoded string
      */
-    save({ compression = _ComprModeType.none } = {}) {
+    save(compression = ComprModeType.none) {
       try {
         return _instance.saveToString(compression)
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     },
 
@@ -85,15 +83,14 @@ export const SecretKey = ({ library }) => {
      *
      * @function
      * @name SecretKey#load
-     * @param {Object} options Options
-     * @param {Context} options.context Encryption context to enforce
-     * @param {String} options.encoded Base64 encoded string
+     * @param {Context} context Encryption context to enforce
+     * @param {String} encoded Base64 encoded string
      */
-    load({ context, encoded }) {
+    load(context, encoded) {
       try {
         _instance.loadFromString(context.instance, encoded)
       } catch (e) {
-        throw _Exception.safe({ error: e })
+        throw Exception.safe(e)
       }
     }
   }

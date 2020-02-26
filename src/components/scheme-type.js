@@ -1,4 +1,6 @@
-export const SchemeType = ({ library }) => {
+// eslint-disable-next-line no-unused-vars
+export const SchemeType = library => Exception => {
+  // Static methods
   const _none = library.SchemeType.none
   const _BFV = library.SchemeType.BFV
   const _CKKS = library.SchemeType.CKKS
