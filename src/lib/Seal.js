@@ -19,69 +19,56 @@ export const SEAL = factories => {
   const SecurityLevel = addDeps(Exception)(factories.SecurityLevel)
 
   // Instance types
-  const ParmsIdType = addDeps(Exception)(factories.ParmsIdType())
-
+  const ParmsIdType = addDeps(Exception)(factories.ParmsIdType)
   const PlainText = addDeps(
     Exception,
     ComprModeType,
     ParmsIdType
   )(factories.PlainText)
-
   const CipherText = addDeps(
     Exception,
     ComprModeType,
     ParmsIdType
   )(factories.CipherText)
-
   const Vector = addDeps(Exception)(factories.Vector)
-
   const BatchEncoder = addDeps(
     Exception,
     MemoryPoolHandle,
     PlainText,
     Vector
   )(factories.BatchEncoder)
-
   const CKKSEncoder = addDeps(
     Exception,
     MemoryPoolHandle,
     PlainText,
     Vector
   )(factories.CKKSEncoder)
-
   const EncryptionParameterQualifiers = addDeps(Exception)(
     factories.EncryptionParameterQualifiers
   )
-
   const SmallModulus = addDeps(Exception, ComprModeType)(factories.SmallModulus)
-
   const EncryptionParameters = addDeps(
     Exception,
     ComprModeType,
     SmallModulus
   )(factories.EncryptionParameters)
-
   const ContextData = addDeps(
     Exception,
     EncryptionParameters,
     ParmsIdType,
     EncryptionParameterQualifiers
   )(factories.ContextData)
-
   const Context = addDeps(
     Exception,
     ParmsIdType,
     ContextData
   )(factories.Context)
-
   const Decryptor = addDeps(Exception, PlainText)(factories.Decryptor)
-
   const Encryptor = addDeps(
     Exception,
     MemoryPoolHandle,
     CipherText
   )(factories.Encryptor)
-
   const Evaluator = addDeps(
     Exception,
     MemoryPoolHandle,

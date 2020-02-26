@@ -92,7 +92,7 @@ export const Context = library => (Exception, ParmsIdType, ContextData) => (
      * @param {ParmsIdType} parmsId Specific id to return ContextData for
      * @returns {ContextData} ContextData corresponding to encryption parameters
      */
-    getContextData({ parmsId }) {
+    getContextData(parmsId) {
       try {
         const instance = _instance.getContextData(parmsId.instance)
         const contextData = ContextData()
@@ -170,45 +170,36 @@ export const Context = library => (Exception, ParmsIdType, ContextData) => (
     },
 
     /**
-     * Returns a parmsIdType corresponding to the set of encryption parameters that are used for keys.
+     * Returns a ParmsIdType corresponding to the set of encryption parameters that are used for keys.
      *
      * @readonly
      * @name Context#keyParmsId
      * @type {ParmsIdType}
      */
     get keyParmsId() {
-      const instance = _instance.keyParmsId()
-      const parmsId = ParmsIdType()
-      parmsId.inject(instance)
-      return parmsId
+      return ParmsIdType(_instance.keyParmsId())
     },
 
     /**
-     * Returns a parmsIdType corresponding to the first encryption parameters that are used for data.
+     * Returns a ParmsIdType corresponding to the first encryption parameters that are used for data.
      *
      * @readonly
      * @name Context#firstParmsId
      * @type {ParmsIdType}
      */
     get firstParmsId() {
-      const instance = _instance.firstParmsId()
-      const parmsId = ParmsIdType()
-      parmsId.inject(instance)
-      return parmsId
+      return ParmsIdType(_instance.firstParmsId())
     },
 
     /**
-     * The parmsIdType corresponding to the last encryption parameters that are used for data.
+     * The ParmsIdType corresponding to the last encryption parameters that are used for data.
      *
      * @readonly
      * @name Context#lastParmsId
      * @type {ParmsIdType}
      */
     get lastParmsId() {
-      const instance = _instance.lastParmsId()
-      const parmsId = ParmsIdType()
-      parmsId.inject(instance)
-      return parmsId
+      return ParmsIdType(_instance.lastParmsId())
     },
 
     /**

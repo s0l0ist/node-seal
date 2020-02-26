@@ -202,10 +202,7 @@ export const CipherText = library => (
      * @type {ParmsIdType}
      */
     get parmsId() {
-      const instance = _instance.parmsId()
-      const parmsId = ParmsIdType()
-      parmsId.inject(instance)
-      return parmsId
+      return ParmsIdType(_instance.parmsId())
     },
 
     /**
