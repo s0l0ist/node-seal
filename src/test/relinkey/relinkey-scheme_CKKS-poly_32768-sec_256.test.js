@@ -7,14 +7,14 @@ describe.skip('relinkey on CKKS', () => {
       const securityLevel = Morfix.SecurityLevel.tc256
       const polyModulusDegree = 32768
       const bitSizes = [52,53,53,53,53,53,53,53,53]
-      
+
       const parms = Morfix.EncryptionParameters(schemeType)
 
       parms.setPolyModulusDegree(polyModulusDegree)
-      
+
       // Create a suitable set of CoeffModulus primes
       parms.setCoeffModulus(
-        Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes)) 
+        Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes))
       )
 
       const context = Morfix.Context(

@@ -8,14 +8,14 @@ describe('keypair on BFV', () => {
       const polyModulusDegree = 16384
       const bitSizes = [48,48,48,49,49,49,49,49,49]
       const bitSize = 20
-      
+
       const parms = Morfix.EncryptionParameters(schemeType)
 
       parms.setPolyModulusDegree(polyModulusDegree)
-      
+
       // Create a suitable set of CoeffModulus primes
       parms.setCoeffModulus(
-        Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes)) 
+        Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes))
       )
 
       // Set the PlainModulus to a prime of bitSize 20.

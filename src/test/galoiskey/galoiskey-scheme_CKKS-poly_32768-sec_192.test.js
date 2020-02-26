@@ -7,14 +7,14 @@ describe.skip('galoiskey on CKKS', () => {
       const securityLevel = Morfix.SecurityLevel.tc192
       const polyModulusDegree = 32768
       const bitSizes = [54,54,54,54,54,55,55,55,55,55,55]
-      
+
       const parms = Morfix.EncryptionParameters(schemeType)
 
       parms.setPolyModulusDegree(polyModulusDegree)
-      
+
       // Create a suitable set of CoeffModulus primes
       parms.setCoeffModulus(
-        Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes)) 
+        Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes))
       )
 
       const context = Morfix.Context(

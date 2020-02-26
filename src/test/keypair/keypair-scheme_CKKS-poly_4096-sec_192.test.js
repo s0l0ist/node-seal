@@ -7,14 +7,14 @@ describe('keypair on CKKS', () => {
       const securityLevel = Morfix.SecurityLevel.tc192
       const polyModulusDegree = 4096
       const bitSizes = [25,25,25]
-      
+
       const parms = Morfix.EncryptionParameters(schemeType)
 
       parms.setPolyModulusDegree(polyModulusDegree)
-      
+
       // Create a suitable set of CoeffModulus primes
       parms.setCoeffModulus(
-        Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes)) 
+        Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes))
       )
 
       const context = Morfix.Context(
