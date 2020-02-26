@@ -8,14 +8,14 @@ describe.skip('galoiskey on BFV', () => {
       const polyModulusDegree = 32768
       const bitSizes = [55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,56]
       const bitSize = 20
-      
+
       const parms = Morfix.EncryptionParameters(schemeType)
 
       parms.setPolyModulusDegree(polyModulusDegree)
-      
+
       // Create a suitable set of CoeffModulus primes
       parms.setCoeffModulus(
-        Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes)) 
+        Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes))
       )
 
       // Set the PlainModulus to a prime of bitSize 20.
