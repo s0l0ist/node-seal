@@ -5,6 +5,8 @@ export const SEAL = factories => {
   const call = args => x => {
     return x(...args)
   }
+
+  // Add dependencies to a component
   const addDeps = (...deps) => pipe(call(deps))
 
   // Instantiate the singletons
