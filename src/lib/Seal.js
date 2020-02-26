@@ -1,4 +1,4 @@
-import { pipe } from './util'
+import { pipe } from './utils'
 
 export const SEAL = factories => {
   // Call a component with arguments
@@ -18,7 +18,7 @@ export const SEAL = factories => {
   const SchemeType = addDeps(Exception)(factories.SchemeType)
   const SecurityLevel = addDeps(Exception)(factories.SecurityLevel)
 
-  // Instance types
+  // Create our constructors
   const ParmsIdType = addDeps(Exception)(factories.ParmsIdType)
   const PlainText = addDeps(
     Exception,
@@ -958,6 +958,8 @@ export const SEAL = factories => {
      * const vectorUint32 = Morfix.Vector(Uint32Array.from([1, 2, 3]))
      * const vectorFloat64 = Morfix.Vector(Float64Array.from([1.11, 2.22, 3.33]))
      */
-    Vector: array => Vector(array)
+    Vector: () => {
+      throw new Error('Constructing a vector has been deprecated since 3.2.0')
+    }
   }
 }
