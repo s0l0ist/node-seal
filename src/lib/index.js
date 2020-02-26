@@ -13,7 +13,7 @@ export const Seal = (async () => {
    * until it has fully initialized. The promise breaks when attempting to
    * resolve the module...
    */
-  const lib = await Library(source)
+  const lib = Library(source)
   await lib.initialize()
 
   // Add a component
