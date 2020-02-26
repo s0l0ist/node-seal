@@ -3,33 +3,29 @@ describe.skip('galoiskey on CKKS', () => {
     test('128-bit security', async () => {
       const { Seal } = require('../../index.js')
       const Morfix = await Seal
-      const parms = Morfix.EncryptionParameters({
-        schemeType: Morfix.SchemeType.CKKS
-      })
+      const schemeType = Morfix.SchemeType.CKKS
+      const securityLevel = Morfix.SecurityLevel.tc128
+      const polyModulusDegree = 16384
+      const bitSizes = [48,48,48,49,49,49,49,49,49]
+      
+      const parms = Morfix.EncryptionParameters(schemeType)
 
-      parms.setPolyModulusDegree({
-        polyModulusDegree: 16384
-      })
+      parms.setPolyModulusDegree(polyModulusDegree)
+      
+      // Create a suitable set of CoeffModulus primes
+      parms.setCoeffModulus(
+        Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes)) 
+      )
 
-      // Create a suitable set of CoeffModulus primes (we use default set)
-      parms.setCoeffModulus({
-        coeffModulus: Morfix.CoeffModulus.Create({
-          polyModulusDegree: 16384,
-          bitSizes: Int32Array.from([60,39,39,39,39,39,39,39,39,60])
-        })
-      })
-
-      const context = Morfix.Context({
-        encryptionParams: parms,
-        expandModChain: true,
-        securityLevel: Morfix.SecurityLevel.tc128
-      })
+      const context = Morfix.Context(
+        parms,
+        true,
+        securityLevel
+      )
 
       expect(context.parametersSet).toBe(true)
 
-      const keyGenerator = Morfix.KeyGenerator({
-        context
-      })
+      const keyGenerator = Morfix.KeyGenerator(context)
 
       const spyGenGaloisKeys = jest.spyOn(keyGenerator, 'genGaloisKeys')
       const galoisKeys = keyGenerator.genGaloisKeys()
@@ -40,7 +36,7 @@ describe.skip('galoiskey on CKKS', () => {
       expect(spySaveGaloisKeys).toHaveBeenCalled()
 
       const spyLoadGaloisKeys = jest.spyOn(galoisKeys, 'load')
-      galoisKeys.load({context, encoded: base64})
+      galoisKeys.load(context, base64)
       expect(spyLoadGaloisKeys).toHaveBeenCalled()
     })
   })
