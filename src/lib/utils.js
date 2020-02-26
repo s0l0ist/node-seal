@@ -1,8 +1,10 @@
-// Composition
 export const pipe = (...fctns) => x => fctns.reduce((y, f) => f(y), x)
 export const compose = (...fctns) => x => fctns.reduceRight((y, f) => f(y), x)
+export const curry = (f, arr = [], length = f.length) => (...args) =>
+  (a => (a.length === length ? f(...a) : curry(f, a)))([...arr, ...args])
+export const reverseArgs = fn => (...args) => fn(...reverse(args))
+export const reverse = ([x, ...xs]) => (isDefined(x) ? [...reverse(xs), x] : [])
 
-// Equality
 export const isDefined = x => typeof x !== 'undefined'
 export const isUndefined = x => !isDefined(x)
 export const isNull = x => x === null
@@ -22,7 +24,6 @@ export const isNotEmpty = x => !isEmpty(x)
 export const max = a => b => Math.max(a, b)
 export const min = a => b => Math.min(a, b)
 
-// Iterables
 export const keys = x => Object.keys(x)
 export const values = x => Object.values(x)
 export const entries = x => Object.entries(x)
@@ -35,7 +36,6 @@ export const hasKey = key => x => key in x
 export const includes = key => x => x.includes(key)
 export const join = str => x => x.join(str)
 
-// Custom
 export const length = x => x.length
 export const exit = (code = 1) => process.exit(code)
 

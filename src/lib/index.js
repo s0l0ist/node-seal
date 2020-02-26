@@ -1,12 +1,11 @@
 import source from '../bin/seal.js'
 import sourceWasm from '../bin/seal'
-
-import { pipe, entries, reduce } from './util'
-
-import { SEAL } from './Seal'
 import { Library } from './library'
-
+import { SEAL } from './Seal'
+import * as utils from './utils'
 import * as Components from '../components'
+
+export const Utils = utils
 
 export const Seal = (async () => {
   /*
@@ -14,7 +13,6 @@ export const Seal = (async () => {
    * This file is loaded asynchronously and therefore we must wait
    * until it has fully initialized.
    */
-
   const lib = Library()
   await lib.initialize({ source, sourceWasm })
 
@@ -24,6 +22,7 @@ export const Seal = (async () => {
     return acc
   }
 
+  const { pipe, entries, reduce } = utils
   // Add the library instance to all components
   const addLibraryToComponents = pipe(
     entries,

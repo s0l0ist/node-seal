@@ -5,16 +5,91 @@ for more details on each SEAL version change.
 
 ## Version 4.0.0
 
-Complete refactor to allow use of functional composition.
+This library aims at being easier to use. To meet this goal, there had to be some significant changes
+in the way components are used. The most notable is a complete refactor of all components to not use
+object destructuring for their arguments. This change allows for the composition of specialized functions
+that are easier to understand and test - all with less code.
+
+Ultimately, `Vectors` had to die. They were an abstraction on top of the TypedArrays 
+in the JS world to WebAssembly, but had no significant use-case outside. Therefore,
+they have been removed and are instead used internally.
+
+Instead of processing separate `encode -> encrypt` and `decrypt -> decode` actions,
+we can compose a higher-order function which performs both transparently using a `pipe` function
+from our `Utils` provider.
+
+```javascript
+import { Seal, Utils } from 'node-seal'
+const Morfix = await Seal
+
+// Parameters
+const schemeType = Morfix.SchemeType.BFV
+const securityLevel = Morfix.SecurityLevel.tc128
+const polyModulusDegree = 4096
+const bitSizes = [36,36,37]
+const bitSize = 20
+...
+```
+
+Create curried functions. In this case we have created functions which take 
+the one argument and returns a function that accepts the second argument. This 
+converts the n-ary functions into the unary function form which allows us to use them 
+with `pipe` much more clearly.
+```
+import { Utils } from 'node-seal'
+const { pipe } = Utils
+const curriedEncode = (dest = null) => array => encoder.encode(array, dest)
+const curriedEncrypt = (dest = null) => plain => encryptor.encrypt(plain, dest)
+const curriedDecrypt = (dest = null) => cipher => decryptor.decrypt(cipher, dest)
+const curriedDecode = (sign = true) => plain => encoder.decode(plain, sign)
+```
+
+Create partial applications. Curried functions allow us to construct specific 
+functions by partially applying arguments.
+```
+const encodeNoDest = curriedEncode(null)
+const encryptNoDest = curriedEncode(null)
+const decryptNoDest = curriedEncode(null)
+const decodeSigned = curriedEncode(true)
+
+```
+`pipe` essentially runs the first argument and 'pipes' its 
+returned value into the input of the next argument and so on.
+```
+const encodeEncrypt = pipe(encodeNoDest, encryptNoDest)
+const decryptDecode = pipe(decryptNoDest, decodeSigned)
+```
+
+An equivalent way to write these functions without pipe would be:
+```javascript
+const encodeEncrypt = (array) => encryptNoDest(encodeNoDest(array))
+const decryptDecode = (cipher) => decodeSigned(decryptNoDest(cipher))
+```
+
+With `encodeEncrypt`, data can be immediately turned from a TypedArray to a cipher without 
+needing to manually encode. Similarly, `decryptDecode` accepts a cipher 
+and returns a TypedArray containing the results.
+```
+const cipherText = encodeEncrypt(Int32Array.from([1,2,-3]))
+const result = decryptDecode(cipherText)
+
+// Will have a length of polyModulusDegree (if BFV) _or_ polyModulusDegree / 2 (if CKKS)
+// result = Int32Array([1,2,-3, 0, 0, ...])
+```
 
 Breaking:
 - All functions which used to take an argument with an object containing named parameters have been 
   replaced with just their named parameters. Ex: `instance.function({ param1, param2 })` have now 
   become `instance.function(param1, param2)`.
-- `Vector` is now _private_ for use inside this library
+- `Vector` is now _private_ for use inside this library. Any public use of a `Vector` will throw.
 
 Feat: 
-- `PlainText` and `CipherText` variables take an optional constructor parameter
+- New utility methods are exposed for convenience to assist in functional programing.
+  ```javascript
+  import { Utils } from 'node-seal'
+  const { Utils } = require('node-seal')
+  ```
+- Several internal functions have been rewritten for clarity. Should be transparent to the user.
 - All evaluator methods accept an optional destination parameter. If one is supplied, the evaluation's
   result well be stored there. Otherwise, a new variable containing the result will be returned. Ex:
   ```
