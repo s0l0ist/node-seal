@@ -3,41 +3,35 @@ describe('keypair on BFV', () => {
     test('128-bit security', async () => {
       const { Seal } = require('../../index.js')
       const Morfix = await Seal
-      const parms = Morfix.EncryptionParameters({
-        schemeType: Morfix.SchemeType.BFV
-      })
+      const schemeType = Morfix.SchemeType.BFV
+      const securityLevel = Morfix.SecurityLevel.tc128
+      const polyModulusDegree = 32768
+      const bitSizes = [55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,56]
+      const bitSize = 20
+      
+      const parms = Morfix.EncryptionParameters(schemeType)
 
-      parms.setPolyModulusDegree({
-        polyModulusDegree: 32768
-      })
-
+      parms.setPolyModulusDegree(polyModulusDegree)
+      
       // Create a suitable set of CoeffModulus primes
-      parms.setCoeffModulus({
-        coeffModulus: Morfix.CoeffModulus.Create({
-          polyModulusDegree: 32768,
-          bitSizes: Int32Array.from([55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,56])
-        })
-      })
+      parms.setCoeffModulus(
+        Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes)) 
+      )
 
       // Set the PlainModulus to a prime of bitSize 20.
-      parms.setPlainModulus({
-        plainModulus: Morfix.PlainModulus.Batching({
-          polyModulusDegree: 32768,
-          bitSize: 20
-        })
-      })
+      parms.setPlainModulus(
+        Morfix.PlainModulus.Batching(polyModulusDegree, bitSize)
+      )
 
-      const context = Morfix.Context({
-        encryptionParams: parms,
-        expandModChain: true,
-        securityLevel: Morfix.SecurityLevel.tc128
-      })
+      const context = Morfix.Context(
+        parms,
+        true,
+        securityLevel
+      )
 
       expect(context.parametersSet).toBe(true)
 
-      const keyGenerator = Morfix.KeyGenerator({
-        context
-      })
+      const keyGenerator = Morfix.KeyGenerator(context)
 
       const spyGetSecretKey = jest.spyOn(keyGenerator, 'getSecretKey')
       const secretKey = keyGenerator.getSecretKey()
@@ -58,11 +52,11 @@ describe('keypair on BFV', () => {
 
 
       const spyLoadSecretKey = jest.spyOn(secretKey, 'load')
-      secretKey.load({context, encoded: secretKeyBase64})
+      secretKey.load(context, secretKeyBase64)
       expect(spyLoadSecretKey).toHaveBeenCalled()
 
       const spyLoadPublicKey = jest.spyOn(publicKey, 'load')
-      publicKey.load({context, encoded: publicKeyBase64})
+      publicKey.load(context, publicKeyBase64)
       expect(spyLoadPublicKey).toHaveBeenCalled()
     })
   })
