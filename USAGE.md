@@ -127,9 +127,7 @@ You may generate a new Public Key (or even Relin/Galois Keys) from an existing S
 ////////////////////////
 
 // Create a new KeyGenerator (creates a new keypair internally)
-const keyGenerator = Morfix.KeyGenerator({ 
-  context
-})
+const keyGenerator = Morfix.KeyGenerator(context)
 
 const secretKey = keyGenerator.getSecretKey()
 const publicKey = keyGenerator.getPublicKey()
