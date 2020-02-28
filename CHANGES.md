@@ -5,8 +5,8 @@ for more details on each SEAL version change.
 
 ## Version 4.0.1
 
-Fix
-- Key instantiation fixed for Keys
+Hotfix
+- Generating key instances were a broken
 
 ## Version 4.0.0
 
