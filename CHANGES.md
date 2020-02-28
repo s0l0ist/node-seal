@@ -5,7 +5,7 @@ for more details on each SEAL version change.
 
 ## Version 4.0.1
 
-Hotfix
+Hotfix:
 - Generating key instances were broken for some keys
 
 ## Version 4.0.0
@@ -40,7 +40,7 @@ Create curried functions. In this case we have created functions which take
 the one argument and returns a function that accepts the second argument. This 
 converts the n-ary functions into the unary function form which allows us to use them 
 with `pipe` much more clearly.
-```
+```javascript
 import { Utils } from 'node-seal'
 const { pipe } = Utils
 const curriedEncode = (dest = null) => array => encoder.encode(array, dest)
@@ -51,7 +51,7 @@ const curriedDecode = (sign = true) => plain => encoder.decode(plain, sign)
 
 Create partial applications. Curried functions allow us to construct specific 
 functions by partially applying arguments.
-```
+```javascript
 const encodeNoDest = curriedEncode(null)
 const encryptNoDest = curriedEncode(null)
 const decryptNoDest = curriedEncode(null)
@@ -60,7 +60,7 @@ const decodeSigned = curriedEncode(true)
 ```
 `pipe` essentially runs the first argument and 'pipes' its 
 returned value into the input of the next argument and so on.
-```
+```javascript
 const encodeEncrypt = pipe(encodeNoDest, encryptNoDest)
 const decryptDecode = pipe(decryptNoDest, decodeSigned)
 ```
@@ -74,7 +74,7 @@ const decryptDecode = (cipher) => decodeSigned(decryptNoDest(cipher))
 With `encodeEncrypt`, data can be immediately turned from a TypedArray to a cipher without 
 needing to manually encode. Similarly, `decryptDecode` accepts a cipher 
 and returns a TypedArray containing the results.
-```
+```javascript
 const cipherText = encodeEncrypt(Int32Array.from([1,2,-3]))
 const result = decryptDecode(cipherText)
 
@@ -97,7 +97,7 @@ Feat:
 - Several internal functions have been rewritten for clarity. Should be transparent to the user.
 - All evaluator methods accept an optional destination parameter. If one is supplied, the evaluation's
   result well be stored there. Otherwise, a new variable containing the result will be returned. Ex:
-  ```
+  ```javascript
   // With optional destination
   const destinationCipher = Morfix.CipherText()
   evaluator.add(cipherTextA, cipherTextB, destinationCipher)`
