@@ -6,7 +6,7 @@ for more details on each SEAL version change.
 ## Version 4.0.1
 
 Hotfix
-- Generating key instances were a broken
+- Generating key instances were broken for some keys
 
 ## Version 4.0.0
 
