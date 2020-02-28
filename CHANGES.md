@@ -3,6 +3,11 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 4.0.1
+
+Fix
+- Key instantiation fixed for Keys
+
 ## Version 4.0.0
 
 This library aims at being easier to use. To meet this goal, there had to be some significant changes
