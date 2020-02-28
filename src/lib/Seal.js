@@ -802,7 +802,7 @@ export const SEAL = factories => {
      * const keyGenerator = Morfix.KeyGenerator(context)
      * const publicKey = keyGenerator.getPublicKey()
      */
-    PublicKey: () => PublicKey,
+    PublicKey: () => PublicKey(),
 
     /**
      * @description
@@ -856,7 +856,7 @@ export const SEAL = factories => {
      * const keyGenerator = Morfix.KeyGenerator(context)
      * const relinKeys = keyGenerator.genRelinKeys()
      */
-    RelinKeys: () => RelinKeys,
+    RelinKeys: () => RelinKeys(),
 
     /**
      * @description
@@ -902,7 +902,7 @@ export const SEAL = factories => {
      * const keyGenerator = Morfix.KeyGenerator(context)
      * const secretKey = keyGenerator.getSecretKey()
      */
-    SecretKey: () => SecretKey,
+    SecretKey: () => SecretKey(),
 
     /**
      * @description
