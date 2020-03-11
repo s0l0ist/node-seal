@@ -317,6 +317,12 @@ export const PlainText = library => (Exception, ComprModeType, ParmsIdType) => (
      * @function
      * @name PlainText#copy
      * @param {PlainText} plain PlainText to copy
+     * @example
+     * const plainTextA = Morfix.PlainText()
+     * // ... after encoding some data ...
+     * const plainTextB = Morfix.PlainText()
+     * plainTextB.copy(plainTextA)
+     * // plainTextB holds a copy of plainTextA
      */
     copy(plain) {
       try {
@@ -332,6 +338,11 @@ export const PlainText = library => (Exception, ComprModeType, ParmsIdType) => (
      * @function
      * @name PlainText#clone
      * @returns {PlainText}
+     * @example
+     * const plainTextA = Morfix.PlainText()
+     * // ... after encoding some data ...
+     * const plainTextB = plainTextA.clone()
+     * // plainTextB holds a copy of plainTextA
      */
     clone() {
       try {
@@ -350,6 +361,13 @@ export const PlainText = library => (Exception, ComprModeType, ParmsIdType) => (
      * @function
      * @name PlainText#move
      * @param {PlainText} plain PlainText to move
+     * @example
+     * const plainTextA = Morfix.PlainText()
+     * // ... after encoding some data ...
+     * const plainTextB = Morfix.PlainText()
+     * plainTextB.move(plainTextA)
+     * // plainTextB holds a the instance of plainTextA.
+     * // plainTextA no longer holds an instance
      */
     move(plain) {
       try {
