@@ -1,7 +1,9 @@
 export const IntegerEncoder = library => (Exception, PlainText) => context => {
+  const Constructor = library.IntegerEncoder
+
   let _instance = null
   try {
-    _instance = new library.IntegerEncoder(context.instance)
+    _instance = new Constructor(context.instance)
   } catch (e) {
     throw Exception.safe(e)
   }
@@ -39,7 +41,8 @@ export const IntegerEncoder = library => (Exception, PlainText) => context => {
         _instance.delete()
         _instance = null
       }
-      _instance = instance
+      _instance = new Constructor(instance)
+      instance.delete()
     },
 
     /**

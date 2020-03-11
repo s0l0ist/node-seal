@@ -1,14 +1,12 @@
 export const GaloisKeys = library => (Exception, ComprModeType) => (
   instance = null
 ) => {
-  let _instance = instance
-
-  if (!instance) {
-    try {
-      _instance = new library.GaloisKeys()
-    } catch (e) {
-      throw Exception.safe(e)
-    }
+  const Constructor = library.GaloisKeys
+  let _instance
+  try {
+    _instance = instance ? new Constructor(instance) : new Constructor()
+  } catch (e) {
+    throw Exception.safe(e)
   }
 
   /**
@@ -44,7 +42,8 @@ export const GaloisKeys = library => (Exception, ComprModeType) => (
         _instance.delete()
         _instance = null
       }
-      _instance = instance
+      _instance = new Constructor(instance)
+      instance.delete()
     },
 
     /**
@@ -60,6 +59,18 @@ export const GaloisKeys = library => (Exception, ComprModeType) => (
         _instance.delete()
         _instance = null
       }
+    },
+
+    /**
+     * Returns the current number of keyswitching keys. Only keys that are
+     * non-empty are counted.
+     *
+     * @readonly
+     * @name GaloisKeys#size
+     * @type {Number}
+     */
+    get size() {
+      return _instance.size()
     },
 
     /**
@@ -89,6 +100,56 @@ export const GaloisKeys = library => (Exception, ComprModeType) => (
     load(context, encoded) {
       try {
         _instance.loadFromString(context.instance, encoded)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Copy an existing GaloisKeys and overwrite this instance
+     *
+     * @function
+     * @name GaloisKeys#copy
+     * @param {GaloisKeys} key GaloisKeys to copy
+     */
+    copy(key) {
+      try {
+        _instance.copy(key.instance)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Clone and return a new instance of this GaloisKeys
+     *
+     * @function
+     * @name GaloisKeys#clone
+     * @returns {GaloisKeys}
+     */
+    clone() {
+      try {
+        const clonedInstance = _instance.clone()
+        return GaloisKeys(library)(Exception, ComprModeType)(clonedInstance)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Move a GaloisKeys into this one and delete the old reference
+     *
+     * @function
+     * @name GaloisKeys#move
+     * @param {GaloisKeys} key GaloisKeys to move
+     */
+    move(key) {
+      try {
+        _instance.move(key.instance)
+        // TODO: find optimization
+        // This method results in a copy instead of a real move.
+        // Therefore, we need to delete the old instance.
+        key.delete()
       } catch (e) {
         throw Exception.safe(e)
       }

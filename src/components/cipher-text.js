@@ -3,13 +3,12 @@ export const CipherText = library => (
   ComprModeType,
   ParmsIdType
 ) => (instance = null) => {
-  let _instance = instance
-  if (!instance) {
-    try {
-      _instance = new library.Ciphertext()
-    } catch (e) {
-      throw Exception.safe(e)
-    }
+  const Constructor = library.Ciphertext
+  let _instance
+  try {
+    _instance = instance ? new Constructor(instance) : new Constructor()
+  } catch (e) {
+    throw Exception.safe(e)
   }
 
   /**
@@ -45,7 +44,8 @@ export const CipherText = library => (
         _instance.delete()
         _instance = null
       }
-      _instance = instance
+      _instance = new Constructor(instance)
+      instance.delete()
     },
 
     /**
@@ -256,6 +256,58 @@ export const CipherText = library => (
     load(context, encoded) {
       try {
         _instance.loadFromString(context.instance, encoded)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Copy an existing CipherText and overwrite this instance
+     *
+     * @function
+     * @name CipherText#copy
+     * @param {CipherText} encrypted CipherText to copy
+     */
+    copy(encrypted) {
+      try {
+        _instance.copy(encrypted.instance)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Clone and return a new instance of this CipherText
+     *
+     * @function
+     * @name CipherText#clone
+     * @returns {CipherText}
+     */
+    clone() {
+      try {
+        const clonedInstance = _instance.clone()
+        return CipherText(library)(Exception, ComprModeType, ParmsIdType)(
+          clonedInstance
+        )
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Move a CipherText into this one and delete the old reference
+     *
+     * @function
+     * @name CipherText#move
+     * @param {CipherText} encrypted CipherText to move
+     */
+    move(encrypted) {
+      try {
+        _instance.move(encrypted.instance)
+        // TODO: find optimization
+        // This method results in a copy instead of a real move.
+        // Therefore, we need to delete the old instance.
+        encrypted.delete()
       } catch (e) {
         throw Exception.safe(e)
       }

@@ -25,14 +25,14 @@ export const EncryptionParameterQualifiers = library => Exception => (
     },
 
     /**
-     * Inject this object with a raw WASM instance
+     * Inject this object with a raw WASM instance. No type checking is performed.
      *
      * @private
      * @function
-     * @name EncryptionParameterQualifiers#inject
+     * @name EncryptionParameterQualifiers#unsafeInject
      * @param {instance} instance WASM instance
      */
-    inject(instance) {
+    unsafeInject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
