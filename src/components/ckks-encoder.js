@@ -4,9 +4,10 @@ export const CKKSEncoder = library => (
   PlainText,
   Vector
 ) => context => {
+  const Constructor = library.CKKSEncoder
   let _instance = null
   try {
-    _instance = new library.CKKSEncoder(context.instance)
+    _instance = new Constructor(context.instance)
   } catch (e) {
     throw Exception.safe(e)
   }
@@ -32,14 +33,14 @@ export const CKKSEncoder = library => (
     },
 
     /**
-     * Inject this object with a raw WASM instance
+     * Inject this object with a raw WASM instance. No type checking is performed.
      *
      * @private
      * @function
-     * @name CKKSEncoder#inject
+     * @name CKKSEncoder#unsafeInject
      * @param {instance} instance WASM instance
      */
-    inject(instance) {
+    unsafeInject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -160,7 +161,7 @@ export const CKKSEncoder = library => (
     decode(plainText, pool = MemoryPoolHandle.global) {
       const tempVect = Vector(new Float64Array(0))
       const instance = _instance.decodeDouble(plainText.instance, pool)
-      tempVect.inject(instance)
+      tempVect.unsafeInject(instance)
       const tempArr = tempVect.toArray()
       tempVect.delete()
       return tempArr

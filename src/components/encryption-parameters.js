@@ -3,6 +3,7 @@ export const EncryptionParameters = library => (
   ComprModeType,
   SmallModulus
 ) => (schemeType, suppressWarning = false) => {
+  const Constructor = library.EncryptionParameters
   let _instance = null
 
   // Normal users must supply a schemeType. If no schemeType is passed in,
@@ -10,7 +11,7 @@ export const EncryptionParameters = library => (
   // EncryptionParameters that ContextData.parms() returns.
   if (schemeType) {
     try {
-      _instance = new library.EncryptionParameters(schemeType)
+      _instance = new Constructor(schemeType)
     } catch (e) {
       throw Exception.safe(e)
     }
@@ -18,10 +19,9 @@ export const EncryptionParameters = library => (
 
   if (!schemeType && !suppressWarning) {
     console.warn(
-      "You're creating an uninitialized EncryptionParameters object. This is probably not what you meant to do. This" +
-        ' constructor is only allowed to' +
-        ' wrap a pointer from `ContextData.parms`. To remove this warning, pass in the option `suppressWarning` set' +
-        " to 'true' in this constructor."
+      "You're creating an uninitialized EncryptionParameters object. This is probably not what you meant to do. An" +
+        ' empty constructor is only allowed to wrap a pointer from `ContextData.parms`. To remove this warning, pass' +
+        " in the option `suppressWarning` set to 'true' in this constructor or call the constructor with a valid SchemeType."
     )
   }
 
@@ -46,14 +46,14 @@ export const EncryptionParameters = library => (
     },
 
     /**
-     * Inject this object with a raw WASM instance
+     * Inject this object with a raw WASM instance. No type checking is performed.
      *
      * @private
      * @function
-     * @name EncryptionParameters#inject
+     * @name EncryptionParameters#unsafeInject
      * @param {instance} instance WASM instance
      */
-    inject(instance) {
+    unsafeInject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null

@@ -3,6 +3,64 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 4.0.2
+Feat:
+- Added `copy`, `clone` and `move` instance methods to `CipherTexts`, `PlainTexts`, and all variants of `Keys`.
+    - Instead of assignment by reference in JS, use the new methods (this goes for all variables and key types)
+    - Examples can be found in the docs. For example, the [CipherText Docs](https://docs.morfix.io/CipherText.html)
+    ```javascript
+    const cipherText = Morfix.CipherText()
+    // ... after some data has been encrypted...
+  
+    // Naïve assignment
+    // This newCipherText.instance will be a reference to the cipherText.instance, which may not be desirable.
+    // If cipherText.delete() is called, then newCipherText.instance will also be `null`.
+    const newCipherText = cipherText
+  
+    // Ex: `clone` generates a new CipherText containing the cloned instance
+    // copyCipherText.instance is now an exact clone of cipherText.instance.
+    // If cipherText.delete() is called, it will have no effect on newCipherText.instance and vice versa.
+    const cloneCipherText = cipherText.clone()
+  
+    // Ex: `copy` copies an existing CipherText and overwrites its own internal instance.
+    // copyCipherText.instance is now a copy of cipherText.instance.
+    // If cipherText.delete() is called, it will have no effect on newCipherText.instance and vice versa.
+    const copyCipherText = Morfix.CipherText()
+    copyCipherText.copy(cipherText) 
+  
+    // Ex: `move` moves an existing CipherText and overwites its own internal instance, but sets the old one to null.
+    // cipherText.instance has been moved to moveCipherText.instance and cipherText.instance is now null.
+    const moveCipherText = Morfix.CipherText()
+    moveCipherText.move(cipherText) 
+    ```
+- Added `size` getter to `CipherTexts` and `PlainTexts`.
+- Added new method `evaluator.dotProduct` for obtaining the dot product of two `CipherTexts`. The result contains the
+ sum inside every slot of the vector.
+  ```javascript
+  // pseudo code
+  // CipherText (cipherA) contains the following encrypted values: [1, 2, 3, 4, 0, ..., 0]
+  // CipherText (cipherB) contains the following encrypted values: [5, 5, 5, 5, 0, ..., 0]
+  const dot = evaluator.dotProduct(cipherA, cipherB, relinKeys, galoisKeys, SchemeType.BFV)
+  // dot is a CipherText containing the encrypted result of [50, 50, 50, 50, 50, ..., 50]
+  ```
+- Added new method `evaluator.sumElements` for obtaining the sum of all elements in a `CipherText`. The result
+ contains the sum inside every slot of the vector.
+  ```javascript
+  // pseudo code
+  // say some CipherText (cipher) contains the following encrypted values: [1, 2, 3, 4, 0, ..., 0]
+  const sum = evaluator.sumElements(cipher, galoisKeys, SchemeType.BFV)
+  // sum is a CipherText containing the encrypted result of [10, 10, 10, 10, 10, ..., 10]
+  ```
+- Added wasm type checking when using private `inject` methods to help reduce development bugs. Renamed a few
+ dangerous methods as `unsafeInject` which don't check for type binding.
+- Added overload checks to perform safe construction if the `instance` overload is used to all objects. This
+ catches cases of injecting the wrong instance type. This comes at a tiny performance cost since it internally
+ performs a copy or in some cases a move, but ensures type safety.
+
+Chore:
+- Removed unused encode/decode functions which operated on deprecated vectors.
+- Updated emsdk to latest version and rebuilt.
+
 ## Version 4.0.1
 
 Hotfix:

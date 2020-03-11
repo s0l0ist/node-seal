@@ -2,9 +2,10 @@ export const Decryptor = library => (Exception, PlainText) => (
   context,
   secretKey
 ) => {
+  const Constructor = library.Decryptor
   let _instance = null
   try {
-    _instance = new library.Decryptor(context.instance, secretKey.instance)
+    _instance = new Constructor(context.instance, secretKey.instance)
   } catch (e) {
     throw Exception.safe(e)
   }
@@ -30,14 +31,14 @@ export const Decryptor = library => (Exception, PlainText) => (
     },
 
     /**
-     * Inject this object with a raw WASM instance
+     * Inject this object with a raw WASM instance. No type checking is performed.
      *
      * @private
      * @function
-     * @name Decryptor#inject
+     * @name Decryptor#unsafeInject
      * @param {instance} instance WASM instance
      */
-    inject(instance) {
+    unsafeInject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null

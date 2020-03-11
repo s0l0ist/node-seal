@@ -17,6 +17,7 @@ export const SEAL = factories => {
   const PlainModulus = addDeps(Exception)(factories.PlainModulus)
   const SchemeType = addDeps(Exception)(factories.SchemeType)
   const SecurityLevel = addDeps(Exception)(factories.SecurityLevel)
+  const Util = addDeps(Exception)(factories.Util)
 
   // Create our constructors
   const ParmsIdType = addDeps(Exception)(factories.ParmsIdType)
@@ -73,7 +74,8 @@ export const SEAL = factories => {
     Exception,
     MemoryPoolHandle,
     CipherText,
-    PlainText
+    PlainText,
+    SchemeType
   )(factories.Evaluator)
   const PublicKey = addDeps(Exception, ComprModeType)(factories.PublicKey)
   const SecretKey = addDeps(Exception, ComprModeType)(factories.SecretKey)
@@ -960,6 +962,21 @@ export const SEAL = factories => {
      */
     Vector: () => {
       throw new Error('Constructing a vector has been deprecated since 3.2.0')
-    }
+    },
+
+    /**
+     * @description
+     * Utility helper to accelerate mathematically intense operations in WebAssembly
+     *
+     * @readonly
+     * @name SEAL#Util
+     * @type {Util}
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const gcd = Morfix.Util.gcd(BigInt(978), BigInt(384778233434))
+     */
+    Util
   }
 }
