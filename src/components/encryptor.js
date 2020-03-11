@@ -32,20 +32,19 @@ export const Encryptor = library => (
     },
 
     /**
-     * Inject this object with a raw WASM instance
+     * Inject this object with a raw WASM instance. No type checking is performed.
      *
      * @private
      * @function
-     * @name Encryptor#inject
+     * @name Encryptor#unsafeInject
      * @param {instance} instance WASM instance
      */
-    inject(instance) {
+    unsafeInject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
       }
-      _instance = new Constructor(instance)
-      instance.delete()
+      _instance = instance
     },
 
     /**
