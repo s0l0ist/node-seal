@@ -1,14 +1,12 @@
 export const PublicKey = library => (Exception, ComprModeType) => (
   instance = null
 ) => {
-  let _instance = instance
-
-  if (!instance) {
-    try {
-      _instance = new library.PublicKey()
-    } catch (e) {
-      throw Exception.safe(e)
-    }
+  const Constructor = library.PublicKey
+  let _instance
+  try {
+    _instance = instance ? new Constructor(instance) : new Constructor()
+  } catch (e) {
+    throw Exception.safe(e)
   }
 
   /**
@@ -44,7 +42,8 @@ export const PublicKey = library => (Exception, ComprModeType) => (
         _instance.delete()
         _instance = null
       }
-      _instance = instance
+      _instance = new Constructor(instance)
+      instance.delete()
     },
 
     /**
@@ -89,6 +88,56 @@ export const PublicKey = library => (Exception, ComprModeType) => (
     load(context, encoded) {
       try {
         _instance.loadFromString(context.instance, encoded)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Copy an existing PublicKey and overwrite this instance
+     *
+     * @function
+     * @name PublicKey#copy
+     * @param {PublicKey} key PublicKey to copy
+     */
+    copy(key) {
+      try {
+        _instance.copy(key.instance)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Clone and return a new instance of this PublicKey
+     *
+     * @function
+     * @name PublicKey#clone
+     * @returns {PublicKey}
+     */
+    clone() {
+      try {
+        const clonedInstance = _instance.clone()
+        return PublicKey(library)(Exception, ComprModeType)(clonedInstance)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Move a PublicKey into this one and delete the old reference
+     *
+     * @function
+     * @name PublicKey#move
+     * @param {PublicKey} key PublicKey to move
+     */
+    move(key) {
+      try {
+        _instance.move(key.instance)
+        // TODO: find optimization
+        // This method results in a copy instead of a real move.
+        // Therefore, we need to delete the old instance.
+        key.delete()
       } catch (e) {
         throw Exception.safe(e)
       }

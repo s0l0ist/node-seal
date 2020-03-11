@@ -2,9 +2,10 @@ export const Decryptor = library => (Exception, PlainText) => (
   context,
   secretKey
 ) => {
+  const Constructor = library.Decryptor
   let _instance = null
   try {
-    _instance = new library.Decryptor(context.instance, secretKey.instance)
+    _instance = new Constructor(context.instance, secretKey.instance)
   } catch (e) {
     throw Exception.safe(e)
   }
@@ -42,7 +43,8 @@ export const Decryptor = library => (Exception, PlainText) => (
         _instance.delete()
         _instance = null
       }
-      _instance = instance
+      _instance = new Constructor(instance)
+      instance.delete()
     },
 
     /**

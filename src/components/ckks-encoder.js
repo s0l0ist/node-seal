@@ -4,9 +4,10 @@ export const CKKSEncoder = library => (
   PlainText,
   Vector
 ) => context => {
+  const Constructor = library.CKKSEncoder
   let _instance = null
   try {
-    _instance = new library.CKKSEncoder(context.instance)
+    _instance = new Constructor(context.instance)
   } catch (e) {
     throw Exception.safe(e)
   }
@@ -44,7 +45,8 @@ export const CKKSEncoder = library => (
         _instance.delete()
         _instance = null
       }
-      _instance = instance
+      _instance = new Constructor(instance)
+      instance.delete()
     },
 
     /**
@@ -160,7 +162,7 @@ export const CKKSEncoder = library => (
     decode(plainText, pool = MemoryPoolHandle.global) {
       const tempVect = Vector(new Float64Array(0))
       const instance = _instance.decodeDouble(plainText.instance, pool)
-      tempVect.inject(instance)
+      tempVect.unsafeInject(instance)
       const tempArr = tempVect.toArray()
       tempVect.delete()
       return tempArr

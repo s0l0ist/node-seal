@@ -3,9 +3,10 @@ export const Encryptor = library => (
   MemoryPoolHandle,
   CipherText
 ) => (context, publicKey) => {
+  const Constructor = library.Encryptor
   let _instance = null
   try {
-    _instance = new library.Encryptor(context.instance, publicKey.instance)
+    _instance = new Constructor(context.instance, publicKey.instance)
   } catch (e) {
     throw Exception.safe(e)
   }
@@ -43,7 +44,8 @@ export const Encryptor = library => (
         _instance.delete()
         _instance = null
       }
-      _instance = instance
+      _instance = new Constructor(instance)
+      instance.delete()
     },
 
     /**

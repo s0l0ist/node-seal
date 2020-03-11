@@ -3,6 +3,7 @@ export const EncryptionParameters = library => (
   ComprModeType,
   SmallModulus
 ) => (schemeType, suppressWarning = false) => {
+  const Constructor = library.EncryptionParameters
   let _instance = null
 
   // Normal users must supply a schemeType. If no schemeType is passed in,
@@ -10,7 +11,7 @@ export const EncryptionParameters = library => (
   // EncryptionParameters that ContextData.parms() returns.
   if (schemeType) {
     try {
-      _instance = new library.EncryptionParameters(schemeType)
+      _instance = new Constructor(schemeType)
     } catch (e) {
       throw Exception.safe(e)
     }
@@ -58,7 +59,8 @@ export const EncryptionParameters = library => (
         _instance.delete()
         _instance = null
       }
-      _instance = instance
+      _instance = new Constructor(instance)
+      instance.delete()
     },
 
     /**

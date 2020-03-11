@@ -1,10 +1,11 @@
 export const SmallModulus = library => (Exception, ComprModeType) => () => {
+  const Constructor = library.SmallModulus
   // Static methods
   const _saveToString = library.SmallModulus.saveToString
   // const _createFromString = library.SmallModulus.createFromString
   let _instance = null
   try {
-    _instance = new library.SmallModulus()
+    _instance = new Constructor()
   } catch (e) {
     throw Exception.safe(e)
   }
@@ -42,7 +43,8 @@ export const SmallModulus = library => (Exception, ComprModeType) => () => {
         _instance.delete()
         _instance = null
       }
-      _instance = instance
+      _instance = new Constructor(instance)
+      instance.delete()
     },
 
     /**

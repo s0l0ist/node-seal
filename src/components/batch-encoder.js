@@ -4,9 +4,10 @@ export const BatchEncoder = library => (
   PlainText,
   Vector
 ) => context => {
+  const Constructor = library.BatchEncoder
   let _instance = null
   try {
-    _instance = new library.BatchEncoder(context.instance)
+    _instance = new Constructor(context.instance)
   } catch (e) {
     throw Exception.safe(e)
   }
@@ -44,7 +45,8 @@ export const BatchEncoder = library => (
         _instance.delete()
         _instance = null
       }
-      _instance = instance
+      _instance = new Constructor(instance)
+      instance.delete()
     },
 
     /**
@@ -275,7 +277,7 @@ export const BatchEncoder = library => (
       if (signed) {
         const tempVect = Vector(new Int32Array(0))
         const instance = _instance.decodeInt32(plainText.instance, pool)
-        tempVect.inject(instance)
+        tempVect.unsafeInject(instance)
         const tempArr = tempVect.toArray()
         tempVect.delete()
         return tempArr
@@ -283,7 +285,7 @@ export const BatchEncoder = library => (
 
       const tempVect = Vector(new Uint32Array(0))
       const instance = _instance.decodeUInt32(plainText.instance, pool)
-      tempVect.inject(instance)
+      tempVect.unsafeInject(instance)
       const tempArr = tempVect.toArray()
       tempVect.delete()
       return tempArr
