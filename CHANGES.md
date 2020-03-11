@@ -51,7 +51,7 @@ Feat:
   // sum is a CipherText containing the encrypted result of [10, 10, 10, 10, 10, ..., 10]
   ```
 - Added wasm type checking when using private `inject` methods to help reduce development bugs. Renamed a few
- dangerous methods as `unsafeInject` which doesn't check for type binding.
+ dangerous methods as `unsafeInject` which don't check for type binding.
 - Added overload checks to perform safe construction if the `instance` overload is used to all objects. This
  catches cases of injecting the wrong instance type. This comes at a tiny performance cost since it internally
  performs a copy or in some cases a move, but ensures type safety.
