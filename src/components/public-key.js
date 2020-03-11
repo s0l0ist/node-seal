@@ -104,6 +104,11 @@ export const PublicKey = library => (Exception, ComprModeType) => (
      * @function
      * @name PublicKey#copy
      * @param {PublicKey} key PublicKey to copy
+     * @example
+     * const keyA = keyGenerator.getPublicKey()
+     * const keyB = Morfix.PublicKey()
+     * keyB.copy(keyA)
+     * // keyB holds a copy of keyA
      */
     copy(key) {
       try {
@@ -119,6 +124,10 @@ export const PublicKey = library => (Exception, ComprModeType) => (
      * @function
      * @name PublicKey#clone
      * @returns {PublicKey}
+     * @example
+     * const keyA = keyGenerator.getPublicKey()
+     * const keyB = keyA.clone()
+     * // keyB holds a copy of keyA
      */
     clone() {
       try {
@@ -135,6 +144,12 @@ export const PublicKey = library => (Exception, ComprModeType) => (
      * @function
      * @name PublicKey#move
      * @param {PublicKey} key PublicKey to move
+     * @example
+     * const keyA = keyGenerator.getPublicKey()
+     * const keyB = Morfix.PublicKey()
+     * keyB.move(keyA)
+     * // keyB holds a the instance of keyA.
+     * // keyA no longer holds an instance
      */
     move(key) {
       try {

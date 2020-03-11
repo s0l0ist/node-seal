@@ -116,6 +116,11 @@ export const GaloisKeys = library => (Exception, ComprModeType) => (
      * @function
      * @name GaloisKeys#copy
      * @param {GaloisKeys} key GaloisKeys to copy
+     * @example
+     * const keyA = keyGenerator.genGaloisKeys()
+     * const keyB = Morfix.GaloisKeys()
+     * keyB.copy(keyA)
+     * // keyB holds a copy of keyA
      */
     copy(key) {
       try {
@@ -131,6 +136,10 @@ export const GaloisKeys = library => (Exception, ComprModeType) => (
      * @function
      * @name GaloisKeys#clone
      * @returns {GaloisKeys}
+     * @example
+     * const keyA = keyGenerator.genGaloisKeys()
+     * const keyB = keyA.clone()
+     * // keyB holds a copy of keyA
      */
     clone() {
       try {
@@ -147,6 +156,12 @@ export const GaloisKeys = library => (Exception, ComprModeType) => (
      * @function
      * @name GaloisKeys#move
      * @param {GaloisKeys} key GaloisKeys to move
+     * @example
+     * const keyA = keyGenerator.genGaloisKeys()
+     * const keyB = Morfix.GaloisKeys()
+     * keyB.move(keyA)
+     * // keyB holds a the instance of keyA.
+     * // keyA no longer holds an instance
      */
     move(key) {
       try {

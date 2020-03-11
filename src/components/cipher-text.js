@@ -272,6 +272,12 @@ export const CipherText = library => (
      * @function
      * @name CipherText#copy
      * @param {CipherText} encrypted CipherText to copy
+     * @example
+     * const cipherTextA = Morfix.CipherText()
+     * // ... after encrypting some data ...
+     * const cipherTextB = Morfix.CipherText()
+     * cipherTextB.copy(cipherTextA)
+     * // cipherTextB holds a copy of cipherTextA
      */
     copy(encrypted) {
       try {
@@ -287,6 +293,11 @@ export const CipherText = library => (
      * @function
      * @name CipherText#clone
      * @returns {CipherText}
+     * @example
+     * const cipherTextA = Morfix.CipherText()
+     * // ... after encrypting some data ...
+     * const cipherTextB = cipherTextA.clone()
+     * // cipherTextB holds a copy of cipherTextA
      */
     clone() {
       try {
@@ -305,6 +316,13 @@ export const CipherText = library => (
      * @function
      * @name CipherText#move
      * @param {CipherText} encrypted CipherText to move
+     * @example
+     * const cipherTextA = Morfix.CipherText()
+     * // ... after encrypting some data ...
+     * const cipherTextB = Morfix.CipherText()
+     * cipherTextB.move(cipherTextA)
+     * // cipherTextB holds a the instance of cipherTextA.
+     * // cipherTextA no longer holds an instance
      */
     move(encrypted) {
       try {

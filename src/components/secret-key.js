@@ -104,6 +104,11 @@ export const SecretKey = library => (Exception, ComprModeType) => (
      * @function
      * @name SecretKey#copy
      * @param {SecretKey} key SecretKey to copy
+     * @example
+     * const keyA = keyGenerator.getSecretKey()
+     * const keyB = Morfix.SecretKey()
+     * keyB.copy(keyA)
+     * // keyB holds a copy of keyA
      */
     copy(key) {
       try {
@@ -119,6 +124,10 @@ export const SecretKey = library => (Exception, ComprModeType) => (
      * @function
      * @name SecretKey#clone
      * @returns {SecretKey}
+     * @example
+     * const keyA = keyGenerator.getSecretKey()
+     * const keyB = keyA.clone()
+     * // keyB holds a copy of keyA
      */
     clone() {
       try {
@@ -135,6 +144,12 @@ export const SecretKey = library => (Exception, ComprModeType) => (
      * @function
      * @name SecretKey#move
      * @param {SecretKey} key SecretKey to move
+     * @example
+     * const keyA = keyGenerator.getSecretKey()
+     * const keyB = Morfix.SecretKey()
+     * keyB.move(keyA)
+     * // keyB holds a the instance of keyA.
+     * // keyA no longer holds an instance
      */
     move(key) {
       try {
