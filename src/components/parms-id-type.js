@@ -1,12 +1,15 @@
 export const ParmsIdType = library => Exception => (instance = null) => {
-  let _instance = instance
-
-  if (!instance) {
-    try {
-      _instance = new library.ParmsIdType()
-    } catch (e) {
-      throw Exception.safe(e)
+  const Constructor = library.ParmsIdType
+  let _instance
+  try {
+    if (instance) {
+      _instance = new Constructor(instance)
+      instance.delete()
+    } else {
+      _instance = new Constructor()
     }
+  } catch (e) {
+    throw Exception.safe(e)
   }
 
   /**
@@ -42,7 +45,8 @@ export const ParmsIdType = library => Exception => (instance = null) => {
         _instance.delete()
         _instance = null
       }
-      _instance = instance
+      _instance = new Constructor(instance)
+      instance.delete()
     },
 
     /**

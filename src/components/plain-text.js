@@ -1,14 +1,17 @@
 export const PlainText = library => (Exception, ComprModeType, ParmsIdType) => (
   instance = null
 ) => {
-  let _instance = instance
-
-  if (!instance) {
-    try {
-      _instance = new library.Plaintext()
-    } catch (e) {
-      throw Exception.safe(e)
+  const Constructor = library.Plaintext
+  let _instance
+  try {
+    if (instance) {
+      _instance = new Constructor(instance)
+      instance.delete()
+    } else {
+      _instance = new Constructor()
     }
+  } catch (e) {
+    throw Exception.safe(e)
   }
 
   /**
@@ -44,7 +47,8 @@ export const PlainText = library => (Exception, ComprModeType, ParmsIdType) => (
         _instance.delete()
         _instance = null
       }
-      _instance = instance
+      _instance = new Constructor(instance)
+      instance.delete()
     },
 
     /**
@@ -302,6 +306,76 @@ export const PlainText = library => (Exception, ComprModeType, ParmsIdType) => (
     load(context, encoded) {
       try {
         _instance.loadFromString(context.instance, encoded)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Copy an existing PlainText and overwrite this instance
+     *
+     * @function
+     * @name PlainText#copy
+     * @param {PlainText} plain PlainText to copy
+     * @example
+     * const plainTextA = Morfix.PlainText()
+     * // ... after encoding some data ...
+     * const plainTextB = Morfix.PlainText()
+     * plainTextB.copy(plainTextA)
+     * // plainTextB holds a copy of plainTextA
+     */
+    copy(plain) {
+      try {
+        _instance.copy(plain.instance)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Clone and return a new instance of this PlainText
+     *
+     * @function
+     * @name PlainText#clone
+     * @returns {PlainText}
+     * @example
+     * const plainTextA = Morfix.PlainText()
+     * // ... after encoding some data ...
+     * const plainTextB = plainTextA.clone()
+     * // plainTextB holds a copy of plainTextA
+     */
+    clone() {
+      try {
+        const clonedInstance = _instance.clone()
+        return PlainText(library)(Exception, ComprModeType, ParmsIdType)(
+          clonedInstance
+        )
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Move a PlainText into this one and delete the old reference
+     *
+     * @function
+     * @name PlainText#move
+     * @param {PlainText} plain PlainText to move
+     * @example
+     * const plainTextA = Morfix.PlainText()
+     * // ... after encoding some data ...
+     * const plainTextB = Morfix.PlainText()
+     * plainTextB.move(plainTextA)
+     * // plainTextB holds a the instance of plainTextA.
+     * // plainTextA no longer holds an instance
+     */
+    move(plain) {
+      try {
+        _instance.move(plain.instance)
+        // TODO: find optimization
+        // This method results in a copy instead of a real move.
+        // Therefore, we need to delete the old instance.
+        plain.delete()
       } catch (e) {
         throw Exception.safe(e)
       }

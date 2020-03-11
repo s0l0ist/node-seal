@@ -3,12 +3,14 @@ export const Context = library => (Exception, ParmsIdType, ContextData) => (
   expandModChain,
   securityLevel
 ) => {
+  const Constructor = library.SEALContext
+
   // Static methods
   const _printContext = library.printContext
 
   let _instance = null
   try {
-    _instance = new library.SEALContext(
+    _instance = new Constructor(
       encryptionParams.instance,
       expandModChain,
       securityLevel
@@ -38,14 +40,14 @@ export const Context = library => (Exception, ParmsIdType, ContextData) => (
     },
 
     /**
-     * Inject this object with a raw WASM instance
+     * Inject this object with a raw WASM instance. No type checking is performed.
      *
      * @private
      * @function
-     * @name Context#inject
+     * @name Context#unsafeInject
      * @param {instance} instance WASM instance
      */
-    inject(instance) {
+    unsafeInject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
@@ -96,7 +98,7 @@ export const Context = library => (Exception, ParmsIdType, ContextData) => (
       try {
         const instance = _instance.getContextData(parmsId.instance)
         const contextData = ContextData()
-        contextData.inject(instance)
+        contextData.unsafeInject(instance)
         return contextData
       } catch (e) {
         throw Exception.safe(e)
@@ -114,7 +116,7 @@ export const Context = library => (Exception, ParmsIdType, ContextData) => (
       try {
         const instance = _instance.keyContextData()
         const contextData = ContextData()
-        contextData.inject(instance)
+        contextData.unsafeInject(instance)
         return contextData
       } catch (e) {
         throw Exception.safe(e)
@@ -132,7 +134,7 @@ export const Context = library => (Exception, ParmsIdType, ContextData) => (
       try {
         const instance = _instance.firstContextData()
         const contextData = ContextData()
-        contextData.inject(instance)
+        contextData.unsafeInject(instance)
         return contextData
       } catch (e) {
         throw Exception.safe(e)
@@ -150,7 +152,7 @@ export const Context = library => (Exception, ParmsIdType, ContextData) => (
       try {
         const instance = _instance.lastContextData()
         const contextData = ContextData()
-        contextData.inject(instance)
+        contextData.unsafeInject(instance)
         return contextData
       } catch (e) {
         throw Exception.safe(e)
