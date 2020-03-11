@@ -57,7 +57,8 @@ Feat:
  performs a copy or in some cases a move, but ensures type safety.
 
 Chore:
-- Removed unused encode/decode functions which operated on deprecated vectors
+- Removed unused encode/decode functions which operated on deprecated vectors.
+- Updated emsdk to latest version and rebuilt.
 
 ## Version 4.0.1
 
