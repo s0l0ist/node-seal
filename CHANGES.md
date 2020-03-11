@@ -6,7 +6,8 @@ for more details on each SEAL version change.
 ## Version 4.0.2
 Feat:
 - Added `copy`, `clone` and `move` instance methods to `CipherTexts`, `PlainTexts`, and all variants of `Keys`.
-    - Instead of assignment by reference in JS, use the new methods (this goes for all variables and key types):
+    - Instead of assignment by reference in JS, use the new methods (this goes for all variables and key types)
+    - Examples can be found in the docs. For example, the [CipherText Docs](https://docs.morfix.io/CipherText.html)
     ```javascript
     const cipherText = Morfix.CipherText()
     // ... after some data has been encrypted...
