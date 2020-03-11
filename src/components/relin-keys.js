@@ -4,7 +4,12 @@ export const RelinKeys = library => (Exception, ComprModeType) => (
   const Constructor = library.RelinKeys
   let _instance
   try {
-    _instance = instance ? new Constructor(instance) : new Constructor()
+    if (instance) {
+      _instance = new Constructor(instance)
+      instance.delete()
+    } else {
+      _instance = new Constructor()
+    }
   } catch (e) {
     throw Exception.safe(e)
   }
