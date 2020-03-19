@@ -14,7 +14,12 @@ export const SEAL = factories => {
   const CoeffModulus = addDeps(Exception)(factories.CoeffModulus)
   const ComprModeType = addDeps(Exception)(factories.ComprModeType)
   const MemoryPoolHandle = addDeps(Exception)(factories.MemoryPoolHandle)
-  const PlainModulus = addDeps(Exception)(factories.PlainModulus)
+  const SmallModulus = addDeps(Exception, ComprModeType)(factories.SmallModulus)
+  const PlainModulus = addDeps(
+    Exception,
+    ComprModeType,
+    SmallModulus
+  )(factories.PlainModulus)
   const SchemeType = addDeps(Exception)(factories.SchemeType)
   const SecurityLevel = addDeps(Exception)(factories.SecurityLevel)
   const Util = addDeps(Exception)(factories.Util)
@@ -47,7 +52,6 @@ export const SEAL = factories => {
   const EncryptionParameterQualifiers = addDeps(Exception)(
     factories.EncryptionParameterQualifiers
   )
-  const SmallModulus = addDeps(Exception, ComprModeType)(factories.SmallModulus)
   const EncryptionParameters = addDeps(
     Exception,
     ComprModeType,
@@ -140,7 +144,7 @@ export const SEAL = factories => {
      * ...
      * const batchEncoder = Morfix.BatchEncoder(context)
      */
-    BatchEncoder: context => BatchEncoder(context),
+    BatchEncoder,
 
     /**
      * @description
@@ -181,7 +185,7 @@ export const SEAL = factories => {
      * ...
      * const cipherText = Morfix.CipherText()
      */
-    CipherText: (instance = null) => CipherText(instance),
+    CipherText,
 
     /**
      * @description
@@ -216,7 +220,7 @@ export const SEAL = factories => {
      * ...
      * const ckksEncoder = Morfix.CKKSEncoder(context)
      */
-    CKKSEncoder: context => CKKSEncoder(context),
+    CKKSEncoder,
 
     /**
      * @description
@@ -320,8 +324,7 @@ export const SEAL = factories => {
      * ...
      * const context = Morfix.Context(encParms, true, Morfix.SecurityLevel.tc128)
      */
-    Context: (encryptionParams, expandModChain, securityLevel) =>
-      Context(encryptionParams, expandModChain, securityLevel),
+    Context,
 
     /**
      * @description
@@ -362,7 +365,7 @@ export const SEAL = factories => {
      * ...
      * const decryptor = Morfix.Decryptor(context, secretKey)
      */
-    Decryptor: (context, secretKey) => Decryptor(context, secretKey),
+    Decryptor,
 
     /**
      * @description
@@ -411,7 +414,7 @@ export const SEAL = factories => {
      * ...
      * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
      */
-    EncryptionParameters: schemeType => EncryptionParameters(schemeType),
+    EncryptionParameters,
 
     /**
      * @description
@@ -453,7 +456,7 @@ export const SEAL = factories => {
      * ...
      * const encryptor = Morfix.Encryptor(context, publicKey)
      */
-    Encryptor: (context, publicKey) => Encryptor(context, publicKey),
+    Encryptor,
 
     /**
      * @description
@@ -530,7 +533,7 @@ export const SEAL = factories => {
      * ...
      * const evaluator = Morfix.Evaluator(context)
      */
-    Evaluator: context => Evaluator(context),
+    Evaluator,
 
     /**
      * @description
@@ -590,7 +593,7 @@ export const SEAL = factories => {
      * const keyGenerator = Morfix.KeyGenerator(context)
      * const galoisKeys = keyGenerator.genGaloisKeys()
      */
-    GaloisKeys: () => GaloisKeys(),
+    GaloisKeys,
 
     /**
      * @description
@@ -621,7 +624,7 @@ export const SEAL = factories => {
      * ...
      * const integerEncoder = Morfix.IntegerEncoder(context)
      */
-    IntegerEncoder: context => IntegerEncoder(context),
+    IntegerEncoder,
 
     /**
      * @description
@@ -654,8 +657,7 @@ export const SEAL = factories => {
      * // In addition, pass in an existing PublicKey with a SecetKey to avoid unnecessary key generation
      * const keyGenerator = Morfix.KeyGenerator(context, secretKey, publicKey)
      */
-    KeyGenerator: (context, secretKey = null, publicKey = null) =>
-      KeyGenerator(context, secretKey, publicKey),
+    KeyGenerator,
 
     /**
      * @description
@@ -773,7 +775,7 @@ export const SEAL = factories => {
      * ...
      * const plainText = Morfix.PlainText()
      */
-    PlainText: (instance = null) => PlainText(instance),
+    PlainText,
 
     /**
      * @description
@@ -804,7 +806,7 @@ export const SEAL = factories => {
      * const keyGenerator = Morfix.KeyGenerator(context)
      * const publicKey = keyGenerator.getPublicKey()
      */
-    PublicKey: () => PublicKey(),
+    PublicKey,
 
     /**
      * @description
@@ -858,7 +860,7 @@ export const SEAL = factories => {
      * const keyGenerator = Morfix.KeyGenerator(context)
      * const relinKeys = keyGenerator.genRelinKeys()
      */
-    RelinKeys: () => RelinKeys(),
+    RelinKeys,
 
     /**
      * @description
@@ -904,7 +906,7 @@ export const SEAL = factories => {
      * const keyGenerator = Morfix.KeyGenerator(context)
      * const secretKey = keyGenerator.getSecretKey()
      */
-    SecretKey: () => SecretKey(),
+    SecretKey,
 
     /**
      * @description
@@ -941,7 +943,7 @@ export const SEAL = factories => {
      * const smallModulus = Morfix.SmallModulus()
      * smallModulus.setValue('5')
      */
-    SmallModulus: () => SmallModulus(),
+    SmallModulus,
 
     /**
      * @description

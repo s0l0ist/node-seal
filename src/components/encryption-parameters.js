@@ -132,7 +132,7 @@ export const EncryptionParameters = library => (
      */
     setPlainModulus(plainModulus) {
       try {
-        _instance.setPlainModulus(plainModulus)
+        _instance.setPlainModulus(plainModulus.instance)
       } catch (e) {
         throw Exception.safe(e)
       }

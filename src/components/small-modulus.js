@@ -2,12 +2,13 @@ export const SmallModulus = library => (Exception, ComprModeType) => (
   instance = null
 ) => {
   const Constructor = library.SmallModulus
-  // Static methods
-  const _saveToString = library.SmallModulus.saveToString
-  // const _createFromString = library.SmallModulus.createFromString
+
   let _instance
   try {
-    if (instance) {
+    if (typeof instance === 'string') {
+      _instance = new Constructor()
+      _instance.setValue(instance)
+    } else if (instance) {
       _instance = new Constructor(instance)
       instance.delete()
     } else {
@@ -78,7 +79,7 @@ export const SmallModulus = library => (Exception, ComprModeType) => (
      */
     setValue(value) {
       try {
-        _instance.loadFromString(value + '')
+        _instance.setValue(value)
       } catch (e) {
         throw Exception.safe(e)
       }
@@ -139,7 +140,7 @@ export const SmallModulus = library => (Exception, ComprModeType) => (
      */
     save(compression = ComprModeType.deflate) {
       try {
-        return _saveToString(compression)
+        return _instance.saveToString(compression)
       } catch (e) {
         throw Exception.safe(e)
       }

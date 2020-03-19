@@ -3,6 +3,22 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 4.0.3
+
+Fix: 
+- `ContextData.parms` was throwing an exception when attempting to access this parameter.
+- `SmallModulus.setValue` now properly sets the value by passing a string representing
+  a 64-bit integer.
+- `SmallModulus` constructor now accepts a string representing a 64-bit integer as a constructor
+- **Internal** changes to some WASM constructors to use the 'move' constructor overload as opposed to 'copy'.
+- `PlainModulus.Batching` now returns a wrapped instance of `SmallModulus`
+- You may now pass in a specific `SmallModulus` into `parms.setPlainModulus(Morfix.SmallModulus('786433'))` in addition to
+ generating one using `PlainModulus.Batching(...)`. This string argument is converted to a 64-bit unsigned integer
+ for the C++ method to consume.
+
+Feat:
+- Added benchmark script in the [benchmark](benchmark) folder. More will be added in the near future.
+
 ## Version 4.0.2
 Feat:
 - Added `copy`, `clone` and `move` instance methods to `CipherTexts`, `PlainTexts`, and all variants of `Keys`.
