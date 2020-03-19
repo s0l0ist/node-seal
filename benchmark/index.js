@@ -2,12 +2,12 @@ const { Seal } = require('../dist/seal.node')
 const { performance } = require('perf_hooks')
 
 ;(async function() {
-  const benchmark = start()
+  const benchmark = create()
   await benchmark.init()
   benchmark.exampleBfvPerformanceDefault()
 })()
 
-function start() {
+function create() {
   let seal = null
 
   function randomIntInc(low, high) {
