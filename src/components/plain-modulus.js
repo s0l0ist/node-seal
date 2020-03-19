@@ -1,4 +1,8 @@
-export const PlainModulus = library => Exception => {
+export const PlainModulus = library => (
+  Exception,
+  ComprModeType,
+  SmallModulus
+) => {
   // Static methods
   const _Batching = library.PlainModulus.Batching
   const _BatchingVector = library.PlainModulus.BatchingVector
@@ -23,7 +27,7 @@ export const PlainModulus = library => Exception => {
      */
     Batching(polyModulusDegree, bitSize) {
       try {
-        return _Batching(polyModulusDegree, bitSize)
+        return SmallModulus(_Batching(polyModulusDegree, bitSize))
       } catch (e) {
         throw Exception.safe(e)
       }
