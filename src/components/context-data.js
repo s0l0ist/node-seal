@@ -69,7 +69,7 @@ export const ContextData = library => (
       try {
         const instance = _instance.parms()
         const encryptionParameters = EncryptionParameters(true)
-        encryptionParameters.inject(instance)
+        encryptionParameters.unsafeInject(instance)
         return encryptionParameters
       } catch (e) {
         throw Exception.safe(e)
