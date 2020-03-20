@@ -58,16 +58,11 @@ export const CoeffModulus = library => Exception => {
      */
     Create(polyModulusDegree, bitSizes) {
       try {
-        if (bitSizes.constructor === Object) {
-          throw new Error(
-            'CoeffModulus.Create with `bitSizes` of type Vector has been deprecated since 3.2.0, use an Int32Array'
-          )
-        }
         if (bitSizes.constructor === Int32Array) {
           return _CreateFromArray(polyModulusDegree, bitSizes)
         }
         throw new Error(
-          'Unsupported argument type! `bitSizes` must be either an Int32Array'
+          'Unsupported argument type! `bitSizes` must be an Int32Array'
         )
       } catch (e) {
         throw Exception.safe(e)

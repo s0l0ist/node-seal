@@ -15,10 +15,12 @@ export const SEAL = factories => {
   const ComprModeType = addDeps(Exception)(factories.ComprModeType)
   const MemoryPoolHandle = addDeps(Exception)(factories.MemoryPoolHandle)
   const SmallModulus = addDeps(Exception, ComprModeType)(factories.SmallModulus)
+  const Vector = addDeps(Exception)(factories.Vector)
   const PlainModulus = addDeps(
     Exception,
     ComprModeType,
-    SmallModulus
+    SmallModulus,
+    Vector
   )(factories.PlainModulus)
   const SchemeType = addDeps(Exception)(factories.SchemeType)
   const SecurityLevel = addDeps(Exception)(factories.SecurityLevel)
@@ -36,7 +38,6 @@ export const SEAL = factories => {
     ComprModeType,
     ParmsIdType
   )(factories.CipherText)
-  const Vector = addDeps(Exception)(factories.Vector)
   const BatchEncoder = addDeps(
     Exception,
     MemoryPoolHandle,
@@ -328,6 +329,18 @@ export const SEAL = factories => {
 
     /**
      * @description
+     * Hold pre-computation data for a given set of encryption parameters. Users should not need to directly create
+     * this instance as it is used internally by the Seal Context.
+     *
+     * @private
+     * @function
+     * @name SEAL#ContextData
+     * @returns {ContextData} The underlying context data from a given seal context
+     */
+    ContextData,
+
+    /**
+     * @description
      * Decrypts CipherText objects into PlainText objects. Constructing a Decryptor
      * requires a Context with valid encryption parameters, and the secret key.
      * The Decryptor is also used to compute the invariant noise budget in a given
@@ -415,6 +428,32 @@ export const SEAL = factories => {
      * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
      */
     EncryptionParameters,
+
+    /**
+     * @description
+     * Stores a set of attributes (qualifiers) of a set of encryption parameters.
+     * These parameters are mainly used internally in various parts of the library,
+     * e.g., to determine which algorithmic optimizations the current support. The
+     * qualifiers are automatically created by the SEALContext class, silently passed
+     * on to classes such as Encryptor, Evaluator, and Decryptor, and the only way to
+     * change them is by changing the encryption parameters themselves. In other
+     * words, a user will never have to create their own instance of this class, and
+     * in most cases never have to worry about it at all.
+     *
+     * @private
+     * @function
+     * @name SEAL#EncryptionParameterQualifiers
+     * @returns {EncryptionParameterQualifiers} The qualifiers of the encryption parameters
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+     * ...
+     * const context = Morfix.Context(encParms, true, Morfix.SecurityLevel.tc128)
+     * const qualifiers = context.qualifiers
+     */
+    EncryptionParameterQualifiers,
 
     /**
      * @description
@@ -718,6 +757,30 @@ export const SEAL = factories => {
 
     /**
      * @description
+     * The EncryptionParameters class maintains at all times a 256-bit hash of the
+     * currently set encryption parameters called the ParmsIdType. This hash acts as
+     * a unique identifier of the encryption parameters and is used by all further
+     * objects created for these encryption parameters. The ParmsIdType is not intended
+     * to be directly modified by the user but is used internally for pre-computation
+     * data lookup and input validity checks. In modulus switching the user can use
+     * the ParmsIdType to keep track of the chain of encryption parameters. The ParmsIdType
+     * is not exposed in the public API of EncryptionParameters, but can be accessed
+     * through the Context.ContextData class once the Context has been created.
+     *
+     * @private
+     * @name SEAL#ParmsIdType
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+     * const context = Morfix.Context(encParms, true, Morfix.SecurityLevel.tc128)
+     * const parmsId = context.firstParmsId
+     */
+    ParmsIdType,
+
+    /**
+     * @description
      * Contains static methods for creating a PlainText modulus easily
      *
      * @readonly
@@ -962,9 +1025,7 @@ export const SEAL = factories => {
      * const vectorUint32 = Morfix.Vector(Uint32Array.from([1, 2, 3]))
      * const vectorFloat64 = Morfix.Vector(Float64Array.from([1.11, 2.22, 3.33]))
      */
-    Vector: () => {
-      throw new Error('Constructing a vector has been deprecated since 3.2.0')
-    },
+    Vector,
 
     /**
      * @description

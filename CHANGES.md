@@ -3,6 +3,28 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 4.1.0
+
+Breaking:
+- `CipherText.reserve` now requires two arguments to be provided, `context, sizeCapacity`. This is because reserving
+ memory before data is encrypted into the cipher instance will have no effect. Due to current constructor limitations
+ , this is the only way to preemptively reserve memory for a cipher.
+
+Feat:
+- `applyGalois` is now supported!
+- `GaloisKeys` has two new methods: `getIndex`, `hasKey`.
+- `RelinKeys` has two new methods: `getIndex`, `hasKey`.
+- `SmallModulus` has a `load` method which takes in a base64 string produces from `save`
+
+Fix:
+- `cipherTransformFromNtt` was calling the wrong method when destination parameter was not supplied.
+- `decode` in the batch encoder is now wrapped with the WASM error handler.
+- `PlainText.resize` now actually resizes to the specified value
+
+
+Chore:
+- Unit tests have been made for all objects.
+
 ## Version 4.0.3
 
 Fix: 

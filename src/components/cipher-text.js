@@ -75,11 +75,12 @@ export const CipherText = library => (
      *
      * @function
      * @name CipherText#reserve
+     * @param {Context} context The SEAL Context
      * @param {Number} capacity The capacity to reserve
      */
-    reserve(capacity) {
+    reserve(context, capacity) {
       try {
-        return _instance.reserve(capacity)
+        return _instance.reserve(context.instance, capacity)
       } catch (e) {
         throw Exception.safe(e)
       }
