@@ -14,9 +14,13 @@ Feat:
 - `applyGalois` is now supported!
 - `GaloisKeys` has two new methods: `getIndex`, `hasKey`.
 - `RelinKeys` has two new methods: `getIndex`, `hasKey`.
+- `SmallModulus` has a `load` method which takes in a base64 string produces from `save`
 
 Fix:
 - `cipherTransformFromNtt` was calling the wrong method when destination parameter was not supplied.
+- `decode` in the batch encoder is now wrapped with the WASM error handler.
+- `PlainText.resize` now actually resizes to the specified value
+
 
 Chore:
 - Unit tests have been made for all objects.
