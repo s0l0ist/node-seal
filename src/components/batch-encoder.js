@@ -273,21 +273,25 @@ export const BatchEncoder = library => (
      * const resultU = batchEncoder.decode(plainTextU, false) // To decode as an Uint32Array
      */
     decode(plainText, signed = true, pool = MemoryPoolHandle.global) {
-      if (signed) {
-        const tempVect = Vector(new Int32Array(0))
-        const instance = _instance.decodeInt32(plainText.instance, pool)
+      try {
+        if (signed) {
+          const tempVect = Vector(new Int32Array(0))
+          const instance = _instance.decodeInt32(plainText.instance, pool)
+          tempVect.unsafeInject(instance)
+          const tempArr = tempVect.toArray()
+          tempVect.delete()
+          return tempArr
+        }
+
+        const tempVect = Vector(new Uint32Array(0))
+        const instance = _instance.decodeUInt32(plainText.instance, pool)
         tempVect.unsafeInject(instance)
         const tempArr = tempVect.toArray()
         tempVect.delete()
         return tempArr
+      } catch (e) {
+        throw Exception.safe(e)
       }
-
-      const tempVect = Vector(new Uint32Array(0))
-      const instance = _instance.decodeUInt32(plainText.instance, pool)
-      tempVect.unsafeInject(instance)
-      const tempArr = tempVect.toArray()
-      tempVect.delete()
-      return tempArr
     },
 
     /**
