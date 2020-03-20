@@ -59,6 +59,22 @@ describe('GaloisKeys', () => {
     expect(item.instance).toBeNull()
     expect(() => item.save()).toThrow(TypeError)
   })
+  test('It should get the index of a galois element', () => {
+    const item = keyGenerator.genGaloisKeys()
+    const spyOn = jest.spyOn(item, 'getIndex')
+    const index = item.getIndex(3)
+    expect(spyOn).toHaveBeenCalledWith(3)
+    expect(typeof index).toBe('number')
+    expect(index).toBe(1)
+  })
+  test('It should return true if the galois element exists', () => {
+    const item = keyGenerator.genGaloisKeys()
+    const spyOn = jest.spyOn(item, 'hasKey')
+    const index = item.hasKey(3)
+    expect(spyOn).toHaveBeenCalledWith(3)
+    expect(typeof index).toBe('boolean')
+    expect(index).toBe(true)
+  })
   test('It should save to a string', () => {
     const item = Morfix.GaloisKeys()
     const spyOn = jest.spyOn(item, 'save')
