@@ -111,6 +111,7 @@ export const Vector = library => Exception => (array = new Int32Array(0)) => {
      *
      * This method is mainly used for debugging this library
      *
+     * @private
      * @function
      * @name Vector#printMatrix
      * @param {Number} rowSize Number of rows in of the Vector (BFV = polyModDeg / 2, CKKS = polyModDeg)
@@ -136,6 +137,7 @@ export const Vector = library => Exception => (array = new Int32Array(0)) => {
      *
      * This method is mainly used for debugging this library
      *
+     * @private
      * @function
      * @name Vector#printVector
      * @param {Number} [printSize=4] Number of elements to print
@@ -164,13 +166,14 @@ export const Vector = library => Exception => (array = new Int32Array(0)) => {
     /**
      * Convert a typed array to a vector.
      *
+     * @private
      * @function
      * @name Vector#fromArray
      * @param {(Int32Array|Uint32Array|Float64Array)} array Array of data to save to a Vector
      * @returns {Vector<(Int32Array|Uint32Array|Float64Array)>} Vector containing the same data type as the array
      */
     fromArray(array) {
-      _fromArray(array)
+      return _fromArray(array)
     },
 
     /**

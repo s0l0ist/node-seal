@@ -1,7 +1,8 @@
 export const PlainModulus = library => (
   Exception,
   ComprModeType,
-  SmallModulus
+  SmallModulus,
+  Vector
 ) => {
   // Static methods
   const _Batching = library.PlainModulus.Batching
@@ -41,12 +42,15 @@ export const PlainModulus = library => (
      * @function
      * @name PlainModulus.BatchingVector
      * @param {Number} polyModulusDegree The degree of the polynomial modulus
-     * @param {Vector} bitSizes Vector containing int32 values representing bit-sizes of primes
+     * @param {Int32Array} bitSizes Int32Array containing values representing bit-sizes of primes
      * @returns {Vector<SmallModulus>} Vector of SmallModulus containing prime numbers
      */
     BatchingVector(polyModulusDegree, bitSizes) {
       try {
-        return _BatchingVector(polyModulusDegree, bitSizes.instance)
+        const vectBitSizes = Vector(bitSizes)
+        const vect = _BatchingVector(polyModulusDegree, vectBitSizes.instance)
+        vectBitSizes.delete()
+        return vect
       } catch (e) {
         throw Exception.safe(e)
       }
