@@ -5,19 +5,15 @@ let parms = null
 let context = null
 let encoder = null
 let keyGen = null
-let secretKey = null
 let publicKey = null
 let encryptor = null
-let decryptor = null
 
 let ckksParms = null
 let ckksContext = null
 let ckksEncoder = null
 let ckksKeyGen = null
-let ckksSecretKey = null
 let ckksPublicKey = null
 let ckksEncryptor = null
-let ckksDecryptor = null
 
 beforeAll(async () => {
   Morfix = await Seal
@@ -30,10 +26,8 @@ beforeAll(async () => {
   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
   encoder = Morfix.BatchEncoder(context)
   keyGen = Morfix.KeyGenerator(context)
-  secretKey = keyGen.getSecretKey()
   publicKey = keyGen.getPublicKey()
   encryptor = Morfix.Encryptor(context, publicKey)
-  decryptor = Morfix.Decryptor(context, secretKey)
 
   ckksParms = Morfix.EncryptionParameters(Morfix.SchemeType.CKKS)
   ckksParms.setPolyModulusDegree(4096)
@@ -43,10 +37,8 @@ beforeAll(async () => {
   ckksContext = Morfix.Context(ckksParms, true, Morfix.SecurityLevel.tc128)
   ckksEncoder = Morfix.CKKSEncoder(ckksContext)
   ckksKeyGen = Morfix.KeyGenerator(ckksContext)
-  ckksSecretKey = ckksKeyGen.getSecretKey()
   ckksPublicKey = ckksKeyGen.getPublicKey()
   ckksEncryptor = Morfix.Encryptor(ckksContext, ckksPublicKey)
-  ckksDecryptor = Morfix.Decryptor(ckksContext, ckksSecretKey)
 })
 
 describe('CipherText', () => {
