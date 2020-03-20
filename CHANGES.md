@@ -3,6 +3,13 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 4.0.4
+
+Breaking:
+- `CipherText.reserve` now requires two arguments to be provided, `context, sizeCapacity`. This is because reserving
+ memory before data is encrypted into the cipher instance will have no effect. Due to current constructor limitations
+ , this is the only way to preemptively reserve memory for a cipher.
+
 ## Version 4.0.3
 
 Fix: 
