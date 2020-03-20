@@ -8,7 +8,7 @@ beforeAll(async () => {
 describe('ComprModeType', () => {
   test('It should be a static instance', () => {
     expect(Morfix).toHaveProperty('ComprModeType')
-    expect(Morfix.ComprModeType).not.toBeUndefined()
+    expect(Morfix.ComprModeType).toBeDefined()
     expect(typeof Morfix.ComprModeType.constructor).toBe('function')
     expect(Morfix.ComprModeType).toBeInstanceOf(Object)
     expect(Morfix.ComprModeType.constructor).toBe(Object)
@@ -20,7 +20,7 @@ describe('ComprModeType', () => {
   })
   test('It should return type none', async () => {
     const comprMode = Morfix.ComprModeType.none
-    expect(comprMode).not.toBeUndefined()
+    expect(comprMode).toBeDefined()
     expect(typeof comprMode.constructor).toBe('function')
     expect(comprMode).toBeInstanceOf(Object)
     expect(comprMode.constructor).toBe(Morfix.ComprModeType.none.constructor)
@@ -30,7 +30,7 @@ describe('ComprModeType', () => {
   })
   test('It should return type deflate', async () => {
     const comprMode = Morfix.ComprModeType.deflate
-    expect(comprMode).not.toBeUndefined()
+    expect(comprMode).toBeDefined()
     expect(typeof comprMode.constructor).toBe('function')
     expect(comprMode).toBeInstanceOf(Object)
     expect(comprMode.constructor).toBe(Morfix.ComprModeType.deflate.constructor)

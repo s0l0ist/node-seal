@@ -32,7 +32,7 @@ beforeAll(async () => {
 describe('EncryptionParameterQualifiers', () => {
   test('It should be a factory', () => {
     expect(Morfix).toHaveProperty('EncryptionParameterQualifiers')
-    expect(Morfix.EncryptionParameterQualifiers).not.toBeUndefined()
+    expect(Morfix.EncryptionParameterQualifiers).toBeDefined()
     expect(typeof Morfix.EncryptionParameterQualifiers.constructor).toBe(
       'function'
     )

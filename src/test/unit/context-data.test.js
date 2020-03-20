@@ -26,7 +26,7 @@ beforeAll(async () => {
 describe('ContextData', () => {
   test('It should be a factory', () => {
     expect(Morfix).toHaveProperty('ContextData')
-    expect(Morfix.ContextData).not.toBeUndefined()
+    expect(Morfix.ContextData).toBeDefined()
     expect(typeof Morfix.ContextData.constructor).toBe('function')
     expect(Morfix.ContextData).toBeInstanceOf(Object)
     expect(Morfix.ContextData.constructor).toBe(Function)

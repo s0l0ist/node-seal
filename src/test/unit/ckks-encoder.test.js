@@ -19,7 +19,7 @@ beforeAll(async () => {
 describe('CKKSEncoder', () => {
   test('It should be a factory', () => {
     expect(Morfix).toHaveProperty('CKKSEncoder')
-    expect(Morfix.CKKSEncoder).not.toBeUndefined()
+    expect(Morfix.CKKSEncoder).toBeDefined()
     expect(typeof Morfix.CKKSEncoder.constructor).toBe('function')
     expect(Morfix.CKKSEncoder).toBeInstanceOf(Object)
     expect(Morfix.CKKSEncoder.constructor).toBe(Function)

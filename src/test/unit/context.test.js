@@ -23,7 +23,7 @@ beforeAll(async () => {
 describe('Context', () => {
   test('It should be a factory', () => {
     expect(Morfix).toHaveProperty('Context')
-    expect(Morfix.Context).not.toBeUndefined()
+    expect(Morfix.Context).toBeDefined()
     expect(typeof Morfix.Context.constructor).toBe('function')
     expect(Morfix.Context).toBeInstanceOf(Object)
     expect(Morfix.Context.constructor).toBe(Function)

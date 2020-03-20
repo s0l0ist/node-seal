@@ -8,7 +8,7 @@ beforeAll(async () => {
 describe('SecurityLevel', () => {
   test('It should be a static instance', () => {
     expect(Morfix).toHaveProperty('SecurityLevel')
-    expect(Morfix.SecurityLevel).not.toBeUndefined()
+    expect(Morfix.SecurityLevel).toBeDefined()
     expect(typeof Morfix.SecurityLevel.constructor).toBe('function')
     expect(Morfix.SecurityLevel).toBeInstanceOf(Object)
     expect(Morfix.SecurityLevel.constructor).toBe(Object)
@@ -22,7 +22,7 @@ describe('SecurityLevel', () => {
   })
   test('It should return type none', async () => {
     const securityLevel = Morfix.SecurityLevel.none
-    expect(securityLevel).not.toBeUndefined()
+    expect(securityLevel).toBeDefined()
     expect(typeof securityLevel.constructor).toBe('function')
     expect(securityLevel).toBeInstanceOf(Object)
     expect(securityLevel.constructor).toBe(
@@ -32,7 +32,7 @@ describe('SecurityLevel', () => {
   })
   test('It should return type tc128', async () => {
     const securityLevel = Morfix.SecurityLevel.tc128
-    expect(securityLevel).not.toBeUndefined()
+    expect(securityLevel).toBeDefined()
     expect(typeof securityLevel.constructor).toBe('function')
     expect(securityLevel).toBeInstanceOf(Object)
     expect(securityLevel.constructor).toBe(
@@ -44,7 +44,7 @@ describe('SecurityLevel', () => {
   })
   test('It should return type tc192', async () => {
     const securityLevel = Morfix.SecurityLevel.tc192
-    expect(securityLevel).not.toBeUndefined()
+    expect(securityLevel).toBeDefined()
     expect(typeof securityLevel.constructor).toBe('function')
     expect(securityLevel).toBeInstanceOf(Object)
     expect(securityLevel.constructor).toBe(
@@ -56,7 +56,7 @@ describe('SecurityLevel', () => {
   })
   test('It should return type tc256', async () => {
     const securityLevel = Morfix.SecurityLevel.tc256
-    expect(securityLevel).not.toBeUndefined()
+    expect(securityLevel).toBeDefined()
     expect(typeof securityLevel.constructor).toBe('function')
     expect(securityLevel).toBeInstanceOf(Object)
     expect(securityLevel.constructor).toBe(

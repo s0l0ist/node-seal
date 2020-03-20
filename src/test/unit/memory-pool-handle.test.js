@@ -8,7 +8,7 @@ beforeAll(async () => {
 describe('MemoryPoolHandle', () => {
   test('It should be a static instance', () => {
     expect(Morfix).toHaveProperty('MemoryPoolHandle')
-    expect(Morfix.MemoryPoolHandle).not.toBeUndefined()
+    expect(Morfix.MemoryPoolHandle).toBeDefined()
     expect(typeof Morfix.MemoryPoolHandle.constructor).toBe('function')
     expect(Morfix.MemoryPoolHandle).toBeInstanceOf(Object)
     expect(Morfix.MemoryPoolHandle.constructor).toBe(Object)
@@ -20,7 +20,7 @@ describe('MemoryPoolHandle', () => {
   })
   test('It should return a pointer to the global handle', () => {
     const pool = Morfix.MemoryPoolHandle.global
-    expect(pool).not.toBeUndefined()
+    expect(pool).toBeDefined()
     expect(typeof pool.constructor).toBe('function')
     expect(pool).toBeInstanceOf(Object)
     expect(pool.constructor).toBe(Morfix.MemoryPoolHandle.global.constructor)
@@ -30,7 +30,7 @@ describe('MemoryPoolHandle', () => {
   })
   test('It should return a pointer to a threadLocal handle', () => {
     const pool = Morfix.MemoryPoolHandle.threadLocal
-    expect(pool).not.toBeUndefined()
+    expect(pool).toBeDefined()
     expect(typeof pool.constructor).toBe('function')
     expect(pool).toBeInstanceOf(Object)
     expect(pool.constructor).toBe(

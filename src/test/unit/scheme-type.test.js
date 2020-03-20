@@ -8,7 +8,7 @@ beforeAll(async () => {
 describe('SchemeType', () => {
   test('It should be a static instance', () => {
     expect(Morfix).toHaveProperty('SchemeType')
-    expect(Morfix.SchemeType).not.toBeUndefined()
+    expect(Morfix.SchemeType).toBeDefined()
     expect(typeof Morfix.SchemeType.constructor).toBe('function')
     expect(Morfix.SchemeType).toBeInstanceOf(Object)
     expect(Morfix.SchemeType.constructor).toBe(Object)
@@ -21,7 +21,7 @@ describe('SchemeType', () => {
   })
   test('It should return type none', () => {
     const schemeType = Morfix.SchemeType.none
-    expect(schemeType).not.toBeUndefined()
+    expect(schemeType).toBeDefined()
     expect(typeof schemeType.constructor).toBe('function')
     expect(schemeType).toBeInstanceOf(Object)
     expect(schemeType.constructor).toBe(Morfix.SchemeType.none.constructor)
@@ -29,7 +29,7 @@ describe('SchemeType', () => {
   })
   test('It should return type BFV', () => {
     const schemeType = Morfix.SchemeType.BFV
-    expect(schemeType).not.toBeUndefined()
+    expect(schemeType).toBeDefined()
     expect(typeof schemeType.constructor).toBe('function')
     expect(schemeType).toBeInstanceOf(Object)
     expect(schemeType.constructor).toBe(Morfix.SchemeType.BFV.constructor)
@@ -37,7 +37,7 @@ describe('SchemeType', () => {
   })
   test('It should return type CKKS', () => {
     const schemeType = Morfix.SchemeType.CKKS
-    expect(schemeType).not.toBeUndefined()
+    expect(schemeType).toBeDefined()
     expect(typeof schemeType.constructor).toBe('function')
     expect(schemeType).toBeInstanceOf(Object)
     expect(schemeType.constructor).toBe(Morfix.SchemeType.CKKS.constructor)

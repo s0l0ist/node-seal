@@ -20,7 +20,7 @@ beforeAll(async () => {
 describe('SecretKey', () => {
   test('It should be a factory', () => {
     expect(Morfix).toHaveProperty('SecretKey')
-    expect(Morfix.SecretKey).not.toBeUndefined()
+    expect(Morfix.SecretKey).toBeDefined()
     expect(typeof Morfix.SecretKey.constructor).toBe('function')
     expect(Morfix.SecretKey).toBeInstanceOf(Object)
     expect(Morfix.SecretKey.constructor).toBe(Function)
@@ -51,6 +51,14 @@ describe('SecretKey', () => {
     expect(spyOn).toHaveBeenCalledWith(item.instance)
     expect(newItem.save()).toEqual(str)
   })
+  test("It should delete it's instance", () => {
+    const item = Morfix.SecretKey()
+    const spyOn = jest.spyOn(item, 'delete')
+    item.delete()
+    expect(spyOn).toHaveBeenCalled()
+    expect(item.instance).toBeNull()
+    expect(() => item.save()).toThrow(TypeError)
+  })
   test('It should save to a string', () => {
     const item = Morfix.SecretKey()
     const spyOn = jest.spyOn(item, 'save')
@@ -80,7 +88,7 @@ describe('SecretKey', () => {
     const spyOn = jest.spyOn(item, 'clone')
     const newItem = item.clone()
     expect(spyOn).toHaveBeenCalledWith()
-    expect(newItem).not.toBeUndefined()
+    expect(newItem).toBeDefined()
     expect(typeof newItem.constructor).toBe('function')
     expect(newItem).toBeInstanceOf(Object)
     expect(newItem.constructor).toBe(Object)
