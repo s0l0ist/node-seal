@@ -144,6 +144,21 @@ export const SmallModulus = library => (Exception, ComprModeType) => (
       } catch (e) {
         throw Exception.safe(e)
       }
+    },
+
+    /**
+     * Load a SmallModulus from a base64 string
+     *
+     * @function
+     * @name SecretKey#load
+     * @param {String} encoded Base64 encoded string
+     */
+    load(encoded) {
+      try {
+        _instance.loadFromString(encoded)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
     }
   }
 }

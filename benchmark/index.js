@@ -219,7 +219,7 @@ function create() {
         and will overwrite the first argument, we reserve first enough memory
         to avoid reallocating during multiplication.
         */
-      encrypted1.reserve(3)
+      encrypted1.reserve(context, 3)
       timeStart = performance.now()
       evaluator.multiply(encrypted1, encrypted2, encrypted1)
       timeEnd = performance.now()

@@ -121,10 +121,11 @@ export const PlainText = library => (Exception, ComprModeType, ParmsIdType) => (
      *
      * @function
      * @name PlainText#resize
+     * @param {Number} coeffCount The number of coefficients in the plaintext polynomial
      */
-    resize() {
+    resize(coeffCount) {
       try {
-        return _instance.resize()
+        return _instance.resize(coeffCount)
       } catch (e) {
         throw Exception.safe(e)
       }

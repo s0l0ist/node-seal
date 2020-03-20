@@ -79,6 +79,36 @@ export const GaloisKeys = library => (Exception, ComprModeType) => (
     },
 
     /**
+     * Returns the index of a Galois key in the backing KSwitchKeys instance that
+     * corresponds to the given Galois element, assuming that it exists in the
+     * backing KSwitchKeys.
+     *
+     * @param {Number} galoisElt The Galois element
+     * @returns {Number} The index of the galois element
+     */
+    getIndex(galoisElt) {
+      try {
+        return _instance.getIndex(galoisElt)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Returns whether a Galois key corresponding to a given Galois element exists.
+     *
+     * @param {Number} galoisElt The Galois element
+     * @returns {Boolean} True if the key exists
+     */
+    hasKey(galoisElt) {
+      try {
+        return _instance.hasKey(galoisElt)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
      * Save the GaloisKeys to a base64 string
      *
      * @function

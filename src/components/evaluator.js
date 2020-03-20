@@ -842,7 +842,7 @@ export const Evaluator = library => (
           return
         }
         const temp = CipherText()
-        _instance.cipherTransformToNtt(encryptedNtt.instance, temp.instance)
+        _instance.cipherTransformFromNtt(encryptedNtt.instance, temp.instance)
         return temp
       } catch (e) {
         throw Exception.safe(e)
@@ -874,7 +874,14 @@ export const Evaluator = library => (
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * TODO
+     * ...
+     * const evaluator = Morfix.Evaluator(context)
+     * const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => i)
+     * const plain = encoder.encode(arr)
+     * const cipher = encryptor.encrypt(plain)
+     * const cipherDest = Morfix.CipherText()
+     * const galElt = 2 * parms.polyModulusDegree - 1
+     * evaluator.applyGalois(cipher, galElt, galoisKeys, cipherDest)
      */
     applyGalois(
       encrypted,
