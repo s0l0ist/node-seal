@@ -20,7 +20,7 @@ beforeAll(async () => {
 describe('BatchEncoder', () => {
   test('It should be a factory', () => {
     expect(Morfix).toHaveProperty('BatchEncoder')
-    expect(Morfix.BatchEncoder).not.toBeUndefined()
+    expect(Morfix.BatchEncoder).toBeDefined()
     expect(typeof Morfix.BatchEncoder.constructor).toBe('function')
     expect(Morfix.BatchEncoder).toBeInstanceOf(Object)
     expect(Morfix.BatchEncoder.constructor).toBe(Function)

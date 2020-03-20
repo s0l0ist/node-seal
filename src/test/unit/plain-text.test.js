@@ -52,7 +52,7 @@ beforeAll(async () => {
 describe('PlainText', () => {
   test('It should be a factory', () => {
     expect(Morfix).toHaveProperty('PlainText')
-    expect(Morfix.PlainText).not.toBeUndefined()
+    expect(Morfix.PlainText).toBeDefined()
     expect(typeof Morfix.PlainText.constructor).toBe('function')
     expect(Morfix.PlainText).toBeInstanceOf(Object)
     expect(Morfix.PlainText.constructor).toBe(Function)
@@ -351,7 +351,7 @@ describe('PlainText', () => {
     const spyOn = jest.spyOn(item, 'clone')
     const newItem = item.clone()
     expect(spyOn).toHaveBeenCalledWith()
-    expect(newItem).not.toBeUndefined()
+    expect(newItem).toBeDefined()
     expect(typeof newItem.constructor).toBe('function')
     expect(newItem).toBeInstanceOf(Object)
     expect(newItem.constructor).toBe(Object)
@@ -367,7 +367,7 @@ describe('PlainText', () => {
     const spyOn = jest.spyOn(item, 'clone')
     const newItem = item.clone()
     expect(spyOn).toHaveBeenCalledWith()
-    expect(newItem).not.toBeUndefined()
+    expect(newItem).toBeDefined()
     expect(typeof newItem.constructor).toBe('function')
     expect(newItem).toBeInstanceOf(Object)
     expect(newItem.constructor).toBe(Object)

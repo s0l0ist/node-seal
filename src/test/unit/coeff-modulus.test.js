@@ -8,7 +8,7 @@ beforeAll(async () => {
 describe('CoeffModulus', () => {
   test('It should be a static instance', () => {
     expect(Morfix).toHaveProperty('CoeffModulus')
-    expect(Morfix.CoeffModulus).not.toBeUndefined()
+    expect(Morfix.CoeffModulus).toBeDefined()
     expect(typeof Morfix.CoeffModulus.constructor).toBe('function')
     expect(Morfix.CoeffModulus).toBeInstanceOf(Object)
     expect(Morfix.CoeffModulus.constructor).toBe(Object)
@@ -38,7 +38,7 @@ describe('CoeffModulus', () => {
       Morfix.SecurityLevel.tc128
     )
     expect(spyOn).toHaveBeenCalledWith(4096, Morfix.SecurityLevel.tc128)
-    expect(vect).not.toBeUndefined()
+    expect(vect).toBeDefined()
     expect(typeof vect.constructor).toBe('function')
     expect(vect).toBeInstanceOf(Object)
     expect(vect.constructor.name).toBe('std$$vector$SmallModulus$')
@@ -48,7 +48,7 @@ describe('CoeffModulus', () => {
     const spyOn = jest.spyOn(Morfix.CoeffModulus, 'Create')
     const vect = Morfix.CoeffModulus.Create(4096, Int32Array.from([36, 36, 37]))
     expect(spyOn).toHaveBeenCalledWith(4096, Int32Array.from([36, 36, 37]))
-    expect(vect).not.toBeUndefined()
+    expect(vect).toBeDefined()
     expect(typeof vect.constructor).toBe('function')
     expect(vect).toBeInstanceOf(Object)
     expect(vect.constructor.name).toBe('std$$vector$SmallModulus$')

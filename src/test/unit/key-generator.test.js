@@ -18,7 +18,7 @@ beforeAll(async () => {
 describe('KeyGenerator', () => {
   test('It should be a factory', () => {
     expect(Morfix).toHaveProperty('KeyGenerator')
-    expect(Morfix.KeyGenerator).not.toBeUndefined()
+    expect(Morfix.KeyGenerator).toBeDefined()
     expect(typeof Morfix.KeyGenerator.constructor).toBe('function')
     expect(Morfix.KeyGenerator).toBeInstanceOf(Object)
     expect(Morfix.KeyGenerator.constructor).toBe(Function)

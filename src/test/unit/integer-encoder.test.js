@@ -20,7 +20,7 @@ beforeAll(async () => {
 describe('IntegerEncoder', () => {
   test('It should be a factory', () => {
     expect(Morfix).toHaveProperty('IntegerEncoder')
-    expect(Morfix.IntegerEncoder).not.toBeUndefined()
+    expect(Morfix.IntegerEncoder).toBeDefined()
     expect(typeof Morfix.IntegerEncoder.constructor).toBe('function')
     expect(Morfix.IntegerEncoder).toBeInstanceOf(Object)
     expect(Morfix.IntegerEncoder.constructor).toBe(Function)

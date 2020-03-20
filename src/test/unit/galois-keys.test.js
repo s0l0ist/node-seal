@@ -20,7 +20,7 @@ beforeAll(async () => {
 describe('GaloisKeys', () => {
   test('It should be a factory', () => {
     expect(Morfix).toHaveProperty('GaloisKeys')
-    expect(Morfix.GaloisKeys).not.toBeUndefined()
+    expect(Morfix.GaloisKeys).toBeDefined()
     expect(typeof Morfix.GaloisKeys.constructor).toBe('function')
     expect(Morfix.GaloisKeys).toBeInstanceOf(Object)
     expect(Morfix.GaloisKeys.constructor).toBe(Function)
@@ -51,6 +51,14 @@ describe('GaloisKeys', () => {
     expect(spyOn).toHaveBeenCalledWith(item.instance)
     expect(newItem.save()).toEqual(str)
   })
+  test("It should delete it's instance", () => {
+    const item = Morfix.GaloisKeys()
+    const spyOn = jest.spyOn(item, 'delete')
+    item.delete()
+    expect(spyOn).toHaveBeenCalled()
+    expect(item.instance).toBeNull()
+    expect(() => item.save()).toThrow(TypeError)
+  })
   test('It should save to a string', () => {
     const item = Morfix.GaloisKeys()
     const spyOn = jest.spyOn(item, 'save')
@@ -80,7 +88,7 @@ describe('GaloisKeys', () => {
     const spyOn = jest.spyOn(item, 'clone')
     const newItem = item.clone()
     expect(spyOn).toHaveBeenCalledWith()
-    expect(newItem).not.toBeUndefined()
+    expect(newItem).toBeDefined()
     expect(typeof newItem.constructor).toBe('function')
     expect(newItem).toBeInstanceOf(Object)
     expect(newItem.constructor).toBe(Object)

@@ -52,7 +52,7 @@ beforeAll(async () => {
 describe('CipherText', () => {
   test('It should be a factory', () => {
     expect(Morfix).toHaveProperty('CipherText')
-    expect(Morfix.CipherText).not.toBeUndefined()
+    expect(Morfix.CipherText).toBeDefined()
     expect(typeof Morfix.CipherText.constructor).toBe('function')
     expect(Morfix.CipherText).toBeInstanceOf(Object)
     expect(Morfix.CipherText.constructor).toBe(Function)
@@ -324,7 +324,7 @@ describe('CipherText', () => {
     const spyOn = jest.spyOn(item, 'clone')
     const newItem = item.clone()
     expect(spyOn).toHaveBeenCalledWith()
-    expect(newItem).not.toBeUndefined()
+    expect(newItem).toBeDefined()
     expect(typeof newItem.constructor).toBe('function')
     expect(newItem).toBeInstanceOf(Object)
     expect(newItem.constructor).toBe(Object)
@@ -341,7 +341,7 @@ describe('CipherText', () => {
     const spyOn = jest.spyOn(item, 'clone')
     const newItem = item.clone()
     expect(spyOn).toHaveBeenCalledWith()
-    expect(newItem).not.toBeUndefined()
+    expect(newItem).toBeDefined()
     expect(typeof newItem.constructor).toBe('function')
     expect(newItem).toBeInstanceOf(Object)
     expect(newItem.constructor).toBe(Object)

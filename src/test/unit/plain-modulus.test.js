@@ -8,7 +8,7 @@ beforeAll(async () => {
 describe('PlainModulus', () => {
   test('It should be a static instance', () => {
     expect(Morfix).toHaveProperty('PlainModulus')
-    expect(Morfix.PlainModulus).not.toBeUndefined()
+    expect(Morfix.PlainModulus).toBeDefined()
     expect(typeof Morfix.PlainModulus.constructor).toBe('function')
     expect(Morfix.PlainModulus).toBeInstanceOf(Object)
     expect(Morfix.PlainModulus.constructor).toBe(Object)
@@ -24,7 +24,7 @@ describe('PlainModulus', () => {
     const spyOn = jest.spyOn(Morfix.PlainModulus, 'Batching')
     const smallModulus = Morfix.PlainModulus.Batching(4096, 20)
     expect(spyOn).toHaveBeenCalledWith(4096, 20)
-    expect(smallModulus).not.toBeUndefined()
+    expect(smallModulus).toBeDefined()
     expect(typeof smallModulus.constructor).toBe('function')
     expect(smallModulus).toBeInstanceOf(Object)
     expect(smallModulus.constructor).toBe(Object)
@@ -39,7 +39,7 @@ describe('PlainModulus', () => {
       Int32Array.from([20, 20, 20])
     )
     expect(spyOn).toHaveBeenCalledWith(4096, Int32Array.from([20, 20, 20]))
-    expect(vectSmallModulus).not.toBeUndefined()
+    expect(vectSmallModulus).toBeDefined()
     expect(typeof vectSmallModulus.constructor).toBe('function')
     expect(vectSmallModulus).toBeInstanceOf(Object)
     expect(vectSmallModulus.constructor.name).toBe('std$$vector$SmallModulus$')

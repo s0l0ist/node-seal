@@ -8,7 +8,7 @@ beforeAll(async () => {
 describe('ParmsIdType', () => {
   test('It should be a factory', () => {
     expect(Morfix).toHaveProperty('ParmsIdType')
-    expect(Morfix.ParmsIdType).not.toBeUndefined()
+    expect(Morfix.ParmsIdType).toBeDefined()
     expect(typeof Morfix.ParmsIdType.constructor).toBe('function')
     expect(Morfix.ParmsIdType).toBeInstanceOf(Object)
     expect(Morfix.ParmsIdType.constructor).toBe(Function)
@@ -66,7 +66,7 @@ describe('ParmsIdType', () => {
     const spyOn = jest.spyOn(Morfix, 'ParmsIdType')
     const item = Morfix.ParmsIdType()
     expect(spyOn).toHaveBeenCalledWith()
-    expect(item).not.toBeUndefined()
+    expect(item).toBeDefined()
     expect(typeof item.constructor).toBe('function')
     expect(item).toBeInstanceOf(Object)
     expect(item.constructor).toBe(Object)

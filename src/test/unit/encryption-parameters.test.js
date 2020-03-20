@@ -9,7 +9,7 @@ beforeAll(async () => {
 describe('EncryptionParameters', () => {
   test('It should be a factory', () => {
     expect(Morfix).toHaveProperty('EncryptionParameters')
-    expect(Morfix.EncryptionParameters).not.toBeUndefined()
+    expect(Morfix.EncryptionParameters).toBeDefined()
     expect(typeof Morfix.EncryptionParameters.constructor).toBe('function')
     expect(Morfix.EncryptionParameters).toBeInstanceOf(Object)
     expect(Morfix.EncryptionParameters.constructor).toBe(Function)
