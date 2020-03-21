@@ -83,6 +83,8 @@ export const RelinKeys = library => ({ Exception, ComprModeType }) => (
      * instance that corresponds to the given secret key power, assuming that
      * it exists in the backing KSwitchKeys.
      *
+     * @function
+     * @name RelinKeys#getIndex
      * @param {Number} keyPower The power of the secret key
      * @returns {Number} The index of the relin key
      */
@@ -98,6 +100,8 @@ export const RelinKeys = library => ({ Exception, ComprModeType }) => (
      * Returns whether a relinearization key corresponding to a given power of
      * the secret key exists.
      *
+     * @function
+     * @name RelinKeys#hasKey
      * @param {Number} keyPower The power of the secret key
      * @returns {Boolean} True if the power exists
      */

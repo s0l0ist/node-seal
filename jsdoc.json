@@ -10,14 +10,14 @@
   },
   "source": {
     "include": [
-      "./src/lib",
+      "./src/seal",
       "./src/components"
     ],
     "includePattern": ".js$"
   },
   "opts": {
     "destination": "./docs/",
-    "readme": "README.md",
+//    "readme": "README.md",
     "template": "node_modules/better-docs"
   },
   "plugins": [

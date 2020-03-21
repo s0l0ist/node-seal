@@ -83,6 +83,8 @@ export const GaloisKeys = library => ({ Exception, ComprModeType }) => (
      * corresponds to the given Galois element, assuming that it exists in the
      * backing KSwitchKeys.
      *
+     * @function
+     * @name GaloisKeys#getIndex
      * @param {Number} galoisElt The Galois element
      * @returns {Number} The index of the galois element
      */
@@ -97,6 +99,8 @@ export const GaloisKeys = library => ({ Exception, ComprModeType }) => (
     /**
      * Returns whether a Galois key corresponding to a given Galois element exists.
      *
+     * @function
+     * @name GaloisKeys#hasKey
      * @param {Number} galoisElt The Galois element
      * @returns {Boolean} True if the key exists
      */
