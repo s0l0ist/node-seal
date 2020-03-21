@@ -9,6 +9,10 @@ Refactor:
 - Complete refactor of the code structure to allow for code coverage
 - Removed underutilized `Util` export for functional composition.
 
+Feat:
+- Added constructor overload options to both cipher and plain texts.
+
+
 ## Version 4.1.0
 
 Breaking:
