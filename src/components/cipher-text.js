@@ -1,19 +1,48 @@
 export const CipherText = library => ({
   Exception,
   ComprModeType,
-  ParmsIdType
-}) => (instance = null) => {
+  ParmsIdType,
+  MemoryPoolHandle
+}) => options => {
   const Constructor = library.Ciphertext
-  let _instance
-  try {
-    if (instance) {
-      _instance = new Constructor(instance)
-      instance.delete()
-    } else {
-      _instance = new Constructor()
+  let _instance = construct(options)
+
+  function construct({
+    context = null,
+    parmsId = null,
+    sizeCapacity = null,
+    pool = MemoryPoolHandle.global
+  } = {}) {
+    try {
+      if (context === null && parmsId === null && sizeCapacity === null) {
+        return new Constructor(pool)
+      } else if (
+        context !== null &&
+        parmsId === null &&
+        sizeCapacity === null
+      ) {
+        return new Constructor(context.instance, pool)
+      } else if (
+        context !== null &&
+        parmsId !== null &&
+        sizeCapacity === null
+      ) {
+        return new Constructor(context.instance, parmsId.instance, pool)
+      } else if (
+        context !== null &&
+        parmsId !== null &&
+        sizeCapacity !== null
+      ) {
+        return new Constructor(
+          context.instance,
+          parmsId.instance,
+          sizeCapacity.instance,
+          pool
+        )
+      }
+    } catch (e) {
+      throw Exception.safe(e)
     }
-  } catch (e) {
-    throw Exception.safe(e)
   }
 
   /**
@@ -37,20 +66,19 @@ export const CipherText = library => ({
     },
 
     /**
-     * Inject this object with a raw WASM instance
+     * Inject this object with a raw WASM instance. No type checking is performed.
      *
      * @private
      * @function
-     * @name CipherText#inject
+     * @name CipherText#unsafeInject
      * @param {instance} instance WASM instance
      */
-    inject(instance) {
+    unsafeInject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
       }
-      _instance = new Constructor(instance)
-      instance.delete()
+      _instance = instance
     },
 
     /**
@@ -303,9 +331,14 @@ export const CipherText = library => ({
     clone() {
       try {
         const clonedInstance = _instance.clone()
-        return CipherText(library)({ Exception, ComprModeType, ParmsIdType })(
-          clonedInstance
-        )
+        const cipher = CipherText(library)({
+          Exception,
+          ComprModeType,
+          ParmsIdType,
+          MemoryPoolHandle
+        })()
+        cipher.unsafeInject(clonedInstance)
+        return cipher
       } catch (e) {
         throw Exception.safe(e)
       }

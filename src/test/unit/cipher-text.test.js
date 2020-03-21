@@ -58,7 +58,7 @@ describe('CipherText', () => {
     const cipher = CipherTextObject()
     // Test properties
     expect(cipher).toHaveProperty('instance')
-    expect(cipher).toHaveProperty('inject')
+    expect(cipher).toHaveProperty('unsafeInject')
     expect(cipher).toHaveProperty('delete')
     expect(cipher).toHaveProperty('reserve')
     expect(cipher).toHaveProperty('resize')
@@ -85,8 +85,8 @@ describe('CipherText', () => {
   test('It should inject', () => {
     const cipher = CipherTextObject()
     const newCipher = CipherTextObject()
-    const spyOn = jest.spyOn(newCipher, 'inject')
-    newCipher.inject(cipher.instance)
+    const spyOn = jest.spyOn(newCipher, 'unsafeInject')
+    newCipher.unsafeInject(cipher.instance)
     expect(spyOn).toHaveBeenCalledWith(cipher.instance)
   })
   test("It should delete it's instance", () => {

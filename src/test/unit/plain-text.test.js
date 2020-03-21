@@ -46,7 +46,7 @@ describe('PlainText', () => {
     const plainText = PlainTextObject()
     // Test properties
     expect(plainText).toHaveProperty('instance')
-    expect(plainText).toHaveProperty('inject')
+    expect(plainText).toHaveProperty('unsafeInject')
     expect(plainText).toHaveProperty('delete')
     expect(plainText).toHaveProperty('reserve')
     expect(plainText).toHaveProperty('shrinkToFit')
@@ -74,8 +74,8 @@ describe('PlainText', () => {
   test('It should inject', () => {
     const plainText = PlainTextObject()
     const newPlainText = PlainTextObject()
-    const spyOn = jest.spyOn(newPlainText, 'inject')
-    newPlainText.inject(plainText.instance)
+    const spyOn = jest.spyOn(newPlainText, 'unsafeInject')
+    newPlainText.unsafeInject(plainText.instance)
     expect(spyOn).toHaveBeenCalledWith(plainText.instance)
   })
   test("It should delete it's instance", () => {
