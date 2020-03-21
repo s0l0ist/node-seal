@@ -1,12 +1,17 @@
 import { Seal } from '../../index.js'
+import { getLibrary } from '../../index'
+import { IntegerEncoder } from '../../components'
 
 let Morfix = null
 let parms = null
 let context = null
 let encoder = null
-
+let IntegerEncoderObject = null
 beforeAll(async () => {
   Morfix = await Seal
+  const lib = getLibrary()
+  IntegerEncoderObject = IntegerEncoder(lib)(Morfix)
+
   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
   parms.setPolyModulusDegree(4096)
   parms.setCoeffModulus(
@@ -14,20 +19,19 @@ beforeAll(async () => {
   )
   parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
-  encoder = Morfix.IntegerEncoder(context)
+  encoder = IntegerEncoderObject(context)
 })
 
 describe('IntegerEncoder', () => {
   test('It should be a factory', () => {
-    expect(Morfix).toHaveProperty('IntegerEncoder')
-    expect(Morfix.IntegerEncoder).toBeDefined()
-    expect(typeof Morfix.IntegerEncoder.constructor).toBe('function')
-    expect(Morfix.IntegerEncoder).toBeInstanceOf(Object)
-    expect(Morfix.IntegerEncoder.constructor).toBe(Function)
-    expect(Morfix.IntegerEncoder.constructor.name).toBe('Function')
+    expect(IntegerEncoderObject).toBeDefined()
+    expect(typeof IntegerEncoderObject.constructor).toBe('function')
+    expect(IntegerEncoderObject).toBeInstanceOf(Object)
+    expect(IntegerEncoderObject.constructor).toBe(Function)
+    expect(IntegerEncoderObject.constructor.name).toBe('Function')
   })
   test('It should have properties', () => {
-    const item = Morfix.IntegerEncoder(context)
+    const item = IntegerEncoderObject(context)
     // Test properties
     expect(item).toHaveProperty('instance')
     expect(item).toHaveProperty('unsafeInject')
@@ -38,18 +42,18 @@ describe('IntegerEncoder', () => {
     expect(item).toHaveProperty('decodeUInt32')
   })
   test('It should have an instance (bfv)', () => {
-    const item = Morfix.IntegerEncoder(context)
+    const item = IntegerEncoderObject(context)
     expect(item.instance).not.toBeFalsy()
   })
   test('It should inject', () => {
-    const item = Morfix.IntegerEncoder(context)
+    const item = IntegerEncoderObject(context)
     const spyOn = jest.spyOn(item, 'unsafeInject')
     item.unsafeInject(encoder.instance)
     expect(spyOn).toHaveBeenCalledWith(encoder.instance)
     expect(item.slotCount).toEqual(encoder.slotCount)
   })
   test("It should delete it's instance", () => {
-    const item = Morfix.IntegerEncoder(context)
+    const item = IntegerEncoderObject(context)
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()

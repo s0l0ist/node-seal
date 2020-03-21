@@ -1,4 +1,6 @@
 import { Seal } from '../../index.js'
+import { getLibrary } from '../../index'
+import { EncryptionParameterQualifiers } from '../../components'
 
 let Morfix = null
 let parms = null
@@ -9,8 +11,15 @@ let ckksParms = null
 let ckksContext = null
 let ckksContextData = null
 
+let EncryptionParameterQualifiersObject = null
+
 beforeAll(async () => {
   Morfix = await Seal
+  const lib = getLibrary()
+  EncryptionParameterQualifiersObject = EncryptionParameterQualifiers(lib)(
+    Morfix
+  )
+
   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
   parms.setPolyModulusDegree(4096)
   parms.setCoeffModulus(
@@ -31,19 +40,21 @@ beforeAll(async () => {
 
 describe('EncryptionParameterQualifiers', () => {
   test('It should be a factory', () => {
-    expect(Morfix).toHaveProperty('EncryptionParameterQualifiers')
-    expect(Morfix.EncryptionParameterQualifiers).toBeDefined()
-    expect(typeof Morfix.EncryptionParameterQualifiers.constructor).toBe(
+    expect(EncryptionParameterQualifiersObject).toBeDefined()
+    expect(typeof EncryptionParameterQualifiersObject.constructor).toBe(
       'function'
     )
-    expect(Morfix.EncryptionParameterQualifiers).toBeInstanceOf(Object)
-    expect(Morfix.EncryptionParameterQualifiers.constructor).toBe(Function)
-    expect(Morfix.EncryptionParameterQualifiers.constructor.name).toBe(
+    expect(EncryptionParameterQualifiersObject).toBeInstanceOf(Object)
+    expect(EncryptionParameterQualifiersObject.constructor).toBe(Function)
+    expect(EncryptionParameterQualifiersObject.constructor.name).toBe(
       'Function'
     )
   })
   test('It should have properties', () => {
-    const item = contextData.qualifiers
+    const item = EncryptionParameterQualifiersObject(
+      EncryptionParameterQualifiersObject(contextData.qualifiers.instance)
+        .instance
+    )
     // Test properties
     expect(item).toHaveProperty('instance')
     expect(item).toHaveProperty('unsafeInject')
@@ -57,27 +68,39 @@ describe('EncryptionParameterQualifiers', () => {
     expect(item).toHaveProperty('securityLevel')
   })
   test('It should have an instance (none)', () => {
-    const item = contextData.qualifiers
+    const item = EncryptionParameterQualifiersObject(
+      contextData.qualifiers.instance
+    )
     expect(item.instance).not.toBeFalsy()
   })
   test('It should have an instance (bfv)', () => {
-    const item = contextData.qualifiers
+    const item = EncryptionParameterQualifiersObject(
+      contextData.qualifiers.instance
+    )
     expect(item.instance).not.toBeFalsy()
   })
   test('It should have an instance (ckks)', () => {
-    const item = ckksContextData.qualifiers
+    const item = EncryptionParameterQualifiersObject(
+      ckksContextData.qualifiers.instance
+    )
     expect(item.instance).not.toBeFalsy()
   })
   test('It should inject', () => {
-    const item = contextData.qualifiers
-    const newItem = ckksContextData.qualifiers
+    const item = EncryptionParameterQualifiersObject(
+      contextData.qualifiers.instance
+    )
+    const newItem = EncryptionParameterQualifiersObject(
+      ckksContextData.qualifiers.instance
+    )
     const spyOn = jest.spyOn(newItem, 'unsafeInject')
     newItem.unsafeInject(item.instance)
     expect(spyOn).toHaveBeenCalledWith(item.instance)
     expect(newItem.parametersSet).toEqual(true)
   })
   test("It should delete it's instance", () => {
-    const item = contextData.qualifiers
+    const item = EncryptionParameterQualifiersObject(
+      contextData.qualifiers.instance
+    )
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
@@ -85,31 +108,45 @@ describe('EncryptionParameterQualifiers', () => {
     expect(() => item.usingFFT).toThrow(TypeError)
   })
   test('It should return true if the parameters are set', () => {
-    const item = contextData.qualifiers
+    const item = EncryptionParameterQualifiersObject(
+      contextData.qualifiers.instance
+    )
     expect(item.parametersSet).toEqual(true)
   })
   test('It should return true if using FFT', () => {
-    const item = contextData.qualifiers
+    const item = EncryptionParameterQualifiersObject(
+      contextData.qualifiers.instance
+    )
     expect(item.usingFFT).toEqual(true)
   })
   test('It should return true if using NTT', () => {
-    const item = contextData.qualifiers
+    const item = EncryptionParameterQualifiersObject(
+      contextData.qualifiers.instance
+    )
     expect(item.usingNTT).toEqual(true)
   })
   test('It should return true if using batching', () => {
-    const item = contextData.qualifiers
+    const item = EncryptionParameterQualifiersObject(
+      contextData.qualifiers.instance
+    )
     expect(item.usingBatching).toEqual(true)
   })
   test('It should return true if using fast plain lift', () => {
-    const item = contextData.qualifiers
+    const item = EncryptionParameterQualifiersObject(
+      contextData.qualifiers.instance
+    )
     expect(item.usingFastPlainLift).toEqual(true)
   })
   test('It should return true if coeff modulus primes are in decreasing order', () => {
-    const item = contextData.qualifiers
+    const item = EncryptionParameterQualifiersObject(
+      contextData.qualifiers.instance
+    )
     expect(item.usingDescendingModulusChain).toEqual(true)
   })
   test('It should return the security level', () => {
-    const item = contextData.qualifiers
+    const item = EncryptionParameterQualifiersObject(
+      contextData.qualifiers.instance
+    )
     expect(item.securityLevel).toEqual(Morfix.SecurityLevel.tc128)
   })
 })

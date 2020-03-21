@@ -1,4 +1,4 @@
-export const SmallModulus = library => (Exception, ComprModeType) => (
+export const SmallModulus = library => ({ Exception, ComprModeType }) => (
   instance = null
 ) => {
   const Constructor = library.SmallModulus

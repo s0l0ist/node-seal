@@ -1,4 +1,4 @@
-export const PublicKey = library => (Exception, ComprModeType) => (
+export const PublicKey = library => ({ Exception, ComprModeType }) => (
   instance = null
 ) => {
   const Constructor = library.PublicKey
@@ -132,7 +132,7 @@ export const PublicKey = library => (Exception, ComprModeType) => (
     clone() {
       try {
         const clonedInstance = _instance.clone()
-        return PublicKey(library)(Exception, ComprModeType)(clonedInstance)
+        return PublicKey(library)({ Exception, ComprModeType })(clonedInstance)
       } catch (e) {
         throw Exception.safe(e)
       }

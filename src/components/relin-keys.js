@@ -1,4 +1,4 @@
-export const RelinKeys = library => (Exception, ComprModeType) => (
+export const RelinKeys = library => ({ Exception, ComprModeType }) => (
   instance = null
 ) => {
   const Constructor = library.RelinKeys
@@ -175,7 +175,7 @@ export const RelinKeys = library => (Exception, ComprModeType) => (
     clone() {
       try {
         const clonedInstance = _instance.clone()
-        return RelinKeys(library)(Exception, ComprModeType)(clonedInstance)
+        return RelinKeys(library)({ Exception, ComprModeType })(clonedInstance)
       } catch (e) {
         throw Exception.safe(e)
       }

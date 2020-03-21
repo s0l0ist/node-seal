@@ -1,4 +1,4 @@
-export const Util = library => Exception => {
+export const Util = library => ({ Exception }) => {
   // Static methods
   const _gcd = library.gcd
 

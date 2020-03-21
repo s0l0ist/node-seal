@@ -1,4 +1,6 @@
 import { Seal } from '../../index.js'
+import { getLibrary } from '../../index'
+import { ContextData } from '../../components'
 
 let Morfix = null
 let parms = null
@@ -6,8 +8,12 @@ let context = null
 
 let ckksParms = null
 let ckksContext = null
+let ContextDataObject = null
 beforeAll(async () => {
   Morfix = await Seal
+  const lib = getLibrary()
+  ContextDataObject = ContextData(lib)(Morfix)
+
   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
   parms.setPolyModulusDegree(4096)
   parms.setCoeffModulus(
@@ -25,65 +31,71 @@ beforeAll(async () => {
 
 describe('ContextData', () => {
   test('It should be a factory', () => {
-    expect(Morfix).toHaveProperty('ContextData')
-    expect(Morfix.ContextData).toBeDefined()
-    expect(typeof Morfix.ContextData.constructor).toBe('function')
-    expect(Morfix.ContextData).toBeInstanceOf(Object)
-    expect(Morfix.ContextData.constructor).toBe(Function)
-    expect(Morfix.ContextData.constructor.name).toBe('Function')
+    expect(ContextDataObject).toBeDefined()
+    expect(typeof ContextDataObject.constructor).toBe('function')
+    expect(ContextDataObject).toBeInstanceOf(Object)
+    expect(ContextDataObject.constructor).toBe(Function)
+    expect(ContextDataObject.constructor.name).toBe('Function')
   })
   test('It should have properties', () => {
-    const item = context.firstContextData
+    const contextData = ContextDataObject(context.firstContextData.instance)
     // Test properties
-    expect(item).toHaveProperty('instance')
-    expect(item).toHaveProperty('unsafeInject')
-    expect(item).toHaveProperty('delete')
-    expect(item).toHaveProperty('parms')
-    expect(item).toHaveProperty('parmsId')
-    expect(item).toHaveProperty('qualifiers')
-    expect(item).toHaveProperty('totalCoeffModulusBitCount')
-    expect(item).toHaveProperty('prevContextData')
-    expect(item).toHaveProperty('nextContextData')
-    expect(item).toHaveProperty('chainIndex')
+    expect(contextData).toHaveProperty('instance')
+    expect(contextData).toHaveProperty('unsafeInject')
+    expect(contextData).toHaveProperty('delete')
+    expect(contextData).toHaveProperty('parms')
+    expect(contextData).toHaveProperty('parmsId')
+    expect(contextData).toHaveProperty('qualifiers')
+    expect(contextData).toHaveProperty('totalCoeffModulusBitCount')
+    expect(contextData).toHaveProperty('prevContextData')
+    expect(contextData).toHaveProperty('nextContextData')
+    expect(contextData).toHaveProperty('chainIndex')
   })
   test('It should have an instance (bfv)', () => {
-    const item = context.firstContextData
-    expect(item.instance).not.toBeFalsy()
+    const contextData = ContextDataObject(context.firstContextData.instance)
+    expect(contextData.instance).not.toBeFalsy()
   })
   test('It should have an instance (ckks)', () => {
-    const item = ckksContext.firstContextData
-    expect(item.instance).not.toBeFalsy()
+    const contextData = ContextDataObject(context.firstContextData.instance)
+    expect(contextData.instance).not.toBeFalsy()
   })
   test('It should inject', () => {
-    const item = context.firstContextData
-    const newItem = ckksContext.firstContextData
-    const spyOn = jest.spyOn(newItem, 'unsafeInject')
-    newItem.unsafeInject(item.instance)
-    expect(spyOn).toHaveBeenCalledWith(item.instance)
-    expect(newItem.totalCoeffModulusBitCount).toEqual(72)
+    const contextData = ContextDataObject(context.firstContextData.instance)
+
+    const newContextData = ContextDataObject(
+      ckksContext.firstContextData.instance
+    )
+    const spyOn = jest.spyOn(newContextData, 'unsafeInject')
+    newContextData.unsafeInject(contextData.instance)
+    expect(spyOn).toHaveBeenCalledWith(contextData.instance)
+    expect(newContextData.totalCoeffModulusBitCount).toEqual(72)
   })
   test("It should delete it's instance", () => {
-    const item = context.firstContextData
-    const spyOn = jest.spyOn(item, 'delete')
-    item.delete()
+    const contextData = ContextDataObject(context.firstContextData.instance)
+
+    const spyOn = jest.spyOn(contextData, 'delete')
+    contextData.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(item.instance).toBeNull()
-    expect(() => item.totalCoeffModulusBitCount).toThrow(TypeError)
+    expect(contextData.instance).toBeNull()
+    expect(() => contextData.totalCoeffModulusBitCount).toThrow(TypeError)
   })
   test('It should return a the previous context data', () => {
-    const item = context.firstContextData
-    const prev = item.prevContextData
+    const contextData = ContextDataObject(context.firstContextData.instance)
+
+    const prev = contextData.prevContextData
     expect(prev.instance).not.toBeFalsy()
     expect(prev.totalCoeffModulusBitCount).toEqual(109)
   })
   test('It should return a the next context data', () => {
-    const item = context.firstContextData
-    const prev = item.nextContextData
+    const contextData = ContextDataObject(context.firstContextData.instance)
+
+    const prev = contextData.nextContextData
     expect(prev.instance).not.toBeFalsy()
     expect(prev.totalCoeffModulusBitCount).toEqual(36)
   })
   test('It should return the chain index', () => {
-    const item = context.firstContextData
-    expect(item.chainIndex).toEqual(1)
+    const contextData = ContextDataObject(context.firstContextData.instance)
+
+    expect(contextData.chainIndex).toEqual(1)
   })
 })

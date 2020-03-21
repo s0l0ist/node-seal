@@ -1,8 +1,8 @@
-export const Encryptor = library => (
+export const Encryptor = library => ({
   Exception,
   MemoryPoolHandle,
   CipherText
-) => (context, publicKey) => {
+}) => (context, publicKey) => {
   const Constructor = library.Encryptor
   let _instance = null
   try {

@@ -1,4 +1,4 @@
-export const ParmsIdType = library => Exception => (instance = null) => {
+export const ParmsIdType = library => ({ Exception }) => (instance = null) => {
   const Constructor = library.ParmsIdType
   let _instance
   try {

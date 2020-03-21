@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-export const SecurityLevel = library => Exception => {
+export const SecurityLevel = library => () => {
   // Static methods
   const _none = library.SecLevelType.none
   const _tc128 = library.SecLevelType.tc128

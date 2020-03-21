@@ -1,12 +1,17 @@
 import { Seal } from '../../index.js'
+import { getLibrary } from '../../index'
+import { BatchEncoder } from '../../components'
 
 let Morfix = null
 let parms = null
 let context = null
 let encoder = null
-
+let BatchEncoderObject = null
 beforeAll(async () => {
   Morfix = await Seal
+  const lib = getLibrary()
+  BatchEncoderObject = BatchEncoder(lib)(Morfix)
+
   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
   parms.setPolyModulusDegree(4096)
   parms.setCoeffModulus(
@@ -14,20 +19,19 @@ beforeAll(async () => {
   )
   parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
-  encoder = Morfix.BatchEncoder(context)
+  encoder = BatchEncoderObject(context)
 })
 
 describe('BatchEncoder', () => {
   test('It should be a factory', () => {
-    expect(Morfix).toHaveProperty('BatchEncoder')
-    expect(Morfix.BatchEncoder).toBeDefined()
-    expect(typeof Morfix.BatchEncoder.constructor).toBe('function')
-    expect(Morfix.BatchEncoder).toBeInstanceOf(Object)
-    expect(Morfix.BatchEncoder.constructor).toBe(Function)
-    expect(Morfix.BatchEncoder.constructor.name).toBe('Function')
+    expect(BatchEncoderObject).toBeDefined()
+    expect(typeof BatchEncoderObject.constructor).toBe('function')
+    expect(BatchEncoderObject).toBeInstanceOf(Object)
+    expect(BatchEncoderObject.constructor).toBe(Function)
+    expect(BatchEncoderObject.constructor.name).toBe('Function')
   })
   test('It should have properties', () => {
-    const item = Morfix.BatchEncoder(context)
+    const item = BatchEncoderObject(context)
     // Test properties
     expect(item).toHaveProperty('instance')
     expect(item).toHaveProperty('unsafeInject')
@@ -37,18 +41,18 @@ describe('BatchEncoder', () => {
     expect(item).toHaveProperty('slotCount')
   })
   test('It should have an instance (bfv)', () => {
-    const item = Morfix.BatchEncoder(context)
+    const item = BatchEncoderObject(context)
     expect(item.instance).not.toBeFalsy()
   })
   test('It should inject', () => {
-    const item = Morfix.BatchEncoder(context)
+    const item = BatchEncoderObject(context)
     const spyOn = jest.spyOn(item, 'unsafeInject')
     item.unsafeInject(encoder.instance)
     expect(spyOn).toHaveBeenCalledWith(encoder.instance)
     expect(item.slotCount).toEqual(encoder.slotCount)
   })
   test("It should delete it's instance", () => {
-    const item = Morfix.BatchEncoder(context)
+    const item = BatchEncoderObject(context)
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()

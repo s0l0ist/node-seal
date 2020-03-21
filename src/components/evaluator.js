@@ -1,9 +1,9 @@
-export const Evaluator = library => (
+export const Evaluator = library => ({
   Exception,
   MemoryPoolHandle,
   CipherText,
   PlainText
-) => context => {
+}) => context => {
   const Constructor = library.Evaluator
   let _instance = null
   try {

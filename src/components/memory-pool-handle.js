@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-export const MemoryPoolHandle = library => Exception => {
+export const MemoryPoolHandle = library => () => {
   // Static methods
   const _global = library.MemoryPoolHandle.MemoryPoolHandleGlobal
   const _threadLocal = library.MemoryPoolHandle.MemoryPoolHandleThreadLocal

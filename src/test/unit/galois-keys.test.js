@@ -1,12 +1,17 @@
 import { Seal } from '../../index.js'
+import { getLibrary } from '../../index'
+import { GaloisKeys } from '../../components'
 
 let Morfix = null
 let parms = null
 let context = null
 let keyGenerator = null
-
+let GaloisKeysObject = null
 beforeAll(async () => {
   Morfix = await Seal
+  const lib = getLibrary()
+  GaloisKeysObject = GaloisKeys(lib)(Morfix)
+
   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
   parms.setPolyModulusDegree(4096)
   parms.setCoeffModulus(
@@ -19,15 +24,14 @@ beforeAll(async () => {
 
 describe('GaloisKeys', () => {
   test('It should be a factory', () => {
-    expect(Morfix).toHaveProperty('GaloisKeys')
-    expect(Morfix.GaloisKeys).toBeDefined()
-    expect(typeof Morfix.GaloisKeys.constructor).toBe('function')
-    expect(Morfix.GaloisKeys).toBeInstanceOf(Object)
-    expect(Morfix.GaloisKeys.constructor).toBe(Function)
-    expect(Morfix.GaloisKeys.constructor.name).toBe('Function')
+    expect(GaloisKeysObject).toBeDefined()
+    expect(typeof GaloisKeysObject.constructor).toBe('function')
+    expect(GaloisKeysObject).toBeInstanceOf(Object)
+    expect(GaloisKeysObject.constructor).toBe(Function)
+    expect(GaloisKeysObject.constructor.name).toBe('Function')
   })
   test('It should have properties', () => {
-    const item = Morfix.GaloisKeys()
+    const item = GaloisKeysObject()
     // Test properties
     expect(item).toHaveProperty('instance')
     expect(item).toHaveProperty('inject')
@@ -39,20 +43,20 @@ describe('GaloisKeys', () => {
     expect(item).toHaveProperty('move')
   })
   test('It should have an instance', () => {
-    const item = Morfix.GaloisKeys()
+    const item = GaloisKeysObject()
     expect(item.instance).not.toBeFalsy()
   })
   test('It should inject', () => {
-    const item = Morfix.GaloisKeys()
+    const item = GaloisKeysObject()
     const str = item.save()
-    const newItem = Morfix.GaloisKeys()
+    const newItem = GaloisKeysObject()
     const spyOn = jest.spyOn(newItem, 'inject')
     newItem.inject(item.instance)
     expect(spyOn).toHaveBeenCalledWith(item.instance)
     expect(newItem.save()).toEqual(str)
   })
   test("It should delete it's instance", () => {
-    const item = Morfix.GaloisKeys()
+    const item = GaloisKeysObject()
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
@@ -76,7 +80,7 @@ describe('GaloisKeys', () => {
     expect(index).toBe(true)
   })
   test('It should save to a string', () => {
-    const item = Morfix.GaloisKeys()
+    const item = GaloisKeysObject()
     const spyOn = jest.spyOn(item, 'save')
     const str = item.save()
     expect(spyOn).toHaveBeenCalledWith()
@@ -84,7 +88,7 @@ describe('GaloisKeys', () => {
   })
   test('It should load from a string', () => {
     const item = keyGenerator.genGaloisKeys()
-    const newItem = Morfix.GaloisKeys()
+    const newItem = GaloisKeysObject()
     const str = item.save()
     const spyOn = jest.spyOn(newItem, 'load')
     newItem.load(context, str)
@@ -93,7 +97,7 @@ describe('GaloisKeys', () => {
   })
   test('It should copy another instance', () => {
     const item = keyGenerator.genGaloisKeys()
-    const newItem = Morfix.GaloisKeys()
+    const newItem = GaloisKeysObject()
     const spyOn = jest.spyOn(newItem, 'copy')
     newItem.copy(item)
     expect(spyOn).toHaveBeenCalledWith(item)
@@ -114,7 +118,7 @@ describe('GaloisKeys', () => {
   test('It should move another instance into itself and delete the old', () => {
     const item = keyGenerator.genGaloisKeys()
     const str = item.save()
-    const newItem = Morfix.GaloisKeys()
+    const newItem = GaloisKeysObject()
     const spyOn = jest.spyOn(newItem, 'move')
     newItem.move(item)
     expect(spyOn).toHaveBeenCalledWith(item)

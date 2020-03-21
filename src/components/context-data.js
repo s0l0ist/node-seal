@@ -1,10 +1,9 @@
-// eslint-disable-next-line no-unused-vars
-export const ContextData = library => (
+export const ContextData = library => ({
   Exception,
   EncryptionParameters,
   ParmsIdType,
   EncryptionParameterQualifiers
-) => (instance = null) => {
+}) => (instance = null) => {
   let _instance = instance
 
   /**

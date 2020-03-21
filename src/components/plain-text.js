@@ -1,6 +1,8 @@
-export const PlainText = library => (Exception, ComprModeType, ParmsIdType) => (
-  instance = null
-) => {
+export const PlainText = library => ({
+  Exception,
+  ComprModeType,
+  ParmsIdType
+}) => (instance = null) => {
   const Constructor = library.Plaintext
   let _instance
   try {
@@ -348,7 +350,7 @@ export const PlainText = library => (Exception, ComprModeType, ParmsIdType) => (
     clone() {
       try {
         const clonedInstance = _instance.clone()
-        return PlainText(library)(Exception, ComprModeType, ParmsIdType)(
+        return PlainText(library)({ Exception, ComprModeType, ParmsIdType })(
           clonedInstance
         )
       } catch (e) {
