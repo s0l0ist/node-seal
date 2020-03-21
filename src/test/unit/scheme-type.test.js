@@ -1,46 +1,50 @@
 import { Seal } from '../../index.js'
+import { getLibrary } from '../../index'
+import { SchemeType } from '../../components'
 
 let Morfix = null
+let SchemeTypeObject = null
 beforeAll(async () => {
   Morfix = await Seal
+  const lib = getLibrary()
+  SchemeTypeObject = SchemeType(lib)(Morfix)
 })
 
 describe('SchemeType', () => {
   test('It should be a static instance', () => {
-    expect(Morfix).toHaveProperty('SchemeType')
-    expect(Morfix.SchemeType).toBeDefined()
-    expect(typeof Morfix.SchemeType.constructor).toBe('function')
-    expect(Morfix.SchemeType).toBeInstanceOf(Object)
-    expect(Morfix.SchemeType.constructor).toBe(Object)
-    expect(Morfix.SchemeType.constructor.name).toBe('Object')
+    expect(SchemeTypeObject).toBeDefined()
+    expect(typeof SchemeTypeObject.constructor).toBe('function')
+    expect(SchemeTypeObject).toBeInstanceOf(Object)
+    expect(SchemeTypeObject.constructor).toBe(Object)
+    expect(SchemeTypeObject.constructor.name).toBe('Object')
   })
   test('It should have properties', () => {
-    expect(Morfix.SchemeType).toHaveProperty('none')
-    expect(Morfix.SchemeType).toHaveProperty('BFV')
-    expect(Morfix.SchemeType).toHaveProperty('CKKS')
+    expect(SchemeTypeObject).toHaveProperty('none')
+    expect(SchemeTypeObject).toHaveProperty('BFV')
+    expect(SchemeTypeObject).toHaveProperty('CKKS')
   })
   test('It should return type none', () => {
-    const schemeType = Morfix.SchemeType.none
+    const schemeType = SchemeTypeObject.none
     expect(schemeType).toBeDefined()
     expect(typeof schemeType.constructor).toBe('function')
     expect(schemeType).toBeInstanceOf(Object)
-    expect(schemeType.constructor).toBe(Morfix.SchemeType.none.constructor)
-    expect(Morfix.SchemeType.none.constructor.name).toBe('SchemeType_none')
+    expect(schemeType.constructor).toBe(SchemeTypeObject.none.constructor)
+    expect(SchemeTypeObject.none.constructor.name).toBe('SchemeType_none')
   })
   test('It should return type BFV', () => {
-    const schemeType = Morfix.SchemeType.BFV
+    const schemeType = SchemeTypeObject.BFV
     expect(schemeType).toBeDefined()
     expect(typeof schemeType.constructor).toBe('function')
     expect(schemeType).toBeInstanceOf(Object)
-    expect(schemeType.constructor).toBe(Morfix.SchemeType.BFV.constructor)
-    expect(Morfix.SchemeType.BFV.constructor.name).toBe('SchemeType_BFV')
+    expect(schemeType.constructor).toBe(SchemeTypeObject.BFV.constructor)
+    expect(SchemeTypeObject.BFV.constructor.name).toBe('SchemeType_BFV')
   })
   test('It should return type CKKS', () => {
-    const schemeType = Morfix.SchemeType.CKKS
+    const schemeType = SchemeTypeObject.CKKS
     expect(schemeType).toBeDefined()
     expect(typeof schemeType.constructor).toBe('function')
     expect(schemeType).toBeInstanceOf(Object)
-    expect(schemeType.constructor).toBe(Morfix.SchemeType.CKKS.constructor)
-    expect(Morfix.SchemeType.CKKS.constructor.name).toBe('SchemeType_CKKS')
+    expect(schemeType.constructor).toBe(SchemeTypeObject.CKKS.constructor)
+    expect(SchemeTypeObject.CKKS.constructor.name).toBe('SchemeType_CKKS')
   })
 })

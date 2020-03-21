@@ -1,4 +1,6 @@
 import { Seal } from '../../index.js'
+import { getLibrary } from '../../index'
+import { Decryptor } from '../../components'
 
 let Morfix = null
 let parms = null
@@ -7,8 +9,12 @@ let keyGenerator = null
 let publicKey = null
 let secretKey = null
 let encryptor = null
+let DecryptorObject = null
 beforeAll(async () => {
   Morfix = await Seal
+  const lib = getLibrary()
+  DecryptorObject = Decryptor(lib)(Morfix)
+
   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
   parms.setPolyModulusDegree(4096)
   parms.setCoeffModulus(
@@ -24,15 +30,14 @@ beforeAll(async () => {
 
 describe('Decryptor', () => {
   test('It should be a factory', () => {
-    expect(Morfix).toHaveProperty('Decryptor')
-    expect(Morfix.Decryptor).toBeDefined()
-    expect(typeof Morfix.Decryptor.constructor).toBe('function')
-    expect(Morfix.Decryptor).toBeInstanceOf(Object)
-    expect(Morfix.Decryptor.constructor).toBe(Function)
-    expect(Morfix.Decryptor.constructor.name).toBe('Function')
+    expect(DecryptorObject).toBeDefined()
+    expect(typeof DecryptorObject.constructor).toBe('function')
+    expect(DecryptorObject).toBeInstanceOf(Object)
+    expect(DecryptorObject.constructor).toBe(Function)
+    expect(DecryptorObject.constructor.name).toBe('Function')
   })
   test('It should have properties', () => {
-    const item = Morfix.Decryptor(context, secretKey)
+    const item = DecryptorObject(context, secretKey)
     // Test properties
     expect(item).toHaveProperty('instance')
     expect(item).toHaveProperty('unsafeInject')
@@ -40,19 +45,19 @@ describe('Decryptor', () => {
     expect(item).toHaveProperty('decrypt')
   })
   test('It should have an instance', () => {
-    const item = Morfix.Decryptor(context, secretKey)
+    const item = DecryptorObject(context, secretKey)
     expect(item.instance).not.toBeFalsy()
   })
   test('It should inject', () => {
-    const item = Morfix.Decryptor(context, secretKey)
-    const newItem = Morfix.Decryptor(context, secretKey)
+    const item = DecryptorObject(context, secretKey)
+    const newItem = DecryptorObject(context, secretKey)
     const spyOn = jest.spyOn(newItem, 'unsafeInject')
     newItem.unsafeInject(item.instance)
     expect(spyOn).toHaveBeenCalledWith(item.instance)
     expect(newItem.instance).toEqual(item.instance)
   })
   test("It should delete it's instance", () => {
-    const item = Morfix.Decryptor(context, secretKey)
+    const item = DecryptorObject(context, secretKey)
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
@@ -60,7 +65,7 @@ describe('Decryptor', () => {
     expect(() => item.decrypt()).toThrow(TypeError)
   })
   test('It should encrypt a ciphertext to a destination plain', () => {
-    const item = Morfix.Decryptor(context, secretKey)
+    const item = DecryptorObject(context, secretKey)
     const encoder = Morfix.BatchEncoder(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).fill(5)
     const plain = Morfix.PlainText()
@@ -75,7 +80,7 @@ describe('Decryptor', () => {
     expect(decoded).toEqual(arr)
   })
   test('It should encrypt a ciphertext and return a plain', () => {
-    const item = Morfix.Decryptor(context, secretKey)
+    const item = DecryptorObject(context, secretKey)
     const encoder = Morfix.BatchEncoder(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).fill(5)
     const plain = Morfix.PlainText()

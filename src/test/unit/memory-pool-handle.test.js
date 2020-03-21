@@ -1,42 +1,46 @@
 import { Seal } from '../../index.js'
+import { getLibrary } from '../../index'
+import { MemoryPoolHandle } from '../../components'
 
 let Morfix = null
+let MemoryPoolHandleObject = null
 beforeAll(async () => {
   Morfix = await Seal
+  const lib = getLibrary()
+  MemoryPoolHandleObject = MemoryPoolHandle(lib)(Morfix)
 })
 
 describe('MemoryPoolHandle', () => {
   test('It should be a static instance', () => {
-    expect(Morfix).toHaveProperty('MemoryPoolHandle')
-    expect(Morfix.MemoryPoolHandle).toBeDefined()
-    expect(typeof Morfix.MemoryPoolHandle.constructor).toBe('function')
-    expect(Morfix.MemoryPoolHandle).toBeInstanceOf(Object)
-    expect(Morfix.MemoryPoolHandle.constructor).toBe(Object)
-    expect(Morfix.MemoryPoolHandle.constructor.name).toBe('Object')
+    expect(MemoryPoolHandleObject).toBeDefined()
+    expect(typeof MemoryPoolHandleObject.constructor).toBe('function')
+    expect(MemoryPoolHandleObject).toBeInstanceOf(Object)
+    expect(MemoryPoolHandleObject.constructor).toBe(Object)
+    expect(MemoryPoolHandleObject.constructor.name).toBe('Object')
   })
   test('It should have properties', () => {
-    expect(Morfix.MemoryPoolHandle).toHaveProperty('global')
-    expect(Morfix.MemoryPoolHandle).toHaveProperty('threadLocal')
+    expect(MemoryPoolHandleObject).toHaveProperty('global')
+    expect(MemoryPoolHandleObject).toHaveProperty('threadLocal')
   })
   test('It should return a pointer to the global handle', () => {
-    const pool = Morfix.MemoryPoolHandle.global
+    const pool = MemoryPoolHandleObject.global
     expect(pool).toBeDefined()
     expect(typeof pool.constructor).toBe('function')
     expect(pool).toBeInstanceOf(Object)
-    expect(pool.constructor).toBe(Morfix.MemoryPoolHandle.global.constructor)
-    expect(Morfix.MemoryPoolHandle.global.constructor.name).toBe(
+    expect(pool.constructor).toBe(MemoryPoolHandleObject.global.constructor)
+    expect(MemoryPoolHandleObject.global.constructor.name).toBe(
       'MemoryPoolHandle'
     )
   })
   test('It should return a pointer to a threadLocal handle', () => {
-    const pool = Morfix.MemoryPoolHandle.threadLocal
+    const pool = MemoryPoolHandleObject.threadLocal
     expect(pool).toBeDefined()
     expect(typeof pool.constructor).toBe('function')
     expect(pool).toBeInstanceOf(Object)
     expect(pool.constructor).toBe(
-      Morfix.MemoryPoolHandle.threadLocal.constructor
+      MemoryPoolHandleObject.threadLocal.constructor
     )
-    expect(Morfix.MemoryPoolHandle.threadLocal.constructor.name).toBe(
+    expect(MemoryPoolHandleObject.threadLocal.constructor.name).toBe(
       'MemoryPoolHandle'
     )
   })

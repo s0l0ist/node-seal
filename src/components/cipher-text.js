@@ -1,8 +1,8 @@
-export const CipherText = library => (
+export const CipherText = library => ({
   Exception,
   ComprModeType,
   ParmsIdType
-) => (instance = null) => {
+}) => (instance = null) => {
   const Constructor = library.Ciphertext
   let _instance
   try {
@@ -303,7 +303,7 @@ export const CipherText = library => (
     clone() {
       try {
         const clonedInstance = _instance.clone()
-        return CipherText(library)(Exception, ComprModeType, ParmsIdType)(
+        return CipherText(library)({ Exception, ComprModeType, ParmsIdType })(
           clonedInstance
         )
       } catch (e) {

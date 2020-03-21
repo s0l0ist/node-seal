@@ -1,4 +1,4 @@
-export const GaloisKeys = library => (Exception, ComprModeType) => (
+export const GaloisKeys = library => ({ Exception, ComprModeType }) => (
   instance = null
 ) => {
   const Constructor = library.GaloisKeys
@@ -174,7 +174,7 @@ export const GaloisKeys = library => (Exception, ComprModeType) => (
     clone() {
       try {
         const clonedInstance = _instance.clone()
-        return GaloisKeys(library)(Exception, ComprModeType)(clonedInstance)
+        return GaloisKeys(library)({ Exception, ComprModeType })(clonedInstance)
       } catch (e) {
         throw Exception.safe(e)
       }

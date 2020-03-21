@@ -1,10 +1,10 @@
-export const KeyGenerator = library => (
+export const KeyGenerator = library => ({
   Exception,
   PublicKey,
   SecretKey,
   RelinKeys,
   GaloisKeys
-) => (context, secretKey = null, publicKey = null) => {
+}) => (context, secretKey = null, publicKey = null) => {
   const Constructor = library.KeyGenerator
 
   const constructInstance = (secretKey, publicKey) => {

@@ -1,8 +1,8 @@
-export const EncryptionParameters = library => (
+export const EncryptionParameters = library => ({
   Exception,
   ComprModeType,
   SmallModulus
-) => (schemeType, suppressWarning = false) => {
+}) => (schemeType, suppressWarning = false) => {
   const Constructor = library.EncryptionParameters
   let _instance = null
 

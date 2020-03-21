@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-export const ComprModeType = library => Exception => {
+export const ComprModeType = library => () => {
   // Static methods
   const _none = library.ComprModeType.none
   const _deflate = library.ComprModeType.deflate

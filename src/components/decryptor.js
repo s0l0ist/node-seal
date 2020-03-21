@@ -1,4 +1,4 @@
-export const Decryptor = library => (Exception, PlainText) => (
+export const Decryptor = library => ({ Exception, PlainText }) => (
   context,
   secretKey
 ) => {

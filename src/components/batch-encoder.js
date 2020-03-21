@@ -1,9 +1,9 @@
-export const BatchEncoder = library => (
+export const BatchEncoder = library => ({
   Exception,
   MemoryPoolHandle,
   PlainText,
   Vector
-) => context => {
+}) => context => {
   const Constructor = library.BatchEncoder
   let _instance = null
   try {

@@ -1,4 +1,4 @@
-export const Exception = library => {
+export const Exception = library => () => {
   // Static methods
   const _getException = library.getException
 

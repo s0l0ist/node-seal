@@ -1,12 +1,17 @@
 import { Seal } from '../../index.js'
+import { getLibrary } from '../../index'
+import { RelinKeys } from '../../components'
 
 let Morfix = null
 let parms = null
 let context = null
 let keyGenerator = null
-
+let RelinKeysObject = null
 beforeAll(async () => {
   Morfix = await Seal
+  const lib = getLibrary()
+  RelinKeysObject = RelinKeys(lib)(Morfix)
+
   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
   parms.setPolyModulusDegree(4096)
   parms.setCoeffModulus(
@@ -19,15 +24,14 @@ beforeAll(async () => {
 
 describe('RelinKeys', () => {
   test('It should be a factory', () => {
-    expect(Morfix).toHaveProperty('RelinKeys')
-    expect(Morfix.RelinKeys).toBeDefined()
-    expect(typeof Morfix.RelinKeys.constructor).toBe('function')
-    expect(Morfix.RelinKeys).toBeInstanceOf(Object)
-    expect(Morfix.RelinKeys.constructor).toBe(Function)
-    expect(Morfix.RelinKeys.constructor.name).toBe('Function')
+    expect(RelinKeysObject).toBeDefined()
+    expect(typeof RelinKeysObject.constructor).toBe('function')
+    expect(RelinKeysObject).toBeInstanceOf(Object)
+    expect(RelinKeysObject.constructor).toBe(Function)
+    expect(RelinKeysObject.constructor.name).toBe('Function')
   })
   test('It should have properties', () => {
-    const item = Morfix.RelinKeys()
+    const item = RelinKeysObject()
     // Test properties
     expect(item).toHaveProperty('instance')
     expect(item).toHaveProperty('inject')
@@ -41,20 +45,20 @@ describe('RelinKeys', () => {
     expect(item).toHaveProperty('move')
   })
   test('It should have an instance', () => {
-    const item = Morfix.RelinKeys()
+    const item = RelinKeysObject()
     expect(item.instance).not.toBeFalsy()
   })
   test('It should inject', () => {
-    const item = Morfix.RelinKeys()
+    const item = RelinKeysObject()
     const str = item.save()
-    const newItem = Morfix.RelinKeys()
+    const newItem = RelinKeysObject()
     const spyOn = jest.spyOn(newItem, 'inject')
     newItem.inject(item.instance)
     expect(spyOn).toHaveBeenCalledWith(item.instance)
     expect(newItem.save()).toEqual(str)
   })
   test("It should delete it's instance", () => {
-    const item = Morfix.RelinKeys()
+    const item = RelinKeysObject()
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
@@ -78,7 +82,7 @@ describe('RelinKeys', () => {
     expect(index).toBe(true)
   })
   test('It should save to a string', () => {
-    const item = Morfix.RelinKeys()
+    const item = RelinKeysObject()
     const spyOn = jest.spyOn(item, 'save')
     const str = item.save()
     expect(spyOn).toHaveBeenCalledWith()
@@ -86,7 +90,7 @@ describe('RelinKeys', () => {
   })
   test('It should load from a string', () => {
     const item = keyGenerator.genRelinKeys()
-    const newItem = Morfix.RelinKeys()
+    const newItem = RelinKeysObject()
     const str = item.save()
     const spyOn = jest.spyOn(newItem, 'load')
     newItem.load(context, str)
@@ -95,7 +99,7 @@ describe('RelinKeys', () => {
   })
   test('It should copy another instance', () => {
     const item = keyGenerator.genRelinKeys()
-    const newItem = Morfix.RelinKeys()
+    const newItem = RelinKeysObject()
     const spyOn = jest.spyOn(newItem, 'copy')
     newItem.copy(item)
     expect(spyOn).toHaveBeenCalledWith(item)
@@ -116,7 +120,7 @@ describe('RelinKeys', () => {
   test('It should move another instance into itself and delete the old', () => {
     const item = keyGenerator.genRelinKeys()
     const str = item.save()
-    const newItem = Morfix.RelinKeys()
+    const newItem = RelinKeysObject()
     const spyOn = jest.spyOn(newItem, 'move')
     newItem.move(item)
     expect(spyOn).toHaveBeenCalledWith(item)

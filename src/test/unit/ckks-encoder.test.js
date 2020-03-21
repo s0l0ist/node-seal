@@ -1,32 +1,36 @@
 import { Seal } from '../../index.js'
+import { getLibrary } from '../../index'
+import { CKKSEncoder } from '../../components'
 
 let Morfix = null
 let parms = null
 let context = null
 let encoder = null
-
+let CKKSEncoderObject = null
 beforeAll(async () => {
   Morfix = await Seal
+  const lib = getLibrary()
+  CKKSEncoderObject = CKKSEncoder(lib)(Morfix)
+
   parms = Morfix.EncryptionParameters(Morfix.SchemeType.CKKS)
   parms.setPolyModulusDegree(4096)
   parms.setCoeffModulus(
     Morfix.CoeffModulus.Create(4096, Int32Array.from([46, 16, 46]))
   )
   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
-  encoder = Morfix.CKKSEncoder(context)
+  encoder = CKKSEncoderObject(context)
 })
 
 describe('CKKSEncoder', () => {
   test('It should be a factory', () => {
-    expect(Morfix).toHaveProperty('CKKSEncoder')
-    expect(Morfix.CKKSEncoder).toBeDefined()
-    expect(typeof Morfix.CKKSEncoder.constructor).toBe('function')
-    expect(Morfix.CKKSEncoder).toBeInstanceOf(Object)
-    expect(Morfix.CKKSEncoder.constructor).toBe(Function)
-    expect(Morfix.CKKSEncoder.constructor.name).toBe('Function')
+    expect(CKKSEncoderObject).toBeDefined()
+    expect(typeof CKKSEncoderObject.constructor).toBe('function')
+    expect(CKKSEncoderObject).toBeInstanceOf(Object)
+    expect(CKKSEncoderObject.constructor).toBe(Function)
+    expect(CKKSEncoderObject.constructor.name).toBe('Function')
   })
   test('It should have properties', () => {
-    const item = Morfix.CKKSEncoder(context)
+    const item = CKKSEncoderObject(context)
     // Test properties
     expect(item).toHaveProperty('instance')
     expect(item).toHaveProperty('unsafeInject')
@@ -36,18 +40,18 @@ describe('CKKSEncoder', () => {
     expect(item).toHaveProperty('slotCount')
   })
   test('It should have an instance (bfv)', () => {
-    const item = Morfix.CKKSEncoder(context)
+    const item = CKKSEncoderObject(context)
     expect(item.instance).not.toBeFalsy()
   })
   test('It should inject', () => {
-    const item = Morfix.CKKSEncoder(context)
+    const item = CKKSEncoderObject(context)
     const spyOn = jest.spyOn(item, 'unsafeInject')
     item.unsafeInject(encoder.instance)
     expect(spyOn).toHaveBeenCalledWith(encoder.instance)
     expect(item.slotCount).toEqual(encoder.slotCount)
   })
   test("It should delete it's instance", () => {
-    const item = Morfix.CKKSEncoder(context)
+    const item = CKKSEncoderObject(context)
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()

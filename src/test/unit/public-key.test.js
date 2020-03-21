@@ -1,12 +1,17 @@
 import { Seal } from '../../index.js'
+import { getLibrary } from '../../index'
+import { PublicKey } from '../../components'
 
 let Morfix = null
 let parms = null
 let context = null
 let keyGenerator = null
-
+let PublicKeyObject = null
 beforeAll(async () => {
   Morfix = await Seal
+  const lib = getLibrary()
+  PublicKeyObject = PublicKey(lib)(Morfix)
+
   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
   parms.setPolyModulusDegree(4096)
   parms.setCoeffModulus(
@@ -19,15 +24,14 @@ beforeAll(async () => {
 
 describe('PublicKey', () => {
   test('It should be a factory', () => {
-    expect(Morfix).toHaveProperty('PublicKey')
-    expect(Morfix.PublicKey).toBeDefined()
-    expect(typeof Morfix.PublicKey.constructor).toBe('function')
-    expect(Morfix.PublicKey).toBeInstanceOf(Object)
-    expect(Morfix.PublicKey.constructor).toBe(Function)
-    expect(Morfix.PublicKey.constructor.name).toBe('Function')
+    expect(PublicKeyObject).toBeDefined()
+    expect(typeof PublicKeyObject.constructor).toBe('function')
+    expect(PublicKeyObject).toBeInstanceOf(Object)
+    expect(PublicKeyObject.constructor).toBe(Function)
+    expect(PublicKeyObject.constructor.name).toBe('Function')
   })
   test('It should have properties', () => {
-    const item = Morfix.PublicKey()
+    const item = PublicKeyObject()
     // Test properties
     expect(item).toHaveProperty('instance')
     expect(item).toHaveProperty('inject')
@@ -39,20 +43,20 @@ describe('PublicKey', () => {
     expect(item).toHaveProperty('move')
   })
   test('It should have an instance', () => {
-    const item = Morfix.PublicKey()
+    const item = PublicKeyObject()
     expect(item.instance).not.toBeFalsy()
   })
   test('It should inject', () => {
-    const item = Morfix.PublicKey()
+    const item = PublicKeyObject()
     const str = item.save()
-    const newItem = Morfix.PublicKey()
+    const newItem = PublicKeyObject()
     const spyOn = jest.spyOn(newItem, 'inject')
     newItem.inject(item.instance)
     expect(spyOn).toHaveBeenCalledWith(item.instance)
     expect(newItem.save()).toEqual(str)
   })
   test("It should delete it's instance", () => {
-    const item = Morfix.PublicKey()
+    const item = PublicKeyObject()
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
@@ -60,7 +64,7 @@ describe('PublicKey', () => {
     expect(() => item.save()).toThrow(TypeError)
   })
   test('It should save to a string', () => {
-    const item = Morfix.PublicKey()
+    const item = PublicKeyObject()
     const spyOn = jest.spyOn(item, 'save')
     const str = item.save()
     expect(spyOn).toHaveBeenCalledWith()
@@ -68,7 +72,7 @@ describe('PublicKey', () => {
   })
   test('It should load from a string', () => {
     const item = keyGenerator.getPublicKey()
-    const newItem = Morfix.PublicKey()
+    const newItem = PublicKeyObject()
     const str = item.save()
     const spyOn = jest.spyOn(newItem, 'load')
     newItem.load(context, str)
@@ -77,7 +81,7 @@ describe('PublicKey', () => {
   })
   test('It should copy another instance', () => {
     const item = keyGenerator.getPublicKey()
-    const newItem = Morfix.PublicKey()
+    const newItem = PublicKeyObject()
     const spyOn = jest.spyOn(newItem, 'copy')
     newItem.copy(item)
     expect(spyOn).toHaveBeenCalledWith(item)
@@ -98,7 +102,7 @@ describe('PublicKey', () => {
   test('It should move another instance into itself and delete the old', () => {
     const item = keyGenerator.getPublicKey()
     const str = item.save()
-    const newItem = Morfix.PublicKey()
+    const newItem = PublicKeyObject()
     const spyOn = jest.spyOn(newItem, 'move')
     newItem.move(item)
     expect(spyOn).toHaveBeenCalledWith(item)

@@ -1,40 +1,42 @@
 import { Seal } from '../../index.js'
+import { getLibrary } from '../../index'
+import { ComprModeType } from '../../components'
 
 let Morfix = null
+let ComprModeTypeObject = null
 beforeAll(async () => {
   Morfix = await Seal
+  const lib = getLibrary()
+  ComprModeTypeObject = ComprModeType(lib)(Morfix)
 })
 
 describe('ComprModeType', () => {
   test('It should be a static instance', () => {
-    expect(Morfix).toHaveProperty('ComprModeType')
-    expect(Morfix.ComprModeType).toBeDefined()
-    expect(typeof Morfix.ComprModeType.constructor).toBe('function')
-    expect(Morfix.ComprModeType).toBeInstanceOf(Object)
-    expect(Morfix.ComprModeType.constructor).toBe(Object)
-    expect(Morfix.ComprModeType.constructor.name).toBe('Object')
+    expect(ComprModeTypeObject).toBeDefined()
+    expect(typeof ComprModeTypeObject.constructor).toBe('function')
+    expect(ComprModeTypeObject).toBeInstanceOf(Object)
+    expect(ComprModeTypeObject.constructor).toBe(Object)
+    expect(ComprModeTypeObject.constructor.name).toBe('Object')
   })
   test('It should have properties', () => {
-    expect(Morfix.ComprModeType).toHaveProperty('none')
-    expect(Morfix.ComprModeType).toHaveProperty('deflate')
+    expect(ComprModeTypeObject).toHaveProperty('none')
+    expect(ComprModeTypeObject).toHaveProperty('deflate')
   })
   test('It should return type none', async () => {
-    const comprMode = Morfix.ComprModeType.none
+    const comprMode = ComprModeTypeObject.none
     expect(comprMode).toBeDefined()
     expect(typeof comprMode.constructor).toBe('function')
     expect(comprMode).toBeInstanceOf(Object)
-    expect(comprMode.constructor).toBe(Morfix.ComprModeType.none.constructor)
-    expect(Morfix.ComprModeType.none.constructor.name).toBe(
-      'ComprModeType_none'
-    )
+    expect(comprMode.constructor).toBe(ComprModeTypeObject.none.constructor)
+    expect(ComprModeTypeObject.none.constructor.name).toBe('ComprModeType_none')
   })
   test('It should return type deflate', async () => {
-    const comprMode = Morfix.ComprModeType.deflate
+    const comprMode = ComprModeTypeObject.deflate
     expect(comprMode).toBeDefined()
     expect(typeof comprMode.constructor).toBe('function')
     expect(comprMode).toBeInstanceOf(Object)
-    expect(comprMode.constructor).toBe(Morfix.ComprModeType.deflate.constructor)
-    expect(Morfix.ComprModeType.deflate.constructor.name).toBe(
+    expect(comprMode.constructor).toBe(ComprModeTypeObject.deflate.constructor)
+    expect(ComprModeTypeObject.deflate.constructor.name).toBe(
       'ComprModeType_deflate'
     )
   })

@@ -1,4 +1,6 @@
-export const Vector = library => Exception => (array = new Int32Array(0)) => {
+export const Vector = library => ({ Exception }) => (
+  array = new Int32Array(0)
+) => {
   // Static methods
   const _vecFromArrayInt32 = library.vecFromArrayInt32
   const _vecFromArrayUInt32 = library.vecFromArrayUInt32

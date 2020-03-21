@@ -1,9 +1,9 @@
-export const CKKSEncoder = library => (
+export const CKKSEncoder = library => ({
   Exception,
   MemoryPoolHandle,
   PlainText,
   Vector
-) => context => {
+}) => context => {
   const Constructor = library.CKKSEncoder
   let _instance = null
   try {

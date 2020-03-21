@@ -1,12 +1,17 @@
 import { Seal } from '../../index.js'
+import { getLibrary } from '../../index'
+import { SecretKey } from '../../components'
 
 let Morfix = null
 let parms = null
 let context = null
 let keyGenerator = null
-
+let SecretKeyObject = null
 beforeAll(async () => {
   Morfix = await Seal
+  const lib = getLibrary()
+  SecretKeyObject = SecretKey(lib)(Morfix)
+
   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
   parms.setPolyModulusDegree(4096)
   parms.setCoeffModulus(
@@ -19,15 +24,14 @@ beforeAll(async () => {
 
 describe('SecretKey', () => {
   test('It should be a factory', () => {
-    expect(Morfix).toHaveProperty('SecretKey')
-    expect(Morfix.SecretKey).toBeDefined()
-    expect(typeof Morfix.SecretKey.constructor).toBe('function')
-    expect(Morfix.SecretKey).toBeInstanceOf(Object)
-    expect(Morfix.SecretKey.constructor).toBe(Function)
-    expect(Morfix.SecretKey.constructor.name).toBe('Function')
+    expect(SecretKeyObject).toBeDefined()
+    expect(typeof SecretKeyObject.constructor).toBe('function')
+    expect(SecretKeyObject).toBeInstanceOf(Object)
+    expect(SecretKeyObject.constructor).toBe(Function)
+    expect(SecretKeyObject.constructor.name).toBe('Function')
   })
   test('It should have properties', () => {
-    const item = Morfix.SecretKey()
+    const item = SecretKeyObject()
     // Test properties
     expect(item).toHaveProperty('instance')
     expect(item).toHaveProperty('inject')
@@ -39,20 +43,20 @@ describe('SecretKey', () => {
     expect(item).toHaveProperty('move')
   })
   test('It should have an instance', () => {
-    const item = Morfix.SecretKey()
+    const item = SecretKeyObject()
     expect(item.instance).not.toBeFalsy()
   })
   test('It should inject', () => {
-    const item = Morfix.SecretKey()
+    const item = SecretKeyObject()
     const str = item.save()
-    const newItem = Morfix.SecretKey()
+    const newItem = SecretKeyObject()
     const spyOn = jest.spyOn(newItem, 'inject')
     newItem.inject(item.instance)
     expect(spyOn).toHaveBeenCalledWith(item.instance)
     expect(newItem.save()).toEqual(str)
   })
   test("It should delete it's instance", () => {
-    const item = Morfix.SecretKey()
+    const item = SecretKeyObject()
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
@@ -60,7 +64,7 @@ describe('SecretKey', () => {
     expect(() => item.save()).toThrow(TypeError)
   })
   test('It should save to a string', () => {
-    const item = Morfix.SecretKey()
+    const item = SecretKeyObject()
     const spyOn = jest.spyOn(item, 'save')
     const str = item.save()
     expect(spyOn).toHaveBeenCalledWith()
@@ -68,7 +72,7 @@ describe('SecretKey', () => {
   })
   test('It should load from a string', () => {
     const item = keyGenerator.getSecretKey()
-    const newItem = Morfix.SecretKey()
+    const newItem = SecretKeyObject()
     const str = item.save()
     const spyOn = jest.spyOn(newItem, 'load')
     newItem.load(context, str)
@@ -77,7 +81,7 @@ describe('SecretKey', () => {
   })
   test('It should copy another instance', () => {
     const item = keyGenerator.getSecretKey()
-    const newItem = Morfix.SecretKey()
+    const newItem = SecretKeyObject()
     const spyOn = jest.spyOn(newItem, 'copy')
     newItem.copy(item)
     expect(spyOn).toHaveBeenCalledWith(item)
@@ -98,7 +102,7 @@ describe('SecretKey', () => {
   test('It should move another instance into itself and delete the old', () => {
     const item = keyGenerator.getSecretKey()
     const str = item.save()
-    const newItem = Morfix.SecretKey()
+    const newItem = SecretKeyObject()
     const spyOn = jest.spyOn(newItem, 'move')
     newItem.move(item)
     expect(spyOn).toHaveBeenCalledWith(item)

@@ -1,45 +1,49 @@
 import { Seal } from '../../index.js'
+import { getLibrary } from '../../index'
+import { ParmsIdType } from '../../components'
 
 let Morfix = null
+let ParmsIdTypeObject = null
 beforeAll(async () => {
   Morfix = await Seal
+  const lib = getLibrary()
+  ParmsIdTypeObject = ParmsIdType(lib)(Morfix)
 })
 
 describe('ParmsIdType', () => {
   test('It should be a factory', () => {
-    expect(Morfix).toHaveProperty('ParmsIdType')
-    expect(Morfix.ParmsIdType).toBeDefined()
-    expect(typeof Morfix.ParmsIdType.constructor).toBe('function')
-    expect(Morfix.ParmsIdType).toBeInstanceOf(Object)
-    expect(Morfix.ParmsIdType.constructor).toBe(Function)
-    expect(Morfix.ParmsIdType.constructor.name).toBe('Function')
+    expect(ParmsIdTypeObject).toBeDefined()
+    expect(typeof ParmsIdTypeObject.constructor).toBe('function')
+    expect(ParmsIdTypeObject).toBeInstanceOf(Object)
+    expect(ParmsIdTypeObject.constructor).toBe(Function)
+    expect(ParmsIdTypeObject.constructor.name).toBe('Function')
   })
   test('It should have properties', () => {
-    const item = Morfix.ParmsIdType()
+    const parmsId = ParmsIdTypeObject()
     // Test properties
-    expect(item).toHaveProperty('instance')
-    expect(item).toHaveProperty('inject')
-    expect(item).toHaveProperty('delete')
-    expect(item).toHaveProperty('values')
+    expect(parmsId).toHaveProperty('instance')
+    expect(parmsId).toHaveProperty('inject')
+    expect(parmsId).toHaveProperty('delete')
+    expect(parmsId).toHaveProperty('values')
   })
   test('It should have an instance', () => {
-    const item = Morfix.ParmsIdType()
-    expect(item.instance).not.toBeFalsy()
+    const parmsId = ParmsIdTypeObject()
+    expect(parmsId.instance).not.toBeFalsy()
   })
   test('It should inject', () => {
-    const item = Morfix.ParmsIdType()
-    const newItem = Morfix.ParmsIdType()
-    const spyOn = jest.spyOn(newItem, 'inject')
-    newItem.inject(item.instance)
-    expect(spyOn).toHaveBeenCalledWith(item.instance)
+    const parmsId = ParmsIdTypeObject()
+    const newParmsId = ParmsIdTypeObject()
+    const spyOn = jest.spyOn(newParmsId, 'inject')
+    newParmsId.inject(parmsId.instance)
+    expect(spyOn).toHaveBeenCalledWith(parmsId.instance)
   })
   test("It should delete it's instance", () => {
-    const item = Morfix.ParmsIdType()
-    const spyOn = jest.spyOn(item, 'delete')
-    item.delete()
+    const parmsId = ParmsIdTypeObject()
+    const spyOn = jest.spyOn(parmsId, 'delete')
+    parmsId.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(item.instance).toBeNull()
-    expect(() => item.values).toThrow(TypeError)
+    expect(parmsId.instance).toBeNull()
+    expect(() => parmsId.values).toThrow(TypeError)
   })
   test('It should return values', () => {
     const parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
@@ -49,8 +53,8 @@ describe('ParmsIdType', () => {
     )
     parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
     const context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
-    const item = context.firstParmsId
-    const values = item.values
+    const parmsId = context.firstParmsId
+    const values = parmsId.values
     expect(Array.isArray(values)).toBe(true)
     values.forEach(x => {
       expect(typeof x).toBe('bigint')
@@ -63,15 +67,15 @@ describe('ParmsIdType', () => {
     ])
   })
   test('It should construct from no args', () => {
-    const spyOn = jest.spyOn(Morfix, 'ParmsIdType')
-    const item = Morfix.ParmsIdType()
-    expect(spyOn).toHaveBeenCalledWith()
-    expect(item).toBeDefined()
-    expect(typeof item.constructor).toBe('function')
-    expect(item).toBeInstanceOf(Object)
-    expect(item.constructor).toBe(Object)
-    expect(item.instance.constructor.name).toBe('ParmsIdType')
-    const values = item.values
+    const constructor = jest.fn(ParmsIdTypeObject)
+    const parmsId = constructor()
+    expect(constructor).toHaveBeenCalledWith()
+    expect(parmsId).toBeDefined()
+    expect(typeof parmsId.constructor).toBe('function')
+    expect(parmsId).toBeInstanceOf(Object)
+    expect(parmsId.constructor).toBe(Object)
+    expect(parmsId.instance.constructor.name).toBe('ParmsIdType')
+    const values = parmsId.values
     expect(Array.isArray(values)).toBe(true)
     values.forEach(x => {
       expect(typeof x).toBe('bigint')

@@ -1,4 +1,4 @@
-export const Context = library => (Exception, ParmsIdType, ContextData) => (
+export const Context = library => ({ Exception, ParmsIdType, ContextData }) => (
   encryptionParams,
   expandModChain,
   securityLevel

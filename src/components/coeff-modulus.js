@@ -1,4 +1,4 @@
-export const CoeffModulus = library => Exception => {
+export const CoeffModulus = library => ({ Exception }) => {
   // Static methods
   const _MaxBitCount = library.CoeffModulus.MaxBitCount
   const _BFVDefault = library.CoeffModulus.BFVDefault
