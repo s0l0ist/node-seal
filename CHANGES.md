@@ -3,6 +3,12 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 4.1.1
+
+Refactor:
+- Complete refactor of the code structure to allow for code coverage
+- Removed underutilized `Util` export for functional composition.
+
 ## Version 4.1.0
 
 Breaking:
