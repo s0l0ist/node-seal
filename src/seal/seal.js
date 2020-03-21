@@ -26,12 +26,14 @@ export const SEAL = library => {
   const PlainText = applyDependencies({
     Exception,
     ComprModeType,
-    ParmsIdType
+    ParmsIdType,
+    MemoryPoolHandle
   })(components.PlainText)
   const CipherText = applyDependencies({
     Exception,
     ComprModeType,
-    ParmsIdType
+    ParmsIdType,
+    MemoryPoolHandle
   })(components.CipherText)
   const BatchEncoder = applyDependencies({
     Exception,
@@ -191,7 +193,11 @@ export const SEAL = library => {
      *
      * @function
      * @name SEAL#CipherText
-     * @param {CipherText} [instance=null] A WASM instance
+     * @param {Object} [options] Options
+     * @param {Context} [options.context] The encryption Context
+     * @param {ParmsIdType} [options.parmsId] The specified parmsId
+     * @param {number} [options.sizeCapacity] The size capacity
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
      * @returns {CipherText} An empty CipherText instance
      * @example
      * import { Seal } from 'node-seal'
@@ -843,7 +849,10 @@ export const SEAL = library => {
      *
      * @function
      * @name SEAL#PlainText
-     * @param {PlainText} [instance=null] A WASM instance
+     * @param {Object} [options] Options
+     * @param {Number} [options.capacity] Size Capacity
+     * @param {Number} [options.coeffCount] Coefficient Modulus Count
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {PlainText} An empty PlainText instance
      * @example
      * import { Seal } from 'node-seal'

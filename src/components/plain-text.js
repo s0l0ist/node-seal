@@ -1,19 +1,28 @@
 export const PlainText = library => ({
   Exception,
   ComprModeType,
-  ParmsIdType
-}) => (instance = null) => {
+  ParmsIdType,
+  MemoryPoolHandle
+}) => options => {
   const Constructor = library.Plaintext
-  let _instance
-  try {
-    if (instance) {
-      _instance = new Constructor(instance)
-      instance.delete()
-    } else {
-      _instance = new Constructor()
+  let _instance = construct(options)
+
+  function construct({
+    capacity = null,
+    coeffCount = null,
+    pool = MemoryPoolHandle.global
+  } = {}) {
+    try {
+      if (capacity === null && coeffCount === null) {
+        return new Constructor(pool)
+      } else if (capacity !== null && coeffCount === null) {
+        return new Constructor(coeffCount, pool)
+      } else if (capacity !== null && coeffCount !== null) {
+        return new Constructor(capacity, coeffCount, pool)
+      }
+    } catch (e) {
+      throw Exception.safe(e)
     }
-  } catch (e) {
-    throw Exception.safe(e)
   }
 
   /**
@@ -37,20 +46,19 @@ export const PlainText = library => ({
     },
 
     /**
-     * Inject this object with a raw WASM instance
+     * Inject this object with a raw WASM instance. No type checking is performed.
      *
      * @private
      * @function
-     * @name PlainText#inject
+     * @name PlainText#unsafeInject
      * @param {instance} instance WASM instance
      */
-    inject(instance) {
+    unsafeInject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
       }
-      _instance = new Constructor(instance)
-      instance.delete()
+      _instance = instance
     },
 
     /**
@@ -350,9 +358,14 @@ export const PlainText = library => ({
     clone() {
       try {
         const clonedInstance = _instance.clone()
-        return PlainText(library)({ Exception, ComprModeType, ParmsIdType })(
-          clonedInstance
-        )
+        const plain = PlainText(library)({
+          Exception,
+          ComprModeType,
+          ParmsIdType,
+          MemoryPoolHandle
+        })()
+        plain.unsafeInject(clonedInstance)
+        return plain
       } catch (e) {
         throw Exception.safe(e)
       }
