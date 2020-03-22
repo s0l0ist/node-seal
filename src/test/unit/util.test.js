@@ -2,12 +2,11 @@ import { Seal } from '../../index.js'
 import { getLibrary } from '../../index'
 import { Util } from '../../components'
 
-let Morfix = null
 let UtilObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  await Seal
   const lib = getLibrary()
-  UtilObject = Util(lib)(Morfix)
+  UtilObject = Util(lib)()
 })
 
 describe('Util', () => {

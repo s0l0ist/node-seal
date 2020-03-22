@@ -2,12 +2,11 @@ import { Seal } from '../../index.js'
 import { getLibrary } from '../../index'
 import { ComprModeType } from '../../components'
 
-let Morfix = null
 let ComprModeTypeObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  await Seal
   const lib = getLibrary()
-  ComprModeTypeObject = ComprModeType(lib)(Morfix)
+  ComprModeTypeObject = ComprModeType(lib)()
 })
 
 describe('ComprModeType', () => {

@@ -2,12 +2,11 @@ import { Seal } from '../../index.js'
 import { getLibrary } from '../../index'
 import { MemoryPoolHandle } from '../../components'
 
-let Morfix = null
 let MemoryPoolHandleObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  await Seal
   const lib = getLibrary()
-  MemoryPoolHandleObject = MemoryPoolHandle(lib)(Morfix)
+  MemoryPoolHandleObject = MemoryPoolHandle(lib)()
 })
 
 describe('MemoryPoolHandle', () => {

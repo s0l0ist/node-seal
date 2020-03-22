@@ -1,13 +1,12 @@
 import { SecurityLevel } from '../../components'
 import { Seal, getLibrary } from '../../index'
 
-let Morfix = null
 let SecurityLevelObject = null
 
 beforeAll(async () => {
-  Morfix = await Seal
+  await Seal
   const lib = getLibrary()
-  SecurityLevelObject = SecurityLevel(lib)(Morfix)
+  SecurityLevelObject = SecurityLevel(lib)()
 })
 
 describe('SecurityLevel', () => {

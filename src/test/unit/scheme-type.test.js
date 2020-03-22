@@ -2,12 +2,11 @@ import { Seal } from '../../index.js'
 import { getLibrary } from '../../index'
 import { SchemeType } from '../../components'
 
-let Morfix = null
 let SchemeTypeObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  await Seal
   const lib = getLibrary()
-  SchemeTypeObject = SchemeType(lib)(Morfix)
+  SchemeTypeObject = SchemeType(lib)()
 })
 
 describe('SchemeType', () => {
