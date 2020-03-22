@@ -17,7 +17,7 @@
   },
   "opts": {
     "destination": "./docs/",
-//    "readme": "README.md",
+    "readme": "README.md",
     "template": "node_modules/better-docs"
   },
   "plugins": [
