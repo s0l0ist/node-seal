@@ -8,7 +8,10 @@ for more details on each SEAL version change.
 Refactor:
 - Complete refactor of the code structure to allow for code coverage
 - Removed underutilized `Util` export for functional composition.
-
+- Removed print methods for `Vector` as these were used for internal debugging only.
+- Renamed `context.print` to `toHuman` which now returns a string instead of printing to 
+  the console.
+  
 Feat:
 - Added constructor overload options to both cipher and plain texts.
 

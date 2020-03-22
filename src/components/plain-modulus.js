@@ -27,7 +27,9 @@ export const PlainModulus = library => ({
      */
     Batching(polyModulusDegree, bitSize) {
       try {
-        return SmallModulus(_Batching(polyModulusDegree, bitSize))
+        const smallMod = SmallModulus()
+        smallMod.inject(_Batching(polyModulusDegree, bitSize))
+        return smallMod
       } catch (e) {
         throw Exception.safe(e)
       }

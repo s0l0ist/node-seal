@@ -44,7 +44,7 @@ describe('Context', () => {
     expect(item).toHaveProperty('instance')
     expect(item).toHaveProperty('unsafeInject')
     expect(item).toHaveProperty('delete')
-    expect(item).toHaveProperty('print')
+    expect(item).toHaveProperty('toHuman')
     expect(item).toHaveProperty('getContextData')
     expect(item).toHaveProperty('keyContextData')
     expect(item).toHaveProperty('firstContextData')
@@ -97,10 +97,10 @@ describe('Context', () => {
     expect(item.instance).toBeNull()
     expect(() => item.usingKeyswitching).toThrow(TypeError)
   })
-  test('It should print the context to the console', () => {
+  test('It should return the human readable string of the context', () => {
     const item = ContextObject(parms)
-    const spyOn = jest.spyOn(item, 'print')
-    item.print()
+    const spyOn = jest.spyOn(item, 'toHuman')
+    item.toHuman()
     expect(spyOn).toHaveBeenCalledWith()
   })
   test('It should return the context data for a specific parms id', () => {
