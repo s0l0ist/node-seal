@@ -1,5 +1,4 @@
 import { Seal } from '../../index.js'
-import { getLibrary } from '../../index'
 import { EncryptionParameterQualifiers } from '../../components'
 
 let Morfix = null
