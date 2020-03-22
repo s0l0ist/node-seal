@@ -64,8 +64,7 @@ function create() {
     let timeEnd = 0
     let timeDiff = 0
 
-    context.print()
-    process.stdout.write('\r\n')
+    console.log(context.toHuman())
 
     const parms = context.firstContextData.parms
     const plainModulus = parms.plainModulus
@@ -129,7 +128,7 @@ function create() {
     /*
       How many times to run the test?
       */
-    const count = 25
+    const count = 10
 
     /*
       Populate a vector of values to batch.
@@ -149,7 +148,10 @@ function create() {
         into the polynomial. Note how the plaintext we create is of the exactly
         right size so unnecessary reallocations are avoided.
         */
-      const plain = seal.PlainText()
+      const plain = seal.PlainText({
+        capacity: parms.polyModulusDegree,
+        coeffCount: 0
+      })
       plain.reserve(polyModulusDegree)
       timeStart = performance.now()
       batchEncoder.encode(array, plain)
@@ -167,7 +169,7 @@ function create() {
       timeEnd = performance.now()
       timeUnbatchSum += timeEnd - timeStart
       if (JSON.stringify(unbatched) !== JSON.stringify(array)) {
-        throw new Error('Batch/unbach failed. Something is wrong.')
+        throw new Error('Batch/unbatch failed. Something is wrong.')
       }
 
       /*
@@ -176,7 +178,7 @@ function create() {
         to hold the encryption with these encryption parameters. We encrypt
         our random batched matrix here.
         */
-      const encrypted = seal.CipherText()
+      const encrypted = seal.CipherText({ context })
       timeStart = performance.now()
       encryptor.encrypt(plain, encrypted)
       timeEnd = performance.now()
@@ -186,7 +188,10 @@ function create() {
          [Decryption]
          We decrypt what we just encrypted.
          */
-      const plain2 = seal.PlainText()
+      const plain2 = seal.PlainText({
+        capacity: parms.polyModulusDegree,
+        coeffCount: 0
+      })
       plain2.reserve(polyModulusDegree)
       timeStart = performance.now()
       decryptor.decrypt(encrypted, plain2)
@@ -199,8 +204,8 @@ function create() {
         [Add]
         We create two ciphertexts and perform a few additions with them.
         */
-      const encrypted1 = seal.CipherText()
-      const encrypted2 = seal.CipherText()
+      const encrypted1 = seal.CipherText({ context })
+      const encrypted2 = seal.CipherText({ context })
       encryptor.encrypt(batchEncoder.encode(Int32Array.from([i])), encrypted1)
       encryptor.encrypt(
         batchEncoder.encode(Int32Array.from([i + 1])),
@@ -327,16 +332,32 @@ function create() {
     console.log(`Average multiply: ${avgMultiply} microseconds`)
     console.log(`Average multiply plain: ${avgMultiplyPlain} microseconds`)
     console.log(`Average square: ${avgSquare} microseconds`)
-    console.log(`Average relinearize: ${avgRelinearize} microseconds`)
-    console.log(
-      `Average rotate row one step: ${avgRotateRowsOneStep} microseconds`
-    )
-    console.log(
-      `Average rotate row random: ${avgRotateRowsRandom} microseconds`
-    )
-    console.log(
-      `Average rotate column random: ${avgRotateColumns} microseconds`
-    )
+    if (context.usingKeyswitching) {
+      console.log(`Average relinearize: ${avgRelinearize} microseconds`)
+      console.log(
+        `Average rotate row one step: ${avgRotateRowsOneStep} microseconds`
+      )
+      console.log(
+        `Average rotate row random: ${avgRotateRowsRandom} microseconds`
+      )
+      console.log(
+        `Average rotate column random: ${avgRotateColumns} microseconds`
+      )
+    }
+    console.log('')
+
+    // Cleanup
+    parms.delete()
+    context.delete()
+    keyGenerator.delete()
+    secretKey.delete()
+    publicKey.delete()
+    relinKeys.delete()
+    galoisKeys.delete()
+    evaluator.delete()
+    batchEncoder.delete()
+    encryptor.delete()
+    decryptor.delete()
   }
 
   return {

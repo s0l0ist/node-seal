@@ -1,8 +1,8 @@
-export const Encryptor = library => (
+export const Encryptor = library => ({
   Exception,
   MemoryPoolHandle,
   CipherText
-) => (context, publicKey) => {
+}) => (context, publicKey) => {
   const Constructor = library.Encryptor
   let _instance = null
   try {
@@ -73,7 +73,7 @@ export const Encryptor = library => (
      * @param {CipherText} [cipherText] CipherText destination to store the encrypted result
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} Returns undefined if a CipherText was specified. Otherwise returns a
-     * CipherText containng the enrypted result
+     * CipherText containing the encrypted result
      */
     encrypt(plainText, cipherText, pool = MemoryPoolHandle.global) {
       try {

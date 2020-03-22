@@ -1,4 +1,6 @@
 import { Seal } from '../../index.js'
+import { getLibrary } from '../../index'
+import { CipherText } from '../../components'
 
 let Morfix = null
 let parms = null
@@ -14,9 +16,12 @@ let ckksEncoder = null
 let ckksKeyGen = null
 let ckksPublicKey = null
 let ckksEncryptor = null
-
+let CipherTextObject = null
 beforeAll(async () => {
   Morfix = await Seal
+  const lib = getLibrary()
+  CipherTextObject = CipherText(lib)(Morfix)
+
   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
   parms.setPolyModulusDegree(4096)
   parms.setCoeffModulus(
@@ -43,333 +48,360 @@ beforeAll(async () => {
 
 describe('CipherText', () => {
   test('It should be a factory', () => {
-    expect(Morfix).toHaveProperty('CipherText')
-    expect(Morfix.CipherText).toBeDefined()
-    expect(typeof Morfix.CipherText.constructor).toBe('function')
-    expect(Morfix.CipherText).toBeInstanceOf(Object)
-    expect(Morfix.CipherText.constructor).toBe(Function)
-    expect(Morfix.CipherText.constructor.name).toBe('Function')
+    expect(CipherTextObject).toBeDefined()
+    expect(typeof CipherTextObject.constructor).toBe('function')
+    expect(CipherTextObject).toBeInstanceOf(Object)
+    expect(CipherTextObject.constructor).toBe(Function)
+    expect(CipherTextObject.constructor.name).toBe('Function')
+  })
+  test('It should construct an instance', () => {
+    const Constructor = jest.fn(CipherTextObject)
+    Constructor()
+    expect(Constructor).toBeCalledWith()
+  })
+  test('It should construct an instance with a context', () => {
+    const Constructor = jest.fn(CipherTextObject)
+    Constructor({ context })
+    expect(Constructor).toBeCalledWith({ context })
+  })
+  test('It should construct an instance with a context, parmsId', () => {
+    const Constructor = jest.fn(CipherTextObject)
+    const parmsId = context.firstParmsId
+    Constructor({ context, parmsId })
+    expect(Constructor).toBeCalledWith({
+      context,
+      parmsId
+    })
+  })
+  test('It should construct an instance with a context, parmsId, sizeCapacity', () => {
+    const Constructor = jest.fn(CipherTextObject)
+    const parmsId = context.firstParmsId
+    Constructor({ context, parmsId, sizeCapacity: 2 })
+    expect(Constructor).toBeCalledWith({
+      context,
+      parmsId,
+      sizeCapacity: 2
+    })
+  })
+  test('It should fail to construct an instance from invalid parameters', () => {
+    const Constructor = jest.fn(CipherTextObject)
+    expect(() => Constructor({ context, sizeCapacity: 2 })).toThrow()
+    expect(Constructor).toBeCalledWith({
+      context,
+      sizeCapacity: 2
+    })
+  })
+  test('It should fail to construct an instance from bad parameters', () => {
+    const Constructor = jest.fn(CipherTextObject)
+    const parmsId = context.firstParmsId
+    expect(() => Constructor({ context, parmsId, sizeCapacity: -2 })).toThrow()
+    expect(Constructor).toBeCalledWith({
+      context,
+      parmsId,
+      sizeCapacity: -2
+    })
   })
   test('It should have properties', () => {
-    const item = Morfix.CipherText()
+    const cipher = CipherTextObject()
     // Test properties
-    expect(item).toHaveProperty('instance')
-    expect(item).toHaveProperty('inject')
-    expect(item).toHaveProperty('delete')
-    expect(item).toHaveProperty('reserve')
-    expect(item).toHaveProperty('resize')
-    expect(item).toHaveProperty('release')
-    expect(item).toHaveProperty('coeffModCount')
-    expect(item).toHaveProperty('polyModulusDegree')
-    expect(item).toHaveProperty('size')
-    expect(item).toHaveProperty('sizeCapacity')
-    expect(item).toHaveProperty('isTransparent')
-    expect(item).toHaveProperty('isNttForm')
-    expect(item).toHaveProperty('parmsId')
-    expect(item).toHaveProperty('scale')
-    expect(item).toHaveProperty('pool')
-    expect(item).toHaveProperty('save')
-    expect(item).toHaveProperty('load')
-    expect(item).toHaveProperty('copy')
-    expect(item).toHaveProperty('clone')
-    expect(item).toHaveProperty('move')
+    expect(cipher).toHaveProperty('instance')
+    expect(cipher).toHaveProperty('unsafeInject')
+    expect(cipher).toHaveProperty('delete')
+    expect(cipher).toHaveProperty('reserve')
+    expect(cipher).toHaveProperty('resize')
+    expect(cipher).toHaveProperty('release')
+    expect(cipher).toHaveProperty('coeffModCount')
+    expect(cipher).toHaveProperty('polyModulusDegree')
+    expect(cipher).toHaveProperty('size')
+    expect(cipher).toHaveProperty('sizeCapacity')
+    expect(cipher).toHaveProperty('isTransparent')
+    expect(cipher).toHaveProperty('isNttForm')
+    expect(cipher).toHaveProperty('parmsId')
+    expect(cipher).toHaveProperty('scale')
+    expect(cipher).toHaveProperty('pool')
+    expect(cipher).toHaveProperty('save')
+    expect(cipher).toHaveProperty('load')
+    expect(cipher).toHaveProperty('copy')
+    expect(cipher).toHaveProperty('clone')
+    expect(cipher).toHaveProperty('move')
   })
+
   test('It should have an instance', () => {
-    const item = Morfix.CipherText()
-    expect(item.instance).not.toBeFalsy()
+    const cipher = CipherTextObject()
+    expect(cipher.instance).toBeDefined()
   })
   test('It should inject', () => {
-    const item = Morfix.CipherText()
-    const newItem = Morfix.CipherText()
-    const spyOn = jest.spyOn(newItem, 'inject')
-    newItem.inject(item.instance)
-    expect(spyOn).toHaveBeenCalledWith(item.instance)
+    const cipher = CipherTextObject()
+    const newCipher = CipherTextObject()
+    newCipher.delete()
+    const spyOn = jest.spyOn(newCipher, 'unsafeInject')
+    newCipher.unsafeInject(cipher.instance)
+    expect(spyOn).toHaveBeenCalledWith(cipher.instance)
+  })
+  test('It should delete the old instance and inject', () => {
+    const cipher = CipherTextObject()
+    const newCipher = CipherTextObject()
+    const spyOn = jest.spyOn(newCipher, 'unsafeInject')
+    newCipher.unsafeInject(cipher.instance)
+    expect(spyOn).toHaveBeenCalledWith(cipher.instance)
   })
   test("It should delete it's instance", () => {
-    const item = Morfix.CipherText()
-    const spyOn = jest.spyOn(item, 'delete')
-    item.delete()
+    const cipher = CipherTextObject()
+    const spyOn = jest.spyOn(cipher, 'delete')
+    cipher.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(item.instance).toBeNull()
-    expect(() => item.size).toThrow(TypeError)
+    expect(cipher.instance).toBeNull()
+  })
+  test('It should skip deleting twice', () => {
+    const cipher = CipherTextObject()
+    cipher.delete()
+    const spyOn = jest.spyOn(cipher, 'delete')
+    cipher.delete()
+    expect(spyOn).toHaveBeenCalled()
+    expect(cipher.instance).toBeNull()
   })
   test('It should reserve memory', () => {
-    const item = Morfix.CipherText()
-    const spyOn = jest.spyOn(item, 'reserve')
-    item.reserve(context, 2)
+    const cipher = CipherTextObject()
+    const spyOn = jest.spyOn(cipher, 'reserve')
+    cipher.reserve(context, 2)
     expect(spyOn).toHaveBeenCalledWith(context, 2)
-    expect(item.sizeCapacity).toEqual(2)
+  })
+  test('It should fail to reserve memory', () => {
+    const cipher = CipherTextObject()
+    const spyOn = jest.spyOn(cipher, 'reserve')
+    expect(() => cipher.reserve(context, 50000)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(context, 50000)
   })
   test('It should resize', () => {
-    const item = Morfix.CipherText()
-    item.reserve(context, 2)
-    expect(item.sizeCapacity).toEqual(2)
-    const spyOn = jest.spyOn(item, 'resize')
-    item.resize(5)
+    const cipher = CipherTextObject()
+    cipher.reserve(context, 2)
+    expect(cipher.sizeCapacity).toEqual(2)
+    const spyOn = jest.spyOn(cipher, 'resize')
+    cipher.resize(5)
     expect(spyOn).toHaveBeenCalledWith(5)
-    expect(item.size).toEqual(5)
+  })
+  test('It should fail to resize', () => {
+    const cipher = CipherTextObject()
+    cipher.reserve(context, 2)
+    expect(cipher.sizeCapacity).toEqual(2)
+    const spyOn = jest.spyOn(cipher, 'resize')
+    expect(() => cipher.resize(1)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(1)
   })
   test('It should release allocated memory', () => {
-    const item = Morfix.CipherText()
-    item.reserve(context, 2)
-    expect(item.sizeCapacity).toEqual(2)
-    const spyOn = jest.spyOn(item, 'release')
-    item.release()
+    const cipher = CipherTextObject()
+    cipher.reserve(context, 2)
+    expect(cipher.sizeCapacity).toEqual(2)
+    const spyOn = jest.spyOn(cipher, 'release')
+    cipher.release()
     expect(spyOn).toHaveBeenCalledWith()
-    expect(item.sizeCapacity).toEqual(0)
   })
   test('It should return the coeff mod count', () => {
-    const item = Morfix.CipherText()
-    item.reserve(context, 2)
-    expect(item.coeffModCount).toEqual(2)
+    const cipher = CipherTextObject()
+    cipher.reserve(context, 2)
+    expect(typeof cipher.coeffModCount).toBe('number')
   })
-  test('It should return the poly modulus degree (bfv)', () => {
+  test('It should return the poly modulus degree', () => {
     const arr = Int32Array.from(
       Array.from({ length: encoder.slotCount }).fill(5)
     )
-    const item = Morfix.CipherText()
+    const cipher = CipherTextObject()
     const plain = encoder.encode(arr)
-    encryptor.encrypt(plain, item)
-    expect(item.polyModulusDegree).toEqual(parms.polyModulusDegree)
+    encryptor.encrypt(plain, cipher)
+    expect(typeof cipher.polyModulusDegree).toBe('number')
   })
-  test('It should return the poly modulus degree (ckks)', () => {
-    const arr = Float64Array.from(
-      Array.from({ length: ckksEncoder.slotCount }).fill(5)
-    )
-    const item = Morfix.CipherText()
-    const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
-    ckksEncryptor.encrypt(plain, item)
-    expect(item.polyModulusDegree).toEqual(ckksParms.polyModulusDegree)
-  })
-
   test('It should return the size', () => {
     const arr = Int32Array.from(
       Array.from({ length: encoder.slotCount }).fill(5)
     )
-    const item = Morfix.CipherText()
+    const cipher = CipherTextObject()
     const plain = encoder.encode(arr)
-    encryptor.encrypt(plain, item)
-    expect(item.size).toEqual(2)
+    encryptor.encrypt(plain, cipher)
+    expect(typeof cipher.size).toBe('number')
   })
   test('It should return the size capacity', () => {
     const arr = Int32Array.from(
       Array.from({ length: encoder.slotCount }).fill(5)
     )
-    const item = Morfix.CipherText()
+    const cipher = CipherTextObject()
     const plain = encoder.encode(arr)
-    encryptor.encrypt(plain, item)
-    expect(item.sizeCapacity).toEqual(2)
+    encryptor.encrypt(plain, cipher)
+    expect(typeof cipher.sizeCapacity).toBe('number')
   })
-  test('It should return false if the cipher is not transparent', () => {
+  test('It should return if the cipher is transparent', () => {
     const arr = Int32Array.from(
       Array.from({ length: encoder.slotCount }).fill(5)
     )
-    const item = Morfix.CipherText()
+    const cipher = CipherTextObject()
     const plain = encoder.encode(arr)
-    encryptor.encrypt(plain, item)
-    expect(item.isTransparent).toEqual(false)
+    encryptor.encrypt(plain, cipher)
+    expect(typeof cipher.isTransparent).toBe('boolean')
   })
-  test('It should return false if the cipher is not in NTT form (bfv)', () => {
+  test('It should return if the cipher is not in NTT form', () => {
     const arr = Int32Array.from(
       Array.from({ length: encoder.slotCount }).fill(5)
     )
-    const item = Morfix.CipherText()
+    const cipher = CipherTextObject()
     const plain = encoder.encode(arr)
-    encryptor.encrypt(plain, item)
-    expect(item.isNttForm).toEqual(false)
-  })
-  test('It should return true if the cipher is in NTT form (ckks)', () => {
-    const arr = Float64Array.from(
-      Array.from({ length: ckksEncoder.slotCount }).fill(5)
-    )
-    const item = Morfix.CipherText()
-    const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
-    ckksEncryptor.encrypt(plain, item)
-    expect(item.isNttForm).toEqual(true)
+    encryptor.encrypt(plain, cipher)
+    expect(typeof cipher.isNttForm).toBe('boolean')
   })
   test('It should return a parms id type', () => {
     const arr = Int32Array.from(
       Array.from({ length: encoder.slotCount }).fill(5)
     )
-    const item = Morfix.CipherText()
+    const cipher = CipherTextObject()
     const plain = encoder.encode(arr)
-    encryptor.encrypt(plain, item)
-    const parms = item.parmsId
+    encryptor.encrypt(plain, cipher)
+    const parms = cipher.parmsId
     const values = parms.values
     expect(Array.isArray(values)).toBe(true)
     values.forEach(x => {
       expect(typeof x).toBe('bigint')
     })
-    expect(parms.values).toEqual([
-      1873000747715295028n,
-      11215186030905010692n,
-      3414445251667737935n,
-      182315704735341130n
-    ])
   })
-  test('It should return the scale (ckks)', () => {
+  test('It should return the scale', () => {
     const arr = Float64Array.from(
       Array.from({ length: ckksEncoder.slotCount }).fill(5)
     )
-    const item = Morfix.CipherText()
+    const cipher = CipherTextObject()
     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
-    ckksEncryptor.encrypt(plain, item)
-    expect(item.scale).toEqual(Math.pow(2, 20))
+    ckksEncryptor.encrypt(plain, cipher)
+    expect(typeof cipher.scale).toBe('number')
   })
   test('It should return the currently used memory pool handle', () => {
     const arr = Float64Array.from(
       Array.from({ length: ckksEncoder.slotCount }).fill(5)
     )
-    const item = Morfix.CipherText()
+    const cipher = CipherTextObject()
     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
-    ckksEncryptor.encrypt(plain, item)
-    const pool = item.pool
+    ckksEncryptor.encrypt(plain, cipher)
+    const pool = cipher.pool
     expect(pool.constructor.name).toBe('MemoryPoolHandle')
   })
-  test('It should save to a string (bfv)', () => {
+  test('It should save to a string', () => {
     const arr = Int32Array.from(
       Array.from({ length: encoder.slotCount }).fill(5)
     )
-    const item = Morfix.CipherText()
+    const cipher = CipherTextObject()
     const plain = encoder.encode(arr)
-    encryptor.encrypt(plain, item)
-    const spyOn = jest.spyOn(item, 'save')
-    const str = item.save()
+    encryptor.encrypt(plain, cipher)
+    const spyOn = jest.spyOn(cipher, 'save')
+    const str = cipher.save()
     expect(spyOn).toHaveBeenCalled()
     expect(typeof str).toBe('string')
   })
-  test('It should save to a string (ckks)', () => {
-    const arr = Float64Array.from(
-      Array.from({ length: ckksEncoder.slotCount }).fill(5)
-    )
-    const item = Morfix.CipherText()
-    const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
-    ckksEncryptor.encrypt(plain, item)
-    const spyOn = jest.spyOn(item, 'save')
-    const str = item.save()
-    expect(spyOn).toHaveBeenCalled()
-    expect(typeof str).toBe('string')
-  })
-  test('It should load from a string (bfv)', () => {
+  test('It should load from a string', () => {
     const arr = Int32Array.from(
       Array.from({ length: encoder.slotCount }).fill(5)
     )
-    const item = Morfix.CipherText()
+    const cipher = CipherTextObject()
     const plain = encoder.encode(arr)
-    encryptor.encrypt(plain, item)
-    const str = item.save()
-    item.delete()
-    const newItem = Morfix.CipherText()
-    const spyOn = jest.spyOn(newItem, 'load')
-    newItem.load(context, str)
+    encryptor.encrypt(plain, cipher)
+    const str = cipher.save()
+    cipher.delete()
+    const newCipher = CipherTextObject()
+    const spyOn = jest.spyOn(newCipher, 'load')
+    newCipher.load(context, str)
     expect(spyOn).toHaveBeenCalledWith(context, str)
-    expect(newItem.save()).toBe(str)
+    expect(newCipher.save()).toBe(str)
   })
-  test('It should load from a string (ckks)', () => {
-    const arr = Float64Array.from(
-      Array.from({ length: ckksEncoder.slotCount }).fill(5)
+  test('It should fail to load from a string', () => {
+    const newCipher = CipherTextObject()
+    const spyOn = jest.spyOn(newCipher, 'load')
+    expect(() =>
+      newCipher.load(
+        context,
+        'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
+      )
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(
+      context,
+      'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
     )
-    const item = Morfix.CipherText()
-    const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
-    ckksEncryptor.encrypt(plain, item)
-    const str = item.save()
-    item.delete()
-    const newItem = Morfix.CipherText()
-    const spyOn = jest.spyOn(newItem, 'load')
-    newItem.load(ckksContext, str)
-    expect(spyOn).toHaveBeenCalledWith(ckksContext, str)
-    expect(newItem.save()).toBe(str)
   })
-  test('It should copy another instance (bfv)', () => {
+  test('It should copy another instance', () => {
     const arr = Int32Array.from(
       Array.from({ length: encoder.slotCount }).fill(5)
     )
-    const item = Morfix.CipherText()
+    const cipher = CipherTextObject()
     const plain = encoder.encode(arr)
-    encryptor.encrypt(plain, item)
-    const newItem = Morfix.CipherText()
-    const spyOn = jest.spyOn(newItem, 'copy')
-    newItem.copy(item)
-    expect(spyOn).toHaveBeenCalledWith(item)
-    expect(newItem.save()).toEqual(item.save())
+    encryptor.encrypt(plain, cipher)
+    const newCipher = CipherTextObject()
+    const spyOn = jest.spyOn(newCipher, 'copy')
+    newCipher.copy(cipher)
+    expect(spyOn).toHaveBeenCalledWith(cipher)
+    expect(newCipher.save()).toEqual(cipher.save())
   })
-  test('It should copy another instance (ckks)', () => {
-    const arr = Float64Array.from(
-      Array.from({ length: ckksEncoder.slotCount }).fill(5)
-    )
-    const item = Morfix.CipherText()
-    const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
-    ckksEncryptor.encrypt(plain, item)
-    const newItem = Morfix.CipherText()
-    const spyOn = jest.spyOn(newItem, 'copy')
-    newItem.copy(item)
-    expect(spyOn).toHaveBeenCalledWith(item)
-    expect(newItem.save()).toEqual(item.save())
-  })
-  test('It should clone itself (bfv)', () => {
+  test('It should fail to copy another instance', () => {
     const arr = Int32Array.from(
       Array.from({ length: encoder.slotCount }).fill(5)
     )
-    const item = Morfix.CipherText()
+    const cipher = CipherTextObject()
     const plain = encoder.encode(arr)
-    encryptor.encrypt(plain, item)
-    const spyOn = jest.spyOn(item, 'clone')
-    const newItem = item.clone()
+    encryptor.encrypt(plain, cipher)
+    const newCipher = CipherTextObject()
+    cipher.delete()
+    const spyOn = jest.spyOn(newCipher, 'copy')
+    expect(() => newCipher.copy(cipher)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(cipher)
+  })
+  test('It should clone itself', () => {
+    const arr = Int32Array.from(
+      Array.from({ length: encoder.slotCount }).fill(5)
+    )
+    const cipher = CipherTextObject()
+    const plain = encoder.encode(arr)
+    encryptor.encrypt(plain, cipher)
+    const spyOn = jest.spyOn(cipher, 'clone')
+    const newCipher = cipher.clone()
     expect(spyOn).toHaveBeenCalledWith()
-    expect(newItem).toBeDefined()
-    expect(typeof newItem.constructor).toBe('function')
-    expect(newItem).toBeInstanceOf(Object)
-    expect(newItem.constructor).toBe(Object)
-    expect(newItem.instance.constructor.name).toBe('Ciphertext')
-    expect(newItem.save()).toEqual(item.save())
+    expect(newCipher).toBeDefined()
+    expect(typeof newCipher.constructor).toBe('function')
+    expect(newCipher).toBeInstanceOf(Object)
+    expect(newCipher.constructor).toBe(Object)
+    expect(newCipher.instance.constructor.name).toBe('Ciphertext')
+    expect(newCipher.save()).toEqual(cipher.save())
   })
-  test('It should clone itself (ckks)', () => {
-    const arr = Float64Array.from(
-      Array.from({ length: ckksEncoder.slotCount }).fill(5)
-    )
-    const item = Morfix.CipherText()
-    const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
-    ckksEncryptor.encrypt(plain, item)
-    const spyOn = jest.spyOn(item, 'clone')
-    const newItem = item.clone()
-    expect(spyOn).toHaveBeenCalledWith()
-    expect(newItem).toBeDefined()
-    expect(typeof newItem.constructor).toBe('function')
-    expect(newItem).toBeInstanceOf(Object)
-    expect(newItem.constructor).toBe(Object)
-    expect(newItem.instance.constructor.name).toBe('Ciphertext')
-    expect(newItem.save()).toEqual(item.save())
-  })
-  test('It should move another instance into itself and delete the old (bfv)', () => {
+  test('It should fail to clone itself', () => {
     const arr = Int32Array.from(
       Array.from({ length: encoder.slotCount }).fill(5)
     )
-    const item = Morfix.CipherText()
+    const cipher = CipherTextObject()
     const plain = encoder.encode(arr)
-    encryptor.encrypt(plain, item)
-    const str = item.save()
-    const newItem = Morfix.CipherText()
-    const spyOn = jest.spyOn(newItem, 'move')
-    newItem.move(item)
-    expect(spyOn).toHaveBeenCalledWith(item)
-    expect(item.instance).toBeNull()
-    expect(() => item.size).toThrow(TypeError)
-    expect(newItem.save()).toEqual(str)
+    encryptor.encrypt(plain, cipher)
+    cipher.delete()
+    const spyOn = jest.spyOn(cipher, 'clone')
+    expect(() => cipher.clone()).toThrow()
+    expect(spyOn).toHaveBeenCalledWith()
   })
-  test('It should move another instance into itself and delete the old (ckks)', () => {
-    const arr = Float64Array.from(
-      Array.from({ length: ckksEncoder.slotCount }).fill(5)
+  test('It should move another instance into itself and delete the old', () => {
+    const arr = Int32Array.from(
+      Array.from({ length: encoder.slotCount }).fill(5)
     )
-    const item = Morfix.CipherText()
-    const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
-    ckksEncryptor.encrypt(plain, item)
-    const str = item.save()
-    const newItem = Morfix.CipherText()
-    const spyOn = jest.spyOn(newItem, 'move')
-    newItem.move(item)
-    expect(spyOn).toHaveBeenCalledWith(item)
-    expect(item.instance).toBeNull()
-    expect(() => item.size).toThrow(TypeError)
-    expect(newItem.save()).toEqual(str)
+    const cipher = CipherTextObject()
+    const plain = encoder.encode(arr)
+    encryptor.encrypt(plain, cipher)
+    const str = cipher.save()
+    const newCipher = CipherTextObject()
+    const spyOn = jest.spyOn(newCipher, 'move')
+    newCipher.move(cipher)
+    expect(spyOn).toHaveBeenCalledWith(cipher)
+    expect(cipher.instance).toBeNull()
+    expect(() => cipher.size).toThrow(TypeError)
+    expect(newCipher.save()).toEqual(str)
+  })
+  test('It should fail to move another instance into itself and delete the old', () => {
+    const arr = Int32Array.from(
+      Array.from({ length: encoder.slotCount }).fill(5)
+    )
+    const cipher = CipherTextObject()
+    const plain = encoder.encode(arr)
+    encryptor.encrypt(plain, cipher)
+    const newCipher = CipherTextObject()
+    cipher.delete()
+    const spyOn = jest.spyOn(newCipher, 'move')
+    expect(() => newCipher.move(cipher)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(cipher)
   })
 })

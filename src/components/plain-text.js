@@ -1,17 +1,30 @@
-export const PlainText = library => (Exception, ComprModeType, ParmsIdType) => (
-  instance = null
-) => {
+export const PlainText = library => ({
+  Exception,
+  ComprModeType,
+  ParmsIdType,
+  MemoryPoolHandle
+}) => options => {
   const Constructor = library.Plaintext
-  let _instance
-  try {
-    if (instance) {
-      _instance = new Constructor(instance)
-      instance.delete()
-    } else {
-      _instance = new Constructor()
+  let _instance = construct(options)
+
+  function construct({
+    capacity = null,
+    coeffCount = null,
+    pool = MemoryPoolHandle.global
+  } = {}) {
+    try {
+      if (capacity === null && coeffCount === null) {
+        return new Constructor(pool)
+      } else if (capacity === null && coeffCount !== null) {
+        return new Constructor(coeffCount, pool)
+      } else if (capacity !== null && coeffCount !== null) {
+        return new Constructor(capacity, coeffCount, pool)
+      } else {
+        throw new Error('Must specify a (coeffCount), (coeffCount, capacity)')
+      }
+    } catch (e) {
+      throw Exception.safe(e)
     }
-  } catch (e) {
-    throw Exception.safe(e)
   }
 
   /**
@@ -35,20 +48,19 @@ export const PlainText = library => (Exception, ComprModeType, ParmsIdType) => (
     },
 
     /**
-     * Inject this object with a raw WASM instance
+     * Inject this object with a raw WASM instance. No type checking is performed.
      *
      * @private
      * @function
-     * @name PlainText#inject
+     * @name PlainText#unsafeInject
      * @param {instance} instance WASM instance
      */
-    inject(instance) {
+    unsafeInject(instance) {
       if (_instance) {
         _instance.delete()
         _instance = null
       }
-      _instance = new Constructor(instance)
-      instance.delete()
+      _instance = instance
     },
 
     /**
@@ -92,11 +104,7 @@ export const PlainText = library => (Exception, ComprModeType, ParmsIdType) => (
      * @name PlainText#shrinkToFit
      */
     shrinkToFit() {
-      try {
-        return _instance.shrinkToFit()
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      _instance.shrinkToFit()
     },
 
     /**
@@ -107,11 +115,7 @@ export const PlainText = library => (Exception, ComprModeType, ParmsIdType) => (
      * @name PlainText#release
      */
     release() {
-      try {
-        return _instance.release()
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      _instance.release()
     },
 
     /**
@@ -125,7 +129,7 @@ export const PlainText = library => (Exception, ComprModeType, ParmsIdType) => (
      */
     resize(coeffCount) {
       try {
-        return _instance.resize(coeffCount)
+        _instance.resize(coeffCount)
       } catch (e) {
         throw Exception.safe(e)
       }
@@ -138,11 +142,7 @@ export const PlainText = library => (Exception, ComprModeType, ParmsIdType) => (
      * @name PlainText#setZero
      */
     setZero() {
-      try {
-        return _instance.setZero()
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      _instance.setZero()
     },
 
     /**
@@ -289,11 +289,7 @@ export const PlainText = library => (Exception, ComprModeType, ParmsIdType) => (
      * @returns {String} Base64 encoded string
      */
     save(compression = ComprModeType.deflate) {
-      try {
-        return _instance.saveToString(compression)
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return _instance.saveToString(compression)
     },
 
     /**
@@ -348,9 +344,14 @@ export const PlainText = library => (Exception, ComprModeType, ParmsIdType) => (
     clone() {
       try {
         const clonedInstance = _instance.clone()
-        return PlainText(library)(Exception, ComprModeType, ParmsIdType)(
-          clonedInstance
-        )
+        const plain = PlainText(library)({
+          Exception,
+          ComprModeType,
+          ParmsIdType,
+          MemoryPoolHandle
+        })()
+        plain.unsafeInject(clonedInstance)
+        return plain
       } catch (e) {
         throw Exception.safe(e)
       }

@@ -1,18 +1,6 @@
-export const GaloisKeys = library => (Exception, ComprModeType) => (
-  instance = null
-) => {
+export const GaloisKeys = library => ({ Exception, ComprModeType }) => () => {
   const Constructor = library.GaloisKeys
-  let _instance
-  try {
-    if (instance) {
-      _instance = new Constructor(instance)
-      instance.delete()
-    } else {
-      _instance = new Constructor()
-    }
-  } catch (e) {
-    throw Exception.safe(e)
-  }
+  let _instance = new Constructor()
 
   /**
    * @implements GaloisKeys
@@ -83,6 +71,8 @@ export const GaloisKeys = library => (Exception, ComprModeType) => (
      * corresponds to the given Galois element, assuming that it exists in the
      * backing KSwitchKeys.
      *
+     * @function
+     * @name GaloisKeys#getIndex
      * @param {Number} galoisElt The Galois element
      * @returns {Number} The index of the galois element
      */
@@ -97,6 +87,8 @@ export const GaloisKeys = library => (Exception, ComprModeType) => (
     /**
      * Returns whether a Galois key corresponding to a given Galois element exists.
      *
+     * @function
+     * @name GaloisKeys#hasKey
      * @param {Number} galoisElt The Galois element
      * @returns {Boolean} True if the key exists
      */
@@ -174,7 +166,9 @@ export const GaloisKeys = library => (Exception, ComprModeType) => (
     clone() {
       try {
         const clonedInstance = _instance.clone()
-        return GaloisKeys(library)(Exception, ComprModeType)(clonedInstance)
+        const galKeys = GaloisKeys(library)({ Exception, ComprModeType })()
+        galKeys.inject(clonedInstance)
+        return galKeys
       } catch (e) {
         throw Exception.safe(e)
       }

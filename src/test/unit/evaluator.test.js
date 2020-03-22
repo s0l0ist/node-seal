@@ -1,4 +1,6 @@
 import { Seal } from '../../index.js'
+import { getLibrary } from '../../index'
+import { Evaluator } from '../../components'
 
 let Morfix = null
 let parms = null
@@ -22,8 +24,16 @@ let ckksRelinKeys = null
 let ckksGaloisKeys = null
 let ckksEncryptor = null
 let ckksDecryptor = null
+
+let invalidCkksPlain = null
+let invalidCkksCipher = null
+
+let EvaluatorObject = null
 beforeAll(async () => {
   Morfix = await Seal
+  const lib = getLibrary()
+  EvaluatorObject = Evaluator(lib)(Morfix)
+
   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
   parms.setPolyModulusDegree(4096)
   parms.setCoeffModulus(
@@ -54,19 +64,46 @@ beforeAll(async () => {
   ckksGaloisKeys = ckksKeyGenerator.genGaloisKeys()
   ckksEncryptor = Morfix.Encryptor(ckksContext, ckksPublicKey)
   ckksDecryptor = Morfix.Decryptor(ckksContext, ckksSecretKey)
+
+  const arr2 = Float64Array.from({ length: ckksEncoder.slotCount / 2 }).map(
+    (x, i) => 5
+  )
+  invalidCkksPlain = ckksEncoder.encode(arr2, Math.pow(2, 20))
+  invalidCkksCipher = ckksEncryptor.encrypt(invalidCkksPlain)
 })
 
 describe('Evaluator', () => {
   test('It should be a factory', () => {
     expect(Morfix).toHaveProperty('Evaluator')
-    expect(Morfix.Evaluator).toBeDefined()
-    expect(typeof Morfix.Evaluator.constructor).toBe('function')
-    expect(Morfix.Evaluator).toBeInstanceOf(Object)
-    expect(Morfix.Evaluator.constructor).toBe(Function)
-    expect(Morfix.Evaluator.constructor.name).toBe('Function')
+    expect(EvaluatorObject).toBeDefined()
+    expect(typeof EvaluatorObject.constructor).toBe('function')
+    expect(EvaluatorObject).toBeInstanceOf(Object)
+    expect(EvaluatorObject.constructor).toBe(Function)
+    expect(EvaluatorObject.constructor.name).toBe('Function')
+  })
+
+  test('It should construct an instance', () => {
+    const Constructor = jest.fn(EvaluatorObject)
+    Constructor(context)
+    expect(Constructor).toBeCalledWith(context)
+  })
+  test('It should fail to construct an instance', () => {
+    const newParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+    newParms.setPolyModulusDegree(4096)
+    newParms.setCoeffModulus(
+      Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
+    )
+    const newContext = Morfix.Context(
+      newParms,
+      true,
+      Morfix.SecurityLevel.tc128
+    )
+    const Constructor = jest.fn(EvaluatorObject)
+    expect(() => Constructor(newContext)).toThrow()
+    expect(Constructor).toBeCalledWith(newContext)
   })
   test('It should have properties', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     // Test properties
     expect(item).toHaveProperty('instance')
     expect(item).toHaveProperty('unsafeInject')
@@ -99,19 +136,37 @@ describe('Evaluator', () => {
     expect(item).toHaveProperty('dotProduct')
   })
   test('It should have an instance', () => {
-    const item = Morfix.Evaluator(context)
-    expect(item.instance).not.toBeFalsy()
+    const item = EvaluatorObject(context)
+    expect(item.instance).toBeDefined()
   })
   test('It should inject', () => {
-    const item = Morfix.Evaluator(context)
-    const newItem = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
+    const newItem = EvaluatorObject(context)
+    newItem.delete()
+    const spyOn = jest.spyOn(newItem, 'unsafeInject')
+    newItem.unsafeInject(item.instance)
+    expect(spyOn).toHaveBeenCalledWith(item.instance)
+    expect(newItem.instance).toEqual(item.instance)
+  })
+  test('It should delete the old instance and inject', () => {
+    const item = EvaluatorObject(context)
+    const newItem = EvaluatorObject(context)
     const spyOn = jest.spyOn(newItem, 'unsafeInject')
     newItem.unsafeInject(item.instance)
     expect(spyOn).toHaveBeenCalledWith(item.instance)
     expect(newItem.instance).toEqual(item.instance)
   })
   test("It should delete it's instance", () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
+    item.delete()
+    const spyOn = jest.spyOn(item, 'delete')
+    item.delete()
+    expect(spyOn).toHaveBeenCalled()
+    expect(item.instance).toBeNull()
+    expect(() => item.add()).toThrow(TypeError)
+  })
+  test('It should skip deleting twice', () => {
+    const item = EvaluatorObject(context)
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
@@ -119,8 +174,15 @@ describe('Evaluator', () => {
     expect(() => item.add()).toThrow(TypeError)
   })
   // Negate
+  test('It should fail to negate a cipher', () => {
+    const item = EvaluatorObject(context)
+    const cipherDest = Morfix.CipherText()
+    const spyOn = jest.spyOn(item, 'negate')
+    expect(() => item.negate(invalidCkksCipher, cipherDest)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(invalidCkksCipher, cipherDest)
+  })
   test('It should negate a cipher to a destination cipher (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -133,7 +195,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => -x))
   })
   test('It should negate a cipher and return a cipher result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -150,7 +212,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => -x))
   })
   test('It should negate a cipher to a destination cipher (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => 5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -160,7 +222,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
   })
   test('It should negate a cipher and return a cipher result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => 5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -174,7 +236,7 @@ describe('Evaluator', () => {
     expect(cipherDest.instance.constructor.name).toBe('Ciphertext')
   })
   test('It should negate a cipher to a destination cipher (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => i
     )
@@ -191,7 +253,7 @@ describe('Evaluator', () => {
     )
   })
   test('It should negate a cipher and return a cipher result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => i
     )
@@ -212,8 +274,15 @@ describe('Evaluator', () => {
     )
   })
   // Add
+  test('It should fail to add ciphers', () => {
+    const item = EvaluatorObject(context)
+    const cipherDest = Morfix.CipherText()
+    const spyOn = jest.spyOn(item, 'add')
+    expect(() => item.add(invalidCkksCipher, cipherDest)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(invalidCkksCipher, cipherDest)
+  })
   test('It should add a cipher to a destination cipher (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -226,7 +295,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => 2 * x))
   })
   test('It should add a cipher and return a cipher result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -243,7 +312,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => 2 * x))
   })
   test('It should add a cipher to a destination cipher (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -256,7 +325,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => 2 * x))
   })
   test('It should add a cipher and return a cipher result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -273,7 +342,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => 2 * x))
   })
   test('It should add a cipher to a destination cipher (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => i
     )
@@ -290,7 +359,7 @@ describe('Evaluator', () => {
     )
   })
   test('It should add a cipher and return a cipher result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => i
     )
@@ -311,8 +380,15 @@ describe('Evaluator', () => {
     )
   })
   // Sub
+  test('It should fail to sub ciphers', () => {
+    const item = EvaluatorObject(context)
+    const cipherDest = Morfix.CipherText()
+    const spyOn = jest.spyOn(item, 'sub')
+    expect(() => item.sub(invalidCkksCipher, cipherDest)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(invalidCkksCipher, cipherDest)
+  })
   test('It should sub a cipher to a destination cipher (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
     const arr2 = Int32Array.from({ length: encoder.slotCount }).map(
       (x, i) => -2 * i
@@ -330,7 +406,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => -x))
   })
   test('It should sub a cipher and return a cipher result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
     const arr2 = Int32Array.from({ length: encoder.slotCount }).map(
       (x, i) => -2 * i
@@ -352,7 +428,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => -x))
   })
   test('It should sub a cipher to a destination cipher (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 2 * i
     )
@@ -372,7 +448,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr2.map(x => x))
   })
   test('It should sub a cipher and return a cipher result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 2 * i
     )
@@ -396,7 +472,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr2.map(x => x))
   })
   test('It should sub a cipher to a destination cipher (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => i
     )
@@ -418,7 +494,7 @@ describe('Evaluator', () => {
     )
   })
   test('It should sub a cipher and return a cipher result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => i
     )
@@ -444,8 +520,21 @@ describe('Evaluator', () => {
     )
   })
   // Multiply
+  test('It should fail to multiply ciphers', () => {
+    const item = EvaluatorObject(context)
+    const cipherDest = Morfix.CipherText()
+    const spyOn = jest.spyOn(item, 'multiply')
+    expect(() =>
+      item.multiply(invalidCkksCipher, cipherDest, invalidCkksCipher)
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(
+      invalidCkksCipher,
+      cipherDest,
+      invalidCkksCipher
+    )
+  })
   test('It should multiply a cipher to a destination cipher (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -458,7 +547,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should multiply a cipher and return a cipher result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -475,7 +564,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should multiply a cipher to a destination cipher (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -490,7 +579,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should multiply a cipher and return a cipher result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -509,7 +598,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should multiply a cipher to a destination cipher (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -526,7 +615,7 @@ describe('Evaluator', () => {
     )
   })
   test('It should multiply a cipher and return a cipher result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -547,8 +636,15 @@ describe('Evaluator', () => {
     )
   })
   // Square
+  test('It should fail to square ciphers', () => {
+    const item = EvaluatorObject(context)
+    const cipherDest = Morfix.CipherText()
+    const spyOn = jest.spyOn(item, 'square')
+    expect(() => item.square(invalidCkksCipher, cipherDest)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(invalidCkksCipher, cipherDest)
+  })
   test('It should square a cipher to a destination cipher (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -561,7 +657,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should square a cipher and return a cipher result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -578,7 +674,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should square a cipher to a destination cipher (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -593,7 +689,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should square a cipher and return a cipher result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -612,7 +708,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should square a cipher to a destination cipher (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -629,7 +725,7 @@ describe('Evaluator', () => {
     )
   })
   test('It should square a cipher and return a cipher result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -650,8 +746,17 @@ describe('Evaluator', () => {
     )
   })
   // Relinearize
+  test('It should fail to relinearize a cipher', () => {
+    const item = EvaluatorObject(context)
+    const cipherDest = Morfix.CipherText()
+    const spyOn = jest.spyOn(item, 'relinearize')
+    expect(() =>
+      item.relinearize(invalidCkksCipher, relinKeys, cipherDest)
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(invalidCkksCipher, relinKeys, cipherDest)
+  })
   test('It should relinearize a cipher to a destination cipher (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -665,7 +770,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should relinearize a cipher and return a cipher result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -683,7 +788,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should relinearize a cipher to a destination cipher (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -699,7 +804,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should relinearize a cipher and return a cipher result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -719,7 +824,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should relinearize a cipher to a destination cipher (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -737,7 +842,7 @@ describe('Evaluator', () => {
     )
   })
   test('It should relinearize a cipher and return a cipher result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -759,8 +864,17 @@ describe('Evaluator', () => {
     )
   })
   // CipherModSwitchToNext
+  test('It should fail to cipherModSwitchToNext a cipher', () => {
+    const item = EvaluatorObject(context)
+    const cipherDest = Morfix.CipherText()
+    const spyOn = jest.spyOn(item, 'cipherModSwitchToNext')
+    expect(() =>
+      item.cipherModSwitchToNext(invalidCkksCipher, cipherDest)
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(invalidCkksCipher, cipherDest)
+  })
   test('It should cipherModSwitchToNext a cipher to a destination cipher (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -773,7 +887,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x))
   })
   test('It should cipherModSwitchToNext a cipher and return a cipher result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -790,7 +904,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x))
   })
   test('It should cipherModSwitchToNext a cipher to a destination cipher (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -805,7 +919,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x))
   })
   test('It should cipherModSwitchToNext a cipher and return a cipher result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -824,7 +938,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x))
   })
   test('It should cipherModSwitchToNext a cipher to a destination cipher (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -841,7 +955,7 @@ describe('Evaluator', () => {
     )
   })
   test('It should cipherModSwitchToNext a cipher and return a cipher result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -862,8 +976,19 @@ describe('Evaluator', () => {
     )
   })
   // cipherModSwitchTo
+  test('It should fail to cipherModSwitchTo a cipher', () => {
+    const item = EvaluatorObject(context)
+    const cipherDest = Morfix.CipherText()
+    const parmsId = context.lastParmsId
+
+    const spyOn = jest.spyOn(item, 'cipherModSwitchTo')
+    expect(() =>
+      item.cipherModSwitchTo(invalidCkksCipher, parmsId, cipherDest)
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(invalidCkksCipher, parmsId, cipherDest)
+  })
   test('It should cipherModSwitchTo a cipher to a destination cipher (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -877,7 +1002,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x))
   })
   test('It should cipherModSwitchTo a cipher and return a cipher result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -895,7 +1020,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x))
   })
   test('It should cipherModSwitchTo a cipher to a destination cipher (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -911,7 +1036,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x))
   })
   test('It should cipherModSwitchTo a cipher and return a cipher result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -931,7 +1056,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x))
   })
   test('It should cipherModSwitchTo a cipher to a destination cipher (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -949,7 +1074,7 @@ describe('Evaluator', () => {
     )
   })
   test('It should cipherModSwitchTo a cipher and return a cipher result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -971,8 +1096,21 @@ describe('Evaluator', () => {
     )
   })
   // plainModSwitchToNext
+  test('It should fail to plainModSwitchToNext a plain', () => {
+    const item = EvaluatorObject(context)
+    const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
+    const plain = encoder.encode(arr)
+    const plainDest = Morfix.PlainText()
+    const parmsId = context.firstParmsId
+    item.plainTransformToNtt(plain, parmsId, plain)
+    const spyOn = jest.spyOn(item, 'plainModSwitchToNext')
+    expect(() =>
+      item.plainModSwitchToNext(invalidCkksPlain, plainDest)
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(invalidCkksPlain, plainDest)
+  })
   test('It should plainModSwitchToNext a plain to a destination plain (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const plainDest = Morfix.PlainText()
@@ -983,7 +1121,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(plain, plainDest)
   })
   test('It should plainModSwitchToNext a plain and return a plain result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const parmsId = context.firstParmsId
@@ -998,7 +1136,7 @@ describe('Evaluator', () => {
     expect(plainDest.instance.constructor.name).toBe('Plaintext')
   })
   test('It should plainModSwitchToNext a plain to a destination plain (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -1011,7 +1149,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(plain, plainDest)
   })
   test('It should plainModSwitchToNext a plain and return a plain result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -1028,7 +1166,7 @@ describe('Evaluator', () => {
     expect(plainDest.instance.constructor.name).toBe('Plaintext')
   })
   test('It should plainModSwitchToNext a plain to a destination plain (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -1043,7 +1181,7 @@ describe('Evaluator', () => {
     )
   })
   test('It should plainModSwitchToNext a plain and return a plain result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -1062,8 +1200,21 @@ describe('Evaluator', () => {
     )
   })
   // plainModSwitchTo
+  test('It should fail to plainModSwitchTo a plain', () => {
+    const item = EvaluatorObject(context)
+    const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
+    const plain = encoder.encode(arr)
+    const plainDest = Morfix.PlainText()
+    const parmsId = context.firstParmsId
+    item.plainTransformToNtt(plain, parmsId, plain)
+    const spyOn = jest.spyOn(item, 'plainModSwitchTo')
+    expect(() =>
+      item.plainModSwitchTo(invalidCkksPlain, parmsId, plainDest)
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(invalidCkksPlain, parmsId, plainDest)
+  })
   test('It should plainModSwitchTo a plain to a destination plain (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const parmsId = context.firstParmsId
@@ -1073,7 +1224,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(plain, parmsId, plain)
   })
   test('It should plainModSwitchTo a plain and return a plain result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const parmsId = context.firstParmsId
@@ -1088,7 +1239,7 @@ describe('Evaluator', () => {
     expect(plainDest.instance.constructor.name).toBe('Plaintext')
   })
   test('It should plainModSwitchTo a plain to a destination plain (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -1101,7 +1252,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(plain, parmsId, plainDest)
   })
   test('It should plainModSwitchTo a plain and return a plain result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -1118,7 +1269,7 @@ describe('Evaluator', () => {
     expect(plainDest.instance.constructor.name).toBe('Plaintext')
   })
   test('It should plainModSwitchTo a plain to a destination plain (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -1134,7 +1285,7 @@ describe('Evaluator', () => {
     )
   })
   test('It should plainModSwitchTo a plain and return a plain result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -1154,8 +1305,15 @@ describe('Evaluator', () => {
     )
   })
   // rescaleToNext
+  test('It should fail to rescaleToNext a cipher', () => {
+    const item = EvaluatorObject(context)
+    const cipherDest = Morfix.CipherText()
+    const spyOn = jest.spyOn(item, 'rescaleToNext')
+    expect(() => item.rescaleToNext(invalidCkksCipher, cipherDest)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(invalidCkksCipher, cipherDest)
+  })
   test('It should fail to rescaleToNext for bfv scheme', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1166,7 +1324,7 @@ describe('Evaluator', () => {
   })
 
   test('It should rescaleToNext a cipher to a destination cipher (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -1183,7 +1341,7 @@ describe('Evaluator', () => {
     )
   })
   test('It should rescaleToNext a cipher and return a cipher result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -1205,7 +1363,7 @@ describe('Evaluator', () => {
   })
   // rescaleTo
   test('It should fail to rescaleTo for bfv scheme', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1217,7 +1375,7 @@ describe('Evaluator', () => {
   })
 
   test('It should rescaleTo a cipher to a destination cipher (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -1235,7 +1393,7 @@ describe('Evaluator', () => {
     )
   })
   test('It should rescaleTo a cipher and return a cipher result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -1257,8 +1415,22 @@ describe('Evaluator', () => {
     )
   })
   // Exponentiate
+  test('It should fail to exponentiate a cipher', () => {
+    const item = EvaluatorObject(context)
+    const cipherDest = Morfix.CipherText()
+    const spyOn = jest.spyOn(item, 'exponentiate')
+    expect(() =>
+      item.exponentiate(invalidCkksCipher, 2, relinKeys, cipherDest)
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(
+      invalidCkksCipher,
+      2,
+      relinKeys,
+      cipherDest
+    )
+  })
   test('It should exponentiate a cipher to a destination cipher (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1271,7 +1443,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should exponentiate a cipher and return a cipher result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1288,7 +1460,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should exponentiate a cipher to a destination cipher (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -1303,7 +1475,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should exponentiate a cipher and return a cipher result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -1322,7 +1494,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should fail to exponentiate for ckks scheme', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -1336,8 +1508,18 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, 2, ckksRelinKeys, cipherDest)
   })
   // Add plain
+  test('It should fail to add a plain to a cipher', () => {
+    const item = EvaluatorObject(context)
+    const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
+    const plain = encoder.encode(arr)
+    const cipher = encryptor.encrypt(plain)
+    const cipherDest = Morfix.CipherText()
+    const spyOn = jest.spyOn(item, 'addPlain')
+    expect(() => item.addPlain(cipher, invalidCkksPlain, cipherDest)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(cipher, invalidCkksPlain, cipherDest)
+  })
   test('It should add a plain to a cipher and store in a destination cipher (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1350,7 +1532,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => 2 * x))
   })
   test('It should add a plain to a cipher and return a cipher result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1367,7 +1549,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => 2 * x))
   })
   test('It should add a plain to a cipher to a destination cipher (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1380,7 +1562,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => 2 * x))
   })
   test('It should add a plain to a cipher and return a cipher result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1397,7 +1579,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => 2 * x))
   })
   test('It should add a plain to a cipher to a destination cipher (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => i
     )
@@ -1414,7 +1596,7 @@ describe('Evaluator', () => {
     )
   })
   test('It should add a plain to a cipher and return a cipher result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => i
     )
@@ -1435,8 +1617,18 @@ describe('Evaluator', () => {
     )
   })
   // Sub plain
+  test('It should fail to sub a plain from a cipher', () => {
+    const item = EvaluatorObject(context)
+    const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
+    const plain = encoder.encode(arr)
+    const cipher = encryptor.encrypt(plain)
+    const cipherDest = Morfix.CipherText()
+    const spyOn = jest.spyOn(item, 'subPlain')
+    expect(() => item.subPlain(cipher, invalidCkksPlain, cipherDest)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(cipher, invalidCkksPlain, cipherDest)
+  })
   test('It should sub a plain from a cipher to a destination cipher (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
     const arr2 = Int32Array.from({ length: encoder.slotCount }).map(
       (x, i) => -2 * i
@@ -1453,7 +1645,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => -x))
   })
   test('It should sub a plain from a cipher and return a cipher result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
     const arr2 = Int32Array.from({ length: encoder.slotCount }).map(
       (x, i) => -2 * i
@@ -1474,7 +1666,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => -x))
   })
   test('It should sub a plain from a cipher to a destination cipher (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 2 * i
     )
@@ -1493,7 +1685,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr2.map(x => x))
   })
   test('It should sub a plain from a cipher and return a cipher result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 2 * i
     )
@@ -1516,7 +1708,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr2.map(x => x))
   })
   test('It should sub a plain from a cipher to a destination cipher (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => i
     )
@@ -1537,7 +1729,7 @@ describe('Evaluator', () => {
     )
   })
   test('It should sub a plain from a cipher and return a cipher result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => i
     )
@@ -1562,8 +1754,20 @@ describe('Evaluator', () => {
     )
   })
   // Multiply plain
+  test('It should fail to multiply a cipher by a plain', () => {
+    const item = EvaluatorObject(context)
+    const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
+    const plain = encoder.encode(arr)
+    const cipher = encryptor.encrypt(plain)
+    const cipherDest = Morfix.CipherText()
+    const spyOn = jest.spyOn(item, 'multiplyPlain')
+    expect(() =>
+      item.multiplyPlain(cipher, invalidCkksPlain, cipherDest)
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(cipher, invalidCkksPlain, cipherDest)
+  })
   test('It should multiply a cipher by a plain and store it to a destination cipher (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1576,7 +1780,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should multiply a cipher by a plain and return a cipher result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1593,7 +1797,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should multiply a cipher by a plain and store it to a destination cipher (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -1608,7 +1812,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should multiply a cipher by a plain and return a cipher result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -1627,7 +1831,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should multiply a cipher by a plain and store it to a destination cipher (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -1644,7 +1848,7 @@ describe('Evaluator', () => {
     )
   })
   test('It should multiply a cipher by a plain and return a cipher result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 6
     )
@@ -1665,8 +1869,21 @@ describe('Evaluator', () => {
     )
   })
   // plainTransformToNtt
+  test('It should fail to plainTransformToNtt a plain', () => {
+    const item = EvaluatorObject(context)
+    const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
+    const plain = encoder.encode(arr)
+    const plainDest = Morfix.PlainText()
+    const parmsId = context.firstParmsId
+    item.plainTransformToNtt(plain, parmsId, plain)
+    const spyOn = jest.spyOn(item, 'plainTransformToNtt')
+    expect(() =>
+      item.plainTransformToNtt(invalidCkksPlain, parmsId, plainDest)
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(invalidCkksPlain, parmsId, plainDest)
+  })
   test('It should plainTransformToNtt a plain to a destination plain (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const parmsId = context.firstParmsId
@@ -1675,7 +1892,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(plain, parmsId, plain)
   })
   test('It should plainTransformToNtt a plain and return a plain result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const parmsId = context.firstParmsId
@@ -1689,7 +1906,7 @@ describe('Evaluator', () => {
     expect(plainDest.instance.constructor.name).toBe('Plaintext')
   })
   test('It should plainTransformToNtt a plain to a destination plain (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -1700,7 +1917,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(plain, parmsId, plain)
   })
   test('It should plainTransformToNtt a plain and return a plain result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -1716,7 +1933,7 @@ describe('Evaluator', () => {
     expect(plainDest.instance.constructor.name).toBe('Plaintext')
   })
   test('It should fail to plainTransformToNtt on ckks scheme', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 10
     )
@@ -1726,8 +1943,17 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(plain, plain)
   })
   // cipherTransformToNtt
+  test('It should fail to cipherTransformToNtt a plain', () => {
+    const item = EvaluatorObject(context)
+    const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
+    const plain = encoder.encode(arr)
+    const cipher = encryptor.encrypt(plain)
+    const spyOn = jest.spyOn(item, 'cipherTransformToNtt')
+    expect(() => item.cipherTransformToNtt(invalidCkksCipher, cipher)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(invalidCkksCipher, cipher)
+  })
   test('It should cipherTransformToNtt a cipher to a destination cipher (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1736,7 +1962,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher)
   })
   test('It should cipherTransformToNtt a cipher and return a cipher result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1750,7 +1976,7 @@ describe('Evaluator', () => {
     expect(plainDest.instance.constructor.name).toBe('Ciphertext')
   })
   test('It should cipherTransformToNtt a cipher to a destination cipher (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -1761,7 +1987,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher)
   })
   test('It should cipherTransformToNtt a cipher and return a cipher result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -1777,7 +2003,7 @@ describe('Evaluator', () => {
     expect(plainDest.instance.constructor.name).toBe('Ciphertext')
   })
   test('It should fail to cipherTransformToNtt on ckks scheme', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 10
     )
@@ -1789,7 +2015,7 @@ describe('Evaluator', () => {
   })
   // cipherTransformFromNtt
   test('It should cipherTransformFromNtt a cipher to a destination cipher (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1799,7 +2025,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher)
   })
   test('It should cipherTransformFromNtt a cipher and return a cipher result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1814,7 +2040,7 @@ describe('Evaluator', () => {
     expect(cipherDest.instance.constructor.name).toBe('Ciphertext')
   })
   test('It should cipherTransformFromNtt a cipher to a destination cipher (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -1826,7 +2052,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher)
   })
   test('It should cipherTransformFromNtt a cipher and return a cipher result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map(
       (x, i) => 10
     )
@@ -1843,7 +2069,7 @@ describe('Evaluator', () => {
     expect(cipherDest.instance.constructor.name).toBe('Ciphertext')
   })
   test('It should fail to cipherTransformFromNtt on ckks scheme', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 10
     )
@@ -1855,8 +2081,23 @@ describe('Evaluator', () => {
   })
 
   // applyGalois
+  test('It should fail to applyGalois on a cipher', () => {
+    const item = EvaluatorObject(context)
+    const cipherDest = Morfix.CipherText()
+    const galElt = 2 * parms.polyModulusDegree - 1
+    const spyOn = jest.spyOn(item, 'applyGalois')
+    expect(() =>
+      item.applyGalois(invalidCkksCipher, galElt, galoisKeys, cipherDest)
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(
+      invalidCkksCipher,
+      galElt,
+      galoisKeys,
+      cipherDest
+    )
+  })
   test('It should applyGalois on a cipher to a destination cipher (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1867,7 +2108,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, galElt, galoisKeys, cipherDest)
   })
   test('It should applyGalois on a cipher and return a cipher result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1882,7 +2123,7 @@ describe('Evaluator', () => {
     expect(cipherDest.instance.constructor.name).toBe('Ciphertext')
   })
   test('It should applyGalois on a cipher to a destination cipher (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1893,7 +2134,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, galElt, galoisKeys, cipherDest)
   })
   test('It should applyGalois on a cipher and return a cipher result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1908,7 +2149,7 @@ describe('Evaluator', () => {
     expect(cipherDest.instance.constructor.name).toBe('Ciphertext')
   })
   test('It should applyGalois on a cipher to a destination cipher (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => i
     )
@@ -1926,7 +2167,7 @@ describe('Evaluator', () => {
     )
   })
   test('It should applyGalois on a cipher and return a cipher result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => i
     )
@@ -1944,7 +2185,7 @@ describe('Evaluator', () => {
   })
   // rotateRows
   test('It should rotateRows on a cipher to a destination cipher (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1954,7 +2195,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, 5, galoisKeys, cipherDest)
   })
   test('It should rotateRows on a cipher and return a cipher result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1968,7 +2209,7 @@ describe('Evaluator', () => {
     expect(cipherDest.instance.constructor.name).toBe('Ciphertext')
   })
   test('It should rotateRows on a cipher to a destination cipher (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1978,7 +2219,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, 5, galoisKeys, cipherDest)
   })
   test('It should rotateRows on a cipher and return a cipher result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -1992,7 +2233,7 @@ describe('Evaluator', () => {
     expect(cipherDest.instance.constructor.name).toBe('Ciphertext')
   })
   test('It should fail to rotateRows when using ckks', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => i
     )
@@ -2007,7 +2248,7 @@ describe('Evaluator', () => {
   })
   // rotateColumns
   test('It should rotateColumns on a cipher to a destination cipher (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -2017,7 +2258,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, galoisKeys, cipherDest)
   })
   test('It should rotateColumns on a cipher and return a cipher result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -2031,7 +2272,7 @@ describe('Evaluator', () => {
     expect(cipherDest.instance.constructor.name).toBe('Ciphertext')
   })
   test('It should rotateColumns on a cipher to a destination cipher (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -2041,7 +2282,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, galoisKeys, cipherDest)
   })
   test('It should rotateColumns on a cipher and return a cipher result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -2055,7 +2296,7 @@ describe('Evaluator', () => {
     expect(cipherDest.instance.constructor.name).toBe('Ciphertext')
   })
   test('It should fail to rotateColumns when using ckks', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => i
     )
@@ -2070,7 +2311,7 @@ describe('Evaluator', () => {
   })
   // rotateVector
   test('It should fail to rotateVector when using bfv', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -2080,7 +2321,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, 5, galoisKeys, cipherDest)
   })
   test('It should rotateVector on a cipher to a destination cipher (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => i
     )
@@ -2092,7 +2333,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, 5, ckksGaloisKeys, cipherDest)
   })
   test('It should rotateVector on a cipher and return a cipher result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => i
     )
@@ -2109,7 +2350,7 @@ describe('Evaluator', () => {
   })
   // complexConjugate
   test('It should fail to complexConjugate when using bfv', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => i)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -2121,7 +2362,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, galoisKeys, cipherDest)
   })
   test('It should complexConjugate on a cipher to a destination cipher (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => i
     )
@@ -2133,7 +2374,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, ckksGaloisKeys, cipherDest)
   })
   test('It should complexConjugate on a cipher and return a cipher result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => i
     )
@@ -2149,8 +2390,22 @@ describe('Evaluator', () => {
     expect(cipherDest.instance.constructor.name).toBe('Ciphertext')
   })
   // sumElements
+  test('It should fail to sumElements on a cipher', () => {
+    const item = EvaluatorObject(context)
+    const cipherDest = Morfix.CipherText()
+    const spyOn = jest.spyOn(item, 'sumElements')
+    expect(() =>
+      item.sumElements(invalidCkksCipher, galoisKeys, parms.scheme, cipherDest)
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(
+      invalidCkksCipher,
+      galoisKeys,
+      parms.scheme,
+      cipherDest
+    )
+  })
   test('It should sumElements on a cipher to a destination cipher (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => 5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -2169,7 +2424,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.fill(sum))
   })
   test('It should sumElements on a cipher and return a cipher result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => 5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -2187,7 +2442,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.fill(sum))
   })
   test('It should sumElements on a cipher to a destination cipher (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => 5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -2206,7 +2461,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.fill(sum))
   })
   test('It should sumElements on a cipher and return a cipher result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => 5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -2224,7 +2479,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.fill(sum))
   })
   test('It should sumElements on a cipher to a destination cipher (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 5
     )
@@ -2241,7 +2496,7 @@ describe('Evaluator', () => {
     )
   })
   test('It should sumElements on a cipher and return a cipher result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 5
     )
@@ -2261,8 +2516,31 @@ describe('Evaluator', () => {
     expect(cipherDest.instance.constructor.name).toBe('Ciphertext')
   })
   // dotProduct
+  test('It should fail to dotProduct two ciphers', () => {
+    const item = EvaluatorObject(context)
+    const cipherDest = Morfix.CipherText()
+    const spyOn = jest.spyOn(item, 'dotProduct')
+    expect(() =>
+      item.dotProduct(
+        invalidCkksCipher,
+        invalidCkksCipher,
+        relinKeys,
+        galoisKeys,
+        parms.scheme,
+        cipherDest
+      )
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(
+      invalidCkksCipher,
+      invalidCkksCipher,
+      relinKeys,
+      galoisKeys,
+      parms.scheme,
+      cipherDest
+    )
+  })
   test('It should calculate the dotProduct of two ciphers to a destination cipher (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => 5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -2291,7 +2569,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.fill(dot))
   })
   test('It should calculate the dotProduct of two ciphers and return a cipher result (bfv) (int32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => 5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -2322,7 +2600,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.fill(dot))
   })
   test('It should calculate the dotProduct of two ciphers to a destination cipher (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => 5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -2351,7 +2629,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.fill(dot))
   })
   test('It should calculate the dotProduct of two ciphers and return a cipher result (bfv) (uint32)', () => {
-    const item = Morfix.Evaluator(context)
+    const item = EvaluatorObject(context)
     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => 5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
@@ -2382,7 +2660,7 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(arr.fill(dot))
   })
   test('It should calculate the dotProduct of two ciphers to a destination cipher (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 5
     )
@@ -2409,7 +2687,7 @@ describe('Evaluator', () => {
     )
   })
   test('It should calculate the dotProduct of two ciphers and return a cipher result (ckks)', () => {
-    const item = Morfix.Evaluator(ckksContext)
+    const item = EvaluatorObject(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
       (x, i) => 5
     )

@@ -1,14 +1,20 @@
 import { Seal } from '../../index.js'
+import { getLibrary } from '../../index'
+import { Encryptor } from '../../components'
 
-let Morfix = null
-let parms = null
-let context = null
-let keyGenerator = null
-let publicKey = null
-let secretKey = null
-let decryptor = null
+let Morfix,
+  parms,
+  context,
+  keyGenerator,
+  publicKey,
+  secretKey,
+  decryptor,
+  EncryptorObject = null
 beforeAll(async () => {
   Morfix = await Seal
+  const lib = getLibrary()
+  EncryptorObject = Encryptor(lib)(Morfix)
+
   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
   parms.setPolyModulusDegree(4096)
   parms.setCoeffModulus(
@@ -24,15 +30,34 @@ beforeAll(async () => {
 
 describe('Encryptor', () => {
   test('It should be a factory', () => {
-    expect(Morfix).toHaveProperty('Encryptor')
-    expect(Morfix.Encryptor).toBeDefined()
-    expect(typeof Morfix.Encryptor.constructor).toBe('function')
-    expect(Morfix.Encryptor).toBeInstanceOf(Object)
-    expect(Morfix.Encryptor.constructor).toBe(Function)
-    expect(Morfix.Encryptor.constructor.name).toBe('Function')
+    expect(EncryptorObject).toBeDefined()
+    expect(typeof EncryptorObject.constructor).toBe('function')
+    expect(EncryptorObject).toBeInstanceOf(Object)
+    expect(EncryptorObject.constructor).toBe(Function)
+    expect(EncryptorObject.constructor.name).toBe('Function')
+  })
+  test('It should construct an instance', () => {
+    const Constructor = jest.fn(EncryptorObject)
+    Constructor(context, publicKey)
+    expect(Constructor).toBeCalledWith(context, publicKey)
+  })
+  test('It should fail to construct an instance', () => {
+    const newParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+    newParms.setPolyModulusDegree(2048)
+    newParms.setCoeffModulus(
+      Morfix.CoeffModulus.BFVDefault(2048, Morfix.SecurityLevel.tc128)
+    )
+    newParms.setPlainModulus(Morfix.PlainModulus.Batching(2048, 20))
+    const newContext = Morfix.Context(newParms)
+    const newKeyGenerator = Morfix.KeyGenerator(newContext)
+    const newPublicKey = newKeyGenerator.getPublicKey()
+
+    const Constructor = jest.fn(EncryptorObject)
+    expect(() => Constructor(context, newPublicKey)).toThrow()
+    expect(Constructor).toBeCalledWith(context, newPublicKey)
   })
   test('It should have properties', () => {
-    const item = Morfix.Encryptor(context, publicKey)
+    const item = EncryptorObject(context, publicKey)
     // Test properties
     expect(item).toHaveProperty('instance')
     expect(item).toHaveProperty('unsafeInject')
@@ -40,27 +65,45 @@ describe('Encryptor', () => {
     expect(item).toHaveProperty('encrypt')
   })
   test('It should have an instance', () => {
-    const item = Morfix.Encryptor(context, publicKey)
-    expect(item.instance).not.toBeFalsy()
+    const item = EncryptorObject(context, publicKey)
+    expect(item.instance).toBeDefined()
   })
   test('It should inject', () => {
-    const item = Morfix.Encryptor(context, publicKey)
-    const newItem = Morfix.Encryptor(context, publicKey)
+    const item = EncryptorObject(context, publicKey)
+    const newItem = EncryptorObject(context, publicKey)
+    newItem.delete()
+    const spyOn = jest.spyOn(newItem, 'unsafeInject')
+    newItem.unsafeInject(item.instance)
+    expect(spyOn).toHaveBeenCalledWith(item.instance)
+    expect(newItem.instance).toEqual(item.instance)
+  })
+  test('It should delete the old instance and inject', () => {
+    const item = EncryptorObject(context, publicKey)
+    const newItem = EncryptorObject(context, publicKey)
     const spyOn = jest.spyOn(newItem, 'unsafeInject')
     newItem.unsafeInject(item.instance)
     expect(spyOn).toHaveBeenCalledWith(item.instance)
     expect(newItem.instance).toEqual(item.instance)
   })
   test("It should delete it's instance", () => {
-    const item = Morfix.Encryptor(context, publicKey)
+    const item = EncryptorObject(context, publicKey)
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
     expect(item.instance).toBeNull()
     expect(() => item.encrypt()).toThrow(TypeError)
   })
+  test('It should skip deleting twice', () => {
+    const item = EncryptorObject(context, publicKey)
+    item.delete()
+    const spyOn = jest.spyOn(item, 'delete')
+    item.delete()
+    expect(spyOn).toHaveBeenCalled()
+    expect(item.instance).toBeNull()
+    expect(() => item.decrypt()).toThrow(TypeError)
+  })
   test('It should encrypt a plaintext to a destination cipher', () => {
-    const item = Morfix.Encryptor(context, publicKey)
+    const item = EncryptorObject(context, publicKey)
     const encoder = Morfix.BatchEncoder(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).fill(5)
     const plain = Morfix.PlainText()
@@ -74,7 +117,7 @@ describe('Encryptor', () => {
     expect(decoded).toEqual(arr)
   })
   test('It should encrypt a plaintext and return a cipher', () => {
-    const item = Morfix.Encryptor(context, publicKey)
+    const item = EncryptorObject(context, publicKey)
     const encoder = Morfix.BatchEncoder(context)
     const arr = Int32Array.from({ length: encoder.slotCount }).fill(5)
     const plain = Morfix.PlainText()
