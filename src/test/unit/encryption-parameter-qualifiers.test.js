@@ -15,10 +15,7 @@ let EncryptionParameterQualifiersObject = null
 
 beforeAll(async () => {
   Morfix = await Seal
-  const lib = getLibrary()
-  EncryptionParameterQualifiersObject = EncryptionParameterQualifiers(lib)(
-    Morfix
-  )
+  EncryptionParameterQualifiersObject = EncryptionParameterQualifiers()()
 
   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
   parms.setPolyModulusDegree(4096)

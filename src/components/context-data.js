@@ -117,12 +117,12 @@ export const ContextData = library => ({
      * @type {ContextData}
      */
     get prevContextData() {
-      return ContextData(library)(
+      return ContextData(library)({
         Exception,
         EncryptionParameters,
         ParmsIdType,
         EncryptionParameterQualifiers
-      )(_instance.prevContextData())
+      })(_instance.prevContextData())
     },
 
     /**
@@ -135,12 +135,12 @@ export const ContextData = library => ({
      * @type {ContextData}
      */
     get nextContextData() {
-      return ContextData(library)(
+      return ContextData(library)({
         Exception,
         EncryptionParameters,
         ParmsIdType,
         EncryptionParameterQualifiers
-      )(_instance.nextContextData())
+      })(_instance.nextContextData())
     },
 
     /**

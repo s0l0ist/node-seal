@@ -26,7 +26,6 @@ let ckksEncryptor = null
 let ckksDecryptor = null
 
 let invalidBfvPlain = null
-let invalidBfvCipher = null
 let invalidCkksPlain = null
 let invalidCkksCipher = null
 
@@ -54,7 +53,6 @@ beforeAll(async () => {
 
   const arr1 = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
   invalidBfvPlain = encoder.encode(arr1)
-  invalidBfvCipher = encryptor.encrypt(invalidBfvPlain)
 
   ckksParms = Morfix.EncryptionParameters(Morfix.SchemeType.CKKS)
   ckksParms.setPolyModulusDegree(4096)

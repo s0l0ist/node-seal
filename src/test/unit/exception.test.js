@@ -1,11 +1,10 @@
 import { Seal, getLibrary } from '../../index.js'
 import { Exception } from '../../components'
 
-let Morfix,
-  lib,
+let lib,
   ExceptionObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  await Seal
   lib = getLibrary()
   ExceptionObject = Exception(lib)()
 })
