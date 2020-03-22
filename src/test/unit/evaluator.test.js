@@ -25,7 +25,6 @@ let ckksGaloisKeys = null
 let ckksEncryptor = null
 let ckksDecryptor = null
 
-let invalidBfvPlain = null
 let invalidCkksPlain = null
 let invalidCkksCipher = null
 
@@ -50,9 +49,6 @@ beforeAll(async () => {
   galoisKeys = keyGenerator.genGaloisKeys()
   encryptor = Morfix.Encryptor(context, publicKey)
   decryptor = Morfix.Decryptor(context, secretKey)
-
-  const arr1 = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
-  invalidBfvPlain = encoder.encode(arr1)
 
   ckksParms = Morfix.EncryptionParameters(Morfix.SchemeType.CKKS)
   ckksParms.setPolyModulusDegree(4096)
