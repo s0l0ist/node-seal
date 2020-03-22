@@ -1,68 +1,69 @@
-import { Seal } from '../../index.js'
+import { SecurityLevel } from '../../components'
+import { Seal, getLibrary } from '../../index'
 
-let Morfix = null
+let SecurityLevelObject = null
+
 beforeAll(async () => {
-  Morfix = await Seal
+  await Seal
+  const lib = getLibrary()
+  SecurityLevelObject = SecurityLevel(lib)()
 })
 
 describe('SecurityLevel', () => {
   test('It should be a static instance', () => {
-    expect(Morfix).toHaveProperty('SecurityLevel')
-    expect(Morfix.SecurityLevel).toBeDefined()
-    expect(typeof Morfix.SecurityLevel.constructor).toBe('function')
-    expect(Morfix.SecurityLevel).toBeInstanceOf(Object)
-    expect(Morfix.SecurityLevel.constructor).toBe(Object)
-    expect(Morfix.SecurityLevel.constructor.name).toBe('Object')
+    expect(SecurityLevelObject).toBeDefined()
+    expect(typeof SecurityLevelObject.constructor).toBe('function')
+    expect(SecurityLevelObject).toBeInstanceOf(Object)
+    expect(SecurityLevelObject.constructor).toBe(Object)
+    expect(SecurityLevelObject.constructor.name).toBe('Object')
   })
   test('It should have properties', () => {
-    expect(Morfix.SecurityLevel).toHaveProperty('none')
-    expect(Morfix.SecurityLevel).toHaveProperty('tc128')
-    expect(Morfix.SecurityLevel).toHaveProperty('tc192')
-    expect(Morfix.SecurityLevel).toHaveProperty('tc256')
+    expect(SecurityLevelObject).toHaveProperty('none')
+    expect(SecurityLevelObject).toHaveProperty('tc128')
+    expect(SecurityLevelObject).toHaveProperty('tc192')
+    expect(SecurityLevelObject).toHaveProperty('tc256')
   })
   test('It should return type none', async () => {
-    const securityLevel = Morfix.SecurityLevel.none
+    const securityLevel = SecurityLevelObject.none
     expect(securityLevel).toBeDefined()
     expect(typeof securityLevel.constructor).toBe('function')
     expect(securityLevel).toBeInstanceOf(Object)
-    expect(securityLevel.constructor).toBe(
-      Morfix.SecurityLevel.none.constructor
-    )
-    expect(Morfix.SecurityLevel.none.constructor.name).toBe('SecLevelType_none')
+    expect(securityLevel.constructor).toBe(SecurityLevelObject.none.constructor)
+    expect(SecurityLevelObject.none.constructor.name).toBe('SecLevelType_none')
   })
   test('It should return type tc128', async () => {
-    const securityLevel = Morfix.SecurityLevel.tc128
+    const securityLevel = SecurityLevelObject.tc128
     expect(securityLevel).toBeDefined()
     expect(typeof securityLevel.constructor).toBe('function')
     expect(securityLevel).toBeInstanceOf(Object)
     expect(securityLevel.constructor).toBe(
-      Morfix.SecurityLevel.tc128.constructor
+      SecurityLevelObject.tc128.constructor
     )
-    expect(Morfix.SecurityLevel.tc128.constructor.name).toBe(
+    expect(SecurityLevelObject.tc128.constructor.name).toBe(
       'SecLevelType_tc128'
     )
   })
   test('It should return type tc192', async () => {
-    const securityLevel = Morfix.SecurityLevel.tc192
+    const securityLevel = SecurityLevelObject.tc192
     expect(securityLevel).toBeDefined()
     expect(typeof securityLevel.constructor).toBe('function')
     expect(securityLevel).toBeInstanceOf(Object)
     expect(securityLevel.constructor).toBe(
-      Morfix.SecurityLevel.tc192.constructor
+      SecurityLevelObject.tc192.constructor
     )
-    expect(Morfix.SecurityLevel.tc192.constructor.name).toBe(
+    expect(SecurityLevelObject.tc192.constructor.name).toBe(
       'SecLevelType_tc192'
     )
   })
   test('It should return type tc256', async () => {
-    const securityLevel = Morfix.SecurityLevel.tc256
+    const securityLevel = SecurityLevelObject.tc256
     expect(securityLevel).toBeDefined()
     expect(typeof securityLevel.constructor).toBe('function')
     expect(securityLevel).toBeInstanceOf(Object)
     expect(securityLevel.constructor).toBe(
-      Morfix.SecurityLevel.tc256.constructor
+      SecurityLevelObject.tc256.constructor
     )
-    expect(Morfix.SecurityLevel.tc256.constructor.name).toBe(
+    expect(SecurityLevelObject.tc256.constructor.name).toBe(
       'SecLevelType_tc256'
     )
   })

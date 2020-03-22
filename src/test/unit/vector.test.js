@@ -1,48 +1,92 @@
 import { Seal } from '../../index.js'
+import { getLibrary } from '../../index'
+import { Vector } from '../../components'
 
 let Morfix = null
+let VectorObject = null
 beforeAll(async () => {
   Morfix = await Seal
+  const lib = getLibrary()
+  VectorObject = Vector(lib)(Morfix)
 })
 
 describe('Vector', () => {
   test('It should be a factory', () => {
-    expect(Morfix).toHaveProperty('Vector')
-    expect(Morfix.Vector).toBeDefined()
-    expect(typeof Morfix.Vector.constructor).toBe('function')
-    expect(Morfix.Vector).toBeInstanceOf(Object)
-    expect(Morfix.Vector.constructor).toBe(Function)
-    expect(Morfix.Vector.constructor.name).toBe('Function')
+    expect(VectorObject).toBeDefined()
+    expect(typeof VectorObject.constructor).toBe('function')
+    expect(VectorObject).toBeInstanceOf(Object)
+    expect(VectorObject.constructor).toBe(Function)
+    expect(VectorObject.constructor.name).toBe('Function')
+  })
+  test('It should construct an instance', () => {
+    const Constructor = jest.fn(VectorObject)
+    Constructor()
+    expect(Constructor).toBeCalledWith()
+  })
+  test('It should construct an instance with of int32', () => {
+    const Constructor = jest.fn(VectorObject)
+    Constructor(Int32Array.from([0]))
+    expect(Constructor).toBeCalledWith(Int32Array.from([0]))
+  })
+  test('It should construct an instance with of uint32', () => {
+    const Constructor = jest.fn(VectorObject)
+    Constructor(Uint32Array.from([0]))
+    expect(Constructor).toBeCalledWith(Uint32Array.from([0]))
+  })
+  test('It should construct an instance with of float64', () => {
+    const Constructor = jest.fn(VectorObject)
+    Constructor(Float64Array.from([0]))
+    expect(Constructor).toBeCalledWith(Float64Array.from([0]))
+  })
+  test('It should fail to construct an instance', () => {
+    const Constructor = jest.fn(VectorObject)
+    expect(() => Constructor(BigInt64Array.from([0n]))).toThrow()
+    expect(Constructor).toBeCalledWith(BigInt64Array.from([0n]))
   })
   test('It should have properties', () => {
-    const item = Morfix.Vector()
+    const item = VectorObject()
     // Test properties
     expect(item).toHaveProperty('instance')
     expect(item).toHaveProperty('unsafeInject')
     expect(item).toHaveProperty('delete')
     expect(item).toHaveProperty('type')
     expect(item).toHaveProperty('size')
-    expect(item).toHaveProperty('printMatrix')
-    expect(item).toHaveProperty('printVector')
-    expect(item).toHaveProperty('fromArray')
     expect(item).toHaveProperty('getValue')
     expect(item).toHaveProperty('resize')
     expect(item).toHaveProperty('toArray')
   })
   test('It should have an instance', () => {
-    const item = Morfix.Vector()
-    expect(item.instance).not.toBeFalsy()
+    const item = VectorObject()
+    expect(item.instance).toBeDefined()
   })
   test('It should inject', () => {
-    const item = Morfix.Vector(Int32Array.from([3]))
-    const newItem = Morfix.Vector(Int32Array.from([7]))
+    const item = VectorObject(Int32Array.from([3]))
+    const newItem = VectorObject(Int32Array.from([7]))
+    newItem.delete()
+    const spyOn = jest.spyOn(newItem, 'unsafeInject')
+    newItem.unsafeInject(item.instance)
+    expect(spyOn).toHaveBeenCalledWith(item.instance)
+    expect(newItem.getValue(0)).toBe(3)
+  })
+  test('It should delete the old instance and inject', () => {
+    const item = VectorObject(Int32Array.from([3]))
+    const newItem = VectorObject(Int32Array.from([7]))
     const spyOn = jest.spyOn(newItem, 'unsafeInject')
     newItem.unsafeInject(item.instance)
     expect(spyOn).toHaveBeenCalledWith(item.instance)
     expect(newItem.getValue(0)).toBe(3)
   })
   test("It should delete it's instance", () => {
-    const item = Morfix.Vector(Int32Array.from([3]))
+    const item = VectorObject(Int32Array.from([3]))
+    const spyOn = jest.spyOn(item, 'delete')
+    item.delete()
+    expect(spyOn).toHaveBeenCalled()
+    expect(item.instance).toBeNull()
+    expect(() => item.getValue(0)).toThrow(TypeError)
+  })
+  test('It should skip deleting twice', () => {
+    const item = VectorObject(Int32Array.from([3]))
+    item.delete()
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
@@ -50,27 +94,27 @@ describe('Vector', () => {
     expect(() => item.getValue(0)).toThrow(TypeError)
   })
   test('It should return type Int32Array', () => {
-    const item = Morfix.Vector(Int32Array.from([3]))
+    const item = VectorObject(Int32Array.from([3]))
     expect(item.type).toBe(Int32Array)
   })
   test('It should return type Uint32Array', () => {
-    const item = Morfix.Vector(Uint32Array.from([3]))
+    const item = VectorObject(Uint32Array.from([3]))
     expect(item.type).toBe(Uint32Array)
   })
   test('It should return type Float64Array', () => {
-    const item = Morfix.Vector(Float64Array.from([3]))
+    const item = VectorObject(Float64Array.from([3]))
     expect(item.type).toBe(Float64Array)
   })
   test('It should return its size', () => {
-    const item = Morfix.Vector(Int32Array.from([3]))
+    const item = VectorObject(Int32Array.from([3]))
     expect(typeof item.size).toBe('number')
   })
   test('It should return size 0', () => {
-    const item = Morfix.Vector(Int32Array.from([]))
+    const item = VectorObject(Int32Array.from([]))
     expect(item.size).toBe(0)
   })
   test('It should print a matrix', () => {
-    const item = Morfix.Vector(
+    const item = VectorObject(
       Int32Array.from(Array.from({ length: 4096 })).fill(5)
     )
     item.printMatrix = jest.fn()
@@ -78,26 +122,15 @@ describe('Vector', () => {
     expect(item.printMatrix).toHaveBeenCalledWith(2048)
   })
   test('It should print a vector', () => {
-    const item = Morfix.Vector(
+    const item = VectorObject(
       Int32Array.from(Array.from({ length: 4096 })).fill(5)
     )
     item.printMatrix = jest.fn()
     item.printMatrix(4, 5)
     expect(item.printMatrix).toHaveBeenCalledWith(4, 5)
   })
-  test('It should create an instance from an array', () => {
-    const array1 = Array.from({ length: 4096 }).fill(5)
-    const array2 = Array.from({ length: 4096 }).fill(6)
-    const intArr1 = Int32Array.from(array1)
-    const intArr2 = Int32Array.from(array2)
-    const item = Morfix.Vector(intArr1)
-    const instance = item.fromArray(intArr2)
-    expect(instance).toBeDefined()
-    item.unsafeInject(instance)
-    expect(item.toArray()).toEqual(intArr2)
-  })
   test('It should get a value from a specified index', () => {
-    const item = Morfix.Vector(
+    const item = VectorObject(
       Int32Array.from(Array.from({ length: 4096 })).map((x, i) => i)
     )
     const spyOn = jest.spyOn(item, 'getValue')
@@ -106,19 +139,24 @@ describe('Vector', () => {
     expect(value).toBe(5)
   })
   test('It should resize to a specified number', () => {
-    const item = Morfix.Vector(
+    const item = VectorObject(
       Int32Array.from(Array.from({ length: 4096 })).fill(3)
     )
     const spyOn = jest.spyOn(item, 'resize')
     item.resize(8192, 3)
     expect(spyOn).toHaveBeenCalledWith(8192, 3)
-    expect(item.toArray()).toEqual(
-      Int32Array.from(Array.from({ length: 8192 })).fill(3)
+  })
+  test('It should fail to resize to a specified number', () => {
+    const item = VectorObject(
+      Int32Array.from(Array.from({ length: 4096 })).fill(3)
     )
+    const spyOn = jest.spyOn(item, 'resize')
+    expect(() => item.resize(-1, 3)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(-1, 3)
   })
   test('It should return an Int32Array', () => {
     const arr = Int32Array.from(Array.from({ length: 4096 })).fill(-3)
-    const item = Morfix.Vector(arr)
+    const item = VectorObject(arr)
     const spyOn = jest.spyOn(item, 'toArray')
     const res = item.toArray()
     expect(spyOn).toHaveBeenCalledWith()
@@ -126,7 +164,7 @@ describe('Vector', () => {
   })
   test('It should return an Uint32Array', () => {
     const arr = Uint32Array.from(Array.from({ length: 4096 })).fill(3)
-    const item = Morfix.Vector(arr)
+    const item = VectorObject(arr)
     const spyOn = jest.spyOn(item, 'toArray')
     const res = item.toArray()
     expect(spyOn).toHaveBeenCalledWith()
@@ -134,59 +172,10 @@ describe('Vector', () => {
   })
   test('It should return an Float64Array', () => {
     const arr = Float64Array.from(Array.from({ length: 4096 })).fill(3.3)
-    const item = Morfix.Vector(arr)
+    const item = VectorObject(arr)
     const spyOn = jest.spyOn(item, 'toArray')
     const res = item.toArray()
     expect(spyOn).toHaveBeenCalledWith()
     expect(res).toEqual(arr)
-  })
-
-  test('It should construct from no args', () => {
-    const spyOn = jest.spyOn(Morfix, 'Vector')
-    const item = Morfix.Vector()
-    expect(spyOn).toHaveBeenCalledWith()
-    expect(item).toBeDefined()
-    expect(typeof item.constructor).toBe('function')
-    expect(item).toBeInstanceOf(Object)
-    expect(item.constructor).toBe(Object)
-    expect(item.instance.constructor.name).toBe('std$$vector$int32_t$')
-    expect(item.toArray()).toEqual(new Int32Array(0))
-  })
-
-  test('It should construct from an Int32Array', () => {
-    const spyOn = jest.spyOn(Morfix, 'Vector')
-    const arr = Int32Array.from(Array.from({ length: 4096 })).fill(-3)
-    const item = Morfix.Vector(arr)
-    expect(spyOn).toHaveBeenCalledWith(arr)
-    expect(item).toBeDefined()
-    expect(typeof item.constructor).toBe('function')
-    expect(item).toBeInstanceOf(Object)
-    expect(item.constructor).toBe(Object)
-    expect(item.instance.constructor.name).toBe('std$$vector$int32_t$')
-    expect(item.toArray()).toEqual(arr)
-  })
-  test('It should construct from an Uint32Array', () => {
-    const spyOn = jest.spyOn(Morfix, 'Vector')
-    const arr = Uint32Array.from(Array.from({ length: 4096 })).fill(3)
-    const item = Morfix.Vector(arr)
-    expect(spyOn).toHaveBeenCalledWith(arr)
-    expect(item).toBeDefined()
-    expect(typeof item.constructor).toBe('function')
-    expect(item).toBeInstanceOf(Object)
-    expect(item.constructor).toBe(Object)
-    expect(item.instance.constructor.name).toBe('std$$vector$uint32_t$')
-    expect(item.toArray()).toEqual(arr)
-  })
-  test('It should construct from an Float64Array', () => {
-    const spyOn = jest.spyOn(Morfix, 'Vector')
-    const arr = Float64Array.from(Array.from({ length: 4096 })).fill(3.3)
-    const item = Morfix.Vector(arr)
-    expect(spyOn).toHaveBeenCalledWith(arr)
-    expect(item).toBeDefined()
-    expect(typeof item.constructor).toBe('function')
-    expect(item).toBeInstanceOf(Object)
-    expect(item.constructor).toBe(Object)
-    expect(item.instance.constructor.name).toBe('std$$vector$double$')
-    expect(item.toArray()).toEqual(arr)
   })
 })

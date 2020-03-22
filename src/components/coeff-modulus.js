@@ -1,4 +1,4 @@
-export const CoeffModulus = library => Exception => {
+export const CoeffModulus = library => ({ Exception }) => {
   // Static methods
   const _MaxBitCount = library.CoeffModulus.MaxBitCount
   const _BFVDefault = library.CoeffModulus.BFVDefault
@@ -22,11 +22,7 @@ export const CoeffModulus = library => Exception => {
      * @returns {Number} Maximum bit count
      */
     MaxBitCount(polyModulusDegree, securityLevel) {
-      try {
-        return _MaxBitCount(polyModulusDegree, securityLevel)
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return _MaxBitCount(polyModulusDegree, securityLevel)
     },
 
     /**

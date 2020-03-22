@@ -3,6 +3,21 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 4.1.1
+
+Feat:
+- Added constructor overload options to both cipher and plain texts. These help in optimization cases.
+- Code coverage unit tests at 100%
+
+Refactor:
+- Complete refactor of the code structure to allow for code coverage
+- Removed underutilized `Util` export for functional composition.
+- Removed print methods for `Vector` as these were used for internal debugging only.
+- Renamed `context.print` to `toHuman` which now returns a string instead of printing to 
+  the console.
+- Optimized code by removed unnecessary checks for exceptions.
+
+
 ## Version 4.1.0
 
 Breaking:

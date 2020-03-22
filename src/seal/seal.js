@@ -1,99 +1,115 @@
-import { pipe } from './utils'
+import * as Components from '../components'
+import { applyDependencies, addLibraryToComponents } from './util'
 
-export const SEAL = factories => {
-  // Call a component with arguments
-  const call = args => x => {
-    return x(...args)
-  }
+export const SEAL = library => {
+  // Inject all components with the seal wasm library
+  const components = addLibraryToComponents(library)(Components)
 
-  // Add dependencies to a component
-  const addDeps = (...deps) => pipe(call(deps))
-
-  // Instantiate the singletons
-  const { Exception } = factories
-  const CoeffModulus = addDeps(Exception)(factories.CoeffModulus)
-  const ComprModeType = addDeps(Exception)(factories.ComprModeType)
-  const MemoryPoolHandle = addDeps(Exception)(factories.MemoryPoolHandle)
-  const SmallModulus = addDeps(Exception, ComprModeType)(factories.SmallModulus)
-  const Vector = addDeps(Exception)(factories.Vector)
-  const PlainModulus = addDeps(
+  // Next, create our singleton and constructor modules in order of dependence
+  const Exception = applyDependencies()(components.Exception)
+  const ComprModeType = applyDependencies()(components.ComprModeType)
+  const MemoryPoolHandle = applyDependencies()(components.MemoryPoolHandle)
+  const CoeffModulus = applyDependencies({ Exception })(components.CoeffModulus)
+  const SmallModulus = applyDependencies({ Exception, ComprModeType })(
+    components.SmallModulus
+  )
+  const Vector = applyDependencies({ Exception })(components.Vector)
+  const PlainModulus = applyDependencies({
+    Exception,
+    SmallModulus,
+    Vector
+  })(components.PlainModulus)
+  const SchemeType = applyDependencies()(components.SchemeType)
+  const SecurityLevel = applyDependencies()(components.SecurityLevel)
+  const Util = applyDependencies()(components.Util)
+  const ParmsIdType = applyDependencies({ Exception })(components.ParmsIdType)
+  const PlainText = applyDependencies({
+    Exception,
+    ComprModeType,
+    ParmsIdType,
+    MemoryPoolHandle
+  })(components.PlainText)
+  const CipherText = applyDependencies({
+    Exception,
+    ComprModeType,
+    ParmsIdType,
+    MemoryPoolHandle
+  })(components.CipherText)
+  const BatchEncoder = applyDependencies({
+    Exception,
+    MemoryPoolHandle,
+    PlainText,
+    Vector
+  })(components.BatchEncoder)
+  const CKKSEncoder = applyDependencies({
+    Exception,
+    MemoryPoolHandle,
+    PlainText,
+    Vector
+  })(components.CKKSEncoder)
+  const EncryptionParameterQualifiers = applyDependencies({
+    Exception
+  })(components.EncryptionParameterQualifiers)
+  const EncryptionParameters = applyDependencies({
     Exception,
     ComprModeType,
     SmallModulus,
-    Vector
-  )(factories.PlainModulus)
-  const SchemeType = addDeps(Exception)(factories.SchemeType)
-  const SecurityLevel = addDeps(Exception)(factories.SecurityLevel)
-  const Util = addDeps(Exception)(factories.Util)
-
-  // Create our constructors
-  const ParmsIdType = addDeps(Exception)(factories.ParmsIdType)
-  const PlainText = addDeps(
-    Exception,
-    ComprModeType,
-    ParmsIdType
-  )(factories.PlainText)
-  const CipherText = addDeps(
-    Exception,
-    ComprModeType,
-    ParmsIdType
-  )(factories.CipherText)
-  const BatchEncoder = addDeps(
-    Exception,
-    MemoryPoolHandle,
-    PlainText,
-    Vector
-  )(factories.BatchEncoder)
-  const CKKSEncoder = addDeps(
-    Exception,
-    MemoryPoolHandle,
-    PlainText,
-    Vector
-  )(factories.CKKSEncoder)
-  const EncryptionParameterQualifiers = addDeps(Exception)(
-    factories.EncryptionParameterQualifiers
-  )
-  const EncryptionParameters = addDeps(
-    Exception,
-    ComprModeType,
-    SmallModulus
-  )(factories.EncryptionParameters)
-  const ContextData = addDeps(
+    SchemeType
+  })(components.EncryptionParameters)
+  const ContextData = applyDependencies({
     Exception,
     EncryptionParameters,
     ParmsIdType,
     EncryptionParameterQualifiers
-  )(factories.ContextData)
-  const Context = addDeps(
-    Exception,
+  })(components.ContextData)
+  const Context = applyDependencies({
     ParmsIdType,
-    ContextData
-  )(factories.Context)
-  const Decryptor = addDeps(Exception, PlainText)(factories.Decryptor)
-  const Encryptor = addDeps(
+    ContextData,
+    SecurityLevel
+  })(components.Context)
+  const Decryptor = applyDependencies({
+    Exception,
+    PlainText
+  })(components.Decryptor)
+  const Encryptor = applyDependencies({
     Exception,
     MemoryPoolHandle,
     CipherText
-  )(factories.Encryptor)
-  const Evaluator = addDeps(
+  })(components.Encryptor)
+  const Evaluator = applyDependencies({
     Exception,
     MemoryPoolHandle,
     CipherText,
     PlainText,
     SchemeType
-  )(factories.Evaluator)
-  const PublicKey = addDeps(Exception, ComprModeType)(factories.PublicKey)
-  const SecretKey = addDeps(Exception, ComprModeType)(factories.SecretKey)
-  const RelinKeys = addDeps(Exception, ComprModeType)(factories.RelinKeys)
-  const GaloisKeys = addDeps(Exception, ComprModeType)(factories.GaloisKeys)
-  const IntegerEncoder = addDeps(Exception, PlainText)(factories.IntegerEncoder)
-  const KeyGenerator = addDeps(
+  })(components.Evaluator)
+  const PublicKey = applyDependencies({
+    Exception,
+    ComprModeType
+  })(components.PublicKey)
+  const SecretKey = applyDependencies({
+    Exception,
+    ComprModeType
+  })(components.SecretKey)
+  const RelinKeys = applyDependencies({
+    Exception,
+    ComprModeType
+  })(components.RelinKeys)
+  const GaloisKeys = applyDependencies({
+    Exception,
+    ComprModeType
+  })(components.GaloisKeys)
+  const IntegerEncoder = applyDependencies({
+    Exception,
+    PlainText
+  })(components.IntegerEncoder)
+  const KeyGenerator = applyDependencies({
     Exception,
     PublicKey,
     SecretKey,
     RelinKeys,
     GaloisKeys
-  )(factories.KeyGenerator)
+  })(components.KeyGenerator)
 
   /**
    * @implements SEAL
@@ -178,7 +194,11 @@ export const SEAL = factories => {
      *
      * @function
      * @name SEAL#CipherText
-     * @param {CipherText} [instance=null] A WASM instance
+     * @param {Object} [options] Options
+     * @param {Context} [options.context] The encryption Context
+     * @param {ParmsIdType} [options.parmsId] The specified parmsId
+     * @param {number} [options.sizeCapacity] The size capacity
+     * @param {MemoryPoolHandle} [options.pool=MemoryPoolHandle.global] MemoryPool to use
      * @returns {CipherText} An empty CipherText instance
      * @example
      * import { Seal } from 'node-seal'
@@ -315,15 +335,15 @@ export const SEAL = factories => {
      * @function
      * @name SEAL#Context
      * @param {EncryptionParameters} encryptionParams A set of specific encryption parameters
-     * @param {boolean} expandModChain Determines whether or not to enable modulus switching
-     * @param {SecurityLevel} securityLevel The security strength in bits.
+     * @param {boolean} [expandModChain=true] Determines whether or not to enable modulus switching
+     * @param {SecurityLevel} [securityLevel={@link SecurityLevel.tc128}] The security strength in bits.
      * @returns {Context} An encryption context to be used for all operations
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
      * ...
-     * const context = Morfix.Context(encParms, true, Morfix.SecurityLevel.tc128)
+     * const context = Morfix.Context(encParms)
      */
     Context,
 
@@ -382,6 +402,32 @@ export const SEAL = factories => {
 
     /**
      * @description
+     * Stores a set of attributes (qualifiers) of a set of encryption parameters.
+     * These parameters are mainly used internally in various parts of the library,
+     * e.g., to determine which algorithmic optimizations the current support. The
+     * qualifiers are automatically created by the SEALContext class, silently passed
+     * on to classes such as Encryptor, Evaluator, and Decryptor, and the only way to
+     * change them is by changing the encryption parameters themselves. In other
+     * words, a user will never have to create their own instance of this class, and
+     * in most cases never have to worry about it at all.
+     *
+     * @private
+     * @function
+     * @name SEAL#EncryptionParameterQualifiers
+     * @returns {EncryptionParameterQualifiers} The qualifiers of the encryption parameters
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal
+     * ...
+     * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+     * ...
+     * const context = Morfix.Context(encParms, true, Morfix.SecurityLevel.tc128)
+     * const qualifiers = context.qualifiers
+     */
+    EncryptionParameterQualifiers,
+
+    /**
+     * @description
      * Represents user-customizable encryption scheme settings. The parameters (most
      * importantly PolyModulus, CoeffModulus, PlainModulus) significantly affect
      * the performance, capabilities, and security of the encryption scheme. Once
@@ -428,32 +474,6 @@ export const SEAL = factories => {
      * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
      */
     EncryptionParameters,
-
-    /**
-     * @description
-     * Stores a set of attributes (qualifiers) of a set of encryption parameters.
-     * These parameters are mainly used internally in various parts of the library,
-     * e.g., to determine which algorithmic optimizations the current support. The
-     * qualifiers are automatically created by the SEALContext class, silently passed
-     * on to classes such as Encryptor, Evaluator, and Decryptor, and the only way to
-     * change them is by changing the encryption parameters themselves. In other
-     * words, a user will never have to create their own instance of this class, and
-     * in most cases never have to worry about it at all.
-     *
-     * @private
-     * @function
-     * @name SEAL#EncryptionParameterQualifiers
-     * @returns {EncryptionParameterQualifiers} The qualifiers of the encryption parameters
-     * @example
-     * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
-     * ...
-     * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
-     * ...
-     * const context = Morfix.Context(encParms, true, Morfix.SecurityLevel.tc128)
-     * const qualifiers = context.qualifiers
-     */
-    EncryptionParameterQualifiers,
 
     /**
      * @description
@@ -830,7 +850,10 @@ export const SEAL = factories => {
      *
      * @function
      * @name SEAL#PlainText
-     * @param {PlainText} [instance=null] A WASM instance
+     * @param {Object} [options] Options
+     * @param {Number} [options.capacity] Size Capacity
+     * @param {Number} [options.coeffCount] Coefficient Modulus Count
+     * @param {MemoryPoolHandle} [options.pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {PlainText} An empty PlainText instance
      * @example
      * import { Seal } from 'node-seal'

@@ -1,6 +1,8 @@
-export const IntegerEncoder = library => (Exception, PlainText) => context => {
+export const IntegerEncoder = library => ({
+  Exception,
+  PlainText
+}) => context => {
   const Constructor = library.IntegerEncoder
-
   let _instance = null
   try {
     _instance = new Constructor(context.instance)

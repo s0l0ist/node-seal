@@ -10,7 +10,7 @@
   },
   "source": {
     "include": [
-      "./src/lib",
+      "./src/seal",
       "./src/components"
     ],
     "includePattern": ".js$"

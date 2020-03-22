@@ -1,13 +1,14 @@
-export const KeyGenerator = library => (
+export const KeyGenerator = library => ({
   Exception,
   PublicKey,
   SecretKey,
   RelinKeys,
   GaloisKeys
-) => (context, secretKey = null, publicKey = null) => {
+}) => (context, secretKey = null, publicKey = null) => {
   const Constructor = library.KeyGenerator
+  let _instance = constructInstance(context, secretKey, publicKey)
 
-  const constructInstance = (secretKey, publicKey) => {
+  function constructInstance(context, secretKey, publicKey) {
     try {
       if (secretKey && publicKey) {
         return new Constructor(
@@ -24,7 +25,6 @@ export const KeyGenerator = library => (
       throw Exception.safe(e)
     }
   }
-  let _instance = constructInstance(secretKey, publicKey)
 
   /**
    * @implements KeyGenerator
@@ -85,14 +85,10 @@ export const KeyGenerator = library => (
      * @returns {SecretKey} The secret key that was generated upon instantiation of this KeyGenerator
      */
     getSecretKey() {
-      try {
-        const key = SecretKey()
-        const instance = _instance.getSecretKey()
-        key.inject(instance)
-        return key
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      const key = SecretKey()
+      const instance = _instance.getSecretKey()
+      key.inject(instance)
+      return key
     },
 
     /**
@@ -103,14 +99,10 @@ export const KeyGenerator = library => (
      * @returns {PublicKey} The public key that was generated upon instantiation of this KeyGenerator
      */
     getPublicKey() {
-      try {
-        const key = PublicKey()
-        const instance = _instance.getPublicKey()
-        key.inject(instance)
-        return key
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      const key = PublicKey()
+      const instance = _instance.getPublicKey()
+      key.inject(instance)
+      return key
     },
 
     /**

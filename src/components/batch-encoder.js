@@ -1,9 +1,9 @@
-export const BatchEncoder = library => (
+export const BatchEncoder = library => ({
   Exception,
   MemoryPoolHandle,
   PlainText,
   Vector
-) => context => {
+}) => context => {
   const Constructor = library.BatchEncoder
   let _instance = null
   try {
@@ -61,134 +61,6 @@ export const BatchEncoder = library => (
         _instance.delete()
         _instance = null
       }
-    },
-
-    /**
-     * Creates a PlainText from a given matrix. This function "batches" a given matrix
-     * of Int32 integers modulo the PlainText modulus into a PlainText element, and stores
-     * the result in the destination parameter. The input vector must have size at most equal
-     * to the degree of the polynomial modulus. The first half of the elements represent the
-     * first row of the matrix, and the second half represent the second row. The numbers
-     * in the matrix can be at most equal to the PlainText modulus for it to represent
-     * a valid PlainText.
-     *
-     * If the destination PlainText overlaps the input values in memory, the behavior of
-     * this function is undefined.
-     *
-     * @deprecated since version 3.2.0
-     * @function
-     * @name BatchEncoder#encodeVectorInt32
-     * @param {Vector} vector Data to encode
-     * @param {PlainText} plainText Destination to store the encoded result
-     * @example
-     * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
-     * ...
-     * const batchEncoder = Morfix.BatchEncoder(context)
-     * const vectorInt32 = Morfix.Vector({ array: Int32Array.from([1, 2, 3]) })
-     * const plain = Morfix.PlainText()
-     * batchEncoder.encodeVectorInt32({ vector: vectorInt32, plainText: plain })
-     */
-    encodeVectorInt32() {
-      throw new Error('encodeVectorInt32 has been deprecated since 3.2.0')
-    },
-
-    /**
-     * Creates a PlainText from a given matrix. This function "batches" a given matrix
-     * of UInt32 integers modulo the PlainText modulus into a PlainText element, and stores
-     * the result in the destination parameter. The input vector must have size at most equal
-     * to the degree of the polynomial modulus. The first half of the elements represent the
-     * first row of the matrix, and the second half represent the second row. The numbers
-     * in the matrix can be at most equal to the PlainText modulus for it to represent
-     * a valid PlainText.
-     *
-     * If the destination PlainText overlaps the input values in memory, the behavior of
-     * this function is undefined.
-     *
-     * @deprecated since version 3.2.0
-     * @function
-     * @name BatchEncoder#encodeVectorUInt32
-     * @param {Vector} vector Data to encode
-     * @param {PlainText} plainText Destination to store the encoded result
-     * @example
-     * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
-     * ...
-     * const batchEncoder = Morfix.BatchEncoder(context)
-     * const vectorUint32 = Morfix.Vector({ array: Uint32Array.from([1, 2, 3]) })
-     * const plain = Morfix.PlainText()
-     * batchEncoder.encodeVectorInt32({ vector: vectorUint32, plainText: plain })
-     */
-    encodeVectorUInt32() {
-      throw new Error('encodeVectorUInt32 has been deprecated since 3.2.0')
-    },
-
-    /**
-     * Inverse of encode Int32. This function "unbatches" a given PlainText into a matrix
-     * of integers modulo the PlainText modulus, and stores the result in the destination
-     * parameter. The input PlainText must have degress less than the polynomial modulus,
-     * and coefficients less than the PlainText modulus, i.e. it must be a valid PlainText
-     * for the encryption parameters. Dynamic memory allocations in the process are
-     * allocated from the memory pool pointed to by the given MemoryPoolHandle.
-     *
-     * @deprecated since version 3.2.0
-     * @function
-     * @name BatchEncoder#decodeVectorInt32
-     * @param {PlainText} plainText Data to decode
-     * @param {Vector} vector Destination to store the decoded result
-     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}]
-     * @example
-     * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
-     * ...
-     * const batchEncoder = Morfix.BatchEncoder(context)
-     *
-     * const vectorInt32 = Morfix.Vector({ array: Int32Array.from([1, 2, 3]) })
-     * const plain = Morfix.PlainText()
-     * batchEncoder.encodeVectorInt32({ vector: vectorInt32, plainText: plain })
-     *
-     * const decodedVector = Morfix.Vector({ array: new Int32Array() })
-     * batchEncoder.decodeVectorInt32({
-     *   plainText: plain,
-     *   vector: decodedVector
-     * })
-     */
-    decodeVectorInt32() {
-      throw new Error('decodeVectorInt32 has been deprecated since 3.2.0')
-    },
-
-    /**
-     * Inverse of encode UInt32. This function "unbatches" a given PlainText into a matrix
-     * of integers modulo the PlainText modulus, and stores the result in the destination
-     * parameter. The input PlainText must have degress less than the polynomial modulus,
-     * and coefficients less than the PlainText modulus, i.e. it must be a valid PlainText
-     * for the encryption parameters. Dynamic memory allocations in the process are
-     * allocated from the memory pool pointed to by the given MemoryPoolHandle.
-     *
-     * @deprecated since version 3.2.0
-     * @function
-     * @name BatchEncoder#decodeVectorUInt32
-     * @param {PlainText} plainText Data to decode
-     * @param {Vector} vector Destination to store the decoded result
-     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}]
-     * @example
-     * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
-     * ...
-     * const batchEncoder = Morfix.BatchEncoder(context)
-     *
-     * const vectorUint32 = Morfix.Vector({ array: Uint32Array.from([1, 2, 3]) })
-     * const plain = Morfix.PlainText()
-     * batchEncoder.encodeVectorInt32({ vector: vectorUint32, plainText: plain })
-     *
-     * const decodedVector = Morfix.Vector({ array: new Uint32Array() })
-     * batchEncoder.decodeVectorUInt32({
-     *   plainText: plain,
-     *   vector: decodedVector
-     * })
-     */
-    decodeVectorUInt32() {
-      throw new Error('decodeVectorUInt32 has been deprecated since 3.2.0')
     },
 
     /**
@@ -282,7 +154,6 @@ export const BatchEncoder = library => (
           tempVect.delete()
           return tempArr
         }
-
         const tempVect = Vector(new Uint32Array(0))
         const instance = _instance.decodeUInt32(plainText.instance, pool)
         tempVect.unsafeInject(instance)

@@ -1,20 +1,19 @@
-export const Vector = library => Exception => (array = new Int32Array(0)) => {
+export const Vector = library => ({ Exception }) => (
+  array = new Int32Array(0)
+) => {
   // Static methods
   const _vecFromArrayInt32 = library.vecFromArrayInt32
   const _vecFromArrayUInt32 = library.vecFromArrayUInt32
   const _vecFromArrayDouble = library.vecFromArrayDouble
-  const _printVectorInt32 = library.printVectorInt32
-  const _printVectorUInt32 = library.printVectorUInt32
-  const _printVectorDouble = library.printVectorDouble
-  const _printMatrixInt32 = library.printMatrixInt32
-  const _printMatrixUInt32 = library.printMatrixUInt32
   const _jsArrayInt32FromVec = library.jsArrayInt32FromVec
   const _jsArrayUint32FromVec = library.jsArrayUint32FromVec
   const _jsArrayDoubleFromVec = library.jsArrayDoubleFromVec
 
   const _type = array.constructor
 
-  const _fromArray = array => {
+  let _instance = createVector(array)
+
+  function createVector(array) {
     try {
       if (array.constructor === Int32Array) {
         return _vecFromArrayInt32(array)
@@ -30,8 +29,6 @@ export const Vector = library => Exception => (array = new Int32Array(0)) => {
       throw Exception.safe(e)
     }
   }
-
-  let _instance = _fromArray(array)
 
   /**
    * @implements Vector
@@ -107,76 +104,6 @@ export const Vector = library => Exception => (array = new Int32Array(0)) => {
     },
 
     /**
-     * Prints a matrix to the console
-     *
-     * This method is mainly used for debugging this library
-     *
-     * @private
-     * @function
-     * @name Vector#printMatrix
-     * @param {Number} rowSize Number of rows in of the Vector (BFV = polyModDeg / 2, CKKS = polyModDeg)
-     */
-    printMatrix(rowSize) {
-      try {
-        if (_type === Int32Array) {
-          _printMatrixInt32(_instance, rowSize)
-          return
-        }
-        if (_type === Uint32Array) {
-          _printMatrixUInt32(_instance, rowSize)
-          return
-        }
-        throw new Error('Unsupported matrix type!')
-      } catch (e) {
-        throw Exception.safe(e)
-      }
-    },
-
-    /**
-     * Prints a vector to the console
-     *
-     * This method is mainly used for debugging this library
-     *
-     * @private
-     * @function
-     * @name Vector#printVector
-     * @param {Number} [printSize=4] Number of elements to print
-     * @param {Number} [precision=5] Number of decimals to print
-     */
-    printVector(printSize = 4, precision = 5) {
-      try {
-        if (_type === Int32Array) {
-          _printVectorInt32(_instance, printSize, precision)
-          return
-        }
-        if (_type === Uint32Array) {
-          _printVectorUInt32(_instance, printSize, precision)
-          return
-        }
-        if (_type === Float64Array) {
-          _printVectorDouble(_instance, printSize, precision)
-          return
-        }
-        throw new Error('Unsupported vector type!')
-      } catch (e) {
-        throw Exception.safe(e)
-      }
-    },
-
-    /**
-     * Convert a typed array to a vector.
-     *
-     * @private
-     * @function
-     * @name Vector#fromArray
-     * @param {(Int32Array|Uint32Array|Float64Array)} array Array of data to save to a Vector
-     * @returns {Vector<(Int32Array|Uint32Array|Float64Array)>} Vector containing the same data type as the array
-     */
-    fromArray(array) {
-      return _fromArray(array)
-    },
-
-    /**
      * Get a value pointed to by the specified index
      *
      * @function
@@ -216,19 +143,13 @@ export const Vector = library => Exception => (array = new Int32Array(0)) => {
      * @returns {(Int32Array|Uint32Array|Float64Array)} TypedArray containing values from the Vector
      */
     toArray() {
-      try {
-        if (_type === Int32Array) {
+      switch (_type) {
+        case Int32Array:
           return Int32Array.from(_jsArrayInt32FromVec(_instance))
-        }
-        if (_type === Uint32Array) {
+        case Uint32Array:
           return Uint32Array.from(_jsArrayUint32FromVec(_instance))
-        }
-        if (_type === Float64Array) {
+        case Float64Array:
           return Float64Array.from(_jsArrayDoubleFromVec(_instance))
-        }
-        throw new Error('Unsupported vector type!')
-      } catch (e) {
-        throw Exception.safe(e)
       }
     }
   }

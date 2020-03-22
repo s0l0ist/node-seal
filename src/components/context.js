@@ -1,23 +1,19 @@
-export const Context = library => (Exception, ParmsIdType, ContextData) => (
+export const Context = library => ({
+  ParmsIdType,
+  ContextData,
+  SecurityLevel
+}) => (
   encryptionParams,
-  expandModChain,
-  securityLevel
+  expandModChain = true,
+  securityLevel = SecurityLevel.tc128
 ) => {
   const Constructor = library.SEALContext
 
-  // Static methods
-  const _printContext = library.printContext
-
-  let _instance = null
-  try {
-    _instance = new Constructor(
-      encryptionParams.instance,
-      expandModChain,
-      securityLevel
-    )
-  } catch (e) {
-    throw Exception.safe(e)
-  }
+  let _instance = new Constructor(
+    encryptionParams.instance,
+    expandModChain,
+    securityLevel
+  )
 
   /**
    * @implements Context
@@ -71,17 +67,15 @@ export const Context = library => (Exception, ParmsIdType, ContextData) => (
     },
 
     /**
-     * Prints the context parameters to STDOUT (console.log)
+     * Returns the context parameters in a human readable string format.
      *
+     * @private
      * @function
-     * @name Context#print
+     * @name Context#toString
+     * @returns {String} Context details as a string
      */
-    print() {
-      try {
-        _printContext(_instance)
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+    toHuman() {
+      return _instance.toHuman()
     },
 
     /**
@@ -95,14 +89,10 @@ export const Context = library => (Exception, ParmsIdType, ContextData) => (
      * @returns {ContextData} ContextData corresponding to encryption parameters
      */
     getContextData(parmsId) {
-      try {
-        const instance = _instance.getContextData(parmsId.instance)
-        const contextData = ContextData()
-        contextData.unsafeInject(instance)
-        return contextData
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      const instance = _instance.getContextData(parmsId.instance)
+      const contextData = ContextData()
+      contextData.unsafeInject(instance)
+      return contextData
     },
 
     /**
@@ -113,14 +103,10 @@ export const Context = library => (Exception, ParmsIdType, ContextData) => (
      * @type {ContextData}
      */
     get keyContextData() {
-      try {
-        const instance = _instance.keyContextData()
-        const contextData = ContextData()
-        contextData.unsafeInject(instance)
-        return contextData
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      const instance = _instance.keyContextData()
+      const contextData = ContextData()
+      contextData.unsafeInject(instance)
+      return contextData
     },
 
     /**
@@ -131,14 +117,10 @@ export const Context = library => (Exception, ParmsIdType, ContextData) => (
      * @type {ContextData}
      */
     get firstContextData() {
-      try {
-        const instance = _instance.firstContextData()
-        const contextData = ContextData()
-        contextData.unsafeInject(instance)
-        return contextData
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      const instance = _instance.firstContextData()
+      const contextData = ContextData()
+      contextData.unsafeInject(instance)
+      return contextData
     },
 
     /**
@@ -149,14 +131,10 @@ export const Context = library => (Exception, ParmsIdType, ContextData) => (
      * @type {ContextData}
      */
     get lastContextData() {
-      try {
-        const instance = _instance.lastContextData()
-        const contextData = ContextData()
-        contextData.unsafeInject(instance)
-        return contextData
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      const instance = _instance.lastContextData()
+      const contextData = ContextData()
+      contextData.unsafeInject(instance)
+      return contextData
     },
 
     /**

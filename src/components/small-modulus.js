@@ -1,21 +1,21 @@
-export const SmallModulus = library => (Exception, ComprModeType) => (
+export const SmallModulus = library => ({ Exception, ComprModeType }) => (
   instance = null
 ) => {
   const Constructor = library.SmallModulus
+  let _instance = createSmallModulus(instance)
 
-  let _instance
-  try {
-    if (typeof instance === 'string') {
-      _instance = new Constructor()
-      _instance.setValue(instance)
-    } else if (instance) {
-      _instance = new Constructor(instance)
-      instance.delete()
-    } else {
-      _instance = new Constructor()
+  function createSmallModulus(instance) {
+    try {
+      if (typeof instance === 'string') {
+        const inst = new Constructor()
+        inst.setValue(instance)
+        return inst
+      } else {
+        return new Constructor()
+      }
+    } catch (e) {
+      throw Exception.safe(e)
     }
-  } catch (e) {
-    throw Exception.safe(e)
   }
 
   /**
@@ -139,11 +139,7 @@ export const SmallModulus = library => (Exception, ComprModeType) => (
      * @returns {String} Base64 encoded string
      */
     save(compression = ComprModeType.deflate) {
-      try {
-        return _instance.saveToString(compression)
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return _instance.saveToString(compression)
     },
 
     /**

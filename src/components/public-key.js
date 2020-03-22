@@ -1,18 +1,6 @@
-export const PublicKey = library => (Exception, ComprModeType) => (
-  instance = null
-) => {
+export const PublicKey = library => ({ Exception, ComprModeType }) => () => {
   const Constructor = library.PublicKey
-  let _instance
-  try {
-    if (instance) {
-      _instance = new Constructor(instance)
-      instance.delete()
-    } else {
-      _instance = new Constructor()
-    }
-  } catch (e) {
-    throw Exception.safe(e)
-  }
+  let _instance = new Constructor()
 
   /**
    * @implements PublicKey
@@ -132,7 +120,9 @@ export const PublicKey = library => (Exception, ComprModeType) => (
     clone() {
       try {
         const clonedInstance = _instance.clone()
-        return PublicKey(library)(Exception, ComprModeType)(clonedInstance)
+        const pubKey = PublicKey(library)({ Exception, ComprModeType })()
+        pubKey.inject(clonedInstance)
+        return pubKey
       } catch (e) {
         throw Exception.safe(e)
       }
