@@ -46,7 +46,7 @@ describe('ParmsIdType', () => {
   })
   test('It should have an instance', () => {
     const parmsId = ParmsIdTypeObject()
-    expect(parmsId.instance).not.toBeFalsy()
+    expect(parmsId.instance).toBeDefined()
   })
   test('It should inject', () => {
     const parmsId = ParmsIdTypeObject()

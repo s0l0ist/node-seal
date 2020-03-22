@@ -46,7 +46,7 @@ describe('GaloisKeys', () => {
   })
   test('It should have an instance', () => {
     const item = GaloisKeysObject()
-    expect(item.instance).not.toBeFalsy()
+    expect(item.instance).toBeDefined()
   })
   test('It should inject', () => {
     const item = GaloisKeysObject()

@@ -99,7 +99,11 @@ describe('Evaluator', () => {
     newParms.setCoeffModulus(
       Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
     )
-    const newContext = Morfix.Context(newParms, true, Morfix.SecurityLevel.tc128)
+    const newContext = Morfix.Context(
+      newParms,
+      true,
+      Morfix.SecurityLevel.tc128
+    )
     const Constructor = jest.fn(EvaluatorObject)
     expect(() => Constructor(newContext)).toThrow()
     expect(Constructor).toBeCalledWith(newContext)
@@ -139,7 +143,7 @@ describe('Evaluator', () => {
   })
   test('It should have an instance', () => {
     const item = EvaluatorObject(context)
-    expect(item.instance).not.toBeFalsy()
+    expect(item.instance).toBeDefined()
   })
   test('It should inject', () => {
     const item = EvaluatorObject(context)
@@ -1106,7 +1110,9 @@ describe('Evaluator', () => {
     const parmsId = context.firstParmsId
     item.plainTransformToNtt(plain, parmsId, plain)
     const spyOn = jest.spyOn(item, 'plainModSwitchToNext')
-    expect(() => item.plainModSwitchToNext(invalidCkksPlain, plainDest)).toThrow()
+    expect(() =>
+      item.plainModSwitchToNext(invalidCkksPlain, plainDest)
+    ).toThrow()
     expect(spyOn).toHaveBeenCalledWith(invalidCkksPlain, plainDest)
   })
   test('It should plainModSwitchToNext a plain to a destination plain (bfv) (int32)', () => {
@@ -1208,7 +1214,9 @@ describe('Evaluator', () => {
     const parmsId = context.firstParmsId
     item.plainTransformToNtt(plain, parmsId, plain)
     const spyOn = jest.spyOn(item, 'plainModSwitchTo')
-    expect(() => item.plainModSwitchTo(invalidCkksPlain, parmsId, plainDest)).toThrow()
+    expect(() =>
+      item.plainModSwitchTo(invalidCkksPlain, parmsId, plainDest)
+    ).toThrow()
     expect(spyOn).toHaveBeenCalledWith(invalidCkksPlain, parmsId, plainDest)
   })
   test('It should plainModSwitchTo a plain to a destination plain (bfv) (int32)', () => {
@@ -1307,9 +1315,7 @@ describe('Evaluator', () => {
     const item = EvaluatorObject(context)
     const cipherDest = Morfix.CipherText()
     const spyOn = jest.spyOn(item, 'rescaleToNext')
-    expect(() =>
-      item.rescaleToNext(invalidCkksCipher, cipherDest)
-    ).toThrow()
+    expect(() => item.rescaleToNext(invalidCkksCipher, cipherDest)).toThrow()
     expect(spyOn).toHaveBeenCalledWith(invalidCkksCipher, cipherDest)
   })
   test('It should fail to rescaleToNext for bfv scheme', () => {
@@ -1422,7 +1428,12 @@ describe('Evaluator', () => {
     expect(() =>
       item.exponentiate(invalidCkksCipher, 2, relinKeys, cipherDest)
     ).toThrow()
-    expect(spyOn).toHaveBeenCalledWith(invalidCkksCipher, 2,  relinKeys, cipherDest)
+    expect(spyOn).toHaveBeenCalledWith(
+      invalidCkksCipher,
+      2,
+      relinKeys,
+      cipherDest
+    )
   })
   test('It should exponentiate a cipher to a destination cipher (bfv) (int32)', () => {
     const item = EvaluatorObject(context)
@@ -1510,9 +1521,7 @@ describe('Evaluator', () => {
     const cipher = encryptor.encrypt(plain)
     const cipherDest = Morfix.CipherText()
     const spyOn = jest.spyOn(item, 'addPlain')
-    expect(() =>
-      item.addPlain(cipher, invalidCkksPlain, cipherDest)
-    ).toThrow()
+    expect(() => item.addPlain(cipher, invalidCkksPlain, cipherDest)).toThrow()
     expect(spyOn).toHaveBeenCalledWith(cipher, invalidCkksPlain, cipherDest)
   })
   test('It should add a plain to a cipher and store in a destination cipher (bfv) (int32)', () => {
@@ -1621,9 +1630,7 @@ describe('Evaluator', () => {
     const cipher = encryptor.encrypt(plain)
     const cipherDest = Morfix.CipherText()
     const spyOn = jest.spyOn(item, 'subPlain')
-    expect(() =>
-      item.subPlain(cipher, invalidCkksPlain, cipherDest)
-    ).toThrow()
+    expect(() => item.subPlain(cipher, invalidCkksPlain, cipherDest)).toThrow()
     expect(spyOn).toHaveBeenCalledWith(cipher, invalidCkksPlain, cipherDest)
   })
   test('It should sub a plain from a cipher to a destination cipher (bfv) (int32)', () => {
@@ -1876,7 +1883,9 @@ describe('Evaluator', () => {
     const parmsId = context.firstParmsId
     item.plainTransformToNtt(plain, parmsId, plain)
     const spyOn = jest.spyOn(item, 'plainTransformToNtt')
-    expect(() => item.plainTransformToNtt(invalidCkksPlain, parmsId, plainDest)).toThrow()
+    expect(() =>
+      item.plainTransformToNtt(invalidCkksPlain, parmsId, plainDest)
+    ).toThrow()
     expect(spyOn).toHaveBeenCalledWith(invalidCkksPlain, parmsId, plainDest)
   })
   test('It should plainTransformToNtt a plain to a destination plain (bfv) (int32)', () => {
@@ -2083,8 +2092,15 @@ describe('Evaluator', () => {
     const cipherDest = Morfix.CipherText()
     const galElt = 2 * parms.polyModulusDegree - 1
     const spyOn = jest.spyOn(item, 'applyGalois')
-    expect(() => item.applyGalois(invalidCkksCipher, galElt, galoisKeys, cipherDest)).toThrow()
-    expect(spyOn).toHaveBeenCalledWith(invalidCkksCipher, galElt, galoisKeys, cipherDest)
+    expect(() =>
+      item.applyGalois(invalidCkksCipher, galElt, galoisKeys, cipherDest)
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(
+      invalidCkksCipher,
+      galElt,
+      galoisKeys,
+      cipherDest
+    )
   })
   test('It should applyGalois on a cipher to a destination cipher (bfv) (int32)', () => {
     const item = EvaluatorObject(context)
@@ -2384,8 +2400,15 @@ describe('Evaluator', () => {
     const item = EvaluatorObject(context)
     const cipherDest = Morfix.CipherText()
     const spyOn = jest.spyOn(item, 'sumElements')
-    expect(() => item.sumElements(invalidCkksCipher, galoisKeys, parms.scheme, cipherDest)).toThrow()
-    expect(spyOn).toHaveBeenCalledWith(invalidCkksCipher, galoisKeys,  parms.scheme, cipherDest)
+    expect(() =>
+      item.sumElements(invalidCkksCipher, galoisKeys, parms.scheme, cipherDest)
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(
+      invalidCkksCipher,
+      galoisKeys,
+      parms.scheme,
+      cipherDest
+    )
   })
   test('It should sumElements on a cipher to a destination cipher (bfv) (int32)', () => {
     const item = EvaluatorObject(context)
@@ -2503,8 +2526,24 @@ describe('Evaluator', () => {
     const item = EvaluatorObject(context)
     const cipherDest = Morfix.CipherText()
     const spyOn = jest.spyOn(item, 'dotProduct')
-    expect(() => item.dotProduct(invalidCkksCipher, invalidCkksCipher, relinKeys, galoisKeys, parms.scheme, cipherDest)).toThrow()
-    expect(spyOn).toHaveBeenCalledWith(invalidCkksCipher, invalidCkksCipher, relinKeys, galoisKeys, parms.scheme, cipherDest)
+    expect(() =>
+      item.dotProduct(
+        invalidCkksCipher,
+        invalidCkksCipher,
+        relinKeys,
+        galoisKeys,
+        parms.scheme,
+        cipherDest
+      )
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(
+      invalidCkksCipher,
+      invalidCkksCipher,
+      relinKeys,
+      galoisKeys,
+      parms.scheme,
+      cipherDest
+    )
   })
   test('It should calculate the dotProduct of two ciphers to a destination cipher (bfv) (int32)', () => {
     const item = EvaluatorObject(context)

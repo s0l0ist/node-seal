@@ -99,7 +99,7 @@ describe('PlainText', () => {
   })
   test('It should have an instance', () => {
     const plainText = PlainTextObject()
-    expect(plainText.instance).not.toBeFalsy()
+    expect(plainText.instance).toBeDefined()
   })
   test('It should inject', () => {
     const plainText = PlainTextObject()

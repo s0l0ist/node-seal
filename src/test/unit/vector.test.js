@@ -57,7 +57,7 @@ describe('Vector', () => {
   })
   test('It should have an instance', () => {
     const item = VectorObject()
-    expect(item.instance).not.toBeFalsy()
+    expect(item.instance).toBeDefined()
   })
   test('It should inject', () => {
     const item = VectorObject(Int32Array.from([3]))

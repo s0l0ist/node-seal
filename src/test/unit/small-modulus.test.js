@@ -49,7 +49,7 @@ describe('SmallModulus', () => {
   })
   test('It should have an instance', () => {
     const smallModulus = SmallModulusObject()
-    expect(smallModulus.instance).not.toBeFalsy()
+    expect(smallModulus.instance).toBeDefined()
   })
   test('It should inject', () => {
     const smallModulus = SmallModulusObject('4')

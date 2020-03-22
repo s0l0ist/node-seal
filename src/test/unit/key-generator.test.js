@@ -77,7 +77,7 @@ describe('KeyGenerator', () => {
   })
   test('It should have an instance (bfv)', () => {
     const item = KeyGeneratorObject(context)
-    expect(item.instance).not.toBeFalsy()
+    expect(item.instance).toBeDefined()
   })
   test('It should inject', () => {
     const item = KeyGeneratorObject(context)
@@ -85,7 +85,7 @@ describe('KeyGenerator', () => {
     const spyOn = jest.spyOn(item, 'unsafeInject')
     item.unsafeInject(keyGen.instance)
     expect(spyOn).toHaveBeenCalledWith(keyGen.instance)
-    expect(item.instance).not.toBeNull()
+    expect(item.instance).toBeDefined()
   })
   test('It should delete the old instance and inject', () => {
     const item = KeyGeneratorObject(context)
@@ -114,21 +114,21 @@ describe('KeyGenerator', () => {
     const spyOn = jest.spyOn(item, 'getSecretKey')
     const key = item.getSecretKey()
     expect(spyOn).toHaveBeenCalledWith()
-    expect(key.instance).not.toBeNull()
+    expect(key.instance).toBeDefined()
   })
   test('It should return its public key', () => {
     const item = KeyGeneratorObject(context)
     const spyOn = jest.spyOn(item, 'getPublicKey')
     const key = item.getPublicKey()
     expect(spyOn).toHaveBeenCalledWith()
-    expect(key.instance).not.toBeNull()
+    expect(key.instance).toBeDefined()
   })
   test('It should generate and return relinKeys', () => {
     const item = KeyGeneratorObject(context)
     const spyOn = jest.spyOn(item, 'genRelinKeys')
     const key = item.genRelinKeys()
     expect(spyOn).toHaveBeenCalledWith()
-    expect(key.instance).not.toBeNull()
+    expect(key.instance).toBeDefined()
   })
   test('It should fail to generate and return relinKeys', () => {
     const item = KeyGeneratorObject(invalidContext)
@@ -141,7 +141,7 @@ describe('KeyGenerator', () => {
     const spyOn = jest.spyOn(item, 'genGaloisKeys')
     const key = item.genGaloisKeys()
     expect(spyOn).toHaveBeenCalledWith()
-    expect(key.instance).not.toBeNull()
+    expect(key.instance).toBeDefined()
   })
   test('It should fail to generate and return galoisKeys', () => {
     const item = KeyGeneratorObject(invalidContext)

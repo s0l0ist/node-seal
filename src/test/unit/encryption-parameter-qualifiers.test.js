@@ -71,19 +71,19 @@ describe('EncryptionParameterQualifiers', () => {
     const item = EncryptionParameterQualifiersObject(
       contextData.qualifiers.instance
     )
-    expect(item.instance).not.toBeFalsy()
+    expect(item.instance).toBeDefined()
   })
   test('It should have an instance (bfv)', () => {
     const item = EncryptionParameterQualifiersObject(
       contextData.qualifiers.instance
     )
-    expect(item.instance).not.toBeFalsy()
+    expect(item.instance).toBeDefined()
   })
   test('It should have an instance (ckks)', () => {
     const item = EncryptionParameterQualifiersObject(
       ckksContextData.qualifiers.instance
     )
-    expect(item.instance).not.toBeFalsy()
+    expect(item.instance).toBeDefined()
   })
   test('It should inject', () => {
     const item = EncryptionParameterQualifiersObject(

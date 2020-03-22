@@ -41,7 +41,7 @@ describe('EncryptionParameters', () => {
   })
   test('It should have an instance', () => {
     const encParms = EncryptionParametersObject()
-    expect(encParms.instance).not.toBeFalsy()
+    expect(encParms.instance).toBeDefined()
   })
   test('It should inject', () => {
     const encParms = EncryptionParametersObject()

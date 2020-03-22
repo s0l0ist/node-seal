@@ -23,7 +23,6 @@ describe('Util', () => {
   })
   test('It should return the gcd between two numbers', () => {
     const gcd = UtilObject.gcd('232', 81n)
-    console.log('gcd', gcd)
     expect(typeof gcd).toBe('bigint')
   })
 })

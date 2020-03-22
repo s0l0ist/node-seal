@@ -21,3 +21,6 @@ yarn-error.log*
 
 # Webpack
 /.cache
+
+# Codecov token
+.cc_token
