@@ -1,18 +1,6 @@
-export const GaloisKeys = library => ({ Exception, ComprModeType }) => (
-  instance = null
-) => {
+export const GaloisKeys = library => ({ Exception, ComprModeType }) => () => {
   const Constructor = library.GaloisKeys
-  let _instance
-  try {
-    if (instance) {
-      _instance = new Constructor(instance)
-      instance.delete()
-    } else {
-      _instance = new Constructor()
-    }
-  } catch (e) {
-    throw Exception.safe(e)
-  }
+  let _instance = new Constructor()
 
   /**
    * @implements GaloisKeys
@@ -178,7 +166,9 @@ export const GaloisKeys = library => ({ Exception, ComprModeType }) => (
     clone() {
       try {
         const clonedInstance = _instance.clone()
-        return GaloisKeys(library)({ Exception, ComprModeType })(clonedInstance)
+        const galKeys = GaloisKeys(library)({ Exception, ComprModeType })()
+        galKeys.inject(clonedInstance)
+        return galKeys
       } catch (e) {
         throw Exception.safe(e)
       }

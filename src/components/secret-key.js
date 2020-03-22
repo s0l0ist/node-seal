@@ -1,18 +1,6 @@
-export const SecretKey = library => ({ Exception, ComprModeType }) => (
-  instance = null
-) => {
+export const SecretKey = library => ({ Exception, ComprModeType }) => () => {
   const Constructor = library.SecretKey
-  let _instance
-  try {
-    if (instance) {
-      _instance = new Constructor(instance)
-      instance.delete()
-    } else {
-      _instance = new Constructor()
-    }
-  } catch (e) {
-    throw Exception.safe(e)
-  }
+  let _instance = new Constructor()
 
   /**
    * @implements SecretKey
@@ -132,7 +120,9 @@ export const SecretKey = library => ({ Exception, ComprModeType }) => (
     clone() {
       try {
         const clonedInstance = _instance.clone()
-        return SecretKey(library)({ Exception, ComprModeType })(clonedInstance)
+        const secKey = SecretKey(library)({ Exception, ComprModeType })()
+        secKey.inject(clonedInstance)
+        return secKey
       } catch (e) {
         throw Exception.safe(e)
       }

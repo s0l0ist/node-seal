@@ -1,18 +1,6 @@
-export const RelinKeys = library => ({ Exception, ComprModeType }) => (
-  instance = null
-) => {
+export const RelinKeys = library => ({ Exception, ComprModeType }) => () => {
   const Constructor = library.RelinKeys
-  let _instance
-  try {
-    if (instance) {
-      _instance = new Constructor(instance)
-      instance.delete()
-    } else {
-      _instance = new Constructor()
-    }
-  } catch (e) {
-    throw Exception.safe(e)
-  }
+  let _instance = new Constructor()
 
   /**
    * @implements RelinKeys
@@ -179,7 +167,9 @@ export const RelinKeys = library => ({ Exception, ComprModeType }) => (
     clone() {
       try {
         const clonedInstance = _instance.clone()
-        return RelinKeys(library)({ Exception, ComprModeType })(clonedInstance)
+        const relKeys = RelinKeys(library)({ Exception, ComprModeType })()
+        relKeys.inject(clonedInstance)
+        return relKeys
       } catch (e) {
         throw Exception.safe(e)
       }

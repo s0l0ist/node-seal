@@ -50,6 +50,16 @@ describe('PublicKey', () => {
     const item = PublicKeyObject()
     const str = item.save()
     const newItem = PublicKeyObject()
+    newItem.delete()
+    const spyOn = jest.spyOn(newItem, 'inject')
+    newItem.inject(item.instance)
+    expect(spyOn).toHaveBeenCalledWith(item.instance)
+    expect(newItem.save()).toEqual(str)
+  })
+  test('It should delete the old instance and inject', () => {
+    const item = PublicKeyObject()
+    const str = item.save()
+    const newItem = PublicKeyObject()
     const spyOn = jest.spyOn(newItem, 'inject')
     newItem.inject(item.instance)
     expect(spyOn).toHaveBeenCalledWith(item.instance)
@@ -62,6 +72,14 @@ describe('PublicKey', () => {
     expect(spyOn).toHaveBeenCalled()
     expect(item.instance).toBeNull()
     expect(() => item.save()).toThrow(TypeError)
+  })
+  test('It should skip deleting twice', () => {
+    const item = PublicKeyObject()
+    item.delete()
+    const spyOn = jest.spyOn(item, 'delete')
+    item.delete()
+    expect(spyOn).toHaveBeenCalled()
+    expect(item.instance).toBeNull()
   })
   test('It should save to a string', () => {
     const item = PublicKeyObject()
@@ -79,16 +97,37 @@ describe('PublicKey', () => {
     expect(spyOn).toHaveBeenCalledWith(context, str)
     expect(newItem.save()).toEqual(str)
   })
+  test('It should fail to load from a string', () => {
+    const newItem = PublicKeyObject()
+    const spyOn = jest.spyOn(newItem, 'load')
+    expect(() =>
+      newItem.load(
+        context,
+        'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
+      )
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(
+      context,
+      'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
+    )
+  })
   test('It should copy another instance', () => {
     const item = keyGenerator.getPublicKey()
     const newItem = PublicKeyObject()
     const spyOn = jest.spyOn(newItem, 'copy')
     newItem.copy(item)
     expect(spyOn).toHaveBeenCalledWith(item)
-    expect(newItem.save()).toEqual(item.save())
+  })
+  test('It should fail to copy another instance', () => {
+    const item = keyGenerator.getPublicKey()
+    const newItem = PublicKeyObject()
+    item.delete()
+    const spyOn = jest.spyOn(newItem, 'copy')
+    expect(() => newItem.copy(item)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(item)
   })
   test('It should clone itself', () => {
-    const item = keyGenerator.getPublicKey()
+    const item = PublicKeyObject()
     const spyOn = jest.spyOn(item, 'clone')
     const newItem = item.clone()
     expect(spyOn).toHaveBeenCalledWith()
@@ -97,17 +136,28 @@ describe('PublicKey', () => {
     expect(newItem).toBeInstanceOf(Object)
     expect(newItem.constructor).toBe(Object)
     expect(newItem.instance.constructor.name).toBe('PublicKey')
-    expect(newItem.save()).toEqual(item.save())
+  })
+  test('It should fail to clone itself', () => {
+    const item = PublicKeyObject()
+    item.delete()
+    const spyOn = jest.spyOn(item, 'clone')
+    expect(() => item.clone()).toThrow()
+    expect(spyOn).toHaveBeenCalledWith()
   })
   test('It should move another instance into itself and delete the old', () => {
     const item = keyGenerator.getPublicKey()
-    const str = item.save()
     const newItem = PublicKeyObject()
     const spyOn = jest.spyOn(newItem, 'move')
     newItem.move(item)
     expect(spyOn).toHaveBeenCalledWith(item)
     expect(item.instance).toBeNull()
-    expect(() => item.save()).toThrow(TypeError)
-    expect(newItem.save()).toEqual(str)
+  })
+  test('It should fail to move another instance into itself and delete the old', () => {
+    const item = keyGenerator.getPublicKey()
+    const newItem = PublicKeyObject()
+    item.delete()
+    const spyOn = jest.spyOn(newItem, 'move')
+    expect(() => newItem.move(item)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(item)
   })
 })

@@ -3,7 +3,6 @@ export const IntegerEncoder = library => ({
   PlainText
 }) => context => {
   const Constructor = library.IntegerEncoder
-
   let _instance = null
   try {
     _instance = new Constructor(context.instance)
