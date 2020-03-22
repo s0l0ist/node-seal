@@ -35,7 +35,11 @@ describe('PlainModulus', () => {
     expect(smallModulus.constructor).toBe(Object)
     expect(smallModulus.constructor.name).toBe('Object')
     expect(smallModulus.instance.constructor.name).toBe('SmallModulus')
-    expect(smallModulus.value).toBe(BigInt(1032193))
+  })
+  test('It should fail to return a SmallModulus', () => {
+    const spyOn = jest.spyOn(PlainModulusObject, 'Batching')
+    expect(() => PlainModulusObject.Batching(4095, 20)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(4095, 20)
   })
   test('It should a create a Vector of SmallModulus', () => {
     const spyOn = jest.spyOn(PlainModulusObject, 'BatchingVector')
@@ -48,6 +52,12 @@ describe('PlainModulus', () => {
     expect(typeof vectSmallModulus.constructor).toBe('function')
     expect(vectSmallModulus).toBeInstanceOf(Object)
     expect(vectSmallModulus.constructor.name).toBe('std$$vector$SmallModulus$')
-    expect(vectSmallModulus.values()).toBe('925697,974849,1032193')
+  })
+  test('It should fail to create a Vector of SmallModulus', () => {
+    const spyOn = jest.spyOn(PlainModulusObject, 'BatchingVector')
+    expect(() =>
+      PlainModulusObject.BatchingVector(4095, Int32Array.from([20, 20, 20]))
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(4095, Int32Array.from([20, 20, 20]))
   })
 })

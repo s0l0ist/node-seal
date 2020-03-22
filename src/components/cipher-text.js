@@ -40,7 +40,9 @@ export const CipherText = library => ({
           pool
         )
       } else {
-        throw new Error('Invalid options specified!')
+        throw new Error(
+          'Must specify a (context), (context, parmsId), or (context, parmsId, sizeCapacity)'
+        )
       }
     } catch (e) {
       throw Exception.safe(e)
