@@ -36,9 +36,11 @@ export const CipherText = library => ({
         return new Constructor(
           context.instance,
           parmsId.instance,
-          sizeCapacity.instance,
+          sizeCapacity,
           pool
         )
+      } else {
+        throw new Error('Invalid options specified!')
       }
     } catch (e) {
       throw Exception.safe(e)
@@ -144,11 +146,7 @@ export const CipherText = library => ({
      * @name CipherText#release
      */
     release() {
-      try {
-        return _instance.release()
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      _instance.release()
     },
 
     /**
@@ -272,11 +270,7 @@ export const CipherText = library => ({
      * @returns {String} base64 encoded string
      */
     save(compression = ComprModeType.deflate) {
-      try {
-        return _instance.saveToString(compression)
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return _instance.saveToString(compression)
     },
 
     /**

@@ -69,40 +69,6 @@ export const CKKSEncoder = library => ({
      * Dynamic memory allocations in the process are allocated from the memory
      * pool pointed to by the given MemoryPoolHandle.
      *
-     * @deprecated since version 3.2.0
-     * @function
-     * @name CKKSEncoder#encodeVectorDouble
-     * @param {Vector} vector Data to encode
-     * @param {Number} scale Scaling parameter defining encoding precision
-     * @param {PlainText} plainText Destination to store the encoded result
-     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     */
-    encodeVectorDouble() {
-      throw new Error('encodeVectorDouble has been deprecated since 3.2.0')
-    },
-
-    /**
-     * Decodes a plaintext polynomial into double-precision floating-point
-     * real numbers. Dynamic memory allocations in the process are
-     * allocated from the memory pool pointed to by the given MemoryPoolHandle.
-     *
-     * @deprecated since version 3.2.0
-     * @function
-     * @name CKKSEncoder#decodeVectorDouble
-     * @param {PlainText} plainText Data to decode
-     * @param {Vector} vector Destination to store the decoded result
-     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     */
-    decodeVectorDouble() {
-      throw new Error('decodeVectorDouble has been deprecated since 3.2.0')
-    },
-
-    /**
-     * Encodes a vector of double-precision floating-point real numbers
-     * into a plaintext polynomial. Append zeros if vector size is less than N/2.
-     * Dynamic memory allocations in the process are allocated from the memory
-     * pool pointed to by the given MemoryPoolHandle.
-     *
      * @function
      * @name CKKSEncoder#encode
      * @param {Float64Array} array Data to encode
@@ -159,12 +125,16 @@ export const CKKSEncoder = library => ({
      * const result = batchEncoder.decode(plainText)
      */
     decode(plainText, pool = MemoryPoolHandle.global) {
-      const tempVect = Vector(new Float64Array(0))
-      const instance = _instance.decodeDouble(plainText.instance, pool)
-      tempVect.unsafeInject(instance)
-      const tempArr = tempVect.toArray()
-      tempVect.delete()
-      return tempArr
+      try {
+        const tempVect = Vector(new Float64Array(0))
+        const instance = _instance.decodeDouble(plainText.instance, pool)
+        tempVect.unsafeInject(instance)
+        const tempArr = tempVect.toArray()
+        tempVect.delete()
+        return tempArr
+      } catch (e) {
+        throw Exception.safe(e)
+      }
     },
 
     /**

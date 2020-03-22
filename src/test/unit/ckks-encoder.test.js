@@ -2,11 +2,16 @@ import { Seal } from '../../index.js'
 import { getLibrary } from '../../index'
 import { CKKSEncoder } from '../../components'
 
-let Morfix = null
-let parms = null
-let context = null
-let encoder = null
-let CKKSEncoderObject = null
+let Morfix,
+  parms,
+  context,
+  encoder,
+  CKKSEncoderObject = null
+
+let batchParms,
+  batchContext,
+  batchEncoder = null
+
 beforeAll(async () => {
   Morfix = await Seal
   const lib = getLibrary()
@@ -19,6 +24,15 @@ beforeAll(async () => {
   )
   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
   encoder = CKKSEncoderObject(context)
+
+  batchParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+  batchParms.setPolyModulusDegree(4096)
+  batchParms.setCoeffModulus(
+    Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
+  )
+  batchParms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
+  batchContext = Morfix.Context(batchParms, true, Morfix.SecurityLevel.tc128)
+  batchEncoder = Morfix.BatchEncoder(batchContext)
 })
 
 describe('CKKSEncoder', () => {
@@ -28,6 +42,16 @@ describe('CKKSEncoder', () => {
     expect(CKKSEncoderObject).toBeInstanceOf(Object)
     expect(CKKSEncoderObject.constructor).toBe(Function)
     expect(CKKSEncoderObject.constructor.name).toBe('Function')
+  })
+  test('It should construct an instance', () => {
+    const Constructor = jest.fn(CKKSEncoderObject)
+    Constructor(context)
+    expect(Constructor).toBeCalledWith(context)
+  })
+  test('It should fail to construct an instance', () => {
+    const Constructor = jest.fn(CKKSEncoderObject)
+    expect(() => Constructor('fail')).toThrow()
+    expect(Constructor).toBeCalledWith('fail')
   })
   test('It should have properties', () => {
     const item = CKKSEncoderObject(context)
@@ -45,6 +69,14 @@ describe('CKKSEncoder', () => {
   })
   test('It should inject', () => {
     const item = CKKSEncoderObject(context)
+    item.delete()
+    const spyOn = jest.spyOn(item, 'unsafeInject')
+    item.unsafeInject(encoder.instance)
+    expect(spyOn).toHaveBeenCalledWith(encoder.instance)
+    expect(item.slotCount).toEqual(encoder.slotCount)
+  })
+  test('It should delete the old instance and inject', () => {
+    const item = CKKSEncoderObject(context)
     const spyOn = jest.spyOn(item, 'unsafeInject')
     item.unsafeInject(encoder.instance)
     expect(spyOn).toHaveBeenCalledWith(encoder.instance)
@@ -58,20 +90,46 @@ describe('CKKSEncoder', () => {
     expect(item.instance).toBeNull()
     expect(() => item.slotCount).toThrow(TypeError)
   })
-  test('It should encode an float64 array (ckks)', () => {
+  test('It should skip deleting twice', () => {
+    const item = CKKSEncoderObject(context)
+    item.delete()
+    const spyOn = jest.spyOn(item, 'delete')
+    item.delete()
+    expect(spyOn).toHaveBeenCalled()
+    expect(item.instance).toBeNull()
+    expect(() => item.slotCount).toThrow(TypeError)
+  })
+  test('It should encode an float64 array to a plain destination', () => {
     const arr = Float64Array.from(
       Array.from({ length: encoder.slotCount }).map((x, i) => i)
     )
     const plain = Morfix.PlainText()
     const spyOn = jest.spyOn(encoder, 'encode')
-    encoder.encode(arr, Math.pow(2, 16), plain)
-    expect(spyOn).toHaveBeenCalledWith(arr, Math.pow(2, 16), plain)
-    const decoded = encoder.decode(plain)
-    expect(decoded.map(x => 0 + Math.round(x))).toEqual(
-      arr.map(x => 0 + Math.round(x))
-    )
+    encoder.encode(arr, Math.pow(2, 20), plain)
+    expect(spyOn).toHaveBeenCalledWith(arr, Math.pow(2, 20), plain)
   })
-  test('It should decode an float64 array (ckks)', () => {
+  test('It should encode an float64 array and return plaintext', () => {
+    const arr = Float64Array.from(
+      Array.from({ length: encoder.slotCount }).map((x, i) => i)
+    )
+    const spyOn = jest.spyOn(encoder, 'encode')
+    const plain = encoder.encode(arr, Math.pow(2, 20))
+    expect(spyOn).toHaveBeenCalledWith(arr, Math.pow(2, 20))
+    expect(plain).toBeDefined()
+    expect(typeof plain.constructor).toBe('function')
+    expect(plain).toBeInstanceOf(Object)
+    expect(plain.constructor).toBe(Object)
+    expect(plain.instance.constructor.name).toBe('Plaintext')
+  })
+  test('It should fail to encode an invalid array type', () => {
+    const arr = Int32Array.from(
+      Array.from({ length: encoder.slotCount }).map((x, i) => i)
+    )
+    const spyOn = jest.spyOn(encoder, 'encode')
+    expect(() => encoder.encode(arr, Math.pow(2, 20))).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(arr, Math.pow(2, 20))
+  })
+  test('It should decode an float64 array', () => {
     const arr = Float64Array.from(
       Array.from({ length: encoder.slotCount }).map((x, i) => i)
     )
@@ -83,5 +141,15 @@ describe('CKKSEncoder', () => {
     expect(decoded.map(x => 0 + Math.round(x))).toEqual(
       arr.map(x => 0 + Math.round(x))
     )
+  })
+  test('It should fail to decode an float64 array', () => {
+    const arr = Int32Array.from(
+      Array.from({ length: batchEncoder.slotCount }).map((x, i) => i)
+    )
+    const plain = Morfix.PlainText()
+    batchEncoder.encode(arr, plain)
+    const spyOn = jest.spyOn(encoder, 'decode')
+    expect(() => encoder.decode(plain)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(plain)
   })
 })

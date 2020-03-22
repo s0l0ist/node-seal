@@ -1,6 +1,4 @@
-export const EncryptionParameterQualifiers = () => ({ Exception }) => (
-  instance = null
-) => {
+export const EncryptionParameterQualifiers = () => () => instance => {
   let _instance = instance
 
   /**
@@ -63,11 +61,7 @@ export const EncryptionParameterQualifiers = () => ({ Exception }) => (
      * @type {Boolean}
      */
     get parametersSet() {
-      try {
-        return _instance.parametersSet
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return _instance.parametersSet
     },
 
     /**
@@ -84,11 +78,7 @@ export const EncryptionParameterQualifiers = () => ({ Exception }) => (
      * @type {Boolean}
      */
     get usingFFT() {
-      try {
-        return _instance.usingFFT
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return _instance.usingFFT
     },
 
     /**
@@ -106,11 +96,7 @@ export const EncryptionParameterQualifiers = () => ({ Exception }) => (
      * @type {Boolean}
      */
     get usingNTT() {
-      try {
-        return _instance.usingNTT
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return _instance.usingNTT
     },
 
     /**
@@ -129,11 +115,7 @@ export const EncryptionParameterQualifiers = () => ({ Exception }) => (
      * @type {Boolean}
      */
     get usingBatching() {
-      try {
-        return _instance.usingBatching
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return _instance.usingBatching
     },
 
     /**
@@ -149,11 +131,7 @@ export const EncryptionParameterQualifiers = () => ({ Exception }) => (
      * @type {Boolean}
      */
     get usingFastPlainLift() {
-      try {
-        return _instance.usingFastPlainLift
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return _instance.usingFastPlainLift
     },
 
     /**
@@ -166,11 +144,7 @@ export const EncryptionParameterQualifiers = () => ({ Exception }) => (
      * @type {Boolean}
      */
     get usingDescendingModulusChain() {
-      try {
-        return _instance.usingDescendingModulusChain
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return _instance.usingDescendingModulusChain
     },
 
     /**
@@ -182,11 +156,7 @@ export const EncryptionParameterQualifiers = () => ({ Exception }) => (
      * @type {(SecurityLevel.none|SecurityLevel.tc128|SecurityLevel.tc192|SecurityLevel.tc256)}
      */
     get securityLevel() {
-      try {
-        return _instance.securityLevel
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return _instance.securityLevel
     }
   }
 }

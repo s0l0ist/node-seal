@@ -71,6 +71,17 @@ describe('Evaluator', () => {
     expect(EvaluatorObject.constructor).toBe(Function)
     expect(EvaluatorObject.constructor.name).toBe('Function')
   })
+
+  test('It should construct an instance', () => {
+    const Constructor = jest.fn(EvaluatorObject)
+    Constructor(context)
+    expect(Constructor).toBeCalledWith(context)
+  })
+  test('It should fail to construct an instance', () => {
+    const Constructor = jest.fn(EvaluatorObject)
+    expect(() => Constructor('fail')).toThrow()
+    expect(Constructor).toBeCalledWith('fail')
+  })
   test('It should have properties', () => {
     const item = EvaluatorObject(context)
     // Test properties
