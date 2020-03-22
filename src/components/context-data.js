@@ -3,7 +3,7 @@ export const ContextData = library => ({
   EncryptionParameters,
   ParmsIdType,
   EncryptionParameterQualifiers
-}) => (instance = null) => {
+}) => instance => {
   let _instance = instance
 
   /**
@@ -65,14 +65,10 @@ export const ContextData = library => ({
      * @type {EncryptionParameters}
      */
     get parms() {
-      try {
-        const instance = _instance.parms()
-        const encryptionParameters = EncryptionParameters(true)
-        encryptionParameters.unsafeInject(instance)
-        return encryptionParameters
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      const instance = _instance.parms()
+      const encryptionParameters = EncryptionParameters()
+      encryptionParameters.unsafeInject(instance)
+      return encryptionParameters
     },
 
     /**
@@ -83,11 +79,7 @@ export const ContextData = library => ({
      * @type {ParmsIdType}
      */
     get parmsId() {
-      try {
-        return ParmsIdType(_instance.parmsId())
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return ParmsIdType(_instance.parmsId())
     },
 
     /**
@@ -101,11 +93,7 @@ export const ContextData = library => ({
      * @type {EncryptionParameterQualifiers}
      */
     get qualifiers() {
-      try {
-        return EncryptionParameterQualifiers(_instance.qualifiers())
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return EncryptionParameterQualifiers(_instance.qualifiers())
     },
 
     /**
@@ -116,11 +104,7 @@ export const ContextData = library => ({
      * @type {Number}
      */
     get totalCoeffModulusBitCount() {
-      try {
-        return _instance.totalCoeffModulusBitCount()
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return _instance.totalCoeffModulusBitCount()
     },
 
     /**
@@ -133,16 +117,12 @@ export const ContextData = library => ({
      * @type {ContextData}
      */
     get prevContextData() {
-      try {
-        return ContextData(library)(
-          Exception,
-          EncryptionParameters,
-          ParmsIdType,
-          EncryptionParameterQualifiers
-        )(_instance.prevContextData())
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return ContextData(library)(
+        Exception,
+        EncryptionParameters,
+        ParmsIdType,
+        EncryptionParameterQualifiers
+      )(_instance.prevContextData())
     },
 
     /**
@@ -155,16 +135,12 @@ export const ContextData = library => ({
      * @type {ContextData}
      */
     get nextContextData() {
-      try {
-        return ContextData(library)(
-          Exception,
-          EncryptionParameters,
-          ParmsIdType,
-          EncryptionParameterQualifiers
-        )(_instance.nextContextData())
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return ContextData(library)(
+        Exception,
+        EncryptionParameters,
+        ParmsIdType,
+        EncryptionParameterQualifiers
+      )(_instance.nextContextData())
     },
 
     /**
@@ -176,11 +152,7 @@ export const ContextData = library => ({
      * @type {Number}
      */
     get chainIndex() {
-      try {
-        return _instance.chainIndex()
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return _instance.chainIndex()
     }
   }
 }

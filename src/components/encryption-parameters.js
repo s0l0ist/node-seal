@@ -1,29 +1,11 @@
 export const EncryptionParameters = library => ({
   Exception,
   ComprModeType,
-  SmallModulus
-}) => (schemeType, suppressWarning = false) => {
+  SmallModulus,
+  SchemeType
+}) => (schemeType = SchemeType.none) => {
   const Constructor = library.EncryptionParameters
-  let _instance = null
-
-  // Normal users must supply a schemeType. If no schemeType is passed in,
-  // this class serves as a wrapper for the pointer to the
-  // EncryptionParameters that ContextData.parms() returns.
-  if (schemeType) {
-    try {
-      _instance = new Constructor(schemeType)
-    } catch (e) {
-      throw Exception.safe(e)
-    }
-  }
-
-  if (!schemeType && !suppressWarning) {
-    console.warn(
-      "You're creating an uninitialized EncryptionParameters object. This is probably not what you meant to do. An" +
-        ' empty constructor is only allowed to wrap a pointer from `ContextData.parms`. To remove this warning, pass' +
-        " in the option `suppressWarning` set to 'true' in this constructor or call the constructor with a valid SchemeType."
-    )
-  }
+  let _instance = new Constructor(schemeType)
 
   /**
    * @implements EncryptionParameters
@@ -168,16 +150,12 @@ export const EncryptionParameters = library => ({
      * @type {Array<BigInt>}
      */
     get coeffModulus() {
-      try {
-        const vectorSmallModulus = _instance.coeffModulus()
-        const values = vectorSmallModulus.values()
-        // eslint-disable-next-line no-undef
-        const array = values.split(',').map(x => BigInt(x))
-        vectorSmallModulus.delete()
-        return array
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      const vectorSmallModulus = _instance.coeffModulus()
+      const values = vectorSmallModulus.values()
+      // eslint-disable-next-line no-undef
+      const array = values.split(',').map(x => BigInt(x))
+      vectorSmallModulus.delete()
+      return array
     },
 
     /**
@@ -203,11 +181,7 @@ export const EncryptionParameters = library => ({
      * @returns {String} base64 encoded string
      */
     save(compression = ComprModeType.deflate) {
-      try {
-        return _instance.saveToString(compression)
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return _instance.saveToString(compression)
     },
 
     /**

@@ -53,7 +53,8 @@ export const SEAL = library => {
   const EncryptionParameters = applyDependencies({
     Exception,
     ComprModeType,
-    SmallModulus
+    SmallModulus,
+    SchemeType
   })(components.EncryptionParameters)
   const ContextData = applyDependencies({
     Exception,
@@ -62,9 +63,9 @@ export const SEAL = library => {
     EncryptionParameterQualifiers
   })(components.ContextData)
   const Context = applyDependencies({
-    Exception,
     ParmsIdType,
-    ContextData
+    ContextData,
+    SecurityLevel
   })(components.Context)
   const Decryptor = applyDependencies({
     Exception,
@@ -334,15 +335,15 @@ export const SEAL = library => {
      * @function
      * @name SEAL#Context
      * @param {EncryptionParameters} encryptionParams A set of specific encryption parameters
-     * @param {boolean} expandModChain Determines whether or not to enable modulus switching
-     * @param {SecurityLevel} securityLevel The security strength in bits.
+     * @param {boolean} [expandModChain=true] Determines whether or not to enable modulus switching
+     * @param {SecurityLevel} [securityLevel={@link SecurityLevel.tc128}] The security strength in bits.
      * @returns {Context} An encryption context to be used for all operations
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal
      * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
      * ...
-     * const context = Morfix.Context(encParms, true, Morfix.SecurityLevel.tc128)
+     * const context = Morfix.Context(encParms)
      */
     Context,
 

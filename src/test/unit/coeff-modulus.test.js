@@ -24,7 +24,6 @@ describe('CoeffModulus', () => {
     expect(CoeffModulusObject).toHaveProperty('BFVDefault')
     expect(CoeffModulusObject).toHaveProperty('Create')
   })
-
   test('It should return a max bit count', () => {
     const spyOn = jest.spyOn(CoeffModulusObject, 'MaxBitCount')
     const count = CoeffModulusObject.MaxBitCount(
@@ -33,7 +32,6 @@ describe('CoeffModulus', () => {
     )
     expect(spyOn).toHaveBeenCalledWith(4096, Morfix.SecurityLevel.tc128)
     expect(typeof count).toBe('number')
-    expect(count).toBe(109)
   })
   test('It should a return a default Vector of SmallModulus', () => {
     const spyOn = jest.spyOn(CoeffModulusObject, 'BFVDefault')
@@ -43,7 +41,13 @@ describe('CoeffModulus', () => {
     expect(typeof vect.constructor).toBe('function')
     expect(vect).toBeInstanceOf(Object)
     expect(vect.constructor.name).toBe('std$$vector$SmallModulus$')
-    expect(vect.values()).toBe('68719403009,68719230977,137438822401')
+  })
+  test('It should fail to return a default Vector of SmallModulus', () => {
+    const spyOn = jest.spyOn(CoeffModulusObject, 'BFVDefault')
+    expect(() =>
+      CoeffModulusObject.BFVDefault(4095, Morfix.SecurityLevel.tc128)
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(4095, Morfix.SecurityLevel.tc128)
   })
   test('It should a create a Vector of SmallModulus', () => {
     const spyOn = jest.spyOn(CoeffModulusObject, 'Create')
@@ -53,6 +57,17 @@ describe('CoeffModulus', () => {
     expect(typeof vect.constructor).toBe('function')
     expect(vect).toBeInstanceOf(Object)
     expect(vect.constructor.name).toBe('std$$vector$SmallModulus$')
-    expect(vect.values()).toBe('68719230977,68719403009,137438822401')
+  })
+  test('It should fail to create a Vector of SmallModulus', () => {
+    const spyOn = jest.spyOn(CoeffModulusObject, 'Create')
+    expect(() => CoeffModulusObject.Create(4095, [36, 36, 37])).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(4095, [36, 36, 37])
+  })
+  test('It should fail to create a Vector of SmallModulus', () => {
+    const spyOn = jest.spyOn(CoeffModulusObject, 'Create')
+    expect(() =>
+      CoeffModulusObject.Create(4095, Int32Array.from([36, 36, 37]))
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(4095, Int32Array.from([36, 36, 37]))
   })
 })

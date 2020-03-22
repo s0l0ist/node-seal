@@ -22,11 +22,7 @@ export const CoeffModulus = library => ({ Exception }) => {
      * @returns {Number} Maximum bit count
      */
     MaxBitCount(polyModulusDegree, securityLevel) {
-      try {
-        return _MaxBitCount(polyModulusDegree, securityLevel)
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return _MaxBitCount(polyModulusDegree, securityLevel)
     },
 
     /**

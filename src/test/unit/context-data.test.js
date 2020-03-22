@@ -65,6 +65,18 @@ describe('ContextData', () => {
     const newContextData = ContextDataObject(
       ckksContext.firstContextData.instance
     )
+    newContextData.delete()
+    const spyOn = jest.spyOn(newContextData, 'unsafeInject')
+    newContextData.unsafeInject(contextData.instance)
+    expect(spyOn).toHaveBeenCalledWith(contextData.instance)
+    expect(newContextData.totalCoeffModulusBitCount).toEqual(72)
+  })
+  test('It should delete the old instance and inject', () => {
+    const contextData = ContextDataObject(context.firstContextData.instance)
+
+    const newContextData = ContextDataObject(
+      ckksContext.firstContextData.instance
+    )
     const spyOn = jest.spyOn(newContextData, 'unsafeInject')
     newContextData.unsafeInject(contextData.instance)
     expect(spyOn).toHaveBeenCalledWith(contextData.instance)
@@ -73,6 +85,15 @@ describe('ContextData', () => {
   test("It should delete it's instance", () => {
     const contextData = ContextDataObject(context.firstContextData.instance)
 
+    const spyOn = jest.spyOn(contextData, 'delete')
+    contextData.delete()
+    expect(spyOn).toHaveBeenCalled()
+    expect(contextData.instance).toBeNull()
+    expect(() => contextData.totalCoeffModulusBitCount).toThrow(TypeError)
+  })
+  test('It should skip deleting twice', () => {
+    const contextData = ContextDataObject(context.firstContextData.instance)
+    contextData.delete()
     const spyOn = jest.spyOn(contextData, 'delete')
     contextData.delete()
     expect(spyOn).toHaveBeenCalled()
