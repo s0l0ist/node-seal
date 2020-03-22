@@ -76,7 +76,7 @@ export const Context = library => ({
      * @name Context#print
      */
     print() {
-      _printContext(_instance)
+      return _printContext(_instance)
     },
 
     /**

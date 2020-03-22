@@ -50,7 +50,7 @@ describe('BatchEncoder', () => {
     expect(item).toHaveProperty('decode')
     expect(item).toHaveProperty('slotCount')
   })
-  test('It should have an instance (bfv)', () => {
+  test('It should have an instance', () => {
     const item = BatchEncoderObject(context)
     expect(item.instance).not.toBeFalsy()
   })
