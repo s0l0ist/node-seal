@@ -18,6 +18,24 @@ describe('ParmsIdType', () => {
     expect(ParmsIdTypeObject.constructor).toBe(Function)
     expect(ParmsIdTypeObject.constructor.name).toBe('Function')
   })
+  test('It should construct an instance', () => {
+    const Constructor = jest.fn(ParmsIdTypeObject)
+    Constructor()
+    expect(Constructor).toBeCalledWith()
+  })
+  test('It should construct from an existing an instance', () => {
+    const parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+    parms.setPolyModulusDegree(4096)
+    parms.setCoeffModulus(
+      Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
+    )
+    parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
+    const context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
+    const parmsId = context.firstParmsId
+    const Constructor = jest.fn(ParmsIdTypeObject)
+    Constructor(parmsId.instance)
+    expect(Constructor).toBeCalledWith(parmsId.instance)
+  })
   test('It should have properties', () => {
     const parmsId = ParmsIdTypeObject()
     // Test properties
@@ -33,6 +51,14 @@ describe('ParmsIdType', () => {
   test('It should inject', () => {
     const parmsId = ParmsIdTypeObject()
     const newParmsId = ParmsIdTypeObject()
+    newParmsId.delete()
+    const spyOn = jest.spyOn(newParmsId, 'inject')
+    newParmsId.inject(parmsId.instance)
+    expect(spyOn).toHaveBeenCalledWith(parmsId.instance)
+  })
+  test('It should delete the old instance and inject', () => {
+    const parmsId = ParmsIdTypeObject()
+    const newParmsId = ParmsIdTypeObject()
     const spyOn = jest.spyOn(newParmsId, 'inject')
     newParmsId.inject(parmsId.instance)
     expect(spyOn).toHaveBeenCalledWith(parmsId.instance)
@@ -44,6 +70,14 @@ describe('ParmsIdType', () => {
     expect(spyOn).toHaveBeenCalled()
     expect(parmsId.instance).toBeNull()
     expect(() => parmsId.values).toThrow(TypeError)
+  })
+  test('It should skip deleting twice', () => {
+    const parmsId = ParmsIdTypeObject()
+    parmsId.delete()
+    const spyOn = jest.spyOn(parmsId, 'delete')
+    parmsId.delete()
+    expect(spyOn).toHaveBeenCalled()
+    expect(parmsId.instance).toBeNull()
   })
   test('It should return values', () => {
     const parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
@@ -59,12 +93,6 @@ describe('ParmsIdType', () => {
     values.forEach(x => {
       expect(typeof x).toBe('bigint')
     })
-    expect(values).toEqual([
-      1873000747715295028n,
-      11215186030905010692n,
-      3414445251667737935n,
-      182315704735341130n
-    ])
   })
   test('It should construct from no args', () => {
     const constructor = jest.fn(ParmsIdTypeObject)
@@ -80,6 +108,5 @@ describe('ParmsIdType', () => {
     values.forEach(x => {
       expect(typeof x).toBe('bigint')
     })
-    expect(values).toEqual([0n, 0n, 0n, 0n])
   })
 })

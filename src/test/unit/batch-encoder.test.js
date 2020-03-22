@@ -60,14 +60,12 @@ describe('BatchEncoder', () => {
     const spyOn = jest.spyOn(item, 'unsafeInject')
     item.unsafeInject(encoder.instance)
     expect(spyOn).toHaveBeenCalledWith(encoder.instance)
-    expect(item.slotCount).toEqual(encoder.slotCount)
   })
   test('It should delete the old instance and inject', () => {
     const item = BatchEncoderObject(context)
     const spyOn = jest.spyOn(item, 'unsafeInject')
     item.unsafeInject(encoder.instance)
     expect(spyOn).toHaveBeenCalledWith(encoder.instance)
-    expect(item.slotCount).toEqual(encoder.slotCount)
   })
   test("It should delete it's instance", () => {
     const item = BatchEncoderObject(context)
@@ -75,7 +73,6 @@ describe('BatchEncoder', () => {
     item.delete()
     expect(spyOn).toHaveBeenCalled()
     expect(item.instance).toBeNull()
-    expect(() => item.slotCount).toThrow(TypeError)
   })
   test('It should skip deleting twice', () => {
     const item = BatchEncoderObject(context)
@@ -84,7 +81,6 @@ describe('BatchEncoder', () => {
     item.delete()
     expect(spyOn).toHaveBeenCalled()
     expect(item.instance).toBeNull()
-    expect(() => item.slotCount).toThrow(TypeError)
   })
   test('It should encode an int32 array to a plaintext destination', () => {
     const arr = Int32Array.from(
@@ -168,12 +164,20 @@ describe('BatchEncoder', () => {
     expect(spyOn).toHaveBeenCalledWith(plain, false)
     expect(decoded).toEqual(arr)
   })
-  test('It should fail to decode', () => {
+  test('It should fail to decode unsigned', () => {
     const arr = Int32Array.from(
       Array.from({ length: encoder.slotCount * 2 }).map((x, i) => i)
     )
     const spyOn = jest.spyOn(encoder, 'decode')
     expect(() => encoder.decode(arr, false)).toThrow()
     expect(spyOn).toHaveBeenCalledWith(arr, false)
+  })
+  test('It should fail to decode signed', () => {
+    const arr = Uint32Array.from(
+      Array.from({ length: encoder.slotCount * 2 }).map((x, i) => i)
+    )
+    const spyOn = jest.spyOn(encoder, 'decode')
+    expect(() => encoder.decode(arr, true)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(arr, true)
   })
 })

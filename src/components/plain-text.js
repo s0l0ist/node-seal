@@ -15,10 +15,12 @@ export const PlainText = library => ({
     try {
       if (capacity === null && coeffCount === null) {
         return new Constructor(pool)
-      } else if (capacity !== null && coeffCount === null) {
+      } else if (capacity === null && coeffCount !== null) {
         return new Constructor(coeffCount, pool)
       } else if (capacity !== null && coeffCount !== null) {
         return new Constructor(capacity, coeffCount, pool)
+      } else {
+        throw new Error('Must specify a (coeffCount), (coeffCount, capacity)')
       }
     } catch (e) {
       throw Exception.safe(e)
@@ -102,11 +104,7 @@ export const PlainText = library => ({
      * @name PlainText#shrinkToFit
      */
     shrinkToFit() {
-      try {
-        return _instance.shrinkToFit()
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      _instance.shrinkToFit()
     },
 
     /**
@@ -117,11 +115,7 @@ export const PlainText = library => ({
      * @name PlainText#release
      */
     release() {
-      try {
-        return _instance.release()
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      _instance.release()
     },
 
     /**
@@ -135,7 +129,7 @@ export const PlainText = library => ({
      */
     resize(coeffCount) {
       try {
-        return _instance.resize(coeffCount)
+        _instance.resize(coeffCount)
       } catch (e) {
         throw Exception.safe(e)
       }
@@ -148,11 +142,7 @@ export const PlainText = library => ({
      * @name PlainText#setZero
      */
     setZero() {
-      try {
-        return _instance.setZero()
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      _instance.setZero()
     },
 
     /**
@@ -299,11 +289,7 @@ export const PlainText = library => ({
      * @returns {String} Base64 encoded string
      */
     save(compression = ComprModeType.deflate) {
-      try {
-        return _instance.saveToString(compression)
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      return _instance.saveToString(compression)
     },
 
     /**
