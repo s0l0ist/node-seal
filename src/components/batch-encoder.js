@@ -146,7 +146,7 @@ export const BatchEncoder = library => ({
      */
     decode(plainText, signed = true, pool = MemoryPoolHandle.global) {
       try {
-        if (signed === true) {
+        if (signed) {
           const tempVect = Vector(new Int32Array(0))
           const instance = _instance.decodeInt32(plainText.instance, pool)
           tempVect.unsafeInject(instance)
