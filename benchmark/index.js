@@ -99,7 +99,6 @@ function create() {
     let timeDiff = 0
 
     console.log(context.toHuman())
-    process.stdout.write('\r\n')
 
     const parms = context.firstContextData.parms
     const plainModulus = parms.plainModulus
@@ -380,6 +379,19 @@ function create() {
       )
     }
     console.log('')
+
+    // Cleanup
+    parms.delete()
+    context.delete()
+    keyGenerator.delete()
+    secretKey.delete()
+    publicKey.delete()
+    relinKeys.delete()
+    galoisKeys.delete()
+    evaluator.delete()
+    batchEncoder.delete()
+    encryptor.delete()
+    decryptor.delete()
   }
 
   function ckksPerformanceTest(context) {
@@ -388,7 +400,6 @@ function create() {
     let timeDiff = 0
 
     console.log(context.toHuman())
-    process.stdout.write('\r\n')
 
     const parms = context.firstContextData.parms
     const polyModulusDegree = parms.polyModulusDegree
@@ -650,6 +661,19 @@ function create() {
       console.log(`Average complex conjugate: ${avgConjugate} microseconds`)
     }
     console.log('')
+
+    // Cleanup
+    parms.delete()
+    context.delete()
+    keyGenerator.delete()
+    secretKey.delete()
+    publicKey.delete()
+    relinKeys.delete()
+    galoisKeys.delete()
+    evaluator.delete()
+    ckksEncoder.delete()
+    encryptor.delete()
+    decryptor.delete()
   }
 
   return {
