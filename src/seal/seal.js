@@ -21,7 +21,7 @@ export const SEAL = library => {
   })(components.PlainModulus)
   const SchemeType = applyDependencies()(components.SchemeType)
   const SecurityLevel = applyDependencies()(components.SecurityLevel)
-  const Util = applyDependencies({ Exception })(components.Util)
+  const Util = applyDependencies()(components.Util)
   const ParmsIdType = applyDependencies({ Exception })(components.ParmsIdType)
   const PlainText = applyDependencies({
     Exception,
