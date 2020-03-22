@@ -1,4 +1,4 @@
-export const Util = library => ({ Exception }) => {
+export const Util = library => () => {
   // Static methods
   const _gcd = library.gcd
 
@@ -17,14 +17,11 @@ export const Util = library => ({ Exception }) => {
      * @name Util#gcd
      * @param {BigInt} a
      * @param {BigInt} b
-     * @returns {Number} GCD of a and b
+     * @returns {BigInt} GCD of a and b
      */
     gcd(a, b) {
-      try {
-        return _gcd(a.toString(), b.toString())
-      } catch (e) {
-        throw Exception.safe(e)
-      }
+      // eslint-disable-next-line no-undef
+      return BigInt(_gcd(a.toString(), b.toString()))
     }
   }
 }
