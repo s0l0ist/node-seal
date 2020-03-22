@@ -44,7 +44,7 @@ describe('SecretKey', () => {
   })
   test('It should have an instance', () => {
     const item = SecretKeyObject()
-    expect(item.instance).not.toBeFalsy()
+    expect(item.instance).toBeDefined()
   })
   test('It should inject', () => {
     const item = SecretKeyObject()

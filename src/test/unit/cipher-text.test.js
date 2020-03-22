@@ -128,7 +128,7 @@ describe('CipherText', () => {
 
   test('It should have an instance', () => {
     const cipher = CipherTextObject()
-    expect(cipher.instance).not.toBeFalsy()
+    expect(cipher.instance).toBeDefined()
   })
   test('It should inject', () => {
     const cipher = CipherTextObject()

@@ -44,7 +44,7 @@ describe('PublicKey', () => {
   })
   test('It should have an instance', () => {
     const item = PublicKeyObject()
-    expect(item.instance).not.toBeFalsy()
+    expect(item.instance).toBeDefined()
   })
   test('It should inject', () => {
     const item = PublicKeyObject()

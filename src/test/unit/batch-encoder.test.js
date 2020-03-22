@@ -50,7 +50,7 @@ describe('BatchEncoder', () => {
   })
   test('It should have an instance', () => {
     const item = BatchEncoderObject(context)
-    expect(item.instance).not.toBeFalsy()
+    expect(item.instance).toBeDefined()
   })
   test('It should inject', () => {
     const item = BatchEncoderObject(context)
@@ -101,10 +101,6 @@ describe('BatchEncoder', () => {
     const plain = item.encode(arr)
     expect(spyOn).toHaveBeenCalledWith(arr)
     expect(plain).toBeDefined()
-    expect(typeof plain.constructor).toBe('function')
-    expect(plain).toBeInstanceOf(Object)
-    expect(plain.constructor).toBe(Object)
-    expect(plain.instance.constructor.name).toBe('Plaintext')
   })
   test('It should encode a uint32 array to a plaintext destination', () => {
     const item = BatchEncoderObject(context)

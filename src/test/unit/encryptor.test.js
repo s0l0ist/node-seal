@@ -66,7 +66,7 @@ describe('Encryptor', () => {
   })
   test('It should have an instance', () => {
     const item = EncryptorObject(context, publicKey)
-    expect(item.instance).not.toBeFalsy()
+    expect(item.instance).toBeDefined()
   })
   test('It should inject', () => {
     const item = EncryptorObject(context, publicKey)

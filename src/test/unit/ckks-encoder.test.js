@@ -65,7 +65,7 @@ describe('CKKSEncoder', () => {
   })
   test('It should have an instance (bfv)', () => {
     const item = CKKSEncoderObject(context)
-    expect(item.instance).not.toBeFalsy()
+    expect(item.instance).toBeDefined()
   })
   test('It should inject', () => {
     const item = CKKSEncoderObject(context)

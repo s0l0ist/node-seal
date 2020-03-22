@@ -53,11 +53,11 @@ describe('ContextData', () => {
   })
   test('It should have an instance (bfv)', () => {
     const contextData = ContextDataObject(context.firstContextData.instance)
-    expect(contextData.instance).not.toBeFalsy()
+    expect(contextData.instance).toBeDefined()
   })
   test('It should have an instance (ckks)', () => {
     const contextData = ContextDataObject(context.firstContextData.instance)
-    expect(contextData.instance).not.toBeFalsy()
+    expect(contextData.instance).toBeDefined()
   })
   test('It should inject', () => {
     const contextData = ContextDataObject(context.firstContextData.instance)
@@ -104,14 +104,14 @@ describe('ContextData', () => {
     const contextData = ContextDataObject(context.firstContextData.instance)
 
     const prev = contextData.prevContextData
-    expect(prev.instance).not.toBeFalsy()
+    expect(prev.instance).toBeDefined()
     expect(prev.totalCoeffModulusBitCount).toEqual(109)
   })
   test('It should return a the next context data', () => {
     const contextData = ContextDataObject(context.firstContextData.instance)
 
     const prev = contextData.nextContextData
-    expect(prev.instance).not.toBeFalsy()
+    expect(prev.instance).toBeDefined()
     expect(prev.totalCoeffModulusBitCount).toEqual(36)
   })
   test('It should return the chain index', () => {

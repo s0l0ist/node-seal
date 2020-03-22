@@ -57,11 +57,11 @@ describe('Context', () => {
   })
   test('It should have an instance (bfv)', () => {
     const item = ContextObject(parms)
-    expect(item.instance).not.toBeFalsy()
+    expect(item.instance).toBeDefined()
   })
   test('It should have an instance (ckks)', () => {
     const item = ContextObject(ckksParms, true, Morfix.SecurityLevel.tc128)
-    expect(item.instance).not.toBeFalsy()
+    expect(item.instance).toBeDefined()
   })
   test('It should inject', () => {
     const item = ContextObject(parms)
