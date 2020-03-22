@@ -4,7 +4,7 @@ const { performance } = require('perf_hooks')
 ;(async function() {
   const benchmark = create()
   await benchmark.init()
-  // benchmark.exampleBfvPerformanceDefault()
+  benchmark.exampleBfvPerformanceDefault()
   benchmark.exampleCkksPerformanceDefault()
 })()
 
@@ -163,7 +163,7 @@ function create() {
     /*
       How many times to run the test?
       */
-    const count = 25
+    const count = 10
 
     /*
       Populate a vector of values to batch.
@@ -452,7 +452,7 @@ function create() {
     /*
       How many times to run the test?
       */
-    const count = 25
+    const count = 10
 
     /*
       Populate a vector of values to batch.
