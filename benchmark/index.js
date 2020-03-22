@@ -98,7 +98,7 @@ function create() {
     let timeEnd = 0
     let timeDiff = 0
 
-    console.log(context.print())
+    console.log(context.toHuman())
     process.stdout.write('\r\n')
 
     const parms = context.firstContextData.parms
@@ -387,7 +387,7 @@ function create() {
     let timeEnd = 0
     let timeDiff = 0
 
-    console.log(context.print())
+    console.log(context.toHuman())
     process.stdout.write('\r\n')
 
     const parms = context.firstContextData.parms

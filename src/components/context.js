@@ -9,9 +9,6 @@ export const Context = library => ({
 ) => {
   const Constructor = library.SEALContext
 
-  // Static methods
-  const _printContext = library.printContext
-
   let _instance = new Constructor(
     encryptionParams.instance,
     expandModChain,
@@ -70,13 +67,15 @@ export const Context = library => ({
     },
 
     /**
-     * Prints the context parameters to STDOUT (console.log)
+     * Returns the context parameters in a human readable string format.
      *
+     * @private
      * @function
-     * @name Context#print
+     * @name Context#toString
+     * @returns {String} Context details as a string
      */
-    print() {
-      return _printContext(_instance)
+    toHuman() {
+      return _instance.toHuman()
     },
 
     /**
