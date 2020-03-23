@@ -21,34 +21,38 @@ function create() {
   function exampleCkksPerformanceDefault() {
     const parms = seal.EncryptionParameters(seal.SchemeType.CKKS)
     let polyModulusDegree = 4096
+    let coeffModulus = seal.CoeffModulus.BFVDefault(polyModulusDegree)
     parms.setPolyModulusDegree(polyModulusDegree)
-    parms.setCoeffModulus(
-      seal.CoeffModulus.BFVDefault(polyModulusDegree, seal.SecurityLevel.tc128)
-    )
-    let context = seal.Context(parms, true, seal.SecurityLevel.tc128)
+    parms.setCoeffModulus(coeffModulus)
+    let context = seal.Context(parms)
+
     ckksPerformanceTest(context)
 
     // Clear data to prevent memory buildup
     context.delete()
+    coeffModulus.delete()
 
     polyModulusDegree = 8192
+    coeffModulus = seal.CoeffModulus.BFVDefault(polyModulusDegree)
     parms.setPolyModulusDegree(polyModulusDegree)
-    parms.setCoeffModulus(
-      seal.CoeffModulus.BFVDefault(polyModulusDegree, seal.SecurityLevel.tc128)
-    )
-    context = seal.Context(parms, true, seal.SecurityLevel.tc128)
+    parms.setCoeffModulus(coeffModulus)
+    context = seal.Context(parms)
     ckksPerformanceTest(context)
 
     // Clear data to prevent memory buildup
     context.delete()
+    coeffModulus.delete()
 
     polyModulusDegree = 16384
+    coeffModulus = seal.CoeffModulus.BFVDefault(polyModulusDegree)
     parms.setPolyModulusDegree(polyModulusDegree)
-    parms.setCoeffModulus(
-      seal.CoeffModulus.BFVDefault(polyModulusDegree, seal.SecurityLevel.tc128)
-    )
-    context = seal.Context(parms, true, seal.SecurityLevel.tc128)
+    parms.setCoeffModulus(coeffModulus)
+    context = seal.Context(parms)
     ckksPerformanceTest(context)
+
+    // Clear data to prevent memory buildup
+    context.delete()
+    coeffModulus.delete()
   }
 
   function ckksPerformanceTest(context) {
@@ -58,7 +62,8 @@ function create() {
 
     console.log(context.toHuman())
 
-    const parms = context.firstContextData.parms
+    const firstContextData = context.firstContextData
+    const parms = firstContextData.parms
     const polyModulusDegree = parms.polyModulusDegree
 
     process.stdout.write('Generating secret/public keys: ')
@@ -90,9 +95,14 @@ function create() {
         `Done [${Math.round((timeEnd - timeStart) * 1000)} microseconds]\r\n`
       )
 
-      if (!context.keyContextData.qualifiers.usingBatching) {
+      const contextData = context.keyContextData
+      const qualifiers = contextData.qualifiers
+      if (!qualifiers.usingBatching) {
         throw new Error('Given encryption parameters do not support batching.')
       }
+      // Cleanup
+      contextData.delete()
+      qualifiers.delete()
     }
 
     const encryptor = seal.Encryptor(context, publicKey)
@@ -187,14 +197,10 @@ function create() {
       */
       const encrypted1 = seal.CipherText({ context })
       const encrypted2 = seal.CipherText({ context })
-      encryptor.encrypt(
-        ckksEncoder.encode(Float64Array.from([i]), scale),
-        encrypted1
-      )
-      encryptor.encrypt(
-        ckksEncoder.encode(Float64Array.from([i + 1]), scale),
-        encrypted2
-      )
+      const plain3 = ckksEncoder.encode(Float64Array.from([i]), scale)
+      const plain4 = ckksEncoder.encode(Float64Array.from([i + 1]), scale)
+      encryptor.encrypt(plain3, encrypted1)
+      encryptor.encrypt(plain4, encrypted2)
       timeStart = performance.now()
       evaluator.add(encrypted1, encrypted1, encrypted1)
       evaluator.add(encrypted2, encrypted2, encrypted2)
@@ -256,7 +262,7 @@ function create() {
         /*
         [Rotate Vector Random]
         */
-        const randomRotation = randomIntInc(0, ckksEncoder.slotCount)
+        const randomRotation = randomIntInc(0, ckksEncoder.slotCount) - 1
         timeStart = performance.now()
         evaluator.rotateVector(encrypted, randomRotation, galoisKeys, encrypted)
         timeEnd = performance.now()
@@ -274,6 +280,8 @@ function create() {
       // Cleanup
       plain.delete()
       plain2.delete()
+      plain3.delete()
+      plain4.delete()
       encrypted.delete()
       encrypted1.delete()
       encrypted2.delete()
@@ -321,6 +329,7 @@ function create() {
 
     // Cleanup
     parms.delete()
+    firstContextData.delete()
     context.delete()
     keyGenerator.delete()
     secretKey.delete()

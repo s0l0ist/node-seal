@@ -22,41 +22,46 @@ function create() {
     const parms = seal.EncryptionParameters(seal.SchemeType.BFV)
     let polyModulusDegree = 4096
     let smallModulus = seal.SmallModulus('786433')
+    let coeffModulus = seal.CoeffModulus.BFVDefault(polyModulusDegree)
     parms.setPolyModulusDegree(polyModulusDegree)
-    parms.setCoeffModulus(
-      seal.CoeffModulus.BFVDefault(polyModulusDegree, seal.SecurityLevel.tc128)
-    )
+    parms.setCoeffModulus(coeffModulus)
     parms.setPlainModulus(smallModulus)
-    let context = seal.Context(parms, true, seal.SecurityLevel.tc128)
+    let context = seal.Context(parms)
+
     bfvPerformanceTest(context)
 
     // Clear data to prevent memory buildup
     context.delete()
     smallModulus.delete()
+    coeffModulus.delete()
 
     polyModulusDegree = 8192
     smallModulus = seal.SmallModulus('786433')
+    coeffModulus = seal.CoeffModulus.BFVDefault(polyModulusDegree)
     parms.setPolyModulusDegree(polyModulusDegree)
-    parms.setCoeffModulus(
-      seal.CoeffModulus.BFVDefault(polyModulusDegree, seal.SecurityLevel.tc128)
-    )
+    parms.setCoeffModulus(coeffModulus)
     parms.setPlainModulus(smallModulus)
-    context = seal.Context(parms, true, seal.SecurityLevel.tc128)
+    context = seal.Context(parms)
     bfvPerformanceTest(context)
 
     // Clear data to prevent memory buildup
     context.delete()
     smallModulus.delete()
+    coeffModulus.delete()
 
     polyModulusDegree = 16384
     smallModulus = seal.SmallModulus('786433')
+    coeffModulus = seal.CoeffModulus.BFVDefault(polyModulusDegree)
     parms.setPolyModulusDegree(polyModulusDegree)
-    parms.setCoeffModulus(
-      seal.CoeffModulus.BFVDefault(polyModulusDegree, seal.SecurityLevel.tc128)
-    )
+    parms.setCoeffModulus(coeffModulus)
     parms.setPlainModulus(smallModulus)
-    context = seal.Context(parms, true, seal.SecurityLevel.tc128)
+    context = seal.Context(parms)
     bfvPerformanceTest(context)
+
+    // Clear data to prevent memory buildup
+    context.delete()
+    smallModulus.delete()
+    coeffModulus.delete()
   }
 
   function bfvPerformanceTest(context) {
@@ -66,7 +71,8 @@ function create() {
 
     console.log(context.toHuman())
 
-    const parms = context.firstContextData.parms
+    const firstContextData = context.firstContextData
+    const parms = firstContextData.parms
     const plainModulus = parms.plainModulus
     const polyModulusDegree = parms.polyModulusDegree
 
@@ -99,9 +105,14 @@ function create() {
         `Done [${Math.round((timeEnd - timeStart) * 1000)} microseconds]\r\n`
       )
 
-      if (!context.keyContextData.qualifiers.usingBatching) {
+      const contextData = context.keyContextData
+      const qualifiers = contextData.qualifiers
+      if (!qualifiers.usingBatching) {
         throw new Error('Given encryption parameters do not support batching.')
       }
+      // Cleanup
+      contextData.delete()
+      qualifiers.delete()
     }
 
     const encryptor = seal.Encryptor(context, publicKey)
@@ -206,11 +217,10 @@ function create() {
         */
       const encrypted1 = seal.CipherText({ context })
       const encrypted2 = seal.CipherText({ context })
-      encryptor.encrypt(batchEncoder.encode(Int32Array.from([i])), encrypted1)
-      encryptor.encrypt(
-        batchEncoder.encode(Int32Array.from([i + 1])),
-        encrypted2
-      )
+      const plain3 = batchEncoder.encode(Int32Array.from([i]))
+      const plain4 = batchEncoder.encode(Int32Array.from([i + 1]))
+      encryptor.encrypt(plain3, encrypted1)
+      encryptor.encrypt(plain4, encrypted2)
       timeStart = performance.now()
       evaluator.add(encrypted1, encrypted1, encrypted1)
       evaluator.add(encrypted2, encrypted2, encrypted2)
@@ -279,7 +289,7 @@ function create() {
           We rotate matrix rows by a random number of steps. This is much more
           expensive than rotating by just one step.
           */
-        const rowSize = batchEncoder.slotCount / 2
+        const rowSize = batchEncoder.slotCount / 2 - 1
         const randomRotation = randomIntInc(0, rowSize)
         timeStart = performance.now()
         evaluator.rotateRows(encrypted, randomRotation, galoisKeys, encrypted)
@@ -299,6 +309,8 @@ function create() {
       // Cleanup
       plain.delete()
       plain2.delete()
+      plain3.delete()
+      plain4.delete()
       encrypted.delete()
       encrypted1.delete()
       encrypted2.delete()
@@ -348,6 +360,8 @@ function create() {
 
     // Cleanup
     parms.delete()
+    firstContextData.delete()
+    plainModulus.delete()
     context.delete()
     keyGenerator.delete()
     secretKey.delete()
