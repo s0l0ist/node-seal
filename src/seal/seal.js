@@ -9,7 +9,10 @@ export const SEAL = library => {
   const Exception = applyDependencies()(components.Exception)
   const ComprModeType = applyDependencies()(components.ComprModeType)
   const MemoryPoolHandle = applyDependencies()(components.MemoryPoolHandle)
-  const CoeffModulus = applyDependencies({ Exception })(components.CoeffModulus)
+  const SecurityLevel = applyDependencies()(components.SecurityLevel)
+  const CoeffModulus = applyDependencies({ Exception, SecurityLevel })(
+    components.CoeffModulus
+  )
   const SmallModulus = applyDependencies({ Exception, ComprModeType })(
     components.SmallModulus
   )
@@ -20,7 +23,6 @@ export const SEAL = library => {
     Vector
   })(components.PlainModulus)
   const SchemeType = applyDependencies()(components.SchemeType)
-  const SecurityLevel = applyDependencies()(components.SecurityLevel)
   const Util = applyDependencies()(components.Util)
   const ParmsIdType = applyDependencies({ Exception })(components.ParmsIdType)
   const PlainText = applyDependencies({
