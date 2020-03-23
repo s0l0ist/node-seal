@@ -24,19 +24,34 @@ describe('CoeffModulus', () => {
     expect(CoeffModulusObject).toHaveProperty('BFVDefault')
     expect(CoeffModulusObject).toHaveProperty('Create')
   })
-  test('It should return a max bit count', () => {
+  test('It should return a max bit count with default security level', () => {
+    const spyOn = jest.spyOn(CoeffModulusObject, 'MaxBitCount')
+    const count = CoeffModulusObject.MaxBitCount(4096)
+    expect(spyOn).toHaveBeenCalledWith(4096)
+    expect(typeof count).toBe('number')
+  })
+  test('It should return a max bit count with a specified security level', () => {
     const spyOn = jest.spyOn(CoeffModulusObject, 'MaxBitCount')
     const count = CoeffModulusObject.MaxBitCount(
       4096,
-      Morfix.SecurityLevel.tc128
+      Morfix.SecurityLevel.tc256
     )
-    expect(spyOn).toHaveBeenCalledWith(4096, Morfix.SecurityLevel.tc128)
+    expect(spyOn).toHaveBeenCalledWith(4096, Morfix.SecurityLevel.tc256)
     expect(typeof count).toBe('number')
   })
-  test('It should a return a default Vector of SmallModulus', () => {
+  test('It should a return a default Vector of SmallModulus with a default security level', () => {
     const spyOn = jest.spyOn(CoeffModulusObject, 'BFVDefault')
-    const vect = CoeffModulusObject.BFVDefault(4096, Morfix.SecurityLevel.tc128)
-    expect(spyOn).toHaveBeenCalledWith(4096, Morfix.SecurityLevel.tc128)
+    const vect = CoeffModulusObject.BFVDefault(4096)
+    expect(spyOn).toHaveBeenCalledWith(4096)
+    expect(vect).toBeDefined()
+    expect(typeof vect.constructor).toBe('function')
+    expect(vect).toBeInstanceOf(Object)
+    expect(vect.constructor.name).toBe('std$$vector$SmallModulus$')
+  })
+  test('It should a return a default Vector of SmallModulus with a specified security level', () => {
+    const spyOn = jest.spyOn(CoeffModulusObject, 'BFVDefault')
+    const vect = CoeffModulusObject.BFVDefault(4096, Morfix.SecurityLevel.tc256)
+    expect(spyOn).toHaveBeenCalledWith(4096, Morfix.SecurityLevel.tc256)
     expect(vect).toBeDefined()
     expect(typeof vect.constructor).toBe('function')
     expect(vect).toBeInstanceOf(Object)

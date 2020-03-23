@@ -1,4 +1,4 @@
-export const CoeffModulus = library => ({ Exception }) => {
+export const CoeffModulus = library => ({ Exception, SecurityLevel }) => {
   // Static methods
   const _MaxBitCount = library.CoeffModulus.MaxBitCount
   const _BFVDefault = library.CoeffModulus.BFVDefault
@@ -18,10 +18,10 @@ export const CoeffModulus = library => ({ Exception }) => {
      * @function
      * @name CoeffModulus.MaxBitCount
      * @param {Number} polyModulusDegree Degree of the polynomial modulus
-     * @param {SecurityLevel} securityLevel Security Level
+     * @param {SecurityLevel} [securityLevel={@link SecurityLevel.tc128}] Security Level
      * @returns {Number} Maximum bit count
      */
-    MaxBitCount(polyModulusDegree, securityLevel) {
+    MaxBitCount(polyModulusDegree, securityLevel = SecurityLevel.tc128) {
       return _MaxBitCount(polyModulusDegree, securityLevel)
     },
 
@@ -31,10 +31,10 @@ export const CoeffModulus = library => ({ Exception }) => {
      * @function
      * @name CoeffModulus.BFVDefault
      * @param {Number} polyModulusDegree Degree of the polynomial modulus
-     * @param {SecurityLevel} securityLevel Security Level
+     * @param {SecurityLevel} [securityLevel={@link SecurityLevel.tc128}] Security Level
      * @returns {Vector<SmallModulus>} Vector containing SmallModulus primes
      */
-    BFVDefault(polyModulusDegree, securityLevel) {
+    BFVDefault(polyModulusDegree, securityLevel = SecurityLevel.tc128) {
       try {
         return _BFVDefault(polyModulusDegree, securityLevel)
       } catch (e) {
