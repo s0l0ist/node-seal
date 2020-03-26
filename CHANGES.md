@@ -3,7 +3,14 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 4.1.4
+
+Feat:
+- Increased performance roughly by **30%**. Disabled seal intrinsics inside cmake script. This was defining an
+  optimization which was actually performing worse when compiled to web assembly.
+
 ## Version 4.1.3
+
 Feat: 
 - Added default values for the security level inside `CoeffModulus.BFVDefault`.
 - Removed benchmarks from npm dist to avoid bloat. To run benchmarks will require to clone the repo.
