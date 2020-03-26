@@ -53,6 +53,45 @@ For changes in this library, take a look [here](CHANGES.md).
 For changes in Microsoft SEAL, 
 take a look at their [list of changes](https://github.com/microsoft/SEAL/blob/master/Changes.md).
 
+## Performance
+
+Test specs 2018 MacBook Pro:
+- 2.6 GHz 6-Core Intel Core i7
+- 16 GB 2400 MHz DDR4
+
+Versions:
+- Seal v3.4.5
+- NodeJS v12.16.1
+- Chrome Version 80.0.3987.149 (Official Build) (64-bit)
+- Firefox 74.0 (64-bit)
+- Safari Version 13.0.5 (15608.5.11)
+
+Encryption Parameters:
+- Scheme: BFV
+- Poly Modulus Degree: 16384
+- Coeff Modulus Size: 438 (48 + 48 + 48 + 49 + 49 + 49 + 49 + 49 + 49) bits
+- Plain Modulus: 786433
+
+Number of iterations is **100**, time in **microseconds**. Browser timers are known to be imprecise, variance maybe high.
+
+| 16384, n = 100       | Node\.js | Chrome  | Firefox | Safari  | Seal \(C\+\+\) | Node\.js \(times slower\) | Chrome \(times slower\) | Firefox \(times slower\) | Safari \(times slower\) |
+|------------------------|----------|---------|---------|---------|----------------|---------------------------|-------------------------|--------------------------|-------------------------|
+| KeyPair                | 36422    | 32770   | 29000   | 55000   | 22376          | 1\.63                     | 1\.46                   | 1\.30                    | 2\.46                   |
+| RelinKeys              | 230859   | 197870  | 198000  | 175000  | 138788         | 1\.66                     | 1\.43                   | 1\.43                    | 1\.26                   |
+| GaloisKeys             | 5937772  | 5084275 | 4936000 | 4624000 | 3577623        | 1\.66                     | 1\.42                   | 1\.38                    | 1\.29                   |
+| Batch                  | 868      | 752     | 670     | 767     | 327            | 2\.65                     | 2\.30                   | 2\.05                    | 2\.35                   |
+| Unbatch                | 1026     | 926     | 730     | 1467    | 304            | 3\.38                     | 3\.05                   | 2\.40                    | 4\.83                   |
+| Encrypt                | 46826    | 41455   | 37110   | 34800   | 18712          | 2\.50                     | 2\.22                   | 1\.98                    | 1\.86                   |
+| Decrypt                | 20992    | 19078   | 16460   | 15667   | 6134           | 3\.42                     | 3\.11                   | 2\.68                    | 2\.55                   |
+| Add                    | 1404     | 1185    | 447     | 389     | 212            | 6\.62                     | 5\.59                   | 2\.11                    | 1\.83                   |
+| Multiply               | 245425   | 231089  | 209040  | 204700  | 60896          | 4\.03                     | 3\.79                   | 3\.43                    | 3\.36                   |
+| Multiply Plain         | 35541    | 31305   | 24260   | 22367   | 10318          | 3\.44                     | 3\.03                   | 2\.35                    | 2\.17                   |
+| Square                 | 180152   | 169122  | 155860  | 148533  | 45762          | 3\.94                     | 3\.70                   | 3\.41                    | 3\.25                   |
+| Relinearize            | 98158    | 85478   | 66870   | 66333   | 25139          | 3\.90                     | 3\.40                   | 2\.66                    | 2\.64                   |
+| Rotate Row One Step    | 97292    | 85724   | 67615   | 65400   | 25247          | 3\.85                     | 3\.40                   | 2\.68                    | 2\.59                   |
+| Rotate Row Random Step | 416774   | 384842  | 295540  | 285733  | 118948         | 3\.50                     | 3\.24                   | 2\.48                    | 2\.40                   |
+| Rotate Column          | 97366    | 85515   | 67730   | 64567   | 25274          | 3\.85                     | 3\.38                   | 2\.68                    | 2\.55                   |
+
 ## Caveats
 
 Conversion from C++ to Web Assembly has some limitations:
