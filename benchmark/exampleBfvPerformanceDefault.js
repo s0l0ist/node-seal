@@ -352,9 +352,7 @@ function create() {
       console.log(
         `Average rotate row random: ${avgRotateRowsRandom} microseconds`
       )
-      console.log(
-        `Average rotate column random: ${avgRotateColumns} microseconds`
-      )
+      console.log(`Average rotate column: ${avgRotateColumns} microseconds`)
     }
     console.log('')
 
