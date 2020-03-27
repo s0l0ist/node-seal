@@ -2,7 +2,8 @@ export const PlainText = library => ({
   Exception,
   ComprModeType,
   ParmsIdType,
-  MemoryPoolHandle
+  MemoryPoolHandle,
+  Vector
 }) => options => {
   const Constructor = library.Plaintext
   let _instance = construct(options)
@@ -293,6 +294,23 @@ export const PlainText = library => ({
     },
 
     /**
+     * Save the PlainText as a binary Uint8Array
+     *
+     * @function
+     * @name PlainText#saveArray
+     * @param {ComprModeType} [compression={@link ComprModeType.deflate}] The compression mode to use
+     * @returns {Uint8Array} A byte array containing the PlainText in binary form
+     */
+    saveArray(compression = ComprModeType.deflate) {
+      const tempVect = Vector(new Uint8Array(0))
+      const instance = _instance.saveToArray(compression)
+      tempVect.unsafeInject(instance)
+      const tempArr = tempVect.toArray()
+      tempVect.delete()
+      return tempArr
+    },
+
+    /**
      * Load a PlainText from a base64 string
      *
      * @function
@@ -303,6 +321,22 @@ export const PlainText = library => ({
     load(context, encoded) {
       try {
         _instance.loadFromString(context.instance, encoded)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Load a PlainText from an Uint8Array holding binary data
+     *
+     * @function
+     * @name PlainText#loadArray
+     * @param {Context} context Encryption context to enforce
+     * @param {Uint8Array} array TypedArray containing binary data
+     */
+    loadArray(context, array) {
+      try {
+        _instance.loadFromArray(context.instance, array)
       } catch (e) {
         throw Exception.safe(e)
       }
@@ -348,7 +382,8 @@ export const PlainText = library => ({
           Exception,
           ComprModeType,
           ParmsIdType,
-          MemoryPoolHandle
+          MemoryPoolHandle,
+          Vector
         })()
         plain.unsafeInject(clonedInstance)
         return plain

@@ -1,4 +1,8 @@
-export const SecretKey = library => ({ Exception, ComprModeType }) => () => {
+export const SecretKey = library => ({
+  Exception,
+  ComprModeType,
+  Vector
+}) => () => {
   const Constructor = library.SecretKey
   let _instance = new Constructor()
 
@@ -71,6 +75,23 @@ export const SecretKey = library => ({ Exception, ComprModeType }) => () => {
     },
 
     /**
+     * Save the SecretKey as a binary Uint8Array
+     *
+     * @function
+     * @name SecretKey#saveArray
+     * @param {ComprModeType} [compression={@link ComprModeType.deflate}] The compression mode to use
+     * @returns {Uint8Array} A byte array containing the SecretKey in binary form
+     */
+    saveArray(compression = ComprModeType.deflate) {
+      const tempVect = Vector(new Uint8Array(0))
+      const instance = _instance.saveToArray(compression)
+      tempVect.unsafeInject(instance)
+      const tempArr = tempVect.toArray()
+      tempVect.delete()
+      return tempArr
+    },
+
+    /**
      * Load a SecretKey from a base64 string
      *
      * @function
@@ -81,6 +102,22 @@ export const SecretKey = library => ({ Exception, ComprModeType }) => () => {
     load(context, encoded) {
       try {
         _instance.loadFromString(context.instance, encoded)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Load a SecretKey from an Uint8Array holding binary data
+     *
+     * @function
+     * @name SecretKey#loadArray
+     * @param {Context} context Encryption context to enforce
+     * @param {Uint8Array} array TypedArray containing binary data
+     */
+    loadArray(context, array) {
+      try {
+        _instance.loadFromArray(context.instance, array)
       } catch (e) {
         throw Exception.safe(e)
       }
@@ -120,7 +157,11 @@ export const SecretKey = library => ({ Exception, ComprModeType }) => () => {
     clone() {
       try {
         const clonedInstance = _instance.clone()
-        const secKey = SecretKey(library)({ Exception, ComprModeType })()
+        const secKey = SecretKey(library)({
+          Exception,
+          ComprModeType,
+          Vector
+        })()
         secKey.inject(clonedInstance)
         return secKey
       } catch (e) {

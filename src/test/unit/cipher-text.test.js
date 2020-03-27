@@ -120,7 +120,9 @@ describe('CipherText', () => {
     expect(cipher).toHaveProperty('scale')
     expect(cipher).toHaveProperty('pool')
     expect(cipher).toHaveProperty('save')
+    expect(cipher).toHaveProperty('saveArray')
     expect(cipher).toHaveProperty('load')
+    expect(cipher).toHaveProperty('loadArray')
     expect(cipher).toHaveProperty('copy')
     expect(cipher).toHaveProperty('clone')
     expect(cipher).toHaveProperty('move')
@@ -291,6 +293,18 @@ describe('CipherText', () => {
     expect(spyOn).toHaveBeenCalled()
     expect(typeof str).toBe('string')
   })
+  test('It should save to an array', () => {
+    const arr = Int32Array.from(
+      Array.from({ length: encoder.slotCount }).fill(5)
+    )
+    const cipher = CipherTextObject()
+    const plain = encoder.encode(arr)
+    encryptor.encrypt(plain, cipher)
+    const spyOn = jest.spyOn(cipher, 'saveArray')
+    const array = cipher.saveArray()
+    expect(spyOn).toHaveBeenCalled()
+    expect(array.constructor).toBe(Uint8Array)
+  })
   test('It should load from a string', () => {
     const arr = Int32Array.from(
       Array.from({ length: encoder.slotCount }).fill(5)
@@ -306,6 +320,21 @@ describe('CipherText', () => {
     expect(spyOn).toHaveBeenCalledWith(context, str)
     expect(newCipher.save()).toBe(str)
   })
+  test('It should load from a typed array', () => {
+    const arr = Int32Array.from(
+      Array.from({ length: encoder.slotCount }).fill(5)
+    )
+    const cipher = CipherTextObject()
+    const plain = encoder.encode(arr)
+    encryptor.encrypt(plain, cipher)
+    const array = cipher.saveArray(Morfix.ComprModeType.deflate)
+    cipher.delete()
+    const newCipher = CipherTextObject()
+    const spyOn = jest.spyOn(newCipher, 'loadArray')
+    newCipher.loadArray(context, array)
+    expect(spyOn).toHaveBeenCalledWith(context, array)
+    expect(newCipher.saveArray()).toEqual(array)
+  })
   test('It should fail to load from a string', () => {
     const newCipher = CipherTextObject()
     const spyOn = jest.spyOn(newCipher, 'load')
@@ -318,6 +347,76 @@ describe('CipherText', () => {
     expect(spyOn).toHaveBeenCalledWith(
       context,
       'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
+    )
+  })
+  test('It should fail to load from a Uint8Array', () => {
+    const newCipher = CipherTextObject()
+    const spyOn = jest.spyOn(newCipher, 'loadArray')
+    expect(() =>
+      newCipher.loadArray(
+        context,
+        Uint8Array.from([
+          93,
+          161,
+          0,
+          1,
+          27,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          120,
+          156,
+          99,
+          103,
+          128,
+          0,
+          0,
+          0,
+          64,
+          0,
+          8
+        ])
+      )
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(
+      context,
+      Uint8Array.from([
+        93,
+        161,
+        0,
+        1,
+        27,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        120,
+        156,
+        99,
+        103,
+        128,
+        0,
+        0,
+        0,
+        64,
+        0,
+        8
+      ])
     )
   })
   test('It should copy another instance', () => {

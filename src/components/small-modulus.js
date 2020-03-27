@@ -1,6 +1,8 @@
-export const SmallModulus = library => ({ Exception, ComprModeType }) => (
-  instance = null
-) => {
+export const SmallModulus = library => ({
+  Exception,
+  ComprModeType,
+  Vector
+}) => (instance = null) => {
   const Constructor = library.SmallModulus
   let _instance = createSmallModulus(instance)
 
@@ -143,6 +145,23 @@ export const SmallModulus = library => ({ Exception, ComprModeType }) => (
     },
 
     /**
+     * Save the SmallModulus as a binary Uint8Array
+     *
+     * @function
+     * @name SmallModulus#saveArray
+     * @param {ComprModeType} [compression={@link ComprModeType.deflate}] The compression mode to use
+     * @returns {Uint8Array} A byte array containing the SmallModulus in binary form
+     */
+    saveArray(compression = ComprModeType.deflate) {
+      const tempVect = Vector(new Uint8Array(0))
+      const instance = _instance.saveToArray(compression)
+      tempVect.unsafeInject(instance)
+      const tempArr = tempVect.toArray()
+      tempVect.delete()
+      return tempArr
+    },
+
+    /**
      * Load a SmallModulus from a base64 string
      *
      * @function
@@ -152,6 +171,21 @@ export const SmallModulus = library => ({ Exception, ComprModeType }) => (
     load(encoded) {
       try {
         _instance.loadFromString(encoded)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Load a SmallModulus from an Uint8Array holding binary data
+     *
+     * @function
+     * @name SecretKey#loadArray
+     * @param {Uint8Array} array TypedArray containing binary data
+     */
+    loadArray(array) {
+      try {
+        _instance.loadFromArray(array)
       } catch (e) {
         throw Exception.safe(e)
       }

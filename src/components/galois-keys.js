@@ -1,4 +1,8 @@
-export const GaloisKeys = library => ({ Exception, ComprModeType }) => () => {
+export const GaloisKeys = library => ({
+  Exception,
+  ComprModeType,
+  Vector
+}) => () => {
   const Constructor = library.GaloisKeys
   let _instance = new Constructor()
 
@@ -117,6 +121,23 @@ export const GaloisKeys = library => ({ Exception, ComprModeType }) => () => {
     },
 
     /**
+     * Save the GaloisKeys as a binary Uint8Array
+     *
+     * @function
+     * @name GaloisKeys#saveArray
+     * @param {ComprModeType} [compression={@link ComprModeType.deflate}] The compression mode to use
+     * @returns {Uint8Array} A byte array containing the GaloisKeys in binary form
+     */
+    saveArray(compression = ComprModeType.deflate) {
+      const tempVect = Vector(new Uint8Array(0))
+      const instance = _instance.saveToArray(compression)
+      tempVect.unsafeInject(instance)
+      const tempArr = tempVect.toArray()
+      tempVect.delete()
+      return tempArr
+    },
+
+    /**
      * Load a set of GaloisKeys from a base64 string
      *
      * @function
@@ -127,6 +148,22 @@ export const GaloisKeys = library => ({ Exception, ComprModeType }) => () => {
     load(context, encoded) {
       try {
         _instance.loadFromString(context.instance, encoded)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Load a GaloisKeys from an Uint8Array holding binary data
+     *
+     * @function
+     * @name RelinKeys#loadArray
+     * @param {Context} context Encryption context to enforce
+     * @param {Uint8Array} array TypedArray containing binary data
+     */
+    loadArray(context, array) {
+      try {
+        _instance.loadFromArray(context.instance, array)
       } catch (e) {
         throw Exception.safe(e)
       }
@@ -166,7 +203,11 @@ export const GaloisKeys = library => ({ Exception, ComprModeType }) => () => {
     clone() {
       try {
         const clonedInstance = _instance.clone()
-        const galKeys = GaloisKeys(library)({ Exception, ComprModeType })()
+        const galKeys = GaloisKeys(library)({
+          Exception,
+          ComprModeType,
+          Vector
+        })()
         galKeys.inject(clonedInstance)
         return galKeys
       } catch (e) {
