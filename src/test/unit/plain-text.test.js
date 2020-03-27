@@ -93,6 +93,9 @@ describe('PlainText', () => {
     expect(plainText).toHaveProperty('scale')
     expect(plainText).toHaveProperty('pool')
     expect(plainText).toHaveProperty('save')
+    expect(plainText).toHaveProperty('saveArray')
+    expect(plainText).toHaveProperty('load')
+    expect(plainText).toHaveProperty('loadArray')
     expect(plainText).toHaveProperty('copy')
     expect(plainText).toHaveProperty('clone')
     expect(plainText).toHaveProperty('move')
@@ -314,6 +317,17 @@ describe('PlainText', () => {
     expect(spyOn).toHaveBeenCalled()
     expect(typeof str).toBe('string')
   })
+  test('It should save to an array', () => {
+    const arr = Int32Array.from(
+      Array.from({ length: encoder.slotCount }).fill(5)
+    )
+    const plainText = PlainTextObject()
+    encoder.encode(arr, plainText)
+    const spyOn = jest.spyOn(plainText, 'saveArray')
+    const array = plainText.saveArray()
+    expect(spyOn).toHaveBeenCalled()
+    expect(array.constructor).toBe(Uint8Array)
+  })
   test('It should load from a string', () => {
     const arr = Int32Array.from(
       Array.from({ length: encoder.slotCount }).fill(5)
@@ -327,6 +341,19 @@ describe('PlainText', () => {
     newPlainText.load(context, str)
     expect(spyOn).toHaveBeenCalledWith(context, str)
   })
+  test('It should load from a typed array', () => {
+    const arr = Int32Array.from(
+      Array.from({ length: encoder.slotCount }).fill(5)
+    )
+    const plainText = PlainTextObject()
+    encoder.encode(arr, plainText)
+    const array = plainText.saveArray()
+    plainText.delete()
+    const newPlainText = PlainTextObject()
+    const spyOn = jest.spyOn(newPlainText, 'loadArray')
+    newPlainText.loadArray(context, array)
+    expect(spyOn).toHaveBeenCalledWith(context, array)
+  })
   test('It should fail to load from a string', () => {
     const plainText = PlainTextObject()
     const spyOn = jest.spyOn(plainText, 'load')
@@ -339,6 +366,76 @@ describe('PlainText', () => {
     expect(spyOn).toHaveBeenCalledWith(
       context,
       'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
+    )
+  })
+  test('It should fail to load from a Uint8Array', () => {
+    const plainText = PlainTextObject()
+    const spyOn = jest.spyOn(plainText, 'loadArray')
+    expect(() =>
+      plainText.loadArray(
+        context,
+        Uint8Array.from([
+          93,
+          161,
+          0,
+          1,
+          27,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          120,
+          156,
+          99,
+          103,
+          128,
+          0,
+          0,
+          0,
+          64,
+          0,
+          8
+        ])
+      )
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(
+      context,
+      Uint8Array.from([
+        93,
+        161,
+        0,
+        1,
+        27,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        120,
+        156,
+        99,
+        103,
+        128,
+        0,
+        0,
+        0,
+        64,
+        0,
+        8
+      ])
     )
   })
   test('It should copy another instance', () => {

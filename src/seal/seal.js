@@ -13,10 +13,10 @@ export const SEAL = library => {
   const CoeffModulus = applyDependencies({ Exception, SecurityLevel })(
     components.CoeffModulus
   )
-  const SmallModulus = applyDependencies({ Exception, ComprModeType })(
+  const Vector = applyDependencies({ Exception })(components.Vector)
+  const SmallModulus = applyDependencies({ Exception, ComprModeType, Vector })(
     components.SmallModulus
   )
-  const Vector = applyDependencies({ Exception })(components.Vector)
   const PlainModulus = applyDependencies({
     Exception,
     SmallModulus,
@@ -29,13 +29,15 @@ export const SEAL = library => {
     Exception,
     ComprModeType,
     ParmsIdType,
-    MemoryPoolHandle
+    MemoryPoolHandle,
+    Vector
   })(components.PlainText)
   const CipherText = applyDependencies({
     Exception,
     ComprModeType,
     ParmsIdType,
-    MemoryPoolHandle
+    MemoryPoolHandle,
+    Vector
   })(components.CipherText)
   const BatchEncoder = applyDependencies({
     Exception,
@@ -56,7 +58,8 @@ export const SEAL = library => {
     Exception,
     ComprModeType,
     SmallModulus,
-    SchemeType
+    SchemeType,
+    Vector
   })(components.EncryptionParameters)
   const ContextData = applyDependencies({
     Exception,
@@ -87,19 +90,23 @@ export const SEAL = library => {
   })(components.Evaluator)
   const PublicKey = applyDependencies({
     Exception,
-    ComprModeType
+    ComprModeType,
+    Vector
   })(components.PublicKey)
   const SecretKey = applyDependencies({
     Exception,
-    ComprModeType
+    ComprModeType,
+    Vector
   })(components.SecretKey)
   const RelinKeys = applyDependencies({
     Exception,
-    ComprModeType
+    ComprModeType,
+    Vector
   })(components.RelinKeys)
   const GaloisKeys = applyDependencies({
     Exception,
-    ComprModeType
+    ComprModeType,
+    Vector
   })(components.GaloisKeys)
   const IntegerEncoder = applyDependencies({
     Exception,

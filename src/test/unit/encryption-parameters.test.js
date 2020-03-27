@@ -37,7 +37,9 @@ describe('EncryptionParameters', () => {
     expect(encParms).toHaveProperty('coeffModulus')
     expect(encParms).toHaveProperty('plainModulus')
     expect(encParms).toHaveProperty('save')
+    expect(encParms).toHaveProperty('saveArray')
     expect(encParms).toHaveProperty('load')
+    expect(encParms).toHaveProperty('loadArray')
   })
   test('It should have an instance', () => {
     const encParms = EncryptionParametersObject()
@@ -219,7 +221,7 @@ describe('EncryptionParameters', () => {
     expect(spyOn).toHaveBeenCalled()
     expect(typeof str).toBe('string')
   })
-  test('It should save to a string (bfv)', () => {
+  test('It should save to a string', () => {
     const encParms = EncryptionParametersObject(Morfix.SchemeType.BFV)
     encParms.setPolyModulusDegree(4096)
     encParms.setCoeffModulus(
@@ -231,18 +233,18 @@ describe('EncryptionParameters', () => {
     expect(spyOn).toHaveBeenCalled()
     expect(typeof str).toBe('string')
   })
-  test('It should save to a string (ckks)', () => {
-    const encParms = EncryptionParametersObject(Morfix.SchemeType.CKKS)
+  test('It should save to an array', () => {
+    const encParms = EncryptionParametersObject(Morfix.SchemeType.BFV)
     encParms.setPolyModulusDegree(4096)
     encParms.setCoeffModulus(
-      Morfix.CoeffModulus.Create(4096, Int32Array.from([46, 16, 46]))
+      Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
     )
-    const spyOn = jest.spyOn(encParms, 'save')
-    const str = encParms.save()
+    encParms.setPlainModulus(Morfix.SmallModulus('786433'))
+    const spyOn = jest.spyOn(encParms, 'saveArray')
+    const array = encParms.saveArray()
     expect(spyOn).toHaveBeenCalled()
-    expect(typeof str).toBe('string')
+    expect(array.constructor).toBe(Uint8Array)
   })
-
   test('It should load from a string', () => {
     const encParms = EncryptionParametersObject()
     const str = encParms.save()
@@ -251,8 +253,15 @@ describe('EncryptionParameters', () => {
     const spyOn = jest.spyOn(newEncParms, 'load')
     newEncParms.load(str)
     expect(spyOn).toHaveBeenCalledWith(str)
-    expect(newEncParms.scheme).toBe(Morfix.SchemeType.none)
-    expect(newEncParms.save()).toBe(str)
+  })
+  test('It should load from a typed array', () => {
+    const encParms = EncryptionParametersObject()
+    const array = encParms.saveArray()
+    encParms.delete()
+    const newEncParms = EncryptionParametersObject(Morfix.SchemeType.BFV)
+    const spyOn = jest.spyOn(newEncParms, 'loadArray')
+    newEncParms.loadArray(array)
+    expect(spyOn).toHaveBeenCalledWith(array)
   })
   test('It should fail to load from a string', () => {
     const encParms = EncryptionParametersObject()
@@ -262,6 +271,74 @@ describe('EncryptionParameters', () => {
     ).toThrow()
     expect(spyOn).toHaveBeenCalledWith(
       'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
+    )
+  })
+  test('It should fail to load from a typed array', () => {
+    const encParms = EncryptionParametersObject()
+    const spyOn = jest.spyOn(encParms, 'loadArray')
+    expect(() =>
+      encParms.loadArray(
+        Uint8Array.from([
+          93,
+          161,
+          0,
+          1,
+          27,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          120,
+          156,
+          99,
+          103,
+          128,
+          0,
+          0,
+          0,
+          64,
+          0,
+          8
+        ])
+      )
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(
+      Uint8Array.from([
+        93,
+        161,
+        0,
+        1,
+        27,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        120,
+        156,
+        99,
+        103,
+        128,
+        0,
+        0,
+        0,
+        64,
+        0,
+        8
+      ])
     )
   })
 })
