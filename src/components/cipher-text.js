@@ -2,7 +2,8 @@ export const CipherText = library => ({
   Exception,
   ComprModeType,
   ParmsIdType,
-  MemoryPoolHandle
+  MemoryPoolHandle,
+  Vector
 }) => options => {
   const Constructor = library.Ciphertext
   let _instance = construct(options)
@@ -264,7 +265,7 @@ export const CipherText = library => ({
     },
 
     /**
-     * Save a cipherText to a base64 string
+     * Save a CipherText to a base64 string
      *
      * @function
      * @name CipherText#save
@@ -276,16 +277,49 @@ export const CipherText = library => ({
     },
 
     /**
-     * Load a cipherText from a base64 string
+     * Save the CipherText as a binary Uint8Array
+     *
+     * @function
+     * @name CipherText#saveArray
+     * @param {ComprModeType} [compression={@link ComprModeType.deflate}] The compression mode to use
+     * @returns {Uint8Array} A byte array containing the CipherText in binary form
+     */
+    saveArray(compression = ComprModeType.deflate) {
+      const tempVect = Vector(new Uint8Array(0))
+      const instance = _instance.saveToArray(compression)
+      tempVect.unsafeInject(instance)
+      const tempArr = tempVect.toArray()
+      tempVect.delete()
+      return tempArr
+    },
+
+    /**
+     * Load a CipherText from a base64 string
      *
      * @function
      * @name CipherText#load
      * @param {Context} context Encryption context to enforce
-     * @param {String} encoded base64 encoded string
+     * @param {String} encoded Base64 encoded string
      */
     load(context, encoded) {
       try {
         _instance.loadFromString(context.instance, encoded)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Load a CipherText from an Uint8Array holding binary data
+     *
+     * @function
+     * @name CipherText#loadArray
+     * @param {Context} context Encryption context to enforce
+     * @param {Uint8Array} array TypedArray containing binary data
+     */
+    loadArray(context, array) {
+      try {
+        _instance.loadFromArray(context.instance, array)
       } catch (e) {
         throw Exception.safe(e)
       }
@@ -331,7 +365,8 @@ export const CipherText = library => ({
           Exception,
           ComprModeType,
           ParmsIdType,
-          MemoryPoolHandle
+          MemoryPoolHandle,
+          Vector
         })()
         cipher.unsafeInject(clonedInstance)
         return cipher

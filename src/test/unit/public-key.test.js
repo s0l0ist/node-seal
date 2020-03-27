@@ -37,7 +37,9 @@ describe('PublicKey', () => {
     expect(item).toHaveProperty('inject')
     expect(item).toHaveProperty('delete')
     expect(item).toHaveProperty('save')
+    expect(item).toHaveProperty('saveArray')
     expect(item).toHaveProperty('load')
+    expect(item).toHaveProperty('loadArray')
     expect(item).toHaveProperty('copy')
     expect(item).toHaveProperty('clone')
     expect(item).toHaveProperty('move')
@@ -88,6 +90,13 @@ describe('PublicKey', () => {
     expect(spyOn).toHaveBeenCalledWith()
     expect(typeof str).toBe('string')
   })
+  test('It should save to an array', () => {
+    const item = PublicKeyObject()
+    const spyOn = jest.spyOn(item, 'saveArray')
+    const array = item.saveArray()
+    expect(spyOn).toHaveBeenCalledWith()
+    expect(array.constructor).toBe(Uint8Array)
+  })
   test('It should load from a string', () => {
     const item = keyGenerator.getPublicKey()
     const newItem = PublicKeyObject()
@@ -96,6 +105,15 @@ describe('PublicKey', () => {
     newItem.load(context, str)
     expect(spyOn).toHaveBeenCalledWith(context, str)
     expect(newItem.save()).toEqual(str)
+  })
+  test('It should load from a typed array', () => {
+    const item = keyGenerator.getPublicKey()
+    const newItem = PublicKeyObject()
+    const array = item.saveArray()
+    const spyOn = jest.spyOn(newItem, 'loadArray')
+    newItem.loadArray(context, array)
+    expect(spyOn).toHaveBeenCalledWith(context, array)
+    expect(newItem.saveArray()).toEqual(array)
   })
   test('It should fail to load from a string', () => {
     const newItem = PublicKeyObject()
@@ -109,6 +127,76 @@ describe('PublicKey', () => {
     expect(spyOn).toHaveBeenCalledWith(
       context,
       'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
+    )
+  })
+  test('It should fail to load from a Uint8Array', () => {
+    const newItem = PublicKeyObject()
+    const spyOn = jest.spyOn(newItem, 'loadArray')
+    expect(() =>
+      newItem.loadArray(
+        context,
+        Uint8Array.from([
+          93,
+          161,
+          0,
+          1,
+          27,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          120,
+          156,
+          99,
+          103,
+          128,
+          0,
+          0,
+          0,
+          64,
+          0,
+          8
+        ])
+      )
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(
+      context,
+      Uint8Array.from([
+        93,
+        161,
+        0,
+        1,
+        27,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        120,
+        156,
+        99,
+        103,
+        128,
+        0,
+        0,
+        0,
+        64,
+        0,
+        8
+      ])
     )
   })
   test('It should copy another instance', () => {

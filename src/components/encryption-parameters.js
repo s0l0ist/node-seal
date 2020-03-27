@@ -2,7 +2,8 @@ export const EncryptionParameters = library => ({
   Exception,
   ComprModeType,
   SmallModulus,
-  SchemeType
+  SchemeType,
+  Vector
 }) => (schemeType = SchemeType.none) => {
   const Constructor = library.EncryptionParameters
   let _instance = new Constructor(schemeType)
@@ -185,6 +186,23 @@ export const EncryptionParameters = library => ({
     },
 
     /**
+     * Save the Encryption Parameters as a binary Uint8Array
+     *
+     * @function
+     * @name EncryptionParameters#saveArray
+     * @param {ComprModeType} [compression={@link ComprModeType.deflate}] The compression mode to use
+     * @returns {Uint8Array} A byte array containing the CipherText in binary form
+     */
+    saveArray(compression = ComprModeType.deflate) {
+      const tempVect = Vector(new Uint8Array(0))
+      const instance = _instance.saveToArray(compression)
+      tempVect.unsafeInject(instance)
+      const tempArr = tempVect.toArray()
+      tempVect.delete()
+      return tempArr
+    },
+
+    /**
      * Load the Encryption Parameters from a base64 string
      *
      * @function
@@ -194,6 +212,21 @@ export const EncryptionParameters = library => ({
     load(encoded) {
       try {
         _instance.loadFromString(encoded)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Load the Encryption Parameters from an Uint8Array holding binary data
+     *
+     * @function
+     * @name EncryptionParameters#loadArray
+     * @param {Uint8Array} array TypedArray containing binary data
+     */
+    loadArray(array) {
+      try {
+        _instance.loadFromArray(array)
       } catch (e) {
         throw Exception.safe(e)
       }

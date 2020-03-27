@@ -2,9 +2,11 @@ export const Vector = library => ({ Exception }) => (
   array = new Int32Array(0)
 ) => {
   // Static methods
+  const _vecFromArrayUint8 = library.vecFromArrayUint8
   const _vecFromArrayInt32 = library.vecFromArrayInt32
-  const _vecFromArrayUInt32 = library.vecFromArrayUInt32
+  const _vecFromArrayUint32 = library.vecFromArrayUint32
   const _vecFromArrayDouble = library.vecFromArrayDouble
+  const _jsArrayUint8FromVec = library.jsArrayUint8FromVec
   const _jsArrayInt32FromVec = library.jsArrayInt32FromVec
   const _jsArrayUint32FromVec = library.jsArrayUint32FromVec
   const _jsArrayDoubleFromVec = library.jsArrayDoubleFromVec
@@ -15,11 +17,14 @@ export const Vector = library => ({ Exception }) => (
 
   function createVector(array) {
     try {
+      if (array.constructor === Uint8Array) {
+        return _vecFromArrayUint8(array)
+      }
       if (array.constructor === Int32Array) {
         return _vecFromArrayInt32(array)
       }
       if (array.constructor === Uint32Array) {
-        return _vecFromArrayUInt32(array)
+        return _vecFromArrayUint32(array)
       }
       if (array.constructor === Float64Array) {
         return _vecFromArrayDouble(array)
@@ -138,12 +143,18 @@ export const Vector = library => ({ Exception }) => (
     /**
      * Copy a vector's data into a Typed Array
      *
+     * Note: we cannot simply return a view on the underlying ArrayBuffer
+     * because emscripten's memory can grow and cause all the views to become
+     * neutered. We have to perform a hard copy to get data from WASM heap to JS.
+     *
      * @function
      * @name Vector#toArray
-     * @returns {(Int32Array|Uint32Array|Float64Array)} TypedArray containing values from the Vector
+     * @returns {(Uint8Array|Int32Array|Uint32Array|Float64Array)} TypedArray containing values from the Vector
      */
     toArray() {
       switch (_type) {
+        case Uint8Array:
+          return Uint8Array.from(_jsArrayUint8FromVec(_instance))
         case Int32Array:
           return Int32Array.from(_jsArrayInt32FromVec(_instance))
         case Uint32Array:
