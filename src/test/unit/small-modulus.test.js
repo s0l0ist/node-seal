@@ -45,7 +45,9 @@ describe('SmallModulus', () => {
     expect(smallModulus).toHaveProperty('isZero')
     expect(smallModulus).toHaveProperty('isPrime')
     expect(smallModulus).toHaveProperty('save')
+    expect(smallModulus).toHaveProperty('saveArray')
     expect(smallModulus).toHaveProperty('load')
+    expect(smallModulus).toHaveProperty('loadArray')
   })
   test('It should have an instance', () => {
     const smallModulus = SmallModulusObject()
@@ -126,6 +128,14 @@ describe('SmallModulus', () => {
     expect(spyOn).toHaveBeenCalled()
     expect(typeof str).toBe('string')
   })
+  test('It should save to an array', () => {
+    const smallModulus = SmallModulusObject('7')
+    expect(smallModulus.value).toBe(BigInt(7))
+    const spyOn = jest.spyOn(smallModulus, 'saveArray')
+    const array = smallModulus.saveArray()
+    expect(spyOn).toHaveBeenCalled()
+    expect(array.constructor).toBe(Uint8Array)
+  })
   test('It should load from a string', () => {
     const smallModulus = SmallModulusObject('7')
     expect(smallModulus.value).toBe(BigInt(7))
@@ -136,6 +146,16 @@ describe('SmallModulus', () => {
     newSmallModulus.load(str)
     expect(spyOn).toHaveBeenCalledWith(str)
   })
+  test('It should load from a typed array', () => {
+    const smallModulus = SmallModulusObject('7')
+    expect(smallModulus.value).toBe(BigInt(7))
+    const array = smallModulus.saveArray()
+    smallModulus.delete()
+    const newSmallModulus = SmallModulusObject()
+    const spyOn = jest.spyOn(newSmallModulus, 'loadArray')
+    newSmallModulus.loadArray(array)
+    expect(spyOn).toHaveBeenCalledWith(array)
+  })
   test('It should fail to load from a string', () => {
     const smallModulus = SmallModulusObject()
     const spyOn = jest.spyOn(smallModulus, 'load')
@@ -143,5 +163,73 @@ describe('SmallModulus', () => {
       smallModulus.load('XqEAARsAAAAAAAAAAAAAAHicY2eAAAAAQAAA')
     ).toThrow()
     expect(spyOn).toHaveBeenCalledWith('XqEAARsAAAAAAAAAAAAAAHicY2eAAAAAQAAA')
+  })
+  test('It should fail to load from a typed array', () => {
+    const smallModulus = SmallModulusObject()
+    const spyOn = jest.spyOn(smallModulus, 'loadArray')
+    expect(() =>
+      smallModulus.loadArray(
+        Uint8Array.from([
+          93,
+          161,
+          0,
+          1,
+          27,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          120,
+          156,
+          99,
+          103,
+          128,
+          0,
+          0,
+          0,
+          64,
+          0,
+          8
+        ])
+      )
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(
+      Uint8Array.from([
+        93,
+        161,
+        0,
+        1,
+        27,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        120,
+        156,
+        99,
+        103,
+        128,
+        0,
+        0,
+        0,
+        64,
+        0,
+        8
+      ])
+    )
   })
 })

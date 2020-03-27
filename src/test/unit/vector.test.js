@@ -23,6 +23,11 @@ describe('Vector', () => {
     Constructor()
     expect(Constructor).toBeCalledWith()
   })
+  test('It should construct an instance with of uint8', () => {
+    const Constructor = jest.fn(VectorObject)
+    Constructor(Uint8Array.from([0]))
+    expect(Constructor).toBeCalledWith(Uint8Array.from([0]))
+  })
   test('It should construct an instance with of int32', () => {
     const Constructor = jest.fn(VectorObject)
     Constructor(Int32Array.from([0]))
@@ -93,6 +98,10 @@ describe('Vector', () => {
     expect(item.instance).toBeNull()
     expect(() => item.getValue(0)).toThrow(TypeError)
   })
+  test('It should return type Uint8Array', () => {
+    const item = VectorObject(Uint8Array.from([3]))
+    expect(item.type).toBe(Uint8Array)
+  })
   test('It should return type Int32Array', () => {
     const item = VectorObject(Int32Array.from([3]))
     expect(item.type).toBe(Int32Array)
@@ -153,6 +162,14 @@ describe('Vector', () => {
     const spyOn = jest.spyOn(item, 'resize')
     expect(() => item.resize(-1, 3)).toThrow()
     expect(spyOn).toHaveBeenCalledWith(-1, 3)
+  })
+  test('It should return a Uint8Array', () => {
+    const arr = Uint8Array.from(Array.from({ length: 4096 })).fill(3)
+    const item = VectorObject(arr)
+    const spyOn = jest.spyOn(item, 'toArray')
+    const res = item.toArray()
+    expect(spyOn).toHaveBeenCalledWith()
+    expect(res).toEqual(arr)
   })
   test('It should return an Int32Array', () => {
     const arr = Int32Array.from(Array.from({ length: 4096 })).fill(-3)
