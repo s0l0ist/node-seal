@@ -18,7 +18,6 @@ em++ -Wall -O3 --bind -o seal.js libseal-* ../../../zlib/libz.* \
 #em++ -Wall -O2 --bind -o seal.js libseal-* ../../../zlib/libz.* \
 #-s WASM=0 \
 #-s TOTAL_MEMORY=1024MB \
-#-s MEMORY_GROWTH_GEOMETRIC_STEP=20 \
 #-s ALLOW_MEMORY_GROWTH=0 \
 #-s EXPORT_ES6=1 \
 #-s MODULARIZE=1 \

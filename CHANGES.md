@@ -12,7 +12,7 @@ Breaking:
 import { Seal } from 'node-seal'
 ...
 const morfix = await Seal // Deprecated
-const morfix = await Seal() // Use new closure constructor
+const morfix = await Seal() // Use the parenthesis
 ```
 
 
