@@ -12,7 +12,7 @@ let Morfix,
   ckksEncoder,
   PlainTextObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   PlainTextObject = PlainText(lib)(Morfix)
 

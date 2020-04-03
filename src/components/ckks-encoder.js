@@ -78,7 +78,7 @@ export const CKKSEncoder = library => ({
      * @returns {PlainText|undefined} A new PlainText holding the encoded data or undefined if one was provided
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const ckksEncoder = Morfix.CKKSEncoder(context)
      *
@@ -116,7 +116,7 @@ export const CKKSEncoder = library => ({
      * @returns {Float64Array} TypedArray containing the decoded data
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const ckksEncoder = Morfix.CKKSEncoder(context)
      *

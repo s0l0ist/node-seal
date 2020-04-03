@@ -13,7 +13,7 @@ let ckksContextData = null
 let EncryptionParameterQualifiersObject = null
 
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   EncryptionParameterQualifiersObject = EncryptionParameterQualifiers()()
 
   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)

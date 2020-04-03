@@ -4,7 +4,7 @@ import { Exception } from '../../components'
 let lib,
   ExceptionObject = null
 beforeAll(async () => {
-  await Seal
+  await Seal()
   lib = getLibrary()
   ExceptionObject = Exception(lib)()
 })

@@ -7,7 +7,7 @@ let parms = null
 let ckksParms = null
 let ContextObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   ContextObject = Context(lib)(Morfix)
 

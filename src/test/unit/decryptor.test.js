@@ -13,7 +13,7 @@ let Morfix,
   evaluator,
   DecryptorObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   DecryptorObject = Decryptor(lib)(Morfix)
 

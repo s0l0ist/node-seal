@@ -13,7 +13,7 @@ let batchParms,
   batchEncoder = null
 
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   CKKSEncoderObject = CKKSEncoder(lib)(Morfix)
 

@@ -11,7 +11,7 @@ let Morfix,
   decryptor,
   EncryptorObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   EncryptorObject = Encryptor(lib)(Morfix)
 

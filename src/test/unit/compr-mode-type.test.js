@@ -4,7 +4,7 @@ import { ComprModeType } from '../../components'
 
 let ComprModeTypeObject = null
 beforeAll(async () => {
-  await Seal
+  await Seal()
   const lib = getLibrary()
   ComprModeTypeObject = ComprModeType(lib)()
 })

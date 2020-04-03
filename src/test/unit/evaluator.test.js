@@ -30,7 +30,7 @@ let invalidCkksCipher = null
 
 let EvaluatorObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   EvaluatorObject = Evaluator(lib)(Morfix)
 
@@ -544,6 +544,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher, cipherDest)
     const result = decryptor.decrypt(cipherDest)
     const decoded = encoder.decode(result, true)
+
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should multiply a cipher and return a cipher result (bfv) (int32)', () => {

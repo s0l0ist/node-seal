@@ -5,7 +5,7 @@ import { Vector } from '../../components'
 let Morfix = null
 let VectorObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   VectorObject = Vector(lib)(Morfix)
 })

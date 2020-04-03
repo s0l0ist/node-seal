@@ -8,7 +8,7 @@ let context = null
 let keyGenerator = null
 let SecretKeyObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   SecretKeyObject = SecretKey(lib)(Morfix)
 
