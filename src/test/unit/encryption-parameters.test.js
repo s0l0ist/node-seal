@@ -5,7 +5,7 @@ import { EncryptionParameters } from '../../components'
 let Morfix = null
 let EncryptionParametersObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   EncryptionParametersObject = EncryptionParameters(lib)(Morfix)
 })

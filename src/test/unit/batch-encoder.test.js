@@ -7,7 +7,7 @@ let Morfix,
   context,
   BatchEncoderObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   BatchEncoderObject = BatchEncoder(lib)(Morfix)
 

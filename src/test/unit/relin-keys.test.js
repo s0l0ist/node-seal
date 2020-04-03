@@ -8,7 +8,7 @@ let context = null
 let keyGenerator = null
 let RelinKeysObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   RelinKeysObject = RelinKeys(lib)(Morfix)
 

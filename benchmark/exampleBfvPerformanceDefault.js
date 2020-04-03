@@ -15,7 +15,7 @@ function create() {
   }
 
   async function init() {
-    seal = await Seal
+    seal = await Seal()
   }
 
   function exampleBfvPerformanceDefault() {
@@ -135,6 +135,8 @@ function create() {
     let timeRotateRowsOneStepSum = 0
     let timeRotateRowsRandomSum = 0
     let timeRotateColumnsSum = 0
+    let timeSumElements = 0
+    let timeDotProduct = 0
 
     /*
       How many times to run the test?
@@ -304,6 +306,29 @@ function create() {
         evaluator.rotateColumns(encrypted, galoisKeys, encrypted)
         timeEnd = performance.now()
         timeRotateColumnsSum += timeEnd - timeStart
+
+        /*
+        [Sum Elements]
+         */
+        timeStart = performance.now()
+        evaluator.sumElements(encrypted, galoisKeys, parms.scheme, encrypted)
+        timeEnd = performance.now()
+        timeSumElements += timeEnd - timeStart
+
+        /*
+        [Dot Product]
+         */
+        timeStart = performance.now()
+        evaluator.dotProduct(
+          encrypted,
+          encrypted,
+          relinKeys,
+          galoisKeys,
+          parms.scheme,
+          encrypted
+        )
+        timeEnd = performance.now()
+        timeDotProduct += timeEnd - timeStart
       }
 
       // Cleanup
@@ -335,6 +360,8 @@ function create() {
       (timeRotateRowsRandomSum * 1000) / count
     )
     const avgRotateColumns = Math.round((timeRotateColumnsSum * 1000) / count)
+    const avgSumElements = Math.round((timeSumElements * 1000) / count)
+    const avgDotProduct = Math.round((timeDotProduct * 1000) / count)
 
     console.log(`Average batch: ${avgBatch} microseconds`)
     console.log(`Average unbatch: ${avgUnbatch} microseconds`)
@@ -353,6 +380,8 @@ function create() {
         `Average rotate row random: ${avgRotateRowsRandom} microseconds`
       )
       console.log(`Average rotate column: ${avgRotateColumns} microseconds`)
+      console.log(`Average sum elements: ${avgSumElements} microseconds`)
+      console.log(`Average dot product: ${avgDotProduct} microseconds`)
     }
     console.log('')
 

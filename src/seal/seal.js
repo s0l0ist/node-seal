@@ -166,7 +166,7 @@ export const SEAL = library => {
      * @returns {BatchEncoder}
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const batchEncoder = Morfix.BatchEncoder(context)
      */
@@ -211,7 +211,7 @@ export const SEAL = library => {
      * @returns {CipherText} An empty CipherText instance
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const cipherText = Morfix.CipherText()
      */
@@ -246,7 +246,7 @@ export const SEAL = library => {
      * @returns {CKKSEncoder} An encoder used for the CKKS scheme type
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const ckksEncoder = Morfix.CKKSEncoder(context)
      */
@@ -269,7 +269,7 @@ export const SEAL = library => {
      * @type {CoeffModulus}
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
      * ...
@@ -293,7 +293,7 @@ export const SEAL = library => {
      * @type {ComprModeType}
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const keyGenerator = Morfix.KeyGenerator(context)
      * const secretKey = keyGenerator.getSecretKey()
@@ -349,7 +349,7 @@ export const SEAL = library => {
      * @returns {Context} An encryption context to be used for all operations
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
      * ...
      * const context = Morfix.Context(encParms)
@@ -403,7 +403,7 @@ export const SEAL = library => {
      * @returns {Decryptor} A Decryptor instance that can be used to decrypt CipherTexts
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const decryptor = Morfix.Decryptor(context, secretKey)
      */
@@ -426,7 +426,7 @@ export const SEAL = library => {
      * @returns {EncryptionParameterQualifiers} The qualifiers of the encryption parameters
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
      * ...
@@ -478,7 +478,7 @@ export const SEAL = library => {
      * @returns {EncryptionParameters} A set of encryption parameters based from the scheme type
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
      */
@@ -520,7 +520,7 @@ export const SEAL = library => {
      * @returns {Encryptor} An Encryptor instance that can be used to encrypt PlainTexts
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const encryptor = Morfix.Encryptor(context, publicKey)
      */
@@ -597,7 +597,7 @@ export const SEAL = library => {
      * @returns {Evaluator} An evaluator instance to be used to perform homomorphic evaluations
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const evaluator = Morfix.Evaluator(context)
      */
@@ -613,7 +613,7 @@ export const SEAL = library => {
      * @type {Exception}
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * try {
      *   <WASM method which is throwing>
@@ -651,7 +651,7 @@ export const SEAL = library => {
      * @returns {GaloisKeys} An empty GaloisKeys instance
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * // Generate an empty key and load from a base64 string
      * const galoisKeys = Morfix.GaloisKeys()
@@ -688,7 +688,7 @@ export const SEAL = library => {
      * @returns {IntegerEncoder} An IntegerEncoder to be used for encoding only integers to PlainTexts
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const integerEncoder = Morfix.IntegerEncoder(context)
      */
@@ -714,7 +714,7 @@ export const SEAL = library => {
      * @returns {KeyGenerator} A KeyGenerator to be used to generate keys depending on how it was initialized
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * // Creating a KeyGenerator automatically creates an internal Secret and Public key pair
      * const keyGenerator = Morfix.KeyGenerator(context)
@@ -777,7 +777,7 @@ export const SEAL = library => {
      * @type {MemoryPoolHandle}
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const encryptor = Morfix.Encryptor(context, publicKey)
      * encryptor.encrypt(plainText, cipherText, Morfix.MemoryPoolHandle.global)
@@ -800,7 +800,7 @@ export const SEAL = library => {
      * @name SEAL#ParmsIdType
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
      * const context = Morfix.Context(encParms, true, Morfix.SecurityLevel.tc128)
@@ -817,7 +817,7 @@ export const SEAL = library => {
      * @type {PlainModulus}
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const polyModulusDegree = 4096
      * const bitSize = 20
@@ -866,7 +866,7 @@ export const SEAL = library => {
      * @returns {PlainText} An empty PlainText instance
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const plainText = Morfix.PlainText()
      */
@@ -891,7 +891,7 @@ export const SEAL = library => {
      * @returns {PublicKey} An empty PublicKey instance
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * // Generate an empty key and load from a base64 string
      * const publicKey = Morfix.PublicKey()
@@ -945,7 +945,7 @@ export const SEAL = library => {
      * @returns {RelinKeys} An empty RelinKeys instance
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * // Generate an empty key and load from a base64 string
      * const relinKeys = Morfix.RelinKeys()
@@ -966,7 +966,7 @@ export const SEAL = library => {
      * @type {SchemeType}
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
      */
@@ -991,7 +991,7 @@ export const SEAL = library => {
      * @returns {SecretKey} An empty SecretKey instance
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * // Generate an empty key and load from a base64 string
      * const secretKey = Morfix.SecretKey()
@@ -1017,7 +1017,7 @@ export const SEAL = library => {
      * @type {SecurityLevel}
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const encParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
      * const context = Morfix.Context(encParms, true, Morfix.SecurityLevel.tc128)
@@ -1033,7 +1033,7 @@ export const SEAL = library => {
      * @returns {SmallModulus} An empty SmallModulus instance
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const smallModulus = Morfix.SmallModulus()
      * smallModulus.setValue('5')
@@ -1051,7 +1051,7 @@ export const SEAL = library => {
      * @returns {Vector} Vector containing the typed data
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const vectorInt32 = Morfix.Vector(Int32Array.from([1, 2, 3]))
      * const vectorUint32 = Morfix.Vector(Uint32Array.from([1, 2, 3]))
@@ -1068,7 +1068,7 @@ export const SEAL = library => {
      * @type {Util}
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const gcd = Morfix.Util.gcd(BigInt(978), BigInt(384778233434))
      */

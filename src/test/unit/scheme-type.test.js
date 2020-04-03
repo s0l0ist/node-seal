@@ -4,7 +4,7 @@ import { SchemeType } from '../../components'
 
 let SchemeTypeObject = null
 beforeAll(async () => {
-  await Seal
+  await Seal()
   const lib = getLibrary()
   SchemeTypeObject = SchemeType(lib)()
 })

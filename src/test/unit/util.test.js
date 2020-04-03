@@ -4,7 +4,7 @@ import { Util } from '../../components'
 
 let UtilObject = null
 beforeAll(async () => {
-  await Seal
+  await Seal()
   const lib = getLibrary()
   UtilObject = Util(lib)()
 })

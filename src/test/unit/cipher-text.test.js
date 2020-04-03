@@ -18,7 +18,7 @@ let ckksPublicKey = null
 let ckksEncryptor = null
 let CipherTextObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   CipherTextObject = CipherText(lib)(Morfix)
 

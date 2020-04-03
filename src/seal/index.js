@@ -1,4 +1,6 @@
-import Source from '../bin/seal'
+import Source from '../bin/seal.js'
+// import SourceWasm from '../bin/seal.wasm'
+
 import { SEAL } from './seal'
 
 /*
@@ -26,7 +28,18 @@ const initialize = wasm =>
 /*
  * Main module export
  */
-export const Seal = (async () => {
-  const wasm = Source()
+export const Seal = async () => {
+  // Webpack will change the name and potentially the path of the `.wasm` file.
+  // We provide a `locateFile` hook to redirect to the appropriate path
+  // More details: https://kripken.github.io/emscripten-site/docs/api_reference/module.html
+  const wasm = Source({
+    locateFile(path) {
+      if (path.endsWith('.wasm')) {
+        // return SourceWasm
+        return Source
+      }
+      return path
+    }
+  })
   return initialize(wasm)
-})()
+}

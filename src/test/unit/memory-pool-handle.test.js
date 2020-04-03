@@ -4,7 +4,7 @@ import { MemoryPoolHandle } from '../../components'
 
 let MemoryPoolHandleObject = null
 beforeAll(async () => {
-  await Seal
+  await Seal()
   const lib = getLibrary()
   MemoryPoolHandleObject = MemoryPoolHandle(lib)()
 })

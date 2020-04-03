@@ -5,7 +5,7 @@ import { CoeffModulus } from '../../components'
 let Morfix = null
 let CoeffModulusObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   CoeffModulusObject = CoeffModulus(lib)(Morfix)
 })

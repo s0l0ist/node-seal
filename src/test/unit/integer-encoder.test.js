@@ -8,7 +8,7 @@ let context = null
 let encoder = null
 let IntegerEncoderObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   IntegerEncoderObject = IntegerEncoder(lib)(Morfix)
 
