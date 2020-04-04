@@ -27,8 +27,7 @@ function create() {
     parms.setCoeffModulus(coeffModulus)
     parms.setPlainModulus(smallModulus)
     let context = seal.Context(parms)
-
-    bfvPerformanceTest(context)
+    bfvPerformanceTest(context, seal)
 
     // Clear data to prevent memory buildup
     context.delete()
@@ -42,7 +41,7 @@ function create() {
     parms.setCoeffModulus(coeffModulus)
     parms.setPlainModulus(smallModulus)
     context = seal.Context(parms)
-    bfvPerformanceTest(context)
+    bfvPerformanceTest(context, seal)
 
     // Clear data to prevent memory buildup
     context.delete()
@@ -56,7 +55,7 @@ function create() {
     parms.setCoeffModulus(coeffModulus)
     parms.setPlainModulus(smallModulus)
     context = seal.Context(parms)
-    bfvPerformanceTest(context)
+    bfvPerformanceTest(context, seal)
 
     // Clear data to prevent memory buildup
     context.delete()
@@ -64,7 +63,7 @@ function create() {
     coeffModulus.delete()
   }
 
-  function bfvPerformanceTest(context) {
+  function bfvPerformanceTest(context, seal) {
     let timeStart = 0
     let timeEnd = 0
     let timeDiff = 0
