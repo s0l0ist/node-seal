@@ -1,4 +1,5 @@
 # [node-seal](https://morfix.io/sandbox)  &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/morfix-io/node-seal/blob/master/LICENSE) [![codecov](https://codecov.io/gh/morfix-io/node-seal/branch/master/graph/badge.svg)](https://codecov.io/gh/morfix-io/node-seal) [![CodeFactor](https://www.codefactor.io/repository/github/morfix-io/node-seal/badge)](https://www.codefactor.io/repository/github/morfix-io/node-seal) [![DeepScan grade](https://deepscan.io/api/teams/6431/projects/8438/branches/100710/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=6431&pid=8438&bid=100710) [![npm version](https://badge.fury.io/js/node-seal.svg)](https://www.npmjs.com/package/node-seal)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmorfix-io%2Fnode-seal.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmorfix-io%2Fnode-seal?ref=badge_shield)
 
 node-seal is a homomorphic encryption library in JavaScript.
 
@@ -132,3 +133,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 ## License
 
 node-seal is [MIT licensed](LICENSE).
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmorfix-io%2Fnode-seal.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmorfix-io%2Fnode-seal?ref=badge_large)
