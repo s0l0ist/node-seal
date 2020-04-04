@@ -3,7 +3,7 @@
 source ./submodules/emsdk/emsdk_env.sh && cd ./submodules/SEAL/native/lib/ && \
 em++ -Wall -O3 --bind -o seal.js libseal-* ../../../zlib/libz.* \
 -s WASM=1 \
--s INITIAL_MEMORY=1073741824 \
+-s INITIAL_MEMORY=268435456 \
 -s ALLOW_MEMORY_GROWTH=1 \
 -s EXPORT_ES6=1 \
 -s MODULARIZE=1 \
