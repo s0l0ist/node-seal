@@ -25,8 +25,7 @@ function create() {
     parms.setPolyModulusDegree(polyModulusDegree)
     parms.setCoeffModulus(coeffModulus)
     let context = seal.Context(parms)
-
-    ckksPerformanceTest(context)
+    ckksPerformanceTest(context, seal)
 
     // Clear data to prevent memory buildup
     context.delete()
@@ -37,7 +36,7 @@ function create() {
     parms.setPolyModulusDegree(polyModulusDegree)
     parms.setCoeffModulus(coeffModulus)
     context = seal.Context(parms)
-    ckksPerformanceTest(context)
+    ckksPerformanceTest(context, seal)
 
     // Clear data to prevent memory buildup
     context.delete()
@@ -48,14 +47,14 @@ function create() {
     parms.setPolyModulusDegree(polyModulusDegree)
     parms.setCoeffModulus(coeffModulus)
     context = seal.Context(parms)
-    ckksPerformanceTest(context)
+    ckksPerformanceTest(context, seal)
 
     // Clear data to prevent memory buildup
     context.delete()
     coeffModulus.delete()
   }
 
-  function ckksPerformanceTest(context) {
+  function ckksPerformanceTest(context, seal) {
     let timeStart = 0
     let timeEnd = 0
     let timeDiff = 0
