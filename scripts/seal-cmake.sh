@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-source ./submodules/emsdk/emsdk_env.sh && cd ./submodules/SEAL/native/src/ && \
-emcmake cmake \
+source ./submodules/emsdk/emsdk_env.sh \
+&& cd ./submodules/SEAL/native/src/ \
+&& emcmake cmake \
 -DSEAL_USE_INTRIN=OFF \
 -DEMSCRIPTEN_GENERATE_BITCODE_STATIC_LIBRARIES=1 \
 -DSEAL_LIB_BUILD_TYPE=Static_PIC \

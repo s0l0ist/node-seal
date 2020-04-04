@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 
-source ./submodules/emsdk/emsdk_env.sh && cd ./submodules/SEAL/native/lib/ && \
-em++ -Wall -O3 --bind -o seal.js libseal-* ../../../zlib/libz.* \
+source ./submodules/emsdk/emsdk_env.sh \
+&& cd ./submodules/SEAL/native/lib/ \
+&& em++ \
+-Wall \
+-O3 \
+--bind \
+-o seal.js \
+libseal-* ../../../zlib/libz.* \
 -s WASM=1 \
 -s ALLOW_MEMORY_GROWTH=1 \
 -s EXPORT_ES6=1 \
@@ -9,11 +15,17 @@ em++ -Wall -O3 --bind -o seal.js libseal-* ../../../zlib/libz.* \
 -s USE_ES6_IMPORT_META=0 \
 -s SINGLE_FILE=1 \
 --closure 1 \
-&& cp seal* ../../../../src/bin/ && cd ../../../
+&& cp seal* ../../../../src/bin/ \
+&& cd ../../../
 
 # Pure JS build
 #source ./submodules/emsdk/emsdk_env.sh && cd ./submodules/SEAL/native/lib/ && \
-#em++ -Wall -O2 --bind -o seal.js libseal-* ../../../zlib/libz.* \
+#em++ \
+#-Wall \
+#-O2 \
+#--bind \
+#-o seal.js \
+#libseal-* ../../../zlib/libz.* \
 #-s WASM=0 \
 #-s INITIAL_MEMORY=268435456 \
 #-s ALLOW_MEMORY_GROWTH=0 \
@@ -22,4 +34,5 @@ em++ -Wall -O3 --bind -o seal.js libseal-* ../../../zlib/libz.* \
 #-s USE_ES6_IMPORT_META=0 \
 #-s SINGLE_FILE=1 \
 #--closure 0 \
-#&& cp seal* ../../../../src/bin/ && cd ../../../
+#&& cp seal* ../../../../src/bin/ \
+#&& cd ../../../
