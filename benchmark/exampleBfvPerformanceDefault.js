@@ -1,7 +1,7 @@
 const { Seal } = require('../node/wasm')
 const { performance } = require('perf_hooks')
 
-;(async function () {
+;(async function() {
   const benchmark = create()
   await benchmark.init()
   benchmark.exampleBfvPerformanceDefault()
