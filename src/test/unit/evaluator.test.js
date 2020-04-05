@@ -133,6 +133,7 @@ describe('Evaluator', () => {
     expect(item).toHaveProperty('complexConjugate')
     expect(item).toHaveProperty('sumElements')
     expect(item).toHaveProperty('dotProduct')
+    expect(item).toHaveProperty('dotProductPlain')
   })
   test('It should have an instance', () => {
     const item = EvaluatorObject(context)

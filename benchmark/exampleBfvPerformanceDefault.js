@@ -1,7 +1,7 @@
 const { Seal } = require('../node/wasm')
 const { performance } = require('perf_hooks')
 
-;(async function() {
+;(async function () {
   const benchmark = create()
   await benchmark.init()
   benchmark.exampleBfvPerformanceDefault()
@@ -120,8 +120,8 @@ function create() {
     const batchEncoder = seal.BatchEncoder(context)
 
     /*
-      These will hold the total times used by each operation.
-      */
+     These will hold the total times used by each operation.
+     */
     let timeBatchSum = 0
     let timeUnbatchSum = 0
     let timeEncryptSum = 0
@@ -136,15 +136,16 @@ function create() {
     let timeRotateColumnsSum = 0
     let timeSumElements = 0
     let timeDotProduct = 0
+    let timeDotProductPlain = 0
 
     /*
-      How many times to run the test?
-      */
+     How many times to run the test?
+     */
     const count = 10
 
     /*
-      Populate a vector of values to batch.
-      */
+     Populate a vector of values to batch.
+     */
     const slotCount = batchEncoder.slotCount
     const array = new Uint32Array(slotCount)
     const plainNumber = Number(plainModulus.value)
@@ -155,11 +156,11 @@ function create() {
     process.stdout.write('Running tests ')
     for (let i = 0; i < count; i++) {
       /*
-        [Batching]
-        There is nothing unusual here. We batch our random plaintext matrix
-        into the polynomial. Note how the plaintext we create is of the exactly
-        right size so unnecessary reallocations are avoided.
-        */
+       [Batching]
+       There is nothing unusual here. We batch our random plaintext matrix
+       into the polynomial. Note how the plaintext we create is of the exactly
+       right size so unnecessary reallocations are avoided.
+       */
       const plain = seal.PlainText({
         capacity: parms.polyModulusDegree,
         coeffCount: 0
@@ -173,9 +174,9 @@ function create() {
       timeBatchSum += timeDiff
 
       /*
-        [Unbatching]
-        We unbatch what we just batched.
-        */
+       [Unbatching]
+       We unbatch what we just batched.
+       */
       timeStart = performance.now()
       const unbatched = batchEncoder.decode(plain, false)
       timeEnd = performance.now()
@@ -185,11 +186,11 @@ function create() {
       }
 
       /*
-        [Encryption]
-        We make sure our ciphertext is already allocated and large enough
-        to hold the encryption with these encryption parameters. We encrypt
-        our random batched matrix here.
-        */
+       [Encryption]
+       We make sure our ciphertext is already allocated and large enough
+       to hold the encryption with these encryption parameters. We encrypt
+       our random batched matrix here.
+       */
       const encrypted = seal.CipherText({ context })
       timeStart = performance.now()
       encryptor.encrypt(plain, encrypted)
@@ -197,9 +198,9 @@ function create() {
       timeEncryptSum += timeEnd - timeStart
 
       /*
-         [Decryption]
-         We decrypt what we just encrypted.
-         */
+       [Decryption]
+      We decrypt what we just encrypted.
+       */
       const plain2 = seal.PlainText({
         capacity: parms.polyModulusDegree,
         coeffCount: 0
@@ -213,9 +214,9 @@ function create() {
         throw new Error('Encrypt/decrypt failed. Something is wrong.')
       }
       /*
-        [Add]
-        We create two ciphertexts and perform a few additions with them.
-        */
+       [Add]
+       We create two ciphertexts and perform a few additions with them.
+       */
       const encrypted1 = seal.CipherText({ context })
       const encrypted2 = seal.CipherText({ context })
       const plain3 = batchEncoder.encode(Int32Array.from([i]))
@@ -230,11 +231,11 @@ function create() {
       timeAddSum += timeEnd - timeStart
 
       /*
-        [Multiply]
-        We multiply two ciphertexts. Since the size of the result will be 3,
-        and will overwrite the first argument, we reserve first enough memory
-        to avoid reallocating during multiplication.
-        */
+       [Multiply]
+       We multiply two ciphertexts. Since the size of the result will be 3,
+       and will overwrite the first argument, we reserve first enough memory
+       to avoid reallocating during multiplication.
+       */
       encrypted1.reserve(context, 3)
       timeStart = performance.now()
       evaluator.multiply(encrypted1, encrypted2, encrypted1)
@@ -242,21 +243,21 @@ function create() {
       timeMultiplySum += timeEnd - timeStart
 
       /*
-        [Multiply Plain]
-        We multiply a ciphertext with a random plaintext. Recall that
-        multiply_plain does not change the size of the ciphertext so we use
-        encrypted2 here.
-        */
+       [Multiply Plain]
+       We multiply a ciphertext with a random plaintext. Recall that
+       multiply_plain does not change the size of the ciphertext so we use
+       encrypted2 here.
+       */
       timeStart = performance.now()
       evaluator.multiplyPlain(encrypted2, plain, encrypted2)
       timeEnd = performance.now()
       timeMultiplyPlainSum += timeEnd - timeStart
 
       /*
-        [Square]
-        We continue to use encrypted2. Now we square it; this should be
-        faster than generic homomorphic multiplication.
-        */
+       [Square]
+       We continue to use encrypted2. Now we square it; this should be
+       faster than generic homomorphic multiplication.
+       */
       timeStart = performance.now()
       evaluator.square(encrypted2, encrypted2)
       timeEnd = performance.now()
@@ -264,21 +265,21 @@ function create() {
 
       if (context.usingKeyswitching) {
         /*
-        [Relinearize]
-        Time to get back to encrypted1. We now relinearize it back
-        to size 2. Since the allocation is currently big enough to
-        contain a ciphertext of size 3, no costly reallocations are
-        needed in the process.
-        */
+         [Relinearize]
+         Time to get back to encrypted1. We now relinearize it back
+         to size 2. Since the allocation is currently big enough to
+         contain a ciphertext of size 3, no costly reallocations are
+         needed in the process.
+         */
         timeStart = performance.now()
         evaluator.relinearize(encrypted1, relinKeys, encrypted1)
         timeEnd = performance.now()
         timeRelinearizeSum += timeEnd - timeStart
 
         /*
-          [Rotate Rows One Step]
-          We rotate matrix rows by one step left and measure the time.
-          */
+         [Rotate Rows One Step]
+         We rotate matrix rows by one step left and measure the time.
+         */
         timeStart = performance.now()
         evaluator.rotateRows(encrypted, 1, galoisKeys, encrypted)
         evaluator.rotateRows(encrypted, -1, galoisKeys, encrypted)
@@ -286,10 +287,10 @@ function create() {
         timeRotateRowsOneStepSum += timeEnd - timeStart
 
         /*
-          [Rotate Rows Random]
-          We rotate matrix rows by a random number of steps. This is much more
-          expensive than rotating by just one step.
-          */
+         [Rotate Rows Random]
+         We rotate matrix rows by a random number of steps. This is much more
+         expensive than rotating by just one step.
+         */
         const rowSize = batchEncoder.slotCount / 2 - 1
         const randomRotation = randomIntInc(0, rowSize)
         timeStart = performance.now()
@@ -298,16 +299,18 @@ function create() {
         timeRotateRowsRandomSum += timeEnd - timeStart
 
         /*
-          [Rotate Columns]
-          Nothing surprising here.
-          */
+         [Rotate Columns]
+         Nothing surprising here.
+         */
         timeStart = performance.now()
         evaluator.rotateColumns(encrypted, galoisKeys, encrypted)
         timeEnd = performance.now()
         timeRotateColumnsSum += timeEnd - timeStart
 
         /*
-        [Sum Elements]
+         [Sum Elements]
+         All items in the cipher are summed and the summation is found in
+         each of the underlying plaintext slots.
          */
         timeStart = performance.now()
         evaluator.sumElements(encrypted, galoisKeys, parms.scheme, encrypted)
@@ -315,12 +318,16 @@ function create() {
         timeSumElements += timeEnd - timeStart
 
         /*
-        [Dot Product]
+         [Dot Product]
+         The internal product is calculated (cipher.cipher) and the result is found in
+         each of the underlying plaintext slots.
          */
+        encryptor.encrypt(plain, encrypted2)
+        encrypted2.reserve(context, 3)
         timeStart = performance.now()
         evaluator.dotProduct(
-          encrypted,
-          encrypted,
+          encrypted2,
+          encrypted2,
           relinKeys,
           galoisKeys,
           parms.scheme,
@@ -328,6 +335,24 @@ function create() {
         )
         timeEnd = performance.now()
         timeDotProduct += timeEnd - timeStart
+
+        /*
+         [Dot Product Plain]
+         The internal product is calculated (cipher.plain) and the result is found in
+         each of the underlying plaintext slots.
+         */
+        encryptor.encrypt(plain, encrypted2)
+        encrypted2.reserve(context, 3)
+        timeStart = performance.now()
+        evaluator.dotProductPlain(
+          encrypted2,
+          plain,
+          galoisKeys,
+          parms.scheme,
+          encrypted
+        )
+        timeEnd = performance.now()
+        timeDotProductPlain += timeEnd - timeStart
       }
 
       // Cleanup
@@ -361,6 +386,7 @@ function create() {
     const avgRotateColumns = Math.round((timeRotateColumnsSum * 1000) / count)
     const avgSumElements = Math.round((timeSumElements * 1000) / count)
     const avgDotProduct = Math.round((timeDotProduct * 1000) / count)
+    const avgDotProductPlain = Math.round((timeDotProductPlain * 1000) / count)
 
     console.log(`Average batch: ${avgBatch} microseconds`)
     console.log(`Average unbatch: ${avgUnbatch} microseconds`)
@@ -381,6 +407,7 @@ function create() {
       console.log(`Average rotate column: ${avgRotateColumns} microseconds`)
       console.log(`Average sum elements: ${avgSumElements} microseconds`)
       console.log(`Average dot product: ${avgDotProduct} microseconds`)
+      console.log(`Average dot product plain: ${avgDotProductPlain} microseconds`)
     }
     console.log('')
 

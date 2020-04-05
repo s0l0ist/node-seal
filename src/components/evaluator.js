@@ -1263,6 +1263,70 @@ export const Evaluator = library => ({
       } catch (e) {
         throw Exception.safe(e)
       }
+    },
+
+    /**
+     * Perform the dot product (A.B) of CipherText (A) and PlainText (B). The resulting CipherText contains the dot
+     * product in every element.
+     *
+     * @function
+     * @name Evaluator#dotProductPlain
+     * @param {CipherText} a CipherText operand A
+     * @param {PlainText} b PlainText operand B
+     * @param {GaloisKeys} galoisKeys GaloisKeys used to perform rotations
+     * @param {SchemeType} scheme Scheme that was used for encryption
+     * @param {CipherText} [destination=null] CipherText destination to store the result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @example
+     * const galoisKeys = keyGenerator.genGaloisKeys()
+     * const cipherTextA = Morfix.CipherText()
+     * const cipherTextB = Morfix.CipherText()
+     * // ... after encrypting some data ...
+     * const resultCipher = evaluator.dotProductPlain(cipherTextA, plainTextB, galoisKeys, Morfix.SchemeTypes.BFV)
+     * // or
+     * const cipherDest = Morfix.CipherText()
+     * evaluator.dotProductPlain(cipherTextA, plainTextB, galoisKeys, Morfix.SchemeTypes.BFV, cipherDest)
+     */
+    dotProductPlain(
+      a,
+      b,
+      galoisKeys,
+      scheme,
+      destination,
+      pool = MemoryPoolHandle.global
+    ) {
+      try {
+        if (destination) {
+          _instance.multiplyPlain(
+            a.instance,
+            b.instance,
+            destination.instance,
+            pool
+          )
+          _instance.sumElements(
+            destination.instance,
+            galoisKeys.instance,
+            scheme,
+            destination.instance,
+            pool
+          )
+          return
+        }
+
+        const newDest = CipherText()
+        _instance.multiplyPlain(a.instance, b.instance, newDest.instance, pool)
+        _instance.sumElements(
+          newDest.instance,
+          galoisKeys.instance,
+          scheme,
+          newDest.instance,
+          pool
+        )
+        return newDest
+      } catch (e) {
+        throw Exception.safe(e)
+      }
     }
   }
 }

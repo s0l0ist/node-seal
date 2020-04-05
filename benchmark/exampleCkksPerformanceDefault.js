@@ -1,7 +1,7 @@
 const { Seal } = require('../node/wasm')
 const { performance } = require('perf_hooks')
 
-;(async function() {
+;(async function () {
   const benchmark = create()
   await benchmark.init()
   benchmark.exampleCkksPerformanceDefault()
@@ -127,15 +127,16 @@ function create() {
     let timeConjugateSum = 0
     let timeSumElements = 0
     let timeDotProduct = 0
+    let timeDotProductPlain = 0
 
     /*
-      How many times to run the test?
-      */
+     How many times to run the test?
+     */
     const count = 10
 
     /*
-      Populate a vector of values to batch.
-      */
+     Populate a vector of values to batch.
+     */
     const slotCount = ckksEncoder.slotCount
     const array = new Float64Array(slotCount)
     for (let i = 0; i < slotCount; i++) {
@@ -145,9 +146,9 @@ function create() {
     process.stdout.write('Running tests ')
     for (let i = 0; i < count; i++) {
       /*
-      [Encoding]
-      For scale we use the square root of the last coeff_modulus prime
-      from parms.
+       [Encoding]
+       For scale we use the square root of the last coeff_modulus prime
+       from parms.
       */
       const plain = seal.PlainText({
         capacity: polyModulusDegree * parms.coeffModulus.length,
@@ -162,16 +163,16 @@ function create() {
       timeBatchSum += timeDiff
 
       /*
-      [Decoding]
-      */
+       [Decoding]
+       */
       timeStart = performance.now()
       ckksEncoder.decode(plain)
       timeEnd = performance.now()
       timeUnbatchSum += timeEnd - timeStart
 
       /*
-      [Encryption]
-      */
+       [Encryption]
+       */
       const encrypted = seal.CipherText({
         context
       })
@@ -181,8 +182,8 @@ function create() {
       timeEncryptSum += timeEnd - timeStart
 
       /*
-      [Decryption]
-      */
+       [Decryption]
+       */
       const plain2 = seal.PlainText({
         capacity: polyModulusDegree,
         coeffCount: 0
@@ -194,8 +195,8 @@ function create() {
       timeDecryptSum += timeEnd - timeStart
 
       /*
-      [Add]
-      */
+       [Add]
+       */
       const encrypted1 = seal.CipherText({ context })
       const encrypted2 = seal.CipherText({ context })
       const plain3 = ckksEncoder.encode(Float64Array.from([i]), scale)
@@ -210,8 +211,8 @@ function create() {
       timeAddSum += timeEnd - timeStart
 
       /*
-      [Multiply]
-      */
+       [Multiply]
+       */
       encrypted1.reserve(context, 3)
       timeStart = performance.now()
       evaluator.multiply(encrypted1, encrypted2, encrypted1)
@@ -219,16 +220,16 @@ function create() {
       timeMultiplySum += timeEnd - timeStart
 
       /*
-      [Multiply Plain]
-      */
+       [Multiply Plain]
+       */
       timeStart = performance.now()
       evaluator.multiplyPlain(encrypted2, plain, encrypted2)
       timeEnd = performance.now()
       timeMultiplyPlainSum += timeEnd - timeStart
 
       /*
-      [Square]
-      */
+       [Square]
+       */
       timeStart = performance.now()
       evaluator.square(encrypted2, encrypted2)
       timeEnd = performance.now()
@@ -236,24 +237,24 @@ function create() {
 
       if (context.usingKeyswitching) {
         /*
-        [Relinearize]
-        */
+         [Relinearize]
+         */
         timeStart = performance.now()
         evaluator.relinearize(encrypted1, relinKeys, encrypted1)
         timeEnd = performance.now()
         timeRelinearizeSum += timeEnd - timeStart
 
         /*
-        [Rescale]
-        */
+         [Rescale]
+         */
         timeStart = performance.now()
-        evaluator.rescaleToNext(encrypted, encrypted)
+        evaluator.rescaleToNext(encrypted1, encrypted1)
         timeEnd = performance.now()
         timeRescaleSum += timeEnd - timeStart
 
         /*
-        [Rotate Vector]
-        */
+         [Rotate Vector]
+         */
         timeStart = performance.now()
         evaluator.rotateVector(encrypted, 1, galoisKeys, encrypted)
         evaluator.rotateVector(encrypted, -1, galoisKeys, encrypted)
@@ -261,8 +262,8 @@ function create() {
         timeRotateOneStepSum += timeEnd - timeStart
 
         /*
-        [Rotate Vector Random]
-        */
+         [Rotate Vector Random]
+         */
         const randomRotation = randomIntInc(0, ckksEncoder.slotCount) - 1
         timeStart = performance.now()
         evaluator.rotateVector(encrypted, randomRotation, galoisKeys, encrypted)
@@ -270,15 +271,15 @@ function create() {
         timeRotateRandomSum += timeEnd - timeStart
 
         /*
-        [Complex Conjugate]
-        */
+         [Complex Conjugate]
+         */
         timeStart = performance.now()
         evaluator.complexConjugate(encrypted, galoisKeys, encrypted)
         timeEnd = performance.now()
         timeConjugateSum += timeEnd - timeStart
 
         /*
-        [Sum Elements]
+         [Sum Elements]
          */
         timeStart = performance.now()
         evaluator.sumElements(encrypted, galoisKeys, parms.scheme, encrypted)
@@ -286,8 +287,10 @@ function create() {
         timeSumElements += timeEnd - timeStart
 
         /*
-        [Dot Product]
+         [Dot Product]
          */
+        encryptor.encrypt(plain, encrypted)
+        encrypted.reserve(context, 3)
         timeStart = performance.now()
         evaluator.dotProduct(
           encrypted,
@@ -299,6 +302,22 @@ function create() {
         )
         timeEnd = performance.now()
         timeDotProduct += timeEnd - timeStart
+
+        /*
+         [Dot Product Plain]
+         */
+        encryptor.encrypt(plain, encrypted)
+        encrypted.reserve(context, 3)
+        timeStart = performance.now()
+        evaluator.dotProductPlain(
+          encrypted,
+          plain,
+          galoisKeys,
+          parms.scheme,
+          encrypted
+        )
+        timeEnd = performance.now()
+        timeDotProductPlain += timeEnd - timeStart
       }
 
       // Cleanup
@@ -331,6 +350,7 @@ function create() {
     const avgConjugate = Math.round((timeConjugateSum * 1000) / count)
     const avgSumElements = Math.round((timeSumElements * 1000) / count)
     const avgDotProduct = Math.round((timeDotProduct * 1000) / count)
+    const avgDotProductPlain = Math.round((timeDotProductPlain * 1000) / count)
 
     console.log(`Average encode: ${avgBatch} microseconds`)
     console.log(`Average decode: ${avgUnbatch} microseconds`)
@@ -352,6 +372,7 @@ function create() {
       console.log(`Average complex conjugate: ${avgConjugate} microseconds`)
       console.log(`Average sum elements: ${avgSumElements} microseconds`)
       console.log(`Average dot product: ${avgDotProduct} microseconds`)
+      console.log(`Average dot product plain: ${avgDotProductPlain} microseconds`)
     }
     console.log('')
 
