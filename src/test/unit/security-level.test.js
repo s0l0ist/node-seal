@@ -1,5 +1,5 @@
+import { Seal, getLibrary } from '../../target/wasm'
 import { SecurityLevel } from '../../components'
-import { Seal, getLibrary } from '../../index'
 
 let SecurityLevelObject = null
 
