@@ -18,8 +18,20 @@ npm install node-seal
 yarn add node-seal
 ```
 
-To use the pure JavaScript build for environments such as React-Native, you will need to change
-the default import 
+Import the library using `import` or `require` syntax:
+```javascript
+// Auto-detects browser or nodejs, defaults to WASM build
+import { Seal } from 'node-seal' 
+
+// Manually specify a target build.
+// Useful for environments that aren't detected properly or do not support WebAssembly
+import { Seal } from 'node-seal/node/wasm' // Specifies the WASM build for NodeJS
+import { Seal } from 'node-seal/node/js' // Specifies the JS build for NodeJS
+import { Seal } from 'node-seal/web/wasm' // Specifies the WASM build for the browser
+import { Seal } from 'node-seal/web/js' // Specifies the JS build for the browser
+
+
+```
 ## Demo
 
 Go to [morfix.io/sandbox](https://morfix.io/sandbox)
