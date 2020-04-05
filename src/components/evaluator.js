@@ -1281,8 +1281,8 @@ export const Evaluator = library => ({
      * @example
      * const galoisKeys = keyGenerator.genGaloisKeys()
      * const cipherTextA = Morfix.CipherText()
-     * const cipherTextB = Morfix.CipherText()
-     * // ... after encrypting some data ...
+     * const plainTextB = Morfix.PlainText()
+     * // ... after encoding / encrypting some data ...
      * const resultCipher = evaluator.dotProductPlain(cipherTextA, plainTextB, galoisKeys, Morfix.SchemeTypes.BFV)
      * // or
      * const cipherDest = Morfix.CipherText()
