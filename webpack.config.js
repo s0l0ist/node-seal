@@ -1,22 +1,36 @@
 const path = require('path')
 const nodeExternals = require('webpack-node-externals')
 
-const mode =
-  process.env.NODE_ENV === 'production' ? 'production' : 'development'
+const mode = process.env.NODE_ENV // 'production' or 'development'
+const target = process.env.TARGET // 'wasm' or 'js'
+const environment = process.env.ENVIRONMENT // 'node' or 'web'
 
 const commonConfig = {
   mode: mode,
+  entry: {
+    seal: `./src/target/${target}/main.js`
+  },
   context: path.resolve(__dirname, '.'),
-  devtool: mode === 'development' ? 'source-map' : 'nosources-source-map',
+  devtool: mode !== 'production' ? 'source-map' : 'nosources-source-map',
   optimization: {
-    ...(mode === 'development' ? { minimize: false } : { minimize: true })
+    ...(mode !== 'production' ? { minimize: false } : { minimize: true })
+  },
+  output: {
+    filename: 'index.js',
+    path: path.resolve(__dirname, `${environment}`, `${target}`),
+    libraryTarget: 'umd',
+    globalObject: `(typeof self !== 'undefined' ? self : this)`, // 'global` for RN
+    umdNamedDefine: true
   },
   devServer: {
-    compress: false,
-    publicPath: '/dist/',
+    filename: 'index.js',
+    index: `./dev/${target}.html`,
+    compress: true,
+    publicPath: `/${environment}/${target}/`,
     port: 9000,
     watchContentBase: true,
-    open: true
+    open: true,
+    openPage: `dev/${target}.html`
   },
   module: {
     rules: [
@@ -33,45 +47,24 @@ const commonConfig = {
         loader: 'file-loader',
         options: {
           name: '[name].[ext]',
-          publicPath: 'dist/'
+          publicPath: `/${environment}/${target}/`
         }
       }
     ]
   }
 }
 
-const nodeConfig = {
+const config = {
   ...commonConfig,
-  entry: {
-    seal: './src/main.js'
-  },
-  output: {
-    filename: '[name].node.js',
-    path: path.resolve(__dirname, 'dist'),
-    libraryTarget: 'umd',
-    globalObject: `(typeof self !== 'undefined' ? self : this)`,
-    umdNamedDefine: true
-  },
-  target: 'node',
-  externals: [nodeExternals()]
+  target: `${environment}`,
+  ...(environment === 'node' && {
+    externals: [nodeExternals()]
+  }),
+  ...(environment === 'web' && {
+    node: {
+      fs: 'empty'
+    }
+  })
 }
 
-const browserConfig = {
-  ...commonConfig,
-  entry: {
-    seal: './src/main.js'
-  },
-  output: {
-    filename: '[name].js',
-    path: path.resolve(__dirname, 'dist'),
-    libraryTarget: 'umd',
-    globalObject: `(typeof self !== 'undefined' ? self : this)`, // 'global' for RN
-    umdNamedDefine: true
-  },
-  target: 'web',
-  node: {
-    fs: 'empty'
-  }
-}
-
-module.exports = [nodeConfig, browserConfig]
+module.exports = [config]

@@ -15,6 +15,20 @@ const morfix = await Seal // Deprecated
 const morfix = await Seal() // Use the parenthesis
 ```
 
+Feat:
+- Added separate builds for pure JS and WASM. The pure JS variant is only useful for environments which do not
+ support Web Assembly, such as React Native. Where possible, use the WASM variant (included by default) as the JS 
+ version is noticeably slower (10-60x).
+- Added default export.
+- Allow to specify a specific import for a given environment:
+ ```javascript
+import { Seal } from 'node-seal' // Auto-detects browser or nodejs, defaults to WASM build
+
+import { Seal } from 'node-seal/dist/wasm/seal.js' // Specifies the WASM build for the browser
+import { Seal } from 'node-seal/dist/wasm/seal.node.js' // Specifies the WASM build for NodeJS
+import { Seal } from 'node-seal/dist/js/seal.js' // Specifies the JS build for the browser
+import { Seal } from 'node-seal/dist/js/seal.node.js' // Specifies the JS build for NodeJS
+ ```
 
 ## Version 4.1.5
 
