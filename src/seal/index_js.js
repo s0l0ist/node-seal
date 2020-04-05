@@ -11,7 +11,7 @@ export const getLibrary = () => library
 /*
  * Creates the Seal library
  */
-const createSeal = (wasm) => {
+const createSeal = wasm => {
   library = wasm
   return SEAL(wasm)
 }
@@ -19,9 +19,9 @@ const createSeal = (wasm) => {
 /*
  * Initialize the wasm by resolving on a callback
  */
-const initialize = (wasm) =>
+const initialize = wasm =>
   new Promise(
-    (resolve) => (wasm.onRuntimeInitialized = () => resolve(createSeal(wasm)))
+    resolve => (wasm.onRuntimeInitialized = () => resolve(createSeal(wasm)))
   )
 
 /*
@@ -34,7 +34,7 @@ export const Seal = async () => {
         return Source
       }
       return path
-    },
+    }
   })
   return initialize(wasm)
 }
