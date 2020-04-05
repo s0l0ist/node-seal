@@ -1,4 +1,4 @@
-const { Seal } = require('../node/js')
+const { Seal } = require('../node/wasm')
 const { performance } = require('perf_hooks')
 
 ;(async function () {
