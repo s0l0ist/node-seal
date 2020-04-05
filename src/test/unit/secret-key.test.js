@@ -1,5 +1,4 @@
-import { Seal } from '../../index.js'
-import { getLibrary } from '../../index'
+import { Seal, getLibrary } from '../../target/wasm'
 import { SecretKey } from '../../components'
 
 let Morfix = null
@@ -8,7 +7,7 @@ let context = null
 let keyGenerator = null
 let SecretKeyObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   SecretKeyObject = SecretKey(lib)(Morfix)
 

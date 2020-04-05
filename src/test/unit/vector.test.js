@@ -1,11 +1,10 @@
-import { Seal } from '../../index.js'
-import { getLibrary } from '../../index'
+import { Seal, getLibrary } from '../../target/wasm'
 import { Vector } from '../../components'
 
 let Morfix = null
 let VectorObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   VectorObject = Vector(lib)(Morfix)
 })

@@ -11,13 +11,29 @@ node-seal is a homomorphic encryption library in JavaScript.
 ## Installation
 
 node-seal can be installed with your favorite package manager:
-```
+```bash
 npm install node-seal
 ```
-```
+```bash
 yarn add node-seal
 ```
 
+Import the library using `import` or `require` syntax:
+```javascript
+// Auto-detects browser or nodejs. Defaults to use the WASM build
+import { Seal } from 'node-seal'
+const { Seal } = require('node-seal')
+```
+
+Specify a target environment. This is useful for environments that 
+aren't detected properly or do not support WebAssembly.
+
+```javascript
+import { Seal } from 'node-seal/node/wasm' // Specifies the WASM build for NodeJS
+import { Seal } from 'node-seal/node/js' // Specifies the JS build for NodeJS
+import { Seal } from 'node-seal/web/wasm' // Specifies the WASM build for the browser
+import { Seal } from 'node-seal/web/js' // Specifies the JS build for the browser
+```
 ## Demo
 
 Go to [morfix.io/sandbox](https://morfix.io/sandbox)

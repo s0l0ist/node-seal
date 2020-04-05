@@ -1,5 +1,4 @@
-import { Seal } from '../../index.js'
-import { getLibrary } from '../../index'
+import { Seal, getLibrary } from '../../target/wasm'
 import { ContextData } from '../../components'
 
 let Morfix = null
@@ -10,7 +9,7 @@ let ckksParms = null
 let ckksContext = null
 let ContextDataObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   ContextDataObject = ContextData(lib)(Morfix)
 

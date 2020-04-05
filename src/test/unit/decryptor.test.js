@@ -1,5 +1,4 @@
-import { Seal } from '../../index.js'
-import { getLibrary } from '../../index'
+import { Seal, getLibrary } from '../../target/wasm'
 import { Decryptor } from '../../components'
 
 let Morfix,
@@ -13,7 +12,7 @@ let Morfix,
   evaluator,
   DecryptorObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   DecryptorObject = Decryptor(lib)(Morfix)
 

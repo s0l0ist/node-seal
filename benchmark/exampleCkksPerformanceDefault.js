@@ -1,4 +1,4 @@
-const { Seal } = require('../dist/seal.node')
+const { Seal } = require('../node/wasm')
 const { performance } = require('perf_hooks')
 
 ;(async function() {
@@ -15,7 +15,7 @@ function create() {
   }
 
   async function init() {
-    seal = await Seal
+    seal = await Seal()
   }
 
   function exampleCkksPerformanceDefault() {
@@ -25,8 +25,7 @@ function create() {
     parms.setPolyModulusDegree(polyModulusDegree)
     parms.setCoeffModulus(coeffModulus)
     let context = seal.Context(parms)
-
-    ckksPerformanceTest(context)
+    ckksPerformanceTest(context, seal)
 
     // Clear data to prevent memory buildup
     context.delete()
@@ -37,7 +36,7 @@ function create() {
     parms.setPolyModulusDegree(polyModulusDegree)
     parms.setCoeffModulus(coeffModulus)
     context = seal.Context(parms)
-    ckksPerformanceTest(context)
+    ckksPerformanceTest(context, seal)
 
     // Clear data to prevent memory buildup
     context.delete()
@@ -48,14 +47,14 @@ function create() {
     parms.setPolyModulusDegree(polyModulusDegree)
     parms.setCoeffModulus(coeffModulus)
     context = seal.Context(parms)
-    ckksPerformanceTest(context)
+    ckksPerformanceTest(context, seal)
 
     // Clear data to prevent memory buildup
     context.delete()
     coeffModulus.delete()
   }
 
-  function ckksPerformanceTest(context) {
+  function ckksPerformanceTest(context, seal) {
     let timeStart = 0
     let timeEnd = 0
     let timeDiff = 0
@@ -126,6 +125,8 @@ function create() {
     let timeRotateOneStepSum = 0
     let timeRotateRandomSum = 0
     let timeConjugateSum = 0
+    let timeSumElements = 0
+    let timeDotProduct = 0
 
     /*
       How many times to run the test?
@@ -275,6 +276,29 @@ function create() {
         evaluator.complexConjugate(encrypted, galoisKeys, encrypted)
         timeEnd = performance.now()
         timeConjugateSum += timeEnd - timeStart
+
+        /*
+        [Sum Elements]
+         */
+        timeStart = performance.now()
+        evaluator.sumElements(encrypted, galoisKeys, parms.scheme, encrypted)
+        timeEnd = performance.now()
+        timeSumElements += timeEnd - timeStart
+
+        /*
+        [Dot Product]
+         */
+        timeStart = performance.now()
+        evaluator.dotProduct(
+          encrypted,
+          encrypted,
+          relinKeys,
+          galoisKeys,
+          parms.scheme,
+          encrypted
+        )
+        timeEnd = performance.now()
+        timeDotProduct += timeEnd - timeStart
       }
 
       // Cleanup
@@ -305,6 +329,8 @@ function create() {
     )
     const avgRotateRandom = Math.round((timeRotateRandomSum * 1000) / count)
     const avgConjugate = Math.round((timeConjugateSum * 1000) / count)
+    const avgSumElements = Math.round((timeSumElements * 1000) / count)
+    const avgDotProduct = Math.round((timeDotProduct * 1000) / count)
 
     console.log(`Average encode: ${avgBatch} microseconds`)
     console.log(`Average decode: ${avgUnbatch} microseconds`)
@@ -324,6 +350,8 @@ function create() {
         `Average rotate vector random: ${avgRotateRandom} microseconds`
       )
       console.log(`Average complex conjugate: ${avgConjugate} microseconds`)
+      console.log(`Average sum elements: ${avgSumElements} microseconds`)
+      console.log(`Average dot product: ${avgDotProduct} microseconds`)
     }
     console.log('')
 

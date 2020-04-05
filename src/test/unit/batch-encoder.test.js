@@ -1,5 +1,4 @@
-import { Seal } from '../../index.js'
-import { getLibrary } from '../../index'
+import { Seal, getLibrary } from '../../target/wasm'
 import { BatchEncoder } from '../../components'
 
 let Morfix,
@@ -7,7 +6,7 @@ let Morfix,
   context,
   BatchEncoderObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   BatchEncoderObject = BatchEncoder(lib)(Morfix)
 

@@ -1,4 +1,5 @@
-import Source from '../bin/seal'
+import Source from '../bin/js/seal.js'
+
 import { SEAL } from './seal'
 
 /*
@@ -26,7 +27,16 @@ const initialize = wasm =>
 /*
  * Main module export
  */
-export const Seal = (async () => {
-  const wasm = Source()
+export const Seal = async () => {
+  const wasm = Source({
+    locateFile(path) {
+      if (path.endsWith('.wasm')) {
+        return Source
+      }
+      return path
+    }
+  })
   return initialize(wasm)
-})()
+}
+
+export default Seal
