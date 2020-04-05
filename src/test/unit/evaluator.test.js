@@ -1,5 +1,4 @@
-import { Seal } from '../../index.js'
-import { getLibrary } from '../../index'
+import { Seal, getLibrary } from '../../target/wasm'
 import { Evaluator } from '../../components'
 
 let Morfix = null

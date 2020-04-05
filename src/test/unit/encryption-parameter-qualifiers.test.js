@@ -1,4 +1,4 @@
-import { Seal } from '../../index.js'
+import { Seal } from '../../target/wasm'
 import { EncryptionParameterQualifiers } from '../../components'
 
 let Morfix = null
