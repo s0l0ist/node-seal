@@ -61,6 +61,7 @@ yarn seal:build     # Will compile both the Web Assembly and JS build from the l
 yarn build          # Will build both the web and node supporting JS and Web Assembly to be packed for npm
 ```
 
+Testing requires a seal:build to have completed successfully.
 All test should pass and coverage should be 100% when making contributions. 
 **Note**: this could a few minutes and is very CPU/memory intensive.
 
