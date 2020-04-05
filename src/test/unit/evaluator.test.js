@@ -2716,4 +2716,166 @@ describe('Evaluator', () => {
     expect(cipherDest.constructor).toBe(Object)
     expect(cipherDest.instance.constructor.name).toBe('Ciphertext')
   })
+  // dotProductPlain
+  test('It should fail to dotProductPlain two ciphers', () => {
+    const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
+      (x, i) => 5
+    )
+    const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
+    const item = EvaluatorObject(context)
+    const cipherDest = Morfix.CipherText()
+    const spyOn = jest.spyOn(item, 'dotProductPlain')
+    expect(() =>
+      item.dotProductPlain(
+        invalidCkksCipher,
+        plain,
+        galoisKeys,
+        parms.scheme,
+        cipherDest
+      )
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(
+      invalidCkksCipher,
+      plain,
+      galoisKeys,
+      parms.scheme,
+      cipherDest
+    )
+  })
+  test('It should calculate the dotProduct of a cipher and a plain to a destination cipher (bfv) (int32)', () => {
+    const item = EvaluatorObject(context)
+    const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => 5)
+    const plain = encoder.encode(arr)
+    const cipher = encryptor.encrypt(plain)
+    const cipherDest = Morfix.CipherText()
+    const spyOn = jest.spyOn(item, 'dotProductPlain')
+    item.dotProductPlain(cipher, plain, galoisKeys, parms.scheme, cipherDest)
+    expect(spyOn).toHaveBeenCalledWith(
+      cipher,
+      plain,
+      galoisKeys,
+      parms.scheme,
+      cipherDest
+    )
+    const decrypted = decryptor.decrypt(cipherDest)
+    const decoded = encoder.decode(decrypted)
+    const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
+    expect(decoded).toEqual(arr.fill(dot))
+  })
+  test('It should calculate the dotProduct of a cipher and a plain and return a cipher result (bfv) (int32)', () => {
+    const item = EvaluatorObject(context)
+    const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => 5)
+    const plain = encoder.encode(arr)
+    const cipher = encryptor.encrypt(plain)
+    const spyOn = jest.spyOn(item, 'dotProductPlain')
+    const cipherDest = item.dotProductPlain(
+      cipher,
+      plain,
+      galoisKeys,
+      parms.scheme
+    )
+    expect(spyOn).toHaveBeenCalledWith(cipher, plain, galoisKeys, parms.scheme)
+    expect(cipherDest).toBeDefined()
+    expect(typeof cipherDest.constructor).toBe('function')
+    expect(cipherDest).toBeInstanceOf(Object)
+    expect(cipherDest.constructor).toBe(Object)
+    expect(cipherDest.instance.constructor.name).toBe('Ciphertext')
+    const decrypted = decryptor.decrypt(cipherDest)
+    const decoded = encoder.decode(decrypted)
+    const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
+    expect(decoded).toEqual(arr.fill(dot))
+  })
+  test('It should calculate the dotProduct of a cipher and a plain to a destination cipher (bfv) (uint32)', () => {
+    const item = EvaluatorObject(context)
+    const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => 5)
+    const plain = encoder.encode(arr)
+    const cipher = encryptor.encrypt(plain)
+    const cipherDest = Morfix.CipherText()
+    const spyOn = jest.spyOn(item, 'dotProductPlain')
+    item.dotProductPlain(cipher, plain, galoisKeys, parms.scheme, cipherDest)
+    expect(spyOn).toHaveBeenCalledWith(
+      cipher,
+      plain,
+      galoisKeys,
+      parms.scheme,
+      cipherDest
+    )
+    const decrypted = decryptor.decrypt(cipherDest)
+    const decoded = encoder.decode(decrypted, false)
+    const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
+    expect(decoded).toEqual(arr.fill(dot))
+  })
+  test('It should calculate the dotProduct of a cipher and a plain and return a cipher result (bfv) (uint32)', () => {
+    const item = EvaluatorObject(context)
+    const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => 5)
+    const plain = encoder.encode(arr)
+    const cipher = encryptor.encrypt(plain)
+    const spyOn = jest.spyOn(item, 'dotProductPlain')
+    const cipherDest = item.dotProductPlain(
+      cipher,
+      plain,
+      galoisKeys,
+      parms.scheme
+    )
+    expect(spyOn).toHaveBeenCalledWith(cipher, plain, galoisKeys, parms.scheme)
+    expect(cipherDest).toBeDefined()
+    expect(typeof cipherDest.constructor).toBe('function')
+    expect(cipherDest).toBeInstanceOf(Object)
+    expect(cipherDest.constructor).toBe(Object)
+    expect(cipherDest.instance.constructor.name).toBe('Ciphertext')
+    const decrypted = decryptor.decrypt(cipherDest)
+    const decoded = encoder.decode(decrypted, false)
+    const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
+    expect(decoded).toEqual(arr.fill(dot))
+  })
+  test('It should calculate the dotProduct of a cipher and a plain to a destination cipher (ckks)', () => {
+    const item = EvaluatorObject(ckksContext)
+    const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
+      (x, i) => 5
+    )
+    const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
+    const cipher = ckksEncryptor.encrypt(plain)
+    const cipherDest = Morfix.CipherText()
+    const spyOn = jest.spyOn(item, 'dotProductPlain')
+    item.dotProductPlain(
+      cipher,
+      plain,
+      ckksGaloisKeys,
+      ckksParms.scheme,
+      cipherDest
+    )
+    expect(spyOn).toHaveBeenCalledWith(
+      cipher,
+      plain,
+      ckksGaloisKeys,
+      ckksParms.scheme,
+      cipherDest
+    )
+  })
+  test('It should calculate the dotProduct of a cipher and a plain and return a cipher result (ckks)', () => {
+    const item = EvaluatorObject(ckksContext)
+    const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(
+      (x, i) => 5
+    )
+    const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
+    const cipher = ckksEncryptor.encrypt(plain)
+    const spyOn = jest.spyOn(item, 'dotProductPlain')
+    const cipherDest = item.dotProductPlain(
+      cipher,
+      plain,
+      ckksGaloisKeys,
+      ckksParms.scheme
+    )
+    expect(spyOn).toHaveBeenCalledWith(
+      cipher,
+      plain,
+      ckksGaloisKeys,
+      ckksParms.scheme
+    )
+    expect(cipherDest).toBeDefined()
+    expect(typeof cipherDest.constructor).toBe('function')
+    expect(cipherDest).toBeInstanceOf(Object)
+    expect(cipherDest.constructor).toBe(Object)
+    expect(cipherDest.instance.constructor.name).toBe('Ciphertext')
+  })
 })
