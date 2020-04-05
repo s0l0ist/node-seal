@@ -1,7 +1,7 @@
-const { Seal } = require('../dist/seal.node')
+const { Seal } = require('../node/js')
 const { performance } = require('perf_hooks')
 
-;(async function() {
+;(async function () {
   const benchmark = create()
   await benchmark.init()
   benchmark.exampleBfvPerformanceDefault()

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-rm -rf ./src/bin/* \
+rm -rf ./src/bin/js/* ./src/bin/wasm/*  \
 && cd ./submodules/SEAL/native \
 && rm -rf ./bin/* \
 && rm -rf ./lib/*  \
