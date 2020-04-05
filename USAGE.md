@@ -13,7 +13,7 @@ asynchronously.
 // ES6 import
 // import { Seal } from 'node-seal'
 const { Seal } = require('node-seal')
-const Morfix = await Seal
+const Morfix = await Seal()
 ```
 
 ### Encryption Parameters
@@ -26,11 +26,11 @@ of parameters for an application, but there is a methodology behind optimization
 * Determine the scheme type the application requires.
 * Start with a 128 bit security context. Higher bit-strength options are available,
   but come at the cost of reduced homomorphic operations.
-* Choose the lowest level for `polyModulusDegree` first and increase 
-  when you cannot successfully execute desired functions.
+* Choose a mid-level for `polyModulusDegree` such as `4096` and increase 
+  if you cannot successfully execute desired functions.
 * Modify the bit-sizes for each prime in the `coeffModulus` for fine tuning.
 * If using `BFV` scheme (not applicable to `CKKS`), set the `plainModulus` to a reasonable value (`20`) and tweak
-  when you encounter correct decoding of some values, but not for others. 
+  when you encounter correct decoding of some values up to a certain 'ceiling'. 
 
 There are two `SchemeTypes`:
 ```
@@ -54,7 +54,6 @@ PolyModulusDegree needs to be a power of 2. We've set up initial helpers on the 
     4096 Bits,
     8192 Bits,
     16384 Bits,
-    32768 Bits,
     etc...
 ```
 

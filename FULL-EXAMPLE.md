@@ -9,6 +9,7 @@ CommonJS (but also works with `import`)
 
   // Using CommonJS for RunKit
   const { Seal } = require('node-seal')
+  const Morfix = await Seal()
   const schemeType = Morfix.SchemeType.BFV
   const securityLevel = Morfix.SecurityLevel.tc128
   const polyModulusDegree = 4096

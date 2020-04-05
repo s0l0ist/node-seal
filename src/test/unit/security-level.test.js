@@ -1,10 +1,10 @@
+import { Seal, getLibrary } from '../../target/wasm'
 import { SecurityLevel } from '../../components'
-import { Seal, getLibrary } from '../../index'
 
 let SecurityLevelObject = null
 
 beforeAll(async () => {
-  await Seal
+  await Seal()
   const lib = getLibrary()
   SecurityLevelObject = SecurityLevel(lib)()
 })

@@ -1,5 +1,4 @@
-import { Seal } from '../../index.js'
-import { getLibrary } from '../../index'
+import { Seal, getLibrary } from '../../target/wasm'
 import { Context } from '../../components'
 
 let Morfix = null
@@ -7,7 +6,7 @@ let parms = null
 let ckksParms = null
 let ContextObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   ContextObject = Context(lib)(Morfix)
 

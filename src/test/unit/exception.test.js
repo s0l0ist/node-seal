@@ -1,10 +1,10 @@
-import { Seal, getLibrary } from '../../index.js'
+import { Seal, getLibrary } from '../../target/wasm'
 import { Exception } from '../../components'
 
 let lib,
   ExceptionObject = null
 beforeAll(async () => {
-  await Seal
+  await Seal()
   lib = getLibrary()
   ExceptionObject = Exception(lib)()
 })

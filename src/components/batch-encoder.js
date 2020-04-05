@@ -82,7 +82,7 @@ export const BatchEncoder = library => ({
      * @returns {PlainText|undefined} A new PlainText holding the encoded data or undefined if one was provided
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const batchEncoder = Morfix.BatchEncoder(context)
      *
@@ -134,7 +134,7 @@ export const BatchEncoder = library => ({
      * @returns {Int32Array|Uint32Array} TypedArray containing the decoded data
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal
+     * const Morfix = await Seal()
      * ...
      * const batchEncoder = Morfix.BatchEncoder(context)
      *

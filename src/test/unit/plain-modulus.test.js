@@ -1,12 +1,11 @@
-import { Seal } from '../../index.js'
-import { getLibrary } from '../../index'
+import { Seal, getLibrary } from '../../target/wasm'
 import { PlainModulus } from '../../components'
 
 let Morfix = null
 let PlainModulusObject = null
 
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   PlainModulusObject = PlainModulus(lib)(Morfix)
 })

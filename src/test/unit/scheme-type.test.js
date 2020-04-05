@@ -1,10 +1,9 @@
-import { Seal } from '../../index.js'
-import { getLibrary } from '../../index'
+import { Seal, getLibrary } from '../../target/wasm'
 import { SchemeType } from '../../components'
 
 let SchemeTypeObject = null
 beforeAll(async () => {
-  await Seal
+  await Seal()
   const lib = getLibrary()
   SchemeTypeObject = SchemeType(lib)()
 })

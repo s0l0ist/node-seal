@@ -3,6 +3,32 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 4.2.0
+
+Breaking:
+- Minor breaking change to allow for functional closure. 
+  ```javascript
+  import { Seal } from 'node-seal'
+  ...
+  const morfix = await Seal // Deprecated
+  const morfix = await Seal() // Use the parenthesis
+  ```
+
+Feat:
+- Added default export.
+- Added to specify a specific import for a given environment. The pure JS variant is only useful for environments which do not
+ support Web Assembly, such as React Native. Where possible, use the WASM variant (included by default) as the JS 
+ version is noticeably slower (10-60x). Ex:
+  ```javascript
+  import { Seal } from 'node-seal' // Auto-detects browser or nodejs, defaults to WASM build
+
+  // Manually specify a build
+  import { Seal } from 'node-seal/node/wasm' // Specifies the WASM build for NodeJS
+  import { Seal } from 'node-seal/node/js' // Specifies the JS build for NodeJS
+  import { Seal } from 'node-seal/web/wasm' // Specifies the WASM build for the browser
+  import { Seal } from 'node-seal/web/js' // Specifies the JS build for the browser
+  ```
+
 ## Version 4.1.5
 
 Feat:

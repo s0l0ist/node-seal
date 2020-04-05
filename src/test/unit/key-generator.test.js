@@ -1,5 +1,4 @@
-import { Seal } from '../../index.js'
-import { getLibrary } from '../../index'
+import { Seal, getLibrary } from '../../target/wasm'
 import { KeyGenerator } from '../../components'
 
 let Morfix,
@@ -12,7 +11,7 @@ let Morfix,
   invalidContext,
   KeyGeneratorObject = null
 beforeAll(async () => {
-  Morfix = await Seal
+  Morfix = await Seal()
   const lib = getLibrary()
   KeyGeneratorObject = KeyGenerator(lib)(Morfix)
 
