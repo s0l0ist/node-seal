@@ -6,7 +6,7 @@ for more details on each SEAL version change.
 ## Version 4.2.2
 
 Fix:
-- JS was crashing due to OOM. The build now allows for memory growth. 
+- JS build was crashing due to OOM when using higher encryption parameters. The build now allows for memory growth. 
 
 ## Version 4.2.1
 
