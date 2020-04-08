@@ -372,7 +372,9 @@ function create() {
       console.log(`Average complex conjugate: ${avgConjugate} microseconds`)
       console.log(`Average sum elements: ${avgSumElements} microseconds`)
       console.log(`Average dot product: ${avgDotProduct} microseconds`)
-      console.log(`Average dot product plain: ${avgDotProductPlain} microseconds`)
+      console.log(
+        `Average dot product plain: ${avgDotProductPlain} microseconds`
+      )
     }
     console.log('')
 

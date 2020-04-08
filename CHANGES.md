@@ -3,6 +3,11 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 4.2.2
+
+Fix:
+- JS was crashing due to OOM. The build now allows for memory growth. 
+
 ## Version 4.2.1
 
 Feat:
