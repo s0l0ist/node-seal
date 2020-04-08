@@ -11,7 +11,7 @@ source ./submodules/emsdk/emsdk_env.sh \
 libseal-* ../../../zlib/libz.* \
 -s WASM=0 \
 -s INITIAL_MEMORY=268435456 \
--s ALLOW_MEMORY_GROWTH=0 \
+-s ALLOW_MEMORY_GROWTH=1 \
 -s EXPORT_ES6=1 \
 -s MODULARIZE=1 \
 -s USE_ES6_IMPORT_META=0 \

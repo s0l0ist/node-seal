@@ -407,7 +407,9 @@ function create() {
       console.log(`Average rotate column: ${avgRotateColumns} microseconds`)
       console.log(`Average sum elements: ${avgSumElements} microseconds`)
       console.log(`Average dot product: ${avgDotProduct} microseconds`)
-      console.log(`Average dot product plain: ${avgDotProductPlain} microseconds`)
+      console.log(
+        `Average dot product plain: ${avgDotProductPlain} microseconds`
+      )
     }
     console.log('')
 
