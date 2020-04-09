@@ -73,6 +73,7 @@ describe('KeyGenerator', () => {
     expect(item).toHaveProperty('getPublicKey')
     expect(item).toHaveProperty('genRelinKeys')
     expect(item).toHaveProperty('genGaloisKeys')
+    expect(item).toHaveProperty('galoisKeysSave')
   })
   test('It should have an instance (bfv)', () => {
     const item = KeyGeneratorObject(context)
@@ -135,11 +136,22 @@ describe('KeyGenerator', () => {
     expect(() => item.genRelinKeys()).toThrow()
     expect(spyOn).toHaveBeenCalledWith()
   })
-  test('It should generate and return galoisKeys', () => {
+  test('It should generate and return all galoisKeys', () => {
     const item = KeyGeneratorObject(context)
     const spyOn = jest.spyOn(item, 'genGaloisKeys')
     const key = item.genGaloisKeys()
     expect(spyOn).toHaveBeenCalledWith()
+    expect(key.instance).toBeDefined()
+  })
+  test('It should generate and return specific galoisKeys', () => {
+    const item = KeyGeneratorObject(context)
+    const spyOn = jest.spyOn(item, 'genGaloisKeys')
+    const key = item.genGaloisKeys(
+      Int32Array.from([1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024])
+    )
+    expect(spyOn).toHaveBeenCalledWith(
+      Int32Array.from([1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024])
+    )
     expect(key.instance).toBeDefined()
   })
   test('It should fail to generate and return galoisKeys', () => {
@@ -147,5 +159,29 @@ describe('KeyGenerator', () => {
     const spyOn = jest.spyOn(item, 'genGaloisKeys')
     expect(() => item.genGaloisKeys()).toThrow()
     expect(spyOn).toHaveBeenCalledWith()
+  })
+  test('It should generate and return all galoisKeys as a base64 string', () => {
+    const item = KeyGeneratorObject(context)
+    const spyOn = jest.spyOn(item, 'galoisKeysSave')
+    const key = item.galoisKeysSave()
+    expect(spyOn).toHaveBeenCalledWith()
+    expect(typeof key).toBe('string')
+  })
+  test('It should generate and return specific galoisKeys as a base64 string', () => {
+    const item = KeyGeneratorObject(context)
+    const spyOn = jest.spyOn(item, 'galoisKeysSave')
+    const key = item.galoisKeysSave(
+      Int32Array.from([1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024])
+    )
+    expect(spyOn).toHaveBeenCalledWith(
+      Int32Array.from([1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024])
+    )
+    expect(typeof key).toBe('string')
+  })
+  test('It should fail to generate and return specific galoisKeys as a base64 string', () => {
+    const item = KeyGeneratorObject(context)
+    const spyOn = jest.spyOn(item, 'galoisKeysSave')
+    expect(() => item.galoisKeysSave(Int32Array.from([99999]))).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(Int32Array.from([99999]))
   })
 })
