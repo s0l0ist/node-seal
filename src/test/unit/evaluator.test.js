@@ -45,7 +45,9 @@ beforeAll(async () => {
   publicKey = keyGenerator.getPublicKey()
   secretKey = keyGenerator.getSecretKey()
   relinKeys = keyGenerator.genRelinKeys()
-  galoisKeys = keyGenerator.genGaloisKeys()
+  galoisKeys = keyGenerator.genGaloisKeys(
+    Int32Array.from([1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0])
+  )
   encryptor = Morfix.Encryptor(context, publicKey)
   decryptor = Morfix.Decryptor(context, secretKey)
 

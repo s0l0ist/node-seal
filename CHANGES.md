@@ -3,6 +3,16 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 4.2.3
+
+Feat:
+- Added optional `steps` argument to `genGaloisKeys`. You can now specify the rotations you need to reduce
+ the size of GaloisKeys and the time it takes to generate them. Ex: you only need specific keys when performing
+  `sumElements` or `dotProduct`.
+- Added `galoisSave` function to the `KeyGenerator`. Allows direct serialization of Galois Keys leveraging the seeded
+ compression which saves 50% of space. This method also accepts an optional `steps` array for further optimization.
+- Added support for symmetric encryption using `Evaluator.encryptSymmetric`. 
+
 ## Version 4.2.2
 
 Fix:
