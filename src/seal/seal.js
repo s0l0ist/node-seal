@@ -117,7 +117,8 @@ export const SEAL = library => {
     PublicKey,
     SecretKey,
     RelinKeys,
-    GaloisKeys
+    GaloisKeys,
+    ComprModeType
   })(components.KeyGenerator)
 
   /**

@@ -2,13 +2,23 @@ export const Encryptor = library => ({
   Exception,
   MemoryPoolHandle,
   CipherText
-}) => (context, publicKey) => {
+}) => (context, publicKey, secretKey = null) => {
   const Constructor = library.Encryptor
-  let _instance = null
-  try {
-    _instance = new Constructor(context.instance, publicKey.instance)
-  } catch (e) {
-    throw Exception.safe(e)
+  let _instance = constructInstance(context, publicKey, secretKey)
+
+  function constructInstance(context, publicKey, secretKey) {
+    try {
+      if (secretKey) {
+        return new Constructor(
+          context.instance,
+          publicKey.instance,
+          secretKey.instance
+        )
+      }
+      return new Constructor(context.instance, publicKey.instance)
+    } catch (e) {
+      throw Exception.safe(e)
+    }
   }
 
   /**
@@ -83,6 +93,41 @@ export const Encryptor = library => ({
         }
         const cipher = CipherText()
         _instance.encrypt(plainText.instance, cipher.instance, pool)
+        return cipher
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Encrypts a PlainText with the secret key and stores the result in
+     * destination. The encryption parameters for the resulting CipherText
+     * correspond to:
+     * 1) in BFV, the highest (data) level in the modulus switching chain,
+     * 2) in CKKS, the encryption parameters of the plaintext.
+     * Dynamic memory allocations in the process are allocated from the memory
+     * pool pointed to by the given MemoryPoolHandle.
+     *
+     * @function
+     * @name Encryptor#encryptSymmetric
+     * @param {PlainText} plainText PlainText to encrypt
+     * @param {CipherText} [cipherText] CipherText destination to store the encrypted result
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {CipherText|undefined} Returns undefined if a CipherText was specified. Otherwise returns a
+     * CipherText containing the encrypted result
+     */
+    encryptSymmetric(plainText, cipherText, pool = MemoryPoolHandle.global) {
+      try {
+        if (cipherText) {
+          _instance.encryptSymmetric(
+            plainText.instance,
+            cipherText.instance,
+            pool
+          )
+          return
+        }
+        const cipher = CipherText()
+        _instance.encryptSymmetric(plainText.instance, cipher.instance, pool)
         return cipher
       } catch (e) {
         throw Exception.safe(e)
