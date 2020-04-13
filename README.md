@@ -34,6 +34,31 @@ import { Seal } from 'node-seal/node/js' // Specifies the JS build for NodeJS
 import { Seal } from 'node-seal/web/wasm' // Specifies the WASM build for the browser
 import { Seal } from 'node-seal/web/js' // Specifies the JS build for the browser
 ```
+
+#### React-Native
+In react-native environments, there are two ways of using node-seal.
+
+1. Load the pure JS build
+2. Create a WebView and manage node-seal inside.
+
+**Option 1** is the easiest method, but performance is
+significantly reduced. Because emscripten expects either a NodeJS or Web environment, 
+loading node-seal will fail because it expects a browser global object that doesn't
+not exist. The solution is to spoof the `document` object.
+
+Simply an empty `document` object to the `global` provided by react-native:
+```javascript
+import { Seal } from 'node-seal/web/js'
+
+(async() => {
+  global.document = {} // mimic browser document
+  const seal = await Seal()
+})()
+```
+
+**Option 2** is harder to implement, but it will allow you to use the faster `web/wasm` build.
+The implementation will need to manage the state within the WebView.
+
 ## Demo
 
 Go to [morfix.io/sandbox](https://morfix.io/sandbox)
