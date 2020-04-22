@@ -46,7 +46,7 @@ significantly reduced. Because emscripten expects either a NodeJS or Web environ
 loading node-seal will fail because it expects a browser global object that doesn't
 not exist. The solution is to spoof the `document` object.
 
-Simply an empty `document` object to the `global` provided by react-native:
+Simply add an empty `document` object to the `global` provided by react-native:
 ```javascript
 import { Seal } from 'node-seal/web/js'
 
