@@ -3,6 +3,11 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 4.2.4
+
+Chore:
+- Updated to lastest emscripten version and rebuilt.
+
 ## Version 4.2.3
 
 Feat:
