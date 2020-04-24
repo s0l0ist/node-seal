@@ -98,7 +98,7 @@ take a look at their [list of changes](https://github.com/microsoft/SEAL/blob/ma
 
 A set of benchmarks similar to the benchmarks of the native SEAL C++ code can be found [here](benchmark/).
 
-Run them by cloning this repository, `yarn install`, then `yarn benchmark:bfv` or `yarn benchmark:ckks`. 
+Run them by cloning this repository and then run `yarn benchmark:bfv` or `yarn benchmark:ckks`. 
 
 The scripts are only for NodeJS. We have adapted a variant of this script for each browser and have shown the results in the section below.
 
