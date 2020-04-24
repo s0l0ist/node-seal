@@ -46,7 +46,7 @@ significantly reduced. Because emscripten expects either a NodeJS or Web environ
 loading node-seal will fail because it expects a browser global object that doesn't
 not exist. The solution is to spoof the `document` object.
 
-Simply an empty `document` object to the `global` provided by react-native:
+Simply add an empty `document` object to the `global` provided by react-native:
 ```javascript
 import { Seal } from 'node-seal/dist/web/js'
 
@@ -85,7 +85,7 @@ Check out the [Sandbox](https://morfix.io/sandbox) to run HE functions and even 
 
 If you'd rather read an example, take a look [here](FULL-EXAMPLE.md).
 
-For more exhaustive examples, view the tests [here](src/test).
+For more exhaustive examples, view the [tests](src/test) or the [benchmarks](benchmark/).
 
 ## Changes
 
@@ -94,6 +94,14 @@ For changes in this library, take a look [here](CHANGES.md).
 For changes in Microsoft SEAL, 
 take a look at their [list of changes](https://github.com/microsoft/SEAL/blob/master/Changes.md).
 
+## Benchmarks
+
+A set of benchmarks similar to the benchmarks of the native SEAL C++ code can be found [here](benchmark/).
+
+Run them by cloning this repository, `yarn install`, then `yarn benchmark:bfv` or `yarn benchmark:ckks`. 
+
+The scripts are only for NodeJS. We have adapted a variant of this script for each browser and have shown the results in the section below.
+
 ## Performance
 
 Test specs 2018 MacBook Pro:
@@ -101,7 +109,8 @@ Test specs 2018 MacBook Pro:
 - 16 GB 2400 MHz DDR4
 
 Versions:
-- Seal v3.4.5
+- Microsoft Seal v3.4.5
+- Node-seal v4.1.4
 - NodeJS v12.16.1
 - Chrome Version 80.0.3987.149 (Official Build) (64-bit)
 - Firefox 74.0 (64-bit)
