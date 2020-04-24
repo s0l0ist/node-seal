@@ -17,7 +17,7 @@ const commonConfig = {
   },
   output: {
     filename: 'index.js',
-    path: path.resolve(__dirname, `${environment}`, `${target}`),
+    path: path.resolve(__dirname, 'dist', `${environment}`, `${target}`),
     libraryTarget: 'umd',
     globalObject: `(typeof self !== 'undefined' ? self : this)`, // 'global` for RN
     umdNamedDefine: true
@@ -26,7 +26,7 @@ const commonConfig = {
     filename: 'index.js',
     index: `./dev/${target}.html`,
     compress: true,
-    publicPath: `/${environment}/${target}/`,
+    publicPath: `/dist/${environment}/${target}/`,
     port: 9000,
     watchContentBase: true,
     open: true,
@@ -47,7 +47,7 @@ const commonConfig = {
         loader: 'file-loader',
         options: {
           name: '[name].[ext]',
-          publicPath: `/${environment}/${target}/`
+          publicPath: `/dist/${environment}/${target}/`
         }
       }
     ]
