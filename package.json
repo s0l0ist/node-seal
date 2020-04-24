@@ -47,7 +47,7 @@
     "build:node": "export ENVIRONMENT=node && export NODE_ENV=production && yarn build:wasm && yarn build:js",
     "build:wasm": "export TARGET=wasm && eslint ./src/target/wasm && webpack",
     "build:js": "export TARGET=js && eslint ./src/target/js && webpack",
-    "build:clean": "rm -rf ./web/js/* ./web/wasm/* ./node/js/* ./node/wasm/*",
+    "build:clean": "rm -rf ./dist/*",
     "test": "jest",
     "test:unit": "jest ./src/test/unit",
     "benchmark:bfv": "node ./benchmark/exampleBfvPerformanceDefault.js",
