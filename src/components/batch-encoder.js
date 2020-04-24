@@ -139,7 +139,7 @@ export const BatchEncoder = library => ({
      * const batchEncoder = Morfix.BatchEncoder(context)
      *
      * const plainText = batchEncoder.encode(Int32Array.from([1, -2, 3]))
-     * const plainTextU = batchEncoder.encode(Unt32Array.from([1, 2, 3]))
+     * const plainTextU = batchEncoder.encode(Uint32Array.from([1, 2, 3]))
      *
      * const result = batchEncoder.decode(plainText)
      * const resultU = batchEncoder.decode(plainTextU, false) // To decode as an Uint32Array
