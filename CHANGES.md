@@ -8,6 +8,10 @@ for more details on each SEAL version change.
 Chore:
 - Updated to lastest emscripten version and rebuilt.
 
+Fix:
+- Moved all builds into `dist` directory. User's need to update their import path if using the deep import links.
+  ex: `import { Seal } from 'node-seal/dist/node/wasm' // Specifies the WASM build for NodeJS`
+
 ## Version 4.2.3
 
 Feat:
