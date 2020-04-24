@@ -1,6 +1,6 @@
 {
   "name": "node-seal",
-  "version": "4.2.3",
+  "version": "4.2.4",
   "description": "Homomorphic Encryption in JavaScript using Microsoft SEAL",
   "repository": {
     "type": "git",
@@ -23,18 +23,18 @@
     "cryptography",
     "cryptosystem"
   ],
-  "main": "node/wasm/index.js",
-  "module": "node/wasm/index.js",
-  "browser": "web/wasm/index.js",
+  "main": "dist/node/wasm/index.js",
+  "module": "dist/node/wasm/index.js",
+  "browser": "dist/web/wasm/index.js",
   "files": [
-    "web/js/index.js",
-    "web/js/index.js.map",
-    "web/wasm/index.js",
-    "web/wasm/index.js.map",
-    "node/js/index.js",
-    "node/js/index.js.map",
-    "node/wasm/index.js",
-    "node/wasm/index.js.map"
+    "dist/web/js/index.js",
+    "dist/web/js/index.js.map",
+    "dist/web/wasm/index.js",
+    "dist/web/wasm/index.js.map",
+    "dist/node/js/index.js",
+    "dist/node/js/index.js.map",
+    "dist/node/wasm/index.js",
+    "dist/node/wasm/index.js.map"
   ],
   "license": "MIT",
   "scripts": {
@@ -47,7 +47,7 @@
     "build:node": "export ENVIRONMENT=node && export NODE_ENV=production && yarn build:wasm && yarn build:js",
     "build:wasm": "export TARGET=wasm && eslint ./src/target/wasm && webpack",
     "build:js": "export TARGET=js && eslint ./src/target/js && webpack",
-    "build:clean": "rm -rf ./web/js/* ./web/wasm/* ./node/js/* ./node/wasm/*",
+    "build:clean": "rm -rf ./dist/*",
     "test": "jest",
     "test:unit": "jest ./src/test/unit",
     "benchmark:bfv": "node ./benchmark/exampleBfvPerformanceDefault.js",

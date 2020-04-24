@@ -29,10 +29,10 @@ Specify a target environment. This is useful for environments that
 aren't detected properly or do not support WebAssembly.
 
 ```javascript
-import { Seal } from 'node-seal/node/wasm' // Specifies the WASM build for NodeJS
-import { Seal } from 'node-seal/node/js' // Specifies the JS build for NodeJS
-import { Seal } from 'node-seal/web/wasm' // Specifies the WASM build for the browser
-import { Seal } from 'node-seal/web/js' // Specifies the JS build for the browser
+import { Seal } from 'node-seal/dist/node/wasm' // Specifies the WASM build for NodeJS
+import { Seal } from 'node-seal/dist/node/js' // Specifies the JS build for NodeJS
+import { Seal } from 'node-seal/dist/web/wasm' // Specifies the WASM build for the browser
+import { Seal } from 'node-seal/dist/web/js' // Specifies the JS build for the browser
 ```
 
 #### React-Native
@@ -48,7 +48,7 @@ not exist. The solution is to spoof the `document` object.
 
 Simply add an empty `document` object to the `global` provided by react-native:
 ```javascript
-import { Seal } from 'node-seal/web/js'
+import { Seal } from 'node-seal/dist/web/js'
 
 (async() => {
   global.document = {} // mimic browser document
@@ -56,7 +56,7 @@ import { Seal } from 'node-seal/web/js'
 })()
 ```
 
-**Option 2** is harder to implement, but it will allow you to use the faster `web/wasm` build.
+**Option 2** is harder to implement, but it will allow you to use the faster `dist/web/wasm` build.
 The implementation will need to manage the state within the WebView.
 
 ## Demo
@@ -85,7 +85,7 @@ Check out the [Sandbox](https://morfix.io/sandbox) to run HE functions and even 
 
 If you'd rather read an example, take a look [here](FULL-EXAMPLE.md).
 
-For more exhaustive examples, view the tests [here](src/test).
+For more exhaustive examples, view the [tests](src/test) or the [benchmarks](benchmark/).
 
 ## Changes
 
@@ -94,6 +94,14 @@ For changes in this library, take a look [here](CHANGES.md).
 For changes in Microsoft SEAL, 
 take a look at their [list of changes](https://github.com/microsoft/SEAL/blob/master/Changes.md).
 
+## Benchmarks
+
+A set of benchmarks similar to the benchmarks of the native SEAL C++ code can be found [here](benchmark/).
+
+Run them by cloning this repository and then run `yarn benchmark:bfv` or `yarn benchmark:ckks`. 
+
+The scripts are only for NodeJS. We have adapted a variant of this script for each browser and have shown the results in the section below.
+
 ## Performance
 
 Test specs 2018 MacBook Pro:
@@ -101,7 +109,8 @@ Test specs 2018 MacBook Pro:
 - 16 GB 2400 MHz DDR4
 
 Versions:
-- Seal v3.4.5
+- Microsoft Seal v3.4.5
+- Node-seal v4.1.4
 - NodeJS v12.16.1
 - Chrome Version 80.0.3987.149 (Official Build) (64-bit)
 - Firefox 74.0 (64-bit)
