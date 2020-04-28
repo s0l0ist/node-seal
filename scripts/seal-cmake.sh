@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 
 source ./submodules/emsdk/emsdk_env.sh \
-&& cd ./submodules/SEAL/native/src/ \
+&& cd ./submodules/SEAL/ \
 && emcmake cmake \
--DSEAL_USE_INTRIN=OFF \
--DEMSCRIPTEN_GENERATE_BITCODE_STATIC_LIBRARIES=1 \
--DSEAL_LIB_BUILD_TYPE=Static_PIC \
+-DEMSCRIPTEN_GENERATE_BITCODE_STATIC_LIBRARIES=ON \
 -DSEAL_USE_CXX17=ON \
--DCMAKE_BUILD_TYPE=Release \
+-DSEAL_USE_INTRIN=OFF \
 -DSEAL_USE_ZLIB=ON \
--DZLIB_ROOT=../../../zlib . \
+-DSEAL_USE_MSGSL=ON \
+-DSEAL_BUILD_EXAMPLES=OFF \
+-DSEAL_BUILD_TESTS=OFF \
+-DBUILD_SHARED_LIBS=OFF \
+-DCMAKE_BUILD_TYPE=Release \
+. \
 && cd ../../../
