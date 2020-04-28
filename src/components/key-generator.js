@@ -116,7 +116,7 @@ export const KeyGenerator = library => ({
     genRelinKeys() {
       try {
         const key = RelinKeys()
-        const instance = _instance.genRelinKeys()
+        const instance = _instance.genRelinKeysLocal()
         key.inject(instance)
         return key
       } catch (e) {
@@ -143,12 +143,12 @@ export const KeyGenerator = library => ({
       try {
         if (steps) {
           const key = GaloisKeys()
-          const instance = _instance.genGaloisKeys(steps)
+          const instance = _instance.genGaloisKeysLocal(steps)
           key.inject(instance)
           return key
         }
         const key = GaloisKeys()
-        const instance = _instance.genGaloisKeysAll()
+        const instance = _instance.genGaloisKeysLocal(Int32Array.from(0))
         key.inject(instance)
         return key
       } catch (e) {
