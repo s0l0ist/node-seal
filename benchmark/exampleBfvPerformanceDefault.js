@@ -21,45 +21,45 @@ function create() {
   function exampleBfvPerformanceDefault() {
     const parms = seal.EncryptionParameters(seal.SchemeType.BFV)
     let polyModulusDegree = 4096
-    let smallModulus = seal.SmallModulus('786433')
+    let modulus = seal.Modulus('786433')
     let coeffModulus = seal.CoeffModulus.BFVDefault(polyModulusDegree)
     parms.setPolyModulusDegree(polyModulusDegree)
     parms.setCoeffModulus(coeffModulus)
-    parms.setPlainModulus(smallModulus)
+    parms.setPlainModulus(modulus)
     let context = seal.Context(parms)
     bfvPerformanceTest(context, seal)
 
     // Clear data to prevent memory buildup
     context.delete()
-    smallModulus.delete()
+    modulus.delete()
     coeffModulus.delete()
 
     polyModulusDegree = 8192
-    smallModulus = seal.SmallModulus('786433')
+    modulus = seal.Modulus('786433')
     coeffModulus = seal.CoeffModulus.BFVDefault(polyModulusDegree)
     parms.setPolyModulusDegree(polyModulusDegree)
     parms.setCoeffModulus(coeffModulus)
-    parms.setPlainModulus(smallModulus)
+    parms.setPlainModulus(modulus)
     context = seal.Context(parms)
     bfvPerformanceTest(context, seal)
 
     // Clear data to prevent memory buildup
     context.delete()
-    smallModulus.delete()
+    modulus.delete()
     coeffModulus.delete()
 
     polyModulusDegree = 16384
-    smallModulus = seal.SmallModulus('786433')
+    modulus = seal.Modulus('786433')
     coeffModulus = seal.CoeffModulus.BFVDefault(polyModulusDegree)
     parms.setPolyModulusDegree(polyModulusDegree)
     parms.setCoeffModulus(coeffModulus)
-    parms.setPlainModulus(smallModulus)
+    parms.setPlainModulus(modulus)
     context = seal.Context(parms)
     bfvPerformanceTest(context, seal)
 
     // Clear data to prevent memory buildup
     context.delete()
-    smallModulus.delete()
+    modulus.delete()
     coeffModulus.delete()
   }
 

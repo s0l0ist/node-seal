@@ -32,7 +32,7 @@ export const CoeffModulus = library => ({ Exception, SecurityLevel }) => {
      * @name CoeffModulus.BFVDefault
      * @param {Number} polyModulusDegree Degree of the polynomial modulus
      * @param {SecurityLevel} [securityLevel={@link SecurityLevel.tc128}] Security Level
-     * @returns {Vector<SmallModulus>} Vector containing SmallModulus primes
+     * @returns {Vector<Modulus>} Vector containing Modulus primes
      */
     BFVDefault(polyModulusDegree, securityLevel = SecurityLevel.tc128) {
       try {
@@ -50,7 +50,7 @@ export const CoeffModulus = library => ({ Exception, SecurityLevel }) => {
      * @param {Number} polyModulusDegree Degree of the polynomial modulus
      * @param {Int32Array} bitSizes Int32Array containing values representing
      * bit-sizes of primes
-     * @returns {Vector<SmallModulus>} Vector containing SmallModulus primes
+     * @returns {Vector<Modulus>} Vector containing Modulus primes
      */
     Create(polyModulusDegree, bitSizes) {
       try {

@@ -1,7 +1,7 @@
 export const EncryptionParameters = library => ({
   Exception,
   ComprModeType,
-  SmallModulus,
+  Modulus,
   SchemeType,
   Vector
 }) => (schemeType = SchemeType.none) => {
@@ -82,7 +82,7 @@ export const EncryptionParameters = library => ({
     /**
      * Sets the coefficient modulus parameter. The coefficient modulus consists
      * of a list of distinct prime numbers, and is represented by a vector of
-     * SmallModulus objects. The coefficient modulus directly affects the size
+     * Modulus objects. The coefficient modulus directly affects the size
      * of CipherText elements, the amount of computation that the scheme can perform
      * (bigger is better), and the security level (bigger is worse). In Microsoft SEAL each
      * of the prime numbers in the coefficient modulus must be at most 60 bits,
@@ -90,7 +90,7 @@ export const EncryptionParameters = library => ({
      *
      * @function
      * @name EncryptionParameters#setCoeffModulus
-     * @param {Vector} coeffModulus Vector of SmallModulus primes
+     * @param {Vector} coeffModulus Vector of Modulus primes
      */
     setCoeffModulus(coeffModulus) {
       try {
@@ -102,7 +102,7 @@ export const EncryptionParameters = library => ({
 
     /**
      * Sets the PlainText modulus parameter. The PlainText modulus is an integer
-     * modulus represented by the SmallModulus class. The PlainText modulus
+     * modulus represented by the Modulus class. The PlainText modulus
      * determines the largest coefficient that PlainText polynomials can represent.
      * It also affects the amount of computation that the scheme can perform
      * (bigger is worse). In Microsoft SEAL the PlainText modulus can be at most 60 bits
@@ -111,7 +111,7 @@ export const EncryptionParameters = library => ({
      *
      * @function
      * @name EncryptionParameters#setPlainModulus
-     * @param {SmallModulus} plainModulus PlainText modulus parameter
+     * @param {Modulus} plainModulus PlainText modulus parameter
      */
     setPlainModulus(plainModulus) {
       try {
@@ -151,11 +151,11 @@ export const EncryptionParameters = library => ({
      * @type {Array<BigInt>}
      */
     get coeffModulus() {
-      const vectorSmallModulus = _instance.coeffModulus()
-      const values = vectorSmallModulus.values()
+      const vectorModulus = _instance.coeffModulus()
+      const values = vectorModulus.values()
       // eslint-disable-next-line no-undef
       const array = values.split(',').map(x => BigInt(x))
-      vectorSmallModulus.delete()
+      vectorModulus.delete()
       return array
     },
 
@@ -164,11 +164,11 @@ export const EncryptionParameters = library => ({
      *
      * @readonly
      * @name EncryptionParameters#plainModulus
-     * @type {SmallModulus}
+     * @type {Modulus}
      */
     get plainModulus() {
       const instance = _instance.plainModulus()
-      const smallModulus = SmallModulus()
+      const smallModulus = Modulus()
       smallModulus.inject(instance)
       return smallModulus
     },

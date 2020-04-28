@@ -14,12 +14,12 @@ export const SEAL = library => {
     components.CoeffModulus
   )
   const Vector = applyDependencies({ Exception })(components.Vector)
-  const SmallModulus = applyDependencies({ Exception, ComprModeType, Vector })(
-    components.SmallModulus
+  const Modulus = applyDependencies({ Exception, ComprModeType, Vector })(
+    components.Modulus
   )
   const PlainModulus = applyDependencies({
     Exception,
-    SmallModulus,
+    Modulus,
     Vector
   })(components.PlainModulus)
   const SchemeType = applyDependencies()(components.SchemeType)
@@ -57,7 +57,7 @@ export const SEAL = library => {
   const EncryptionParameters = applyDependencies({
     Exception,
     ComprModeType,
-    SmallModulus,
+    Modulus,
     SchemeType,
     Vector
   })(components.EncryptionParameters)
@@ -822,7 +822,7 @@ export const SEAL = library => {
      * ...
      * const polyModulusDegree = 4096
      * const bitSize = 20
-     * const smallModulus = Morfix.PlainModulus.Batching(polyModulusDegree, bitSize)
+     * const modulus = Morfix.PlainModulus.Batching(polyModulusDegree, bitSize)
      */
     PlainModulus,
 
@@ -1027,19 +1027,19 @@ export const SEAL = library => {
 
     /**
      * @description
-     * Create an instance of a SmallModulus
+     * Create an instance of a Modulus
      *
      * @function
-     * @name SEAL#SmallModulus
-     * @returns {SmallModulus} An empty SmallModulus instance
+     * @name SEAL#Modulus
+     * @returns {Modulus} An empty Modulus instance
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal()
      * ...
-     * const smallModulus = Morfix.SmallModulus()
-     * smallModulus.setValue('5')
+     * const modulus = Morfix.Modulus()
+     * modulus.setValue('5')
      */
-    SmallModulus,
+    Modulus,
 
     /**
      * @description
