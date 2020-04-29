@@ -3,6 +3,5 @@
   "arrowParens": "avoid",
   "trailingComma": "none",
   "singleQuote": true,
-  "semi": false,
-  "code": 120
+  "semi": false
 }
