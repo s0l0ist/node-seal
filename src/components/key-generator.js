@@ -4,7 +4,7 @@ export const KeyGenerator = library => ({
   SecretKey,
   RelinKeys,
   GaloisKeys,
-  ComprModeType
+  Serializable
 }) => (context, secretKey = null, publicKey = null) => {
   const Constructor = library.KeyGenerator
   let _instance = constructInstance(context, secretKey, publicKey)
@@ -107,13 +107,15 @@ export const KeyGenerator = library => ({
     },
 
     /**
-     * Generate and return a set of RelinKeys
+     * Generates and returns relinearization keys. This function returns
+     * relinearization keys in a fully expanded form and is meant to be used
+     * primarily for demo, testing, and debugging purposes.
      *
      * @function
-     * @name KeyGenerator#genRelinKeys
+     * @name KeyGenerator#genRelinKeysLocal
      * @returns {RelinKeys} New RelinKeys from the KeyGenerator's internal secret key
      */
-    genRelinKeys() {
+    genRelinKeysLocal() {
       try {
         const key = RelinKeys()
         const instance = _instance.genRelinKeysLocal()
@@ -125,21 +127,43 @@ export const KeyGenerator = library => ({
     },
 
     /**
-     * Generates and returns GaloisKeys. If provided with an array of steps,
-     * this function creates specific GaloisKeys that can be used to apply
-     * specific Galois automorphisms on encrypted data. The user needs to give
-     * as input a vector of desired Galois rotation step counts, where negative
-     * step counts correspond to rotations to the right and positive step counts
-     * correspond to rotations to the left. A step count of zero can be used to
-     * indicate a column rotation in the BFV scheme complex conjugation in the
-     * CKKS scheme.
+     * Generates and returns relinearization keys as a serializable object.
+     *
+     * Half of the key data is pseudo-randomly generated from a seed to reduce
+     * the object size. The resulting serializable object cannot be used
+     * directly and is meant to be serialized for the size reduction to have an
+     * impact.
      *
      * @function
-     * @name KeyGenerator#genGaloisKeys
+     * @name KeyGenerator#relinKeys
+     * @returns {RelinKeys} New RelinKeys from the KeyGenerator's internal secret key
+     */
+    relinKeys() {
+      try {
+        const serialized = Serializable()
+        const instance = _instance.genRelinKeys()
+        serialized.unsafeInject(instance)
+        return serialized
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Generates and returns Galois keys. This function returns Galois keys in
+     * a fully expanded form and is meant to be used primarily for demo, testing,
+     * and debugging purposes. The user can optionally give an input a vector of desired
+     * Galois rotation step counts, where negative step counts correspond to
+     * rotations to the right and positive step counts correspond to rotations to
+     * the left. A step count of zero can be used to indicate a column rotation
+     * in the BFV scheme complex conjugation in the CKKS scheme.
+     *
+     * @function
+     * @name KeyGenerator#genGaloisKeysLocal
      * @param {Int32Array} [steps=null] Specific Galois Elements to generate
      * @returns {GaloisKeys} New GaloisKeys from the KeyGenerator's internal secret key
      */
-    genGaloisKeys(steps = null) {
+    genGaloisKeysLocal(steps = null) {
       try {
         if (steps) {
           const key = GaloisKeys()
@@ -157,29 +181,35 @@ export const KeyGenerator = library => ({
     },
 
     /**
-     * Generates and saves Galois keys to a base64 string. If provided with steps,
-     * This function creates specific Galois keys that can be used to apply
-     * specific Galois automorphisms on encrypted data. The user needs to give
-     * as input a vector of Galois elements corresponding to the keys that are
-     * to be created.
-
-     * Half of the polynomials in Galois keys are randomly generated and are
-     * replaced with the seed used to compress output size. The output is in
-     * binary format and not human-readable. The output stream must have the
-     * "binary" flag set.
+     * Generates and returns Galois keys as a serializable object. This function
+     * creates specific Galois keys that can be used to apply specific Galois
+     * automorphisms on encrypted data. The user can optionally give an input a vector
+     * of desired Galois rotation step counts, where negative step counts
+     * correspond to rotations to the right and positive step counts correspond
+     * to rotations to the left. A step count of zero can be used to indicate
+     * a column rotation in the BFV scheme complex conjugation in the CKKS scheme.
+     * Half of the key data is pseudo-randomly generated from a seed to reduce
+     * the object size. The resulting serializable object cannot be used
+     * directly and is meant to be serialized for the size reduction to have an
+     * impact.
      *
      * @function
-     * @name KeyGenerator#galoisKeysSave
+     * @name KeyGenerator#galoisKeys
      * @param {Int32Array} [steps=null] Specific Galois Elements to generate
-     * @param {ComprModeType} [compression={@link ComprModeType.deflate}] The compression mode to use
      * @returns {String} Base64 encoded string
      */
-    galoisKeysSave(steps = null, compression = ComprModeType.deflate) {
+    galoisKeys(steps = null) {
       try {
         if (steps) {
-          return _instance.galoisKeysSave(steps, compression)
+          const serialized = Serializable()
+          const instance = _instance.genGaloisKeys(steps)
+          serialized.unsafeInject(instance)
+          return serialized
         }
-        return _instance.galoisKeysSaveAll(compression)
+        const serialized = Serializable()
+        const instance = _instance.genGaloisKeys(Int32Array.from(0))
+        serialized.unsafeInject(instance)
+        return serialized
       } catch (e) {
         throw Exception.safe(e)
       }

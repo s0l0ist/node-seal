@@ -126,7 +126,7 @@ describe('GaloisKeys', () => {
     expect(array.constructor).toBe(Uint8Array)
   })
   test('It should load from a string', () => {
-    const item = keyGenerator.genGaloisKeys()
+    const item = keyGenerator.genGaloisKeysLocal()
     const newItem = GaloisKeysObject()
     const str = item.save()
     const spyOn = jest.spyOn(newItem, 'load')
@@ -135,7 +135,7 @@ describe('GaloisKeys', () => {
     expect(newItem.save()).toEqual(str)
   })
   test('It should load from a typed array', () => {
-    const item = keyGenerator.genGaloisKeys()
+    const item = keyGenerator.genGaloisKeysLocal()
     const newItem = GaloisKeysObject()
     const array = item.saveArray()
     const spyOn = jest.spyOn(newItem, 'loadArray')
@@ -228,14 +228,14 @@ describe('GaloisKeys', () => {
     )
   })
   test('It should copy another instance', () => {
-    const item = keyGenerator.genGaloisKeys()
+    const item = keyGenerator.genGaloisKeysLocal()
     const newItem = GaloisKeysObject()
     const spyOn = jest.spyOn(newItem, 'copy')
     newItem.copy(item)
     expect(spyOn).toHaveBeenCalledWith(item)
   })
   test('It should fail to copy another instance', () => {
-    const item = keyGenerator.genGaloisKeys()
+    const item = keyGenerator.genGaloisKeysLocal()
     const newItem = GaloisKeysObject()
     item.delete()
     const spyOn = jest.spyOn(newItem, 'copy')
@@ -261,7 +261,7 @@ describe('GaloisKeys', () => {
     expect(spyOn).toHaveBeenCalledWith()
   })
   test('It should move another instance into itself and delete the old', () => {
-    const item = keyGenerator.genGaloisKeys()
+    const item = keyGenerator.genGaloisKeysLocal()
     const newItem = GaloisKeysObject()
     const spyOn = jest.spyOn(newItem, 'move')
     newItem.move(item)
@@ -269,7 +269,7 @@ describe('GaloisKeys', () => {
     expect(item.instance).toBeNull()
   })
   test('It should fail to move another instance into itself and delete the old', () => {
-    const item = keyGenerator.genGaloisKeys()
+    const item = keyGenerator.genGaloisKeysLocal()
     const newItem = GaloisKeysObject()
     item.delete()
     const spyOn = jest.spyOn(newItem, 'move')
