@@ -11,7 +11,7 @@ https://cmake.org/download/
 
 Install:
 
-```
+```shell
 cd ./cmake-3.15.4
 ./bootstrap
 make -j4
@@ -28,7 +28,7 @@ The repository contains a few submodules:
 
 To begin development, first clone the repository and related submodules
 
-```
+```shell
 git clone --recursive https://github.com/morfix-io/node-seal.git
 
 cd node-seal
@@ -42,14 +42,14 @@ Assembly code.
 First, initialize the Emscripten SDK build environment. This sets up a known working version
 of the SDK to build the project:
 
-```
+```shell
 yarn em:update      # Updates the tag information
 yarn em:init        # Sets up the working toolchain
 ```
 
 Next, compile zlib:
 
-```
+```shell
 yarn zlib:clean     # When you want to remove all artifacts
 yarn zlib:cmake     # Do this once
 yarn zlib:make      # Will begin building the zlib static library
@@ -57,7 +57,7 @@ yarn zlib:make      # Will begin building the zlib static library
 
 Finally, configure the Microsoft SEAL build settings:
 
-```
+```shell
 yarn seal:clean     # When you want to remove all artifacts
 yarn seal:cmake     # Do this once
 yarn seal:make      # Will begin building the SEAL static library
@@ -69,7 +69,7 @@ Testing requires a seal:build to have completed successfully.
 All test should pass and coverage should be 100% when making contributions.
 **Note**: this could a few minutes and is very CPU/memory intensive.
 
-```
+```shell
 yarn coverage
 ```
 
