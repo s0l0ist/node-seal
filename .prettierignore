@@ -2,5 +2,5 @@
 /docs/*
 /node_modules/*
 /scripts/*
-/src/bin/*.js
+/src/bin/**/*.js
 /submodules/*
