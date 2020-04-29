@@ -9,7 +9,7 @@ because of how some browsers limit the size of synchronously
 loaded WASM files. Therefore, loading must be done
 asynchronously.
 
-```
+```javascript
 // ES6 import
 // import { Seal } from 'node-seal'
 const { Seal } = require('node-seal')
@@ -34,7 +34,7 @@ of parameters for an application, but there is a methodology behind optimization
 
 There are two `SchemeTypes`:
 
-```
+```javascript
 Morfix.SchemeType.BFV
 Morfix.SchemeType.CKKS
 ```
@@ -42,7 +42,7 @@ Morfix.SchemeType.CKKS
 A security level determines the bit level security of the encrypted data.
 There are 3 modes you should be primarily concerned with:
 
-```
+```javascript
 Morfix.SchemeType.none // Use unless you know what you're doing
 Morfix.SchemeType.tc128
 Morfix.SchemeType.tc192
@@ -51,7 +51,7 @@ Morfix.SchemeType.tc256
 
 PolyModulusDegree needs to be a power of 2. We've set up initial helpers on the demo to create the following:
 
-```
+```none
     1024 Bits,
     2048 Bits,
     4096 Bits,
@@ -65,7 +65,7 @@ auto generated a list of bit-lengths in the demo, but they can easily be overrid
 
 Example:
 
-```
+```javascript
 ////////////////////////
 // Encryption Parameters
 ////////////////////////
@@ -73,7 +73,7 @@ Example:
 const schemeType = Morfix.SchemeType.BFV
 const securityLevel = Morfix.SecurityLevel.tc128
 const polyModulusDegree = 4096
-const bitSizes = [36,36,37]
+const bitSizes = [36, 36, 37]
 const bitSize = 20
 
 const encParms = Morfix.EncryptionParameters(schemeType)
@@ -97,7 +97,7 @@ encParms.setPlainModulus(
 After encryption parameters are created, we need to use them to create a Context. A Context is used to create all
 other instances which execute within the same **context** as the encryption parameters we specify.
 
-```
+```javascript
 ////////////////////////
 // Context
 ////////////////////////
@@ -110,7 +110,9 @@ const context = Morfix.Context(
 )
 
 if (!context.parametersSet) {
-  throw new Error('Could not set the parameters in the given context. Please try different encryption parameters.')
+  throw new Error(
+    'Could not set the parameters in the given context. Please try different encryption parameters.'
+  )
 }
 ```
 
@@ -126,7 +128,7 @@ A KeyGenerator is used to create all the keys necessary for encryption and decry
 
 You may generate a new Public Key (or even Relin/Galois Keys) from an existing Secret key.
 
-```
+```javascript
 ////////////////////////
 // Keys
 ////////////////////////
@@ -188,7 +190,7 @@ const keyGenerator = Morfix.KeyGenerator(context, UploadedSecretKey, UploadedPub
 Variables hold data we are manipulating. PlainTexts store encoded values of the human readable data that we
 provide. CipherTexts store encrypted values of the encoded PlainText. Homomorphic operations occur on CipherTexts.
 
-```
+```javascript
 ////////////////////////
 // Variables
 ////////////////////////
@@ -227,7 +229,7 @@ To perform homomorphic evaluations, we need to construct a few helpers:
 - **Encryptor:** Used to encrypt a PlainText to a CipherText.
 - **Decryptor:** Used to decrypt a CipherText to a PlainText.
 
-```
+```javascript
 ////////////////////////
 // Instances
 ////////////////////////
@@ -253,7 +255,7 @@ const decryptor = Morfix.Decryptor(context, secretKey)
 We show homomorphic addition, but more functions are available and the code can
 be generated from the [demo](https://morfix.io/sandbox).
 
-```
+```javascript
 ////////////////////////
 // Homomorphic Functions
 ////////////////////////

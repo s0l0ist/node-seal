@@ -2,8 +2,8 @@
 
 CommonJS (but also works with `import`)
 
-```
-(async () => {
+```javascript
+;(async () => {
   // ES6 or CommonJS
   // import { Seal } from 'node-seal'
   // const { Seal } = require('node-seal')
@@ -14,7 +14,7 @@ CommonJS (but also works with `import`)
   const schemeType = Morfix.SchemeType.BFV
   const securityLevel = Morfix.SecurityLevel.tc128
   const polyModulusDegree = 4096
-  const bitSizes = [36,36,37]
+  const bitSizes = [36, 36, 37]
   const bitSize = 20
 
   const parms = Morfix.EncryptionParameters(schemeType)
@@ -39,7 +39,9 @@ CommonJS (but also works with `import`)
   )
 
   if (!context.parametersSet) {
-    throw new Error('Could not set the parameters in the given context. Please try different encryption parameters.')
+    throw new Error(
+      'Could not set the parameters in the given context. Please try different encryption parameters.'
+    )
   }
 
   const encoder = Morfix.BatchEncoder(context)
@@ -51,7 +53,7 @@ CommonJS (but also works with `import`)
   const evaluator = Morfix.Evaluator(context)
 
   // Create data to be encrypted
-  const array = Int32Array.from([1,2,3,4,5])
+  const array = Int32Array.from([1, 2, 3, 4, 5])
 
   // Encode the Array
   const plainText = encoder.encode(array)
@@ -60,7 +62,7 @@ CommonJS (but also works with `import`)
   const cipherText = encryptor.encrypt(plainText)
 
   // Add the CipherText to itself and store it in the destination parameter (itself)
-  evaluator.add(cipherText, cipherText, cipherText)  // Op (A), Op (B), Op (Dest)
+  evaluator.add(cipherText, cipherText, cipherText) // Op (A), Op (B), Op (Dest)
 
   // Or create return a new cipher with the result (omitting destination parameter)
   // const cipher2x = evaluator.add(cipherText, cipherText)

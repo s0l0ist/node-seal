@@ -12,11 +12,11 @@ node-seal is a homomorphic encryption library in JavaScript.
 
 node-seal can be installed with your favorite package manager:
 
-```bash
+```shell
 npm install node-seal
 ```
 
-```bash
+```shell
 yarn add node-seal
 ```
 
@@ -54,7 +54,6 @@ Simply add an empty `document` object to the `global` provided by react-native:
 
 ```javascript
 import { Seal } from 'node-seal/dist/web/js'
-
 ;(async () => {
   global.document = {} // mimic browser document
   const seal = await Seal()
@@ -172,7 +171,7 @@ Conversion from C++ to Web Assembly has some limitations:
   on C++ objects. JavaScript code must explicitly delete any C++ object handles it has received, or the
   heap will grow indefinitely.
 
-  ```
+  ```javascript
   <instance>.delete()
   ```
 
