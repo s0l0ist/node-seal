@@ -1,6 +1,7 @@
 # Full Example
 
 CommonJS (but also works with `import`)
+
 ```
 (async () => {
   // ES6 or CommonJS
@@ -15,22 +16,22 @@ CommonJS (but also works with `import`)
   const polyModulusDegree = 4096
   const bitSizes = [36,36,37]
   const bitSize = 20
-  
+
   const parms = Morfix.EncryptionParameters(schemeType)
-  
+
   // Set the PolyModulusDegree
   parms.setPolyModulusDegree(polyModulusDegree)
-  
+
   // Create a suitable set of CoeffModulus primes
   parms.setCoeffModulus(
     Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes))
   )
-  
+
   // Set the PlainModulus to a prime of bitSize 20.
   parms.setPlainModulus(
     Morfix.PlainModulus.Batching(polyModulusDegree, bitSize)
   )
-  
+
   const context = Morfix.Context(
     parms, // Encryption Parameters
     true, // ExpandModChain
