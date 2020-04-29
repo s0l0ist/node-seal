@@ -43,10 +43,10 @@ A security level determines the bit level security of the encrypted data.
 There are 3 modes you should be primarily concerned with:
 
 ```javascript
-Morfix.SchemeType.none // Use unless you know what you're doing
-Morfix.SchemeType.tc128
-Morfix.SchemeType.tc192
-Morfix.SchemeType.tc256
+Morfix.SecurityLevel.none // Use unless you know what you're doing
+Morfix.SecurityLevel.tc128
+Morfix.SecurityLevel.tc192
+Morfix.SecurityLevel.tc256
 ```
 
 PolyModulusDegree needs to be a power of 2. We've set up initial helpers on the demo to create the following:
@@ -204,7 +204,7 @@ const cipherA = Morfix.CipherText()
 const cipherB = Morfix.CipherText()
 
 // Saving
-... after some encoding...
+// ... after some encoding...
 const plainAbase64 = plainA.save() // Saves as a base64 string.
 
 // Loading. Create an empty instance, then use the following method
@@ -212,7 +212,7 @@ const uploadedPlain = Morfix.PlainText()
 uploadedPlain.load(context, plainAbase64)
 
 // Saving
-... after some encryption...
+// ... after some encryption...
 const cipherAbase64 = cipherA.save() // Saves as a base64 string.
 
 // Loading. Create an empty instance, then use the following method
