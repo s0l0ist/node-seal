@@ -3,6 +3,7 @@
 We welcome help on this project, but please create all PRs with feature branches onto Master.
 
 ### Requirements
+
 #### Cmake > 3.12
 
 Download latest stable cmake from:
@@ -20,11 +21,13 @@ sudo make install
 ### Development
 
 The repository contains a few submodules:
+
 - [Emscripten SDK](https://github.com/emscripten-core/emsdk)
 - [Zlib](https://github.com/madler/zlib)
 - [Microsoft SEAL](https://github.com/microsoft/SEAL)
 
 To begin development, first clone the repository and related submodules
+
 ```
 git clone --recursive https://github.com/morfix-io/node-seal.git
 
@@ -33,7 +36,7 @@ cd node-seal
 yarn install
 ```
 
-Inside [package.json](package.json), we have several scripts to help generate the Web 
+Inside [package.json](package.json), we have several scripts to help generate the Web
 Assembly code.
 
 First, initialize the Emscripten SDK build environment. This sets up a known working version
@@ -45,6 +48,7 @@ yarn em:init        # Sets up the working toolchain
 ```
 
 Next, compile zlib:
+
 ```
 yarn zlib:clean     # When you want to remove all artifacts
 yarn zlib:cmake     # Do this once
@@ -62,7 +66,7 @@ yarn build          # Will build both the web and node supporting JS and Web Ass
 ```
 
 Testing requires a seal:build to have completed successfully.
-All test should pass and coverage should be 100% when making contributions. 
+All test should pass and coverage should be 100% when making contributions.
 **Note**: this could a few minutes and is very CPU/memory intensive.
 
 ```
