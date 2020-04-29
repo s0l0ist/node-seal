@@ -176,7 +176,7 @@ export const GaloisKeys = library => ({
      * @name GaloisKeys#copy
      * @param {GaloisKeys} key GaloisKeys to copy
      * @example
-     * const keyA = keyGenerator.genGaloisKeys()
+     * const keyA = keyGenerator.genGaloisKeysLocal()
      * const keyB = Morfix.GaloisKeys()
      * keyB.copy(keyA)
      * // keyB holds a copy of keyA
@@ -196,7 +196,7 @@ export const GaloisKeys = library => ({
      * @name GaloisKeys#clone
      * @returns {GaloisKeys}
      * @example
-     * const keyA = keyGenerator.genGaloisKeys()
+     * const keyA = keyGenerator.genGaloisKeysLocal()
      * const keyB = keyA.clone()
      * // keyB holds a copy of keyA
      */
@@ -222,7 +222,7 @@ export const GaloisKeys = library => ({
      * @name GaloisKeys#move
      * @param {GaloisKeys} key GaloisKeys to move
      * @example
-     * const keyA = keyGenerator.genGaloisKeys()
+     * const keyA = keyGenerator.genGaloisKeysLocal()
      * const keyB = Morfix.GaloisKeys()
      * keyB.move(keyA)
      * // keyB holds a the instance of keyA.
