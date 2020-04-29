@@ -340,84 +340,110 @@ describe('CipherText', () => {
     expect(() =>
       newCipher.load(
         context,
-        'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
+        'XqEQAwUBAAAoAAAAAAAAAHicY2CgCHywj1sowMwKZEmgyQAAOaoCXw=='
       )
     ).toThrow()
     expect(spyOn).toHaveBeenCalledWith(
       context,
-      'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
+      'XqEQAwUBAAAoAAAAAAAAAHicY2CgCHywj1sowMwKZEmgyQAAOaoCXw=='
     )
   })
-  // test('It should fail to load from a Uint8Array', () => {
-  //   const newCipher = CipherTextObject()
-  //   const spyOn = jest.spyOn(newCipher, 'loadArray')
-  //   expect(() =>
-  //     newCipher.loadArray(
-  //       context,
-  //       Uint8Array.from([
-  //         93,
-  //         161,
-  //         0,
-  //         1,
-  //         27,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         0,
-  //         120,
-  //         156,
-  //         99,
-  //         103,
-  //         128,
-  //         0,
-  //         0,
-  //         0,
-  //         64,
-  //         0,
-  //         8
-  //       ])
-  //     )
-  //   ).toThrow()
-  //   expect(spyOn).toHaveBeenCalledWith(
-  //     context,
-  //     Uint8Array.from([
-  //       93,
-  //       161,
-  //       0,
-  //       1,
-  //       27,
-  //       0,
-  //       0,
-  //       0,
-  //       0,
-  //       0,
-  //       0,
-  //       0,
-  //       0,
-  //       0,
-  //       0,
-  //       0,
-  //       120,
-  //       156,
-  //       99,
-  //       103,
-  //       128,
-  //       0,
-  //       0,
-  //       0,
-  //       64,
-  //       0,
-  //       8
-  //     ])
-  //   )
-  // })
+  test('It should fail to load from a Uint8Array', () => {
+    const newCipher = CipherTextObject()
+    const spyOn = jest.spyOn(newCipher, 'loadArray')
+    expect(() =>
+      newCipher.loadArray(
+        context,
+        Uint8Array.from([
+          94,
+          161,
+          16,
+          3,
+          5,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          120,
+          156,
+          99,
+          96,
+          160,
+          8,
+          124,
+          176,
+          143,
+          91,
+          40,
+          192,
+          204,
+          10,
+          100,
+          73,
+          160,
+          201,
+          0,
+          0,
+          57,
+          170,
+          2,
+          95
+        ])
+      )
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(
+      context,
+      Uint8Array.from([
+        94,
+        161,
+        16,
+        3,
+        5,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        120,
+        156,
+        99,
+        96,
+        160,
+        8,
+        124,
+        176,
+        143,
+        91,
+        40,
+        192,
+        204,
+        10,
+        100,
+        73,
+        160,
+        201,
+        0,
+        0,
+        57,
+        170,
+        2,
+        95
+      ])
+    )
+  })
   test('It should copy another instance', () => {
     const arr = Int32Array.from(
       Array.from({ length: encoder.slotCount }).fill(5)
