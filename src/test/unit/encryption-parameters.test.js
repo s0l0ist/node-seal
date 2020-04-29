@@ -129,14 +129,14 @@ describe('EncryptionParameters', () => {
 
   test('It should fail to set the plain modulus (none)', () => {
     const encParms = EncryptionParametersObject()
-    const plainModulus = Morfix.SmallModulus('786433')
+    const plainModulus = Morfix.Modulus('786433')
     const spyOn = jest.spyOn(encParms, 'setPlainModulus')
     expect(() => encParms.setPlainModulus(plainModulus)).toThrow()
     expect(spyOn).toHaveBeenCalledWith(plainModulus)
   })
   test('It should set the plain modulus (bfv)', () => {
     const encParms = EncryptionParametersObject(Morfix.SchemeType.BFV)
-    const plainModulus = Morfix.SmallModulus('786433')
+    const plainModulus = Morfix.Modulus('786433')
     const spyOn = jest.spyOn(encParms, 'setPlainModulus')
     encParms.setPlainModulus(plainModulus)
     expect(spyOn).toHaveBeenCalledWith(plainModulus)
@@ -197,20 +197,16 @@ describe('EncryptionParameters', () => {
 
   test('It should fail to return the plain modulus (none)', () => {
     const encParms = EncryptionParametersObject()
-    expect(() =>
-      encParms.setPlainModulus(Morfix.SmallModulus('786433'))
-    ).toThrow()
+    expect(() => encParms.setPlainModulus(Morfix.Modulus('786433'))).toThrow()
   })
   test('It should return the plain modulus (bfv)', () => {
     const encParms = EncryptionParametersObject(Morfix.SchemeType.BFV)
-    encParms.setPlainModulus(Morfix.SmallModulus('786433'))
+    encParms.setPlainModulus(Morfix.Modulus('786433'))
     expect(encParms.plainModulus.value).toBe(BigInt(786433))
   })
   test('It should fail to return the plain modulus (ckks)', () => {
     const encParms = EncryptionParametersObject(Morfix.SchemeType.CKKS)
-    expect(() =>
-      encParms.setPlainModulus(Morfix.SmallModulus('786433'))
-    ).toThrow()
+    expect(() => encParms.setPlainModulus(Morfix.Modulus('786433'))).toThrow()
   })
 
   test('It should save to a string (none)', () => {
@@ -226,7 +222,7 @@ describe('EncryptionParameters', () => {
     encParms.setCoeffModulus(
       Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
     )
-    encParms.setPlainModulus(Morfix.SmallModulus('786433'))
+    encParms.setPlainModulus(Morfix.Modulus('786433'))
     const spyOn = jest.spyOn(encParms, 'save')
     const str = encParms.save()
     expect(spyOn).toHaveBeenCalled()
@@ -238,7 +234,7 @@ describe('EncryptionParameters', () => {
     encParms.setCoeffModulus(
       Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
     )
-    encParms.setPlainModulus(Morfix.SmallModulus('786433'))
+    encParms.setPlainModulus(Morfix.Modulus('786433'))
     const spyOn = jest.spyOn(encParms, 'saveArray')
     const array = encParms.saveArray()
     expect(spyOn).toHaveBeenCalled()
@@ -278,12 +274,12 @@ describe('EncryptionParameters', () => {
     expect(() =>
       encParms.loadArray(
         Uint8Array.from([
-          93,
+          94,
           161,
-          0,
+          16,
+          3,
+          5,
           1,
-          27,
-          0,
           0,
           0,
           0,
@@ -310,12 +306,12 @@ describe('EncryptionParameters', () => {
     ).toThrow()
     expect(spyOn).toHaveBeenCalledWith(
       Uint8Array.from([
-        93,
+        94,
         161,
-        0,
+        16,
+        3,
+        5,
         1,
-        27,
-        0,
         0,
         0,
         0,

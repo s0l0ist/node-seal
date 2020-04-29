@@ -109,7 +109,7 @@ describe('CipherText', () => {
     expect(cipher).toHaveProperty('reserve')
     expect(cipher).toHaveProperty('resize')
     expect(cipher).toHaveProperty('release')
-    expect(cipher).toHaveProperty('coeffModCount')
+    expect(cipher).toHaveProperty('coeffModulusSize')
     expect(cipher).toHaveProperty('polyModulusDegree')
     expect(cipher).toHaveProperty('size')
     expect(cipher).toHaveProperty('sizeCapacity')
@@ -197,10 +197,10 @@ describe('CipherText', () => {
     cipher.release()
     expect(spyOn).toHaveBeenCalledWith()
   })
-  test('It should return the coeff mod count', () => {
+  test('It should return the coeff mod size', () => {
     const cipher = CipherTextObject()
     cipher.reserve(context, 2)
-    expect(typeof cipher.coeffModCount).toBe('number')
+    expect(typeof cipher.coeffModulusSize).toBe('number')
   })
   test('It should return the poly modulus degree', () => {
     const arr = Int32Array.from(

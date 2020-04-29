@@ -158,11 +158,11 @@ export const CipherText = library => ({
      * allocation size of the CipherText.
      *
      * @readonly
-     * @name CipherText#coeffModCount
+     * @name CipherText#coeffModulusSize
      * @type {Number}
      */
-    get coeffModCount() {
-      return _instance.coeffModCount()
+    get coeffModulusSize() {
+      return _instance.coeffModulusSize()
     },
 
     /**
