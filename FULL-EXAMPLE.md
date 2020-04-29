@@ -37,7 +37,7 @@ CommonJS (but also works with `import`)
     securityLevel // Enforce a security level
   )
 
-  if (!context.parametersSet) {
+  if (!context.parametersSet()) {
     throw new Error('Could not set the parameters in the given context. Please try different encryption parameters.')
   }
 

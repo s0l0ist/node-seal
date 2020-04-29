@@ -69,7 +69,7 @@ describe('Context', () => {
     const spyOn = jest.spyOn(newItem, 'unsafeInject')
     newItem.unsafeInject(item.instance)
     expect(spyOn).toHaveBeenCalledWith(item.instance)
-    expect(newItem.parametersSet).toEqual(true)
+    expect(newItem.parametersSet()).toEqual(true)
   })
   test('It should delete the old instance and inject', () => {
     const item = ContextObject(parms)
@@ -77,7 +77,7 @@ describe('Context', () => {
     const spyOn = jest.spyOn(newItem, 'unsafeInject')
     newItem.unsafeInject(item.instance)
     expect(spyOn).toHaveBeenCalledWith(item.instance)
-    expect(newItem.parametersSet).toEqual(true)
+    expect(newItem.parametersSet()).toEqual(true)
   })
   test("It should delete it's instance", () => {
     const item = ContextObject(parms)
@@ -127,7 +127,7 @@ describe('Context', () => {
   })
   test('It should return true if the parameters are set correctly', () => {
     const item = ContextObject(parms)
-    expect(typeof item.parametersSet).toBe('boolean')
+    expect(typeof item.parametersSet()).toBe('boolean')
   })
   test('It should return the parmsId corresponding to the parms that are used for keys', () => {
     const item = ContextObject(parms)
