@@ -120,12 +120,12 @@ describe('PublicKey', () => {
     expect(() =>
       newItem.load(
         context,
-        'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
+        'XqEQAwUBAAAoAAAAAAAAAHicY2CgCHywj1sowMwKZEmgyQAAOaoCXw=='
       )
     ).toThrow()
     expect(spyOn).toHaveBeenCalledWith(
       context,
-      'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
+      'XqEQAwUBAAAoAAAAAAAAAHicY2CgCHywj1sowMwKZEmgyQAAOaoCXw=='
     )
   })
   test('It should fail to load from a Uint8Array', () => {
@@ -135,15 +135,15 @@ describe('PublicKey', () => {
       newItem.loadArray(
         context,
         Uint8Array.from([
-          93,
+          94,
           161,
-          0,
+          16,
+          3,
+          5,
           1,
-          27,
           0,
           0,
-          0,
-          0,
+          40,
           0,
           0,
           0,
@@ -154,29 +154,42 @@ describe('PublicKey', () => {
           120,
           156,
           99,
-          103,
-          128,
+          96,
+          160,
+          8,
+          124,
+          176,
+          143,
+          91,
+          40,
+          192,
+          204,
+          10,
+          100,
+          73,
+          160,
+          201,
           0,
           0,
-          0,
-          64,
-          0,
-          8
+          57,
+          170,
+          2,
+          95
         ])
       )
     ).toThrow()
     expect(spyOn).toHaveBeenCalledWith(
       context,
       Uint8Array.from([
-        93,
+        94,
         161,
-        0,
+        16,
+        3,
+        5,
         1,
-        27,
         0,
         0,
-        0,
-        0,
+        40,
         0,
         0,
         0,
@@ -187,14 +200,27 @@ describe('PublicKey', () => {
         120,
         156,
         99,
-        103,
-        128,
+        96,
+        160,
+        8,
+        124,
+        176,
+        143,
+        91,
+        40,
+        192,
+        204,
+        10,
+        100,
+        73,
+        160,
+        201,
         0,
         0,
-        0,
-        64,
-        0,
-        8
+        57,
+        170,
+        2,
+        95
       ])
     )
   })
