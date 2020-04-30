@@ -13,7 +13,7 @@ let SerializableObject = null
 beforeAll(async () => {
   Morfix = await Seal()
   const lib = getLibrary()
-  SerializableObject = Serializable(lib)(Morfix)
+  SerializableObject = Serializable()(Morfix)
 
   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
   parms.setPolyModulusDegree(4096)

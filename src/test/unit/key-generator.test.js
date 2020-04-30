@@ -6,7 +6,6 @@ let Morfix,
   context,
   keyGen,
   secretKey,
-  publicKey,
   invalidParms,
   invalidContext,
   KeyGeneratorObject = null
@@ -24,7 +23,6 @@ beforeAll(async () => {
   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
   keyGen = Morfix.KeyGenerator(context)
   secretKey = keyGen.secretKey()
-  publicKey = keyGen.publicKey()
 
   invalidParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
   invalidParms.setPolyModulusDegree(1024)
