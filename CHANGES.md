@@ -1,15 +1,15 @@
 # List of Changes
 
-See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
+See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
 ## Version 4.3.0
 
 Feat:
 
-- Upgraded to [SEAL v3.5.1](https://github.com/microsoft/SEAL/blob/master/Changes.md)
+- Upgraded to [SEAL v3.5.1](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 - Removed submodule and scripts for `zlib` as this is now contained within SEAL.
-- The seeded versions of Encryptor's symmetric-key encryption and KeyGenerator's RelinKeys and GaloisKeys generation now output Serializable objects. See more details in the [MS SEAL API Changes](https://github.com/microsoft/SEAL/blob/master/Changes.md).
+- The seeded versions of Encryptor's symmetric-key encryption and KeyGenerator's RelinKeys and GaloisKeys generation now output Serializable objects. See more details in the [MS SEAL API Changes](https://github.com/microsoft/SEAL/blob/master/CHANGES.md).
 - `SmallModulus` has been renamed to `Modulus`.
 - `Ciphertext.coeffModCount` has been renamed to `Ciphertext.coeffModulusSize`.
 - Renamed KeyGenerator.[get|gen]\* functions to their original C++ names. Ex: `KeyGenerator.getPublicKey()` -> `KeyGenerator.publicKey()`, `KeyGenerator.genRelinKeys()` -> `KeyGenerator.relinKeys()`.
