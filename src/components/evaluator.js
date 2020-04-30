@@ -244,7 +244,7 @@ export const Evaluator = library => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const relinKeys = keyGenerator.genRelinKeys()
+     * const relinKeys = keyGenerator.relinKeys()
      * const cipherTextA = Morfix.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.relinearize(cipherTextA, relinKeys)
@@ -553,7 +553,7 @@ export const Evaluator = library => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const relinKeys = keyGenerator.genRelinKeys()
+     * const relinKeys = keyGenerator.relinKeys()
      * const cipherTextA = Morfix.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.exponentiate(cipherTextA, 3, relinKeys)
@@ -934,7 +934,7 @@ export const Evaluator = library => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const galoisKeys = keyGenerator.genGaloisKeys()
+     * const galoisKeys = keyGenerator.galoisKeys()
      * const cipherTextA = Morfix.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.rotateRows(cipherTextA, 3, galoisKeys)
@@ -991,7 +991,7 @@ export const Evaluator = library => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const galoisKeys = keyGenerator.genGaloisKeys()
+     * const galoisKeys = keyGenerator.galoisKeys()
      * const cipherTextA = Morfix.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.rotateColumns(cipherTextA, galoisKeys)
@@ -1046,7 +1046,7 @@ export const Evaluator = library => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const galoisKeys = keyGenerator.genGaloisKeys()
+     * const galoisKeys = keyGenerator.galoisKeys()
      * const cipherTextA = Morfix.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.rotateVector(cipherTextA, 3, galoisKeys)
@@ -1101,7 +1101,7 @@ export const Evaluator = library => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const galoisKeys = keyGenerator.genGaloisKeys()
+     * const galoisKeys = keyGenerator.galoisKeys()
      * const cipherTextA = Morfix.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.complexConjugate(cipherTextA, galoisKeys)
@@ -1150,7 +1150,7 @@ export const Evaluator = library => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const galoisKeys = keyGenerator.genGaloisKeys()
+     * const galoisKeys = keyGenerator.galoisKeys()
      * const cipherTextA = Morfix.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.sumElements(cipherTextA, galoisKeys, Morfix.SchemeTypes.BFV)
@@ -1206,8 +1206,8 @@ export const Evaluator = library => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const relinKeys = keyGenerator.genRelinKeys()
-     * const galoisKeys = keyGenerator.genGaloisKeys()
+     * const relinKeys = keyGenerator.relinKeys()
+     * const galoisKeys = keyGenerator.galoisKeys()
      * const cipherTextA = Morfix.CipherText()
      * const cipherTextB = Morfix.CipherText()
      * // ... after encrypting some data ...
@@ -1279,7 +1279,7 @@ export const Evaluator = library => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const galoisKeys = keyGenerator.genGaloisKeys()
+     * const galoisKeys = keyGenerator.galoisKeys()
      * const cipherTextA = Morfix.CipherText()
      * const plainTextB = Morfix.PlainText()
      * // ... after encoding / encrypting some data ...

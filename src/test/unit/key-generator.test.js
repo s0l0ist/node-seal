@@ -66,9 +66,9 @@ describe('KeyGenerator', () => {
     expect(item).toHaveProperty('delete')
     expect(item).toHaveProperty('getSecretKey')
     expect(item).toHaveProperty('getPublicKey')
-    expect(item).toHaveProperty('genRelinKeysLocal')
+    expect(item).toHaveProperty('relinKeysLocal')
     expect(item).toHaveProperty('relinKeys')
-    expect(item).toHaveProperty('genGaloisKeysLocal')
+    expect(item).toHaveProperty('galoisKeysLocal')
     expect(item).toHaveProperty('galoisKeys')
   })
   test('It should have an instance (bfv)', () => {
@@ -121,28 +121,28 @@ describe('KeyGenerator', () => {
   })
   test('It should generate and return relinKeys', () => {
     const item = KeyGeneratorObject(context)
-    const spyOn = jest.spyOn(item, 'genRelinKeysLocal')
-    const key = item.genRelinKeysLocal()
+    const spyOn = jest.spyOn(item, 'relinKeysLocal')
+    const key = item.relinKeysLocal()
     expect(spyOn).toHaveBeenCalledWith()
     expect(key.instance).toBeDefined()
   })
   test('It should fail to generate and return relinKeys', () => {
     const item = KeyGeneratorObject(invalidContext)
-    const spyOn = jest.spyOn(item, 'genRelinKeysLocal')
-    expect(() => item.genRelinKeysLocal()).toThrow()
+    const spyOn = jest.spyOn(item, 'relinKeysLocal')
+    expect(() => item.relinKeysLocal()).toThrow()
     expect(spyOn).toHaveBeenCalledWith()
   })
   test('It should generate and return all galoisKeys', () => {
     const item = KeyGeneratorObject(context)
-    const spyOn = jest.spyOn(item, 'genGaloisKeysLocal')
-    const key = item.genGaloisKeysLocal()
+    const spyOn = jest.spyOn(item, 'galoisKeysLocal')
+    const key = item.galoisKeysLocal()
     expect(spyOn).toHaveBeenCalledWith()
     expect(key.instance).toBeDefined()
   })
   test('It should generate and return specific galoisKeys', () => {
     const item = KeyGeneratorObject(context)
-    const spyOn = jest.spyOn(item, 'genGaloisKeysLocal')
-    const key = item.genGaloisKeysLocal(
+    const spyOn = jest.spyOn(item, 'galoisKeysLocal')
+    const key = item.galoisKeysLocal(
       Int32Array.from([1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024])
     )
     expect(spyOn).toHaveBeenCalledWith(
@@ -152,8 +152,8 @@ describe('KeyGenerator', () => {
   })
   test('It should fail to generate and return galoisKeys', () => {
     const item = KeyGeneratorObject(invalidContext)
-    const spyOn = jest.spyOn(item, 'genGaloisKeysLocal')
-    expect(() => item.genGaloisKeysLocal()).toThrow()
+    const spyOn = jest.spyOn(item, 'galoisKeysLocal')
+    expect(() => item.galoisKeysLocal()).toThrow()
     expect(spyOn).toHaveBeenCalledWith()
   })
   test('It should generate and return all galoisKeys as a base64 string', () => {

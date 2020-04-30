@@ -91,14 +91,14 @@ function create() {
     if (context.usingKeyswitching) {
       process.stdout.write('Generating relinearization keys: ')
       timeStart = performance.now()
-      relinKeys.move(keyGenerator.genRelinKeysLocal())
+      relinKeys.move(keyGenerator.relinKeysLocal())
       timeEnd = performance.now()
       process.stdout.write(
         `Done [${Math.round((timeEnd - timeStart) * 1000)} microseconds]\r\n`
       )
       process.stdout.write('Generating Galois keys: ')
       timeStart = performance.now()
-      galoisKeys.move(keyGenerator.genGaloisKeysLocal())
+      galoisKeys.move(keyGenerator.galoisKeysLocal())
       timeEnd = performance.now()
       process.stdout.write(
         `Done [${Math.round((timeEnd - timeStart) * 1000)} microseconds]\r\n`
