@@ -92,13 +92,12 @@ describe('GaloisKeys', () => {
     expect(spyOn).toHaveBeenCalledWith(5)
     expect(typeof index).toBe('number')
   })
-  // test('It should fail to get the index of a galois element', () => {
-  //   const item = GaloisKeysObject()
-  //   console.log('Get Index:', item.getIndex(4294967295))
-  //   const spyOn = jest.spyOn(item, 'getIndex')
-  //   expect(() => item.getIndex(4294967295)).toThrow()
-  //   expect(spyOn).toHaveBeenCalledWith(4294967295)
-  // })
+  test('It should fail to get the index of a galois element', () => {
+    const item = GaloisKeysObject()
+    const spyOn = jest.spyOn(item, 'getIndex')
+    expect(() => item.getIndex(-1)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(-1)
+  })
   test('It should return if the galois element exists', () => {
     const item = GaloisKeysObject()
     const spyOn = jest.spyOn(item, 'hasKey')
@@ -106,12 +105,12 @@ describe('GaloisKeys', () => {
     expect(spyOn).toHaveBeenCalledWith(3)
     expect(typeof index).toBe('boolean')
   })
-  // test('It should fail to return if the galois element exists', () => {
-  //   const item = GaloisKeysObject()
-  //   const spyOn = jest.spyOn(item, 'hasKey')
-  //   expect(() => item.hasKey(2)).toThrow()
-  //   expect(spyOn).toHaveBeenCalledWith(2)
-  // })
+  test('It should fail to return if the galois element exists', () => {
+    const item = GaloisKeysObject()
+    const spyOn = jest.spyOn(item, 'hasKey')
+    expect(() => item.hasKey(-1)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(-1)
+  })
   test('It should save to a string', () => {
     const item = GaloisKeysObject()
     const spyOn = jest.spyOn(item, 'save')
