@@ -4,6 +4,7 @@ source ./submodules/emsdk/emsdk_env.sh > /dev/null
 cd ./submodules/SEAL/
 emcmake cmake \
   -DSEAL_USE_CXX17=ON \
+  -DCMAKE_CXX_FLAGS=-O3 -DNDEBUG\
   -DSEAL_USE_INTRIN=OFF \
   -DSEAL_USE_ZLIB=ON \
   -DSEAL_USE_MSGSL=ON \
