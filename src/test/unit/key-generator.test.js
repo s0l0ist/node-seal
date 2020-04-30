@@ -132,6 +132,20 @@ describe('KeyGenerator', () => {
     expect(() => item.relinKeysLocal()).toThrow()
     expect(spyOn).toHaveBeenCalledWith()
   })
+  test('It should generate and a serializable relinkeys object', () => {
+    const item = KeyGeneratorObject(context)
+    const spyOn = jest.spyOn(item, 'relinKeys')
+    const serializable = item.relinKeys()
+    const serialized = serializable.save()
+    expect(spyOn).toHaveBeenCalledWith()
+    expect(typeof serialized).toBe('string')
+  })
+  test('It should fail to generate and a serializable relinkeys object', () => {
+    const item = KeyGeneratorObject(invalidContext)
+    const spyOn = jest.spyOn(item, 'relinKeys')
+    expect(() => item.relinKeys()).toThrow()
+    expect(spyOn).toHaveBeenCalledWith()
+  })
   test('It should generate and return all galoisKeys', () => {
     const item = KeyGeneratorObject(context)
     const spyOn = jest.spyOn(item, 'galoisKeysLocal')
