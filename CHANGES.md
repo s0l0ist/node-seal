@@ -13,7 +13,9 @@ Feat:
 - `SmallModulus` has been renamed to `Modulus`.
 - `Ciphertext.coeffModCount` has been renamed to `Ciphertext.coeffModulusSize`.
 - Renamed KeyGenerator.[get|gen]\* functions to their original C++ names. Ex: `KeyGenerator.getPublicKey()` -> `KeyGenerator.publicKey()`, `KeyGenerator.genRelinKeys()` -> `KeyGenerator.relinKeys()`.
-- KeyGenerator may only be instantiated with a `SecretKey`.
+- KeyGenerator now may only be instantiated with a `SecretKey`.
+- `parametersSet` is now a function (`parametersSet()`) instead of a getter property for `Context` and `EncryptionParameterQualifiers` instances.
+- `Encryptor.encryptSymmetricSerialize` outputs a `Serializable` object for a `CipherText`. This new object cannot be used directly, but instead provides 50% space savings and is meant to be used when serialized over a network where the receiver would deserialize and use it accordingly.
 
 ## Version 4.2.4
 
