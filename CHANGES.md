@@ -3,6 +3,20 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/Changes.md)
 for more details on each SEAL version change.
 
+## Version 4.3.0
+
+Feat:
+
+- Upgraded to [SEAL v3.5.1](https://github.com/microsoft/SEAL/blob/master/Changes.md)
+- Removed submodule and scripts for `zlib` as this is now contained within SEAL.
+- The seeded versions of Encryptor's symmetric-key encryption and KeyGenerator's RelinKeys and GaloisKeys generation now output Serializable objects. See more details in the [MS SEAL API Changes](https://github.com/microsoft/SEAL/blob/master/Changes.md).
+- `SmallModulus` has been renamed to `Modulus`.
+- `Ciphertext.coeffModCount` has been renamed to `Ciphertext.coeffModulusSize`.
+- Renamed KeyGenerator.[get|gen]\* functions to their original C++ names. Ex: `KeyGenerator.getPublicKey()` -> `KeyGenerator.publicKey()`, `KeyGenerator.genRelinKeys()` -> `KeyGenerator.relinKeys()`.
+- KeyGenerator now may only be instantiated with a `SecretKey`.
+- `parametersSet` is now a function (`parametersSet()`) instead of a getter property for `Context` and `EncryptionParameterQualifiers` instances.
+- `Encryptor.encryptSymmetricSerializable` outputs a `Serializable` object for a `CipherText`. This new object cannot be used directly, but instead provides 50% space savings and is meant to be used when serialized over a network where the receiver would deserialize and use it accordingly.
+
 ## Version 4.2.4
 
 Chore:
@@ -18,7 +32,7 @@ Fix:
 
 Feat:
 
-- Added optional `steps` argument to `genGaloisKeys`. You can now specify the rotations you need to reduce
+- Added optional `steps` argument to `galoisKeys`. You can now specify the rotations you need to reduce
   the size of GaloisKeys and the time it takes to generate them. Ex: you only need specific keys when performing
   `sumElements` or `dotProduct`.
 - Added `galoisSave` function to the `KeyGenerator`. Allows direct serialization of Galois Keys leveraging the seeded

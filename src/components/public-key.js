@@ -130,7 +130,7 @@ export const PublicKey = library => ({
      * @name PublicKey#copy
      * @param {PublicKey} key PublicKey to copy
      * @example
-     * const keyA = keyGenerator.getPublicKey()
+     * const keyA = keyGenerator.publicKey()
      * const keyB = Morfix.PublicKey()
      * keyB.copy(keyA)
      * // keyB holds a copy of keyA
@@ -150,7 +150,7 @@ export const PublicKey = library => ({
      * @name PublicKey#clone
      * @returns {PublicKey}
      * @example
-     * const keyA = keyGenerator.getPublicKey()
+     * const keyA = keyGenerator.publicKey()
      * const keyB = keyA.clone()
      * // keyB holds a copy of keyA
      */
@@ -176,7 +176,7 @@ export const PublicKey = library => ({
      * @name PublicKey#move
      * @param {PublicKey} key PublicKey to move
      * @example
-     * const keyA = keyGenerator.getPublicKey()
+     * const keyA = keyGenerator.publicKey()
      * const keyB = Morfix.PublicKey()
      * keyB.move(keyA)
      * // keyB holds a the instance of keyA.

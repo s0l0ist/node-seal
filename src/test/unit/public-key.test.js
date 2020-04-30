@@ -97,7 +97,7 @@ describe('PublicKey', () => {
     expect(array.constructor).toBe(Uint8Array)
   })
   test('It should load from a string', () => {
-    const item = keyGenerator.getPublicKey()
+    const item = keyGenerator.publicKey()
     const newItem = PublicKeyObject()
     const str = item.save()
     const spyOn = jest.spyOn(newItem, 'load')
@@ -106,7 +106,7 @@ describe('PublicKey', () => {
     expect(newItem.save()).toEqual(str)
   })
   test('It should load from a typed array', () => {
-    const item = keyGenerator.getPublicKey()
+    const item = keyGenerator.publicKey()
     const newItem = PublicKeyObject()
     const array = item.saveArray()
     const spyOn = jest.spyOn(newItem, 'loadArray')
@@ -120,12 +120,12 @@ describe('PublicKey', () => {
     expect(() =>
       newItem.load(
         context,
-        'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
+        'XqEQAwUBAAAoAAAAAAAAAHicY2CgCHywj1sowMwKZEmgyQAAOaoCXw=='
       )
     ).toThrow()
     expect(spyOn).toHaveBeenCalledWith(
       context,
-      'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
+      'XqEQAwUBAAAoAAAAAAAAAHicY2CgCHywj1sowMwKZEmgyQAAOaoCXw=='
     )
   })
   test('It should fail to load from a Uint8Array', () => {
@@ -135,15 +135,15 @@ describe('PublicKey', () => {
       newItem.loadArray(
         context,
         Uint8Array.from([
-          93,
+          94,
           161,
-          0,
+          16,
+          3,
+          5,
           1,
-          27,
           0,
           0,
-          0,
-          0,
+          40,
           0,
           0,
           0,
@@ -154,29 +154,42 @@ describe('PublicKey', () => {
           120,
           156,
           99,
-          103,
-          128,
+          96,
+          160,
+          8,
+          124,
+          176,
+          143,
+          91,
+          40,
+          192,
+          204,
+          10,
+          100,
+          73,
+          160,
+          201,
           0,
           0,
-          0,
-          64,
-          0,
-          8
+          57,
+          170,
+          2,
+          95
         ])
       )
     ).toThrow()
     expect(spyOn).toHaveBeenCalledWith(
       context,
       Uint8Array.from([
-        93,
+        94,
         161,
-        0,
+        16,
+        3,
+        5,
         1,
-        27,
         0,
         0,
-        0,
-        0,
+        40,
         0,
         0,
         0,
@@ -187,26 +200,39 @@ describe('PublicKey', () => {
         120,
         156,
         99,
-        103,
-        128,
+        96,
+        160,
+        8,
+        124,
+        176,
+        143,
+        91,
+        40,
+        192,
+        204,
+        10,
+        100,
+        73,
+        160,
+        201,
         0,
         0,
-        0,
-        64,
-        0,
-        8
+        57,
+        170,
+        2,
+        95
       ])
     )
   })
   test('It should copy another instance', () => {
-    const item = keyGenerator.getPublicKey()
+    const item = keyGenerator.publicKey()
     const newItem = PublicKeyObject()
     const spyOn = jest.spyOn(newItem, 'copy')
     newItem.copy(item)
     expect(spyOn).toHaveBeenCalledWith(item)
   })
   test('It should fail to copy another instance', () => {
-    const item = keyGenerator.getPublicKey()
+    const item = keyGenerator.publicKey()
     const newItem = PublicKeyObject()
     item.delete()
     const spyOn = jest.spyOn(newItem, 'copy')
@@ -232,7 +258,7 @@ describe('PublicKey', () => {
     expect(spyOn).toHaveBeenCalledWith()
   })
   test('It should move another instance into itself and delete the old', () => {
-    const item = keyGenerator.getPublicKey()
+    const item = keyGenerator.publicKey()
     const newItem = PublicKeyObject()
     const spyOn = jest.spyOn(newItem, 'move')
     newItem.move(item)
@@ -240,7 +266,7 @@ describe('PublicKey', () => {
     expect(item.instance).toBeNull()
   })
   test('It should fail to move another instance into itself and delete the old', () => {
-    const item = keyGenerator.getPublicKey()
+    const item = keyGenerator.publicKey()
     const newItem = PublicKeyObject()
     item.delete()
     const spyOn = jest.spyOn(newItem, 'move')

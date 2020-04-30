@@ -1,12 +1,10 @@
-export const SmallModulus = library => ({
-  Exception,
-  ComprModeType,
-  Vector
-}) => (instance = null) => {
-  const Constructor = library.SmallModulus
-  let _instance = createSmallModulus(instance)
+export const Modulus = library => ({ Exception, ComprModeType, Vector }) => (
+  instance = null
+) => {
+  const Constructor = library.Modulus
+  let _instance = createModulus(instance)
 
-  function createSmallModulus(instance) {
+  function createModulus(instance) {
     try {
       if (typeof instance === 'string') {
         const inst = new Constructor()
@@ -21,11 +19,11 @@ export const SmallModulus = library => ({
   }
 
   /**
-   * @implements SmallModulus
+   * @implements Modulus
    */
 
   /**
-   * @interface SmallModulus
+   * @interface Modulus
    */
   return {
     /**
@@ -33,7 +31,7 @@ export const SmallModulus = library => ({
      *
      * @private
      * @readonly
-     * @name SmallModulus#instance
+     * @name Modulus#instance
      * @type {instance}
      */
     get instance() {
@@ -45,7 +43,7 @@ export const SmallModulus = library => ({
      *
      * @private
      * @function
-     * @name SmallModulus#inject
+     * @name Modulus#inject
      * @param {instance} instance WASM instance
      */
     inject(instance) {
@@ -63,7 +61,7 @@ export const SmallModulus = library => ({
      * Should be called before dereferencing this object to prevent the
      * WASM heap from growing indefinitely.
      * @function
-     * @name SmallModulus#delete
+     * @name Modulus#delete
      */
     delete() {
       if (_instance) {
@@ -73,10 +71,10 @@ export const SmallModulus = library => ({
     },
 
     /**
-     * Loads a SmallModulus from a string representing an uint64 value.
+     * Loads a Modulus from a string representing an uint64 value.
      *
      * @function
-     * @name SmallModulus#setValue
+     * @name Modulus#setValue
      * @param {String} value String representation of a uint64 value
      */
     setValue(value) {
@@ -88,10 +86,10 @@ export const SmallModulus = library => ({
     },
 
     /**
-     * The value of the current SmallModulus as a BigInt.
+     * The value of the current Modulus as a BigInt.
      *
      * @readonly
-     * @name SmallModulus#value
+     * @name Modulus#value
      * @type {BigInt}
      */
     get value() {
@@ -100,10 +98,10 @@ export const SmallModulus = library => ({
     },
 
     /**
-     * The significant bit count of the value of the current SmallModulus.
+     * The significant bit count of the value of the current Modulus.
      *
      * @readonly
-     * @name SmallModulus#bitCount
+     * @name Modulus#bitCount
      * @type {Number}
      */
     get bitCount() {
@@ -111,10 +109,10 @@ export const SmallModulus = library => ({
     },
 
     /**
-     * Whether the value of the current SmallModulus is zero.
+     * Whether the value of the current Modulus is zero.
      *
      * @readonly
-     * @name SmallModulus#isZero
+     * @name Modulus#isZero
      * @type {Boolean}
      */
     get isZero() {
@@ -122,10 +120,10 @@ export const SmallModulus = library => ({
     },
 
     /**
-     * Whether the value of the current SmallModulus is a prime number.
+     * Whether the value of the current Modulus is a prime number.
      *
      * @readonly
-     * @name SmallModulus#isPrime
+     * @name Modulus#isPrime
      * @type {Boolean}
      */
     get isPrime() {
@@ -133,10 +131,10 @@ export const SmallModulus = library => ({
     },
 
     /**
-     * Save the SmallModulus as a base64 string
+     * Save the Modulus as a base64 string
      *
      * @function
-     * @name SmallModulus#save
+     * @name Modulus#save
      * @param {ComprModeType} [compression={@link ComprModeType.deflate}] The compression mode to use
      * @returns {String} Base64 encoded string
      */
@@ -145,12 +143,12 @@ export const SmallModulus = library => ({
     },
 
     /**
-     * Save the SmallModulus as a binary Uint8Array
+     * Save the Modulus as a binary Uint8Array
      *
      * @function
-     * @name SmallModulus#saveArray
+     * @name Modulus#saveArray
      * @param {ComprModeType} [compression={@link ComprModeType.deflate}] The compression mode to use
-     * @returns {Uint8Array} A byte array containing the SmallModulus in binary form
+     * @returns {Uint8Array} A byte array containing the Modulus in binary form
      */
     saveArray(compression = ComprModeType.deflate) {
       const tempVect = Vector(new Uint8Array(0))
@@ -162,7 +160,7 @@ export const SmallModulus = library => ({
     },
 
     /**
-     * Load a SmallModulus from a base64 string
+     * Load a Modulus from a base64 string
      *
      * @function
      * @name SecretKey#load
@@ -177,7 +175,7 @@ export const SmallModulus = library => ({
     },
 
     /**
-     * Load a SmallModulus from an Uint8Array holding binary data
+     * Load a Modulus from an Uint8Array holding binary data
      *
      * @function
      * @name SecretKey#loadArray

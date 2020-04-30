@@ -95,8 +95,8 @@ describe('GaloisKeys', () => {
   test('It should fail to get the index of a galois element', () => {
     const item = GaloisKeysObject()
     const spyOn = jest.spyOn(item, 'getIndex')
-    expect(() => item.getIndex(2)).toThrow()
-    expect(spyOn).toHaveBeenCalledWith(2)
+    expect(() => item.getIndex(-1)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(-1)
   })
   test('It should return if the galois element exists', () => {
     const item = GaloisKeysObject()
@@ -108,8 +108,8 @@ describe('GaloisKeys', () => {
   test('It should fail to return if the galois element exists', () => {
     const item = GaloisKeysObject()
     const spyOn = jest.spyOn(item, 'hasKey')
-    expect(() => item.hasKey(2)).toThrow()
-    expect(spyOn).toHaveBeenCalledWith(2)
+    expect(() => item.hasKey(-1)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(-1)
   })
   test('It should save to a string', () => {
     const item = GaloisKeysObject()
@@ -126,7 +126,7 @@ describe('GaloisKeys', () => {
     expect(array.constructor).toBe(Uint8Array)
   })
   test('It should load from a string', () => {
-    const item = keyGenerator.genGaloisKeys()
+    const item = keyGenerator.galoisKeysLocal()
     const newItem = GaloisKeysObject()
     const str = item.save()
     const spyOn = jest.spyOn(newItem, 'load')
@@ -135,7 +135,7 @@ describe('GaloisKeys', () => {
     expect(newItem.save()).toEqual(str)
   })
   test('It should load from a typed array', () => {
-    const item = keyGenerator.genGaloisKeys()
+    const item = keyGenerator.galoisKeysLocal()
     const newItem = GaloisKeysObject()
     const array = item.saveArray()
     const spyOn = jest.spyOn(newItem, 'loadArray')
@@ -149,12 +149,12 @@ describe('GaloisKeys', () => {
     expect(() =>
       newItem.load(
         context,
-        'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
+        'XqEQAwUBAAAoAAAAAAAAAHicY2CgCHywj1sowMwKZEmgyQAAOaoCXw=='
       )
     ).toThrow()
     expect(spyOn).toHaveBeenCalledWith(
       context,
-      'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
+      'XqEQAwUBAAAoAAAAAAAAAHicY2CgCHywj1sowMwKZEmgyQAAOaoCXw=='
     )
   })
   test('It should fail to load from a Uint8Array', () => {
@@ -164,15 +164,15 @@ describe('GaloisKeys', () => {
       newItem.loadArray(
         context,
         Uint8Array.from([
-          93,
+          94,
           161,
-          0,
+          16,
+          3,
+          5,
           1,
-          27,
           0,
           0,
-          0,
-          0,
+          40,
           0,
           0,
           0,
@@ -183,29 +183,42 @@ describe('GaloisKeys', () => {
           120,
           156,
           99,
-          103,
-          128,
+          96,
+          160,
+          8,
+          124,
+          176,
+          143,
+          91,
+          40,
+          192,
+          204,
+          10,
+          100,
+          73,
+          160,
+          201,
           0,
           0,
-          0,
-          64,
-          0,
-          8
+          57,
+          170,
+          2,
+          95
         ])
       )
     ).toThrow()
     expect(spyOn).toHaveBeenCalledWith(
       context,
       Uint8Array.from([
-        93,
+        94,
         161,
-        0,
+        16,
+        3,
+        5,
         1,
-        27,
         0,
         0,
-        0,
-        0,
+        40,
         0,
         0,
         0,
@@ -216,26 +229,39 @@ describe('GaloisKeys', () => {
         120,
         156,
         99,
-        103,
-        128,
+        96,
+        160,
+        8,
+        124,
+        176,
+        143,
+        91,
+        40,
+        192,
+        204,
+        10,
+        100,
+        73,
+        160,
+        201,
         0,
         0,
-        0,
-        64,
-        0,
-        8
+        57,
+        170,
+        2,
+        95
       ])
     )
   })
   test('It should copy another instance', () => {
-    const item = keyGenerator.genGaloisKeys()
+    const item = keyGenerator.galoisKeysLocal()
     const newItem = GaloisKeysObject()
     const spyOn = jest.spyOn(newItem, 'copy')
     newItem.copy(item)
     expect(spyOn).toHaveBeenCalledWith(item)
   })
   test('It should fail to copy another instance', () => {
-    const item = keyGenerator.genGaloisKeys()
+    const item = keyGenerator.galoisKeysLocal()
     const newItem = GaloisKeysObject()
     item.delete()
     const spyOn = jest.spyOn(newItem, 'copy')
@@ -261,7 +287,7 @@ describe('GaloisKeys', () => {
     expect(spyOn).toHaveBeenCalledWith()
   })
   test('It should move another instance into itself and delete the old', () => {
-    const item = keyGenerator.genGaloisKeys()
+    const item = keyGenerator.galoisKeysLocal()
     const newItem = GaloisKeysObject()
     const spyOn = jest.spyOn(newItem, 'move')
     newItem.move(item)
@@ -269,7 +295,7 @@ describe('GaloisKeys', () => {
     expect(item.instance).toBeNull()
   })
   test('It should fail to move another instance into itself and delete the old', () => {
-    const item = keyGenerator.genGaloisKeys()
+    const item = keyGenerator.galoisKeysLocal()
     const newItem = GaloisKeysObject()
     item.delete()
     const spyOn = jest.spyOn(newItem, 'move')

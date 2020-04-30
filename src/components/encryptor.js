@@ -1,7 +1,8 @@
 export const Encryptor = library => ({
   Exception,
   MemoryPoolHandle,
-  CipherText
+  CipherText,
+  Serializable
 }) => (context, publicKey, secretKey = null) => {
   const Constructor = library.Encryptor
   let _instance = constructInstance(context, publicKey, secretKey)
@@ -101,7 +102,9 @@ export const Encryptor = library => ({
 
     /**
      * Encrypts a PlainText with the secret key and stores the result in
-     * destination. The encryption parameters for the resulting CipherText
+     * destination.
+     *
+     * The encryption parameters for the resulting CipherText
      * correspond to:
      * 1) in BFV, the highest (data) level in the modulus switching chain,
      * 2) in CKKS, the encryption parameters of the plaintext.
@@ -111,7 +114,7 @@ export const Encryptor = library => ({
      * @function
      * @name Encryptor#encryptSymmetric
      * @param {PlainText} plainText PlainText to encrypt
-     * @param {CipherText} [cipherText] CipherText destination to store the encrypted result
+     * @param {CipherText} [cipherText] CipherText destination to store the encrypted result.
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} Returns undefined if a CipherText was specified. Otherwise returns a
      * CipherText containing the encrypted result
@@ -129,6 +132,43 @@ export const Encryptor = library => ({
         const cipher = CipherText()
         _instance.encryptSymmetric(plainText.instance, cipher.instance, pool)
         return cipher
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Encrypts a plaintext with the secret key and returns the ciphertext as
+     * a serializable object.
+     *
+     * The encryption parameters for the resulting CipherText
+     * correspond to:
+     * 1) in BFV, the highest (data) level in the modulus switching chain,
+     * 2) in CKKS, the encryption parameters of the plaintext.
+     * Dynamic memory allocations in the process are allocated from the memory
+     * pool pointed to by the given MemoryPoolHandle.
+     *
+     * Half of the ciphertext data is pseudo-randomly generated from a seed to
+     * reduce the object size. The resulting serializable object cannot be used
+     * directly and is meant to be serialized for the size reduction to have an
+     * impact.
+     *
+     * @function
+     * @name Encryptor#encryptSymmetricSerializable
+     * @param {PlainText} plainText PlainText to encrypt
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {CipherText|undefined} Returns undefined if a CipherText was specified. Otherwise returns a
+     * CipherText containing the encrypted result
+     */
+    encryptSymmetricSerializable(plainText, pool = MemoryPoolHandle.global) {
+      try {
+        const serialized = Serializable()
+        const instance = _instance.encryptSymmetricSerializable(
+          plainText.instance,
+          pool
+        )
+        serialized.unsafeInject(instance)
+        return serialized
       } catch (e) {
         throw Exception.safe(e)
       }

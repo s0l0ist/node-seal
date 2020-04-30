@@ -30,7 +30,7 @@ beforeAll(async () => {
   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
   encoder = Morfix.BatchEncoder(context)
   keyGen = Morfix.KeyGenerator(context)
-  publicKey = keyGen.getPublicKey()
+  publicKey = keyGen.publicKey()
   encryptor = Morfix.Encryptor(context, publicKey)
 
   ckksParms = Morfix.EncryptionParameters(Morfix.SchemeType.CKKS)
@@ -41,7 +41,7 @@ beforeAll(async () => {
   ckksContext = Morfix.Context(ckksParms, true, Morfix.SecurityLevel.tc128)
   ckksEncoder = Morfix.CKKSEncoder(ckksContext)
   ckksKeyGen = Morfix.KeyGenerator(ckksContext)
-  ckksPublicKey = ckksKeyGen.getPublicKey()
+  ckksPublicKey = ckksKeyGen.publicKey()
   ckksEncryptor = Morfix.Encryptor(ckksContext, ckksPublicKey)
 })
 
@@ -109,7 +109,7 @@ describe('CipherText', () => {
     expect(cipher).toHaveProperty('reserve')
     expect(cipher).toHaveProperty('resize')
     expect(cipher).toHaveProperty('release')
-    expect(cipher).toHaveProperty('coeffModCount')
+    expect(cipher).toHaveProperty('coeffModulusSize')
     expect(cipher).toHaveProperty('polyModulusDegree')
     expect(cipher).toHaveProperty('size')
     expect(cipher).toHaveProperty('sizeCapacity')
@@ -197,10 +197,10 @@ describe('CipherText', () => {
     cipher.release()
     expect(spyOn).toHaveBeenCalledWith()
   })
-  test('It should return the coeff mod count', () => {
+  test('It should return the coeff mod size', () => {
     const cipher = CipherTextObject()
     cipher.reserve(context, 2)
-    expect(typeof cipher.coeffModCount).toBe('number')
+    expect(typeof cipher.coeffModulusSize).toBe('number')
   })
   test('It should return the poly modulus degree', () => {
     const arr = Int32Array.from(
@@ -340,12 +340,12 @@ describe('CipherText', () => {
     expect(() =>
       newCipher.load(
         context,
-        'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
+        'XqEQAwUBAAAoAAAAAAAAAHicY2CgCHywj1sowMwKZEmgyQAAOaoCXw=='
       )
     ).toThrow()
     expect(spyOn).toHaveBeenCalledWith(
       context,
-      'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
+      'XqEQAwUBAAAoAAAAAAAAAHicY2CgCHywj1sowMwKZEmgyQAAOaoCXw=='
     )
   })
   test('It should fail to load from a Uint8Array', () => {
@@ -355,12 +355,12 @@ describe('CipherText', () => {
       newCipher.loadArray(
         context,
         Uint8Array.from([
-          93,
+          94,
           161,
-          0,
+          16,
+          3,
+          5,
           1,
-          27,
-          0,
           0,
           0,
           0,
@@ -374,26 +374,39 @@ describe('CipherText', () => {
           120,
           156,
           99,
-          103,
-          128,
+          96,
+          160,
+          8,
+          124,
+          176,
+          143,
+          91,
+          40,
+          192,
+          204,
+          10,
+          100,
+          73,
+          160,
+          201,
           0,
           0,
-          0,
-          64,
-          0,
-          8
+          57,
+          170,
+          2,
+          95
         ])
       )
     ).toThrow()
     expect(spyOn).toHaveBeenCalledWith(
       context,
       Uint8Array.from([
-        93,
+        94,
         161,
-        0,
+        16,
+        3,
+        5,
         1,
-        27,
-        0,
         0,
         0,
         0,
@@ -407,14 +420,27 @@ describe('CipherText', () => {
         120,
         156,
         99,
-        103,
-        128,
+        96,
+        160,
+        8,
+        124,
+        176,
+        143,
+        91,
+        40,
+        192,
+        204,
+        10,
+        100,
+        73,
+        160,
+        201,
         0,
         0,
-        0,
-        64,
-        0,
-        8
+        57,
+        170,
+        2,
+        95
       ])
     )
   })

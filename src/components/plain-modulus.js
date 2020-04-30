@@ -1,8 +1,4 @@
-export const PlainModulus = library => ({
-  Exception,
-  SmallModulus,
-  Vector
-}) => {
+export const PlainModulus = library => ({ Exception, Modulus, Vector }) => {
   // Static methods
   const _Batching = library.PlainModulus.Batching
   const _BatchingVector = library.PlainModulus.BatchingVector
@@ -16,18 +12,18 @@ export const PlainModulus = library => ({
    */
   return {
     /**
-     * Creates a prime number SmallModulus for use as plainModulus encryption
+     * Creates a prime number Modulus for use as plainModulus encryption
      * parameter that supports batching with a given polyModulusDegree.
      *
      * @function
      * @name PlainModulus.Batching
      * @param {Number} polyModulusDegree The degree of the polynomial modulus
      * @param {Number} bitSize The bit-size of the desired prime number
-     * @returns {SmallModulus} A SmallModulus containing the prime number
+     * @returns {Modulus} A Modulus containing the prime number
      */
     Batching(polyModulusDegree, bitSize) {
       try {
-        const smallMod = SmallModulus()
+        const smallMod = Modulus()
         smallMod.inject(_Batching(polyModulusDegree, bitSize))
         return smallMod
       } catch (e) {
@@ -36,7 +32,7 @@ export const PlainModulus = library => ({
     },
 
     /**
-     * Creates several prime number SmallModulus elements that can be used as
+     * Creates several prime number Modulus elements that can be used as
      * plainModulus encryption parameters, each supporting batching with a given
      * polyModulusDegree.
      *
@@ -44,7 +40,7 @@ export const PlainModulus = library => ({
      * @name PlainModulus.BatchingVector
      * @param {Number} polyModulusDegree The degree of the polynomial modulus
      * @param {Int32Array} bitSizes Int32Array containing values representing bit-sizes of primes
-     * @returns {Vector<SmallModulus>} Vector of SmallModulus containing prime numbers
+     * @returns {Vector<Modulus>} Vector of Modulus containing prime numbers
      */
     BatchingVector(polyModulusDegree, bitSizes) {
       try {

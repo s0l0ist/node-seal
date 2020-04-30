@@ -56,12 +56,12 @@ export const EncryptionParameterQualifiers = () => () => instance => {
      * If the encryption parameters are set in a way that is considered valid by
      * Microsoft SEAL, the variable parameters_set is set to true.
      *
-     * @readonly
+     * @function
      * @name EncryptionParameterQualifiers#parametersSet
      * @type {Boolean}
      */
-    get parametersSet() {
-      return _instance.parametersSet
+    parametersSet() {
+      return _instance.parametersSet()
     },
 
     /**

@@ -5,7 +5,3 @@
 	path = submodules/emsdk
 	url = https://github.com/morfix-io/emsdk.git
 	ignore = dirty
-[submodule "submodules/zlib"]
-	path = submodules/zlib
-	url = https://github.com/morfix-io/zlib.git
-	ignore = dirty

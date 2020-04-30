@@ -6,7 +6,6 @@ let Morfix,
   context,
   keyGen,
   secretKey,
-  publicKey,
   invalidParms,
   invalidContext,
   KeyGeneratorObject = null
@@ -23,8 +22,7 @@ beforeAll(async () => {
   parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
   keyGen = Morfix.KeyGenerator(context)
-  secretKey = keyGen.getSecretKey()
-  publicKey = keyGen.getPublicKey()
+  secretKey = keyGen.secretKey()
 
   invalidParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
   invalidParms.setPolyModulusDegree(1024)
@@ -53,11 +51,6 @@ describe('KeyGenerator', () => {
     Constructor(context, secretKey)
     expect(Constructor).toBeCalledWith(context, secretKey)
   })
-  test('It should construct an instance with a secretkey and publicKey', () => {
-    const Constructor = jest.fn(KeyGeneratorObject)
-    Constructor(context, secretKey, publicKey)
-    expect(Constructor).toBeCalledWith(context, secretKey, publicKey)
-  })
   test('It should fail to construct an instance', () => {
     const Constructor = jest.fn(KeyGeneratorObject)
     expect(() => Constructor('fail')).toThrow()
@@ -69,11 +62,12 @@ describe('KeyGenerator', () => {
     expect(item).toHaveProperty('instance')
     expect(item).toHaveProperty('unsafeInject')
     expect(item).toHaveProperty('delete')
-    expect(item).toHaveProperty('getSecretKey')
-    expect(item).toHaveProperty('getPublicKey')
-    expect(item).toHaveProperty('genRelinKeys')
-    expect(item).toHaveProperty('genGaloisKeys')
-    expect(item).toHaveProperty('galoisKeysSave')
+    expect(item).toHaveProperty('secretKey')
+    expect(item).toHaveProperty('publicKey')
+    expect(item).toHaveProperty('relinKeysLocal')
+    expect(item).toHaveProperty('relinKeys')
+    expect(item).toHaveProperty('galoisKeysLocal')
+    expect(item).toHaveProperty('galoisKeys')
   })
   test('It should have an instance (bfv)', () => {
     const item = KeyGeneratorObject(context)
@@ -99,7 +93,7 @@ describe('KeyGenerator', () => {
     item.delete()
     expect(spyOn).toHaveBeenCalled()
     expect(item.instance).toBeNull()
-    expect(() => item.getSecretKey()).toThrow(TypeError)
+    expect(() => item.secretKey()).toThrow(TypeError)
   })
   test('It should skip deleting twice', () => {
     const item = KeyGeneratorObject(context)
@@ -111,42 +105,56 @@ describe('KeyGenerator', () => {
   })
   test('It should return its secret key', () => {
     const item = KeyGeneratorObject(context)
-    const spyOn = jest.spyOn(item, 'getSecretKey')
-    const key = item.getSecretKey()
+    const spyOn = jest.spyOn(item, 'secretKey')
+    const key = item.secretKey()
     expect(spyOn).toHaveBeenCalledWith()
     expect(key.instance).toBeDefined()
   })
   test('It should return its public key', () => {
     const item = KeyGeneratorObject(context)
-    const spyOn = jest.spyOn(item, 'getPublicKey')
-    const key = item.getPublicKey()
+    const spyOn = jest.spyOn(item, 'publicKey')
+    const key = item.publicKey()
     expect(spyOn).toHaveBeenCalledWith()
     expect(key.instance).toBeDefined()
   })
   test('It should generate and return relinKeys', () => {
     const item = KeyGeneratorObject(context)
-    const spyOn = jest.spyOn(item, 'genRelinKeys')
-    const key = item.genRelinKeys()
+    const spyOn = jest.spyOn(item, 'relinKeysLocal')
+    const key = item.relinKeysLocal()
     expect(spyOn).toHaveBeenCalledWith()
     expect(key.instance).toBeDefined()
   })
   test('It should fail to generate and return relinKeys', () => {
     const item = KeyGeneratorObject(invalidContext)
-    const spyOn = jest.spyOn(item, 'genRelinKeys')
-    expect(() => item.genRelinKeys()).toThrow()
+    const spyOn = jest.spyOn(item, 'relinKeysLocal')
+    expect(() => item.relinKeysLocal()).toThrow()
+    expect(spyOn).toHaveBeenCalledWith()
+  })
+  test('It should generate and a serializable relinkeys object', () => {
+    const item = KeyGeneratorObject(context)
+    const spyOn = jest.spyOn(item, 'relinKeys')
+    const serializable = item.relinKeys()
+    const serialized = serializable.save()
+    expect(spyOn).toHaveBeenCalledWith()
+    expect(typeof serialized).toBe('string')
+  })
+  test('It should fail to generate and a serializable relinkeys object', () => {
+    const item = KeyGeneratorObject(invalidContext)
+    const spyOn = jest.spyOn(item, 'relinKeys')
+    expect(() => item.relinKeys()).toThrow()
     expect(spyOn).toHaveBeenCalledWith()
   })
   test('It should generate and return all galoisKeys', () => {
     const item = KeyGeneratorObject(context)
-    const spyOn = jest.spyOn(item, 'genGaloisKeys')
-    const key = item.genGaloisKeys()
+    const spyOn = jest.spyOn(item, 'galoisKeysLocal')
+    const key = item.galoisKeysLocal()
     expect(spyOn).toHaveBeenCalledWith()
     expect(key.instance).toBeDefined()
   })
   test('It should generate and return specific galoisKeys', () => {
     const item = KeyGeneratorObject(context)
-    const spyOn = jest.spyOn(item, 'genGaloisKeys')
-    const key = item.genGaloisKeys(
+    const spyOn = jest.spyOn(item, 'galoisKeysLocal')
+    const key = item.galoisKeysLocal(
       Int32Array.from([1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024])
     )
     expect(spyOn).toHaveBeenCalledWith(
@@ -156,32 +164,34 @@ describe('KeyGenerator', () => {
   })
   test('It should fail to generate and return galoisKeys', () => {
     const item = KeyGeneratorObject(invalidContext)
-    const spyOn = jest.spyOn(item, 'genGaloisKeys')
-    expect(() => item.genGaloisKeys()).toThrow()
+    const spyOn = jest.spyOn(item, 'galoisKeysLocal')
+    expect(() => item.galoisKeysLocal()).toThrow()
     expect(spyOn).toHaveBeenCalledWith()
   })
   test('It should generate and return all galoisKeys as a base64 string', () => {
     const item = KeyGeneratorObject(context)
-    const spyOn = jest.spyOn(item, 'galoisKeysSave')
-    const key = item.galoisKeysSave()
+    const spyOn = jest.spyOn(item, 'galoisKeys')
+    const serializable = item.galoisKeys()
+    const serialized = serializable.save()
     expect(spyOn).toHaveBeenCalledWith()
-    expect(typeof key).toBe('string')
+    expect(typeof serialized).toBe('string')
   })
   test('It should generate and return specific galoisKeys as a base64 string', () => {
     const item = KeyGeneratorObject(context)
-    const spyOn = jest.spyOn(item, 'galoisKeysSave')
-    const key = item.galoisKeysSave(
+    const spyOn = jest.spyOn(item, 'galoisKeys')
+    const serializable = item.galoisKeys(
       Int32Array.from([1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024])
     )
     expect(spyOn).toHaveBeenCalledWith(
       Int32Array.from([1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024])
     )
-    expect(typeof key).toBe('string')
+    const serialized = serializable.save()
+    expect(typeof serialized).toBe('string')
   })
   test('It should fail to generate and return specific galoisKeys as a base64 string', () => {
     const item = KeyGeneratorObject(context)
-    const spyOn = jest.spyOn(item, 'galoisKeysSave')
-    expect(() => item.galoisKeysSave(Int32Array.from([99999]))).toThrow()
+    const spyOn = jest.spyOn(item, 'galoisKeys')
+    expect(() => item.galoisKeys(Int32Array.from([99999]))).toThrow()
     expect(spyOn).toHaveBeenCalledWith(Int32Array.from([99999]))
   })
 })

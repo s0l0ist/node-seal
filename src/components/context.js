@@ -141,11 +141,11 @@ export const Context = library => ({
      * Whether the encryption parameters are set in a way that is considered valid by
      * Microsoft SEAL, the variable parameters_set is set to true.
      *
-     * @readonly
+     * @function
      * @name Context#parametersSet
      * @type {Boolean}
      */
-    get parametersSet() {
+    parametersSet() {
       return _instance.parametersSet()
     },
 
