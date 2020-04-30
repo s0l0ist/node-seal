@@ -166,9 +166,7 @@ describe('Encryptor', () => {
     expect(typeof serialized.constructor).toBe('function')
     expect(serialized).toBeInstanceOf(Object)
     expect(serialized.constructor).toBe(Object)
-    expect(serialized.instance.constructor.name).toBe(
-      'Serializable$Ciphertext$'
-    )
+    expect(serialized.instance.constructor.name).toBe('Ciphertext')
     const cipher = Morfix.CipherText()
     cipher.load(context, serialized.save())
     const plainResult = decryptor.decrypt(cipher)
