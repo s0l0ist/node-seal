@@ -38,9 +38,7 @@ beforeAll(async () => {
   parms.setCoeffModulus(
     Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
   )
-  const modulus = Morfix.Modulus('786433')
-  // parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
-  parms.setPlainModulus(modulus)
+  parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
   keyGenerator = Morfix.KeyGenerator(context)
   encoder = Morfix.BatchEncoder(context)

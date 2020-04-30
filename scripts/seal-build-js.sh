@@ -7,7 +7,7 @@ cd ./submodules/SEAL/lib/
 
 emcc \
   -Wall \
-  -O3 \
+  -O2 \
   libseal-3.5.a \
   --bind \
   -o seal.js \
@@ -17,7 +17,7 @@ emcc \
   -s MODULARIZE=1 \
   -s USE_ES6_IMPORT_META=0 \
   -s SINGLE_FILE=1 \
-  --closure 1
+  --closure 0
 
 cp seal* ../../../src/bin/js
 cd ../../
