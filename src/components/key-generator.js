@@ -5,20 +5,13 @@ export const KeyGenerator = library => ({
   RelinKeys,
   GaloisKeys,
   Serializable
-}) => (context, secretKey = null, publicKey = null) => {
+}) => (context, secretKey = null) => {
   const Constructor = library.KeyGenerator
-  let _instance = constructInstance(context, secretKey, publicKey)
+  let _instance = constructInstance(context, secretKey)
 
-  function constructInstance(context, secretKey, publicKey) {
+  function constructInstance(context, secretKey) {
     try {
-      if (secretKey && publicKey) {
-        return new Constructor(
-          context.instance,
-          secretKey.instance,
-          publicKey.instance
-        )
-      }
-      if (secretKey && !publicKey) {
+      if (secretKey) {
         return new Constructor(context.instance, secretKey.instance)
       }
       return new Constructor(context.instance)
@@ -112,13 +105,13 @@ export const KeyGenerator = library => ({
      * primarily for demo, testing, and debugging purposes.
      *
      * @function
-     * @name KeyGenerator#genRelinKeysLocal
+     * @name KeyGenerator#relinKeysLocal
      * @returns {RelinKeys} New RelinKeys from the KeyGenerator's internal secret key
      */
-    genRelinKeysLocal() {
+    relinKeysLocal() {
       try {
         const key = RelinKeys()
-        const instance = _instance.genRelinKeysLocal()
+        const instance = _instance.relinKeysLocal()
         key.inject(instance)
         return key
       } catch (e) {
@@ -141,7 +134,7 @@ export const KeyGenerator = library => ({
     relinKeys() {
       try {
         const serialized = Serializable()
-        const instance = _instance.genRelinKeys()
+        const instance = _instance.relinKeys()
         serialized.unsafeInject(instance)
         return serialized
       } catch (e) {
@@ -159,20 +152,20 @@ export const KeyGenerator = library => ({
      * in the BFV scheme complex conjugation in the CKKS scheme.
      *
      * @function
-     * @name KeyGenerator#genGaloisKeysLocal
+     * @name KeyGenerator#galoisKeysLocal
      * @param {Int32Array} [steps=null] Specific Galois Elements to generate
      * @returns {GaloisKeys} New GaloisKeys from the KeyGenerator's internal secret key
      */
-    genGaloisKeysLocal(steps = null) {
+    galoisKeysLocal(steps = null) {
       try {
         if (steps) {
           const key = GaloisKeys()
-          const instance = _instance.genGaloisKeysLocal(steps)
+          const instance = _instance.galoisKeysLocal(steps)
           key.inject(instance)
           return key
         }
         const key = GaloisKeys()
-        const instance = _instance.genGaloisKeysLocal(Int32Array.from(0))
+        const instance = _instance.galoisKeysLocal(Int32Array.from(0))
         key.inject(instance)
         return key
       } catch (e) {
@@ -202,12 +195,12 @@ export const KeyGenerator = library => ({
       try {
         if (steps) {
           const serialized = Serializable()
-          const instance = _instance.genGaloisKeys(steps)
+          const instance = _instance.galoisKeys(steps)
           serialized.unsafeInject(instance)
           return serialized
         }
         const serialized = Serializable()
-        const instance = _instance.genGaloisKeys(Int32Array.from(0))
+        const instance = _instance.galoisKeys(Int32Array.from(0))
         serialized.unsafeInject(instance)
         return serialized
       } catch (e) {

@@ -138,9 +138,9 @@ const keyGenerator = Morfix.KeyGenerator(context)
 
 const secretKey = keyGenerator.getSecretKey()
 const publicKey = keyGenerator.getPublicKey()
-const relinKey = keyGenerator.genRelinKeys()
+const relinKey = keyGenerator.relinKeys()
 // Generating Galois keys takes a while compared to the others
-const galoisKey = keyGenerator.genGaloisKeys()
+const galoisKey = keyGenerator.galoisKeys()
 
 // Saving a key to a string is the same for each type of key
 const secretBase64Key = secretKey.save()

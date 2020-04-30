@@ -44,8 +44,8 @@ beforeAll(async () => {
   encoder = Morfix.BatchEncoder(context)
   publicKey = keyGenerator.getPublicKey()
   secretKey = keyGenerator.getSecretKey()
-  relinKeys = keyGenerator.genRelinKeysLocal()
-  galoisKeys = keyGenerator.genGaloisKeysLocal(
+  relinKeys = keyGenerator.relinKeysLocal()
+  galoisKeys = keyGenerator.galoisKeysLocal(
     Int32Array.from([1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0])
   )
   encryptor = Morfix.Encryptor(context, publicKey)
@@ -61,8 +61,8 @@ beforeAll(async () => {
   ckksEncoder = Morfix.CKKSEncoder(ckksContext)
   ckksPublicKey = ckksKeyGenerator.getPublicKey()
   ckksSecretKey = ckksKeyGenerator.getSecretKey()
-  ckksRelinKeys = ckksKeyGenerator.genRelinKeysLocal()
-  ckksGaloisKeys = ckksKeyGenerator.genGaloisKeysLocal()
+  ckksRelinKeys = ckksKeyGenerator.relinKeysLocal()
+  ckksGaloisKeys = ckksKeyGenerator.galoisKeysLocal()
   ckksEncryptor = Morfix.Encryptor(ckksContext, ckksPublicKey)
   ckksDecryptor = Morfix.Decryptor(ckksContext, ckksSecretKey)
 

@@ -665,7 +665,7 @@ export const SEAL = library => {
      *
      * // Or generate them from a KeyGenerator
      * const keyGenerator = Morfix.KeyGenerator(context)
-     * const galoisKeys = keyGenerator.genGaloisKeys()
+     * const galoisKeys = keyGenerator.galoisKeys()
      */
     GaloisKeys,
 
@@ -716,8 +716,7 @@ export const SEAL = library => {
      * @name SEAL#KeyGenerator
      * @param {Context} context Encryption context
      * @param {SecretKey} [secretKey=null] Previously generated SecretKey
-     * @param {PublicKey} [publicKey=null] Previously generated PublicKey
-     * @returns {KeyGenerator} A KeyGenerator to be used to generate keys depending on how it was initialized
+     * @returns {KeyGenerator} A KeyGenerator to be used to generate keys
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal()
@@ -727,9 +726,6 @@ export const SEAL = library => {
      *
      * // Optionally, pass in an existing SecetKey
      * const keyGenerator = Morfix.KeyGenerator(context, secretKey)
-     *
-     * // In addition, pass in an existing PublicKey with a SecetKey to avoid unnecessary key generation
-     * const keyGenerator = Morfix.KeyGenerator(context, secretKey, publicKey)
      */
     KeyGenerator,
 
@@ -959,7 +955,7 @@ export const SEAL = library => {
      *
      * // Or generate them from a KeyGenerator
      * const keyGenerator = Morfix.KeyGenerator(context)
-     * const relinKeys = keyGenerator.genRelinKeys()
+     * const relinKeys = keyGenerator.relinKeys()
      */
     RelinKeys,
 
@@ -1084,7 +1080,7 @@ export const SEAL = library => {
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal()
      * ...
-     * const serializableGaloisKeys = Morfix.KeyGenerator.genGaloisKeys()
+     * const serializableGaloisKeys = Morfix.KeyGenerator.galoisKeys()
      * const base64 = serializableGaloisKeys.save(Morfix.ComprModeType.deflate)
      * const binaryArray = serializableGaloisKeys.saveArray(Morfix.ComprModeType.deflate)
      */
