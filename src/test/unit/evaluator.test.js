@@ -1776,6 +1776,7 @@ describe('Evaluator', () => {
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
+    const cipherDest = Morfix.CipherText()
     const spyOn = jest.spyOn(item, 'multiplyPlain')
     item.multiplyPlain(cipher, plain, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, plain, cipherDest)
