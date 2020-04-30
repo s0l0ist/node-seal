@@ -38,7 +38,9 @@ beforeAll(async () => {
   parms.setCoeffModulus(
     Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
   )
-  parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
+  const modulus = Morfix.Modulus('786433')
+  // parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
+  parms.setPlainModulus(modulus)
   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
   keyGenerator = Morfix.KeyGenerator(context)
   encoder = Morfix.BatchEncoder(context)
@@ -1774,7 +1776,6 @@ describe('Evaluator', () => {
     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
     const plain = encoder.encode(arr)
     const cipher = encryptor.encrypt(plain)
-    const cipherDest = Morfix.CipherText()
     const spyOn = jest.spyOn(item, 'multiplyPlain')
     item.multiplyPlain(cipher, plain, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, plain, cipherDest)
