@@ -96,7 +96,7 @@ For more exhaustive examples, view the [tests](src/test) or the [benchmarks](ben
 For changes in this library, take a look [here](CHANGES.md).
 
 For changes in Microsoft SEAL,
-take a look at their [list of changes](https://github.com/microsoft/SEAL/blob/master/Changes.md).
+take a look at their [list of changes](https://github.com/microsoft/SEAL/blob/master/CHANGES.md).
 
 ## Benchmarks
 
