@@ -72,8 +72,8 @@ function create() {
     process.stdout.write(
       `Done [${Math.round((timeEnd - timeStart) * 1000)} microseconds]\r\n`
     )
-    const secretKey = keyGenerator.getSecretKey()
-    const publicKey = keyGenerator.getPublicKey()
+    const secretKey = keyGenerator.secretKey()
+    const publicKey = keyGenerator.publicKey()
 
     const relinKeys = seal.RelinKeys()
     const galoisKeys = seal.GaloisKeys()

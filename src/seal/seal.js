@@ -302,7 +302,7 @@ export const SEAL = library => {
      * const Morfix = await Seal()
      * ...
      * const keyGenerator = Morfix.KeyGenerator(context)
-     * const secretKey = keyGenerator.getSecretKey()
+     * const secretKey = keyGenerator.secretKey()
      * const base64 = secretKey.save() // Defaults to ComprModeType.deflate
      *
      * // Manually disable compression
@@ -901,7 +901,7 @@ export const SEAL = library => {
      *
      * // Or generate them from a KeyGenerator
      * const keyGenerator = Morfix.KeyGenerator(context)
-     * const publicKey = keyGenerator.getPublicKey()
+     * const publicKey = keyGenerator.publicKey()
      */
     PublicKey,
 
@@ -1001,7 +1001,7 @@ export const SEAL = library => {
      *
      * // Or generate them from a KeyGenerator
      * const keyGenerator = Morfix.KeyGenerator(context)
-     * const secretKey = keyGenerator.getSecretKey()
+     * const secretKey = keyGenerator.secretKey()
      */
     SecretKey,
 

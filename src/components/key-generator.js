@@ -75,12 +75,12 @@ export const KeyGenerator = library => ({
      * Return the generated SecretKey
      *
      * @function
-     * @name KeyGenerator#getSecretKey
+     * @name KeyGenerator#secretKey
      * @returns {SecretKey} The secret key that was generated upon instantiation of this KeyGenerator
      */
-    getSecretKey() {
+    secretKey() {
       const key = SecretKey()
-      const instance = _instance.getSecretKey()
+      const instance = _instance.secretKey()
       key.inject(instance)
       return key
     },
@@ -89,12 +89,12 @@ export const KeyGenerator = library => ({
      * Return the generated PublicKey
      *
      * @function
-     * @name KeyGenerator#getPublicKey
+     * @name KeyGenerator#publicKey
      * @returns {PublicKey} The public key that was generated upon instantiation of this KeyGenerator
      */
-    getPublicKey() {
+    publicKey() {
       const key = PublicKey()
-      const instance = _instance.getPublicKey()
+      const instance = _instance.publicKey()
       key.inject(instance)
       return key
     },
