@@ -30,7 +30,7 @@ beforeAll(async () => {
   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
   encoder = Morfix.BatchEncoder(context)
   keyGen = Morfix.KeyGenerator(context)
-  publicKey = keyGen.getPublicKey()
+  publicKey = keyGen.publicKey()
   encryptor = Morfix.Encryptor(context, publicKey)
 
   ckksParms = Morfix.EncryptionParameters(Morfix.SchemeType.CKKS)
@@ -41,7 +41,7 @@ beforeAll(async () => {
   ckksContext = Morfix.Context(ckksParms, true, Morfix.SecurityLevel.tc128)
   ckksEncoder = Morfix.CKKSEncoder(ckksContext)
   ckksKeyGen = Morfix.KeyGenerator(ckksContext)
-  ckksPublicKey = ckksKeyGen.getPublicKey()
+  ckksPublicKey = ckksKeyGen.publicKey()
   ckksEncryptor = Morfix.Encryptor(ckksContext, ckksPublicKey)
 })
 

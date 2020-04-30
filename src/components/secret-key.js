@@ -130,7 +130,7 @@ export const SecretKey = library => ({
      * @name SecretKey#copy
      * @param {SecretKey} key SecretKey to copy
      * @example
-     * const keyA = keyGenerator.getSecretKey()
+     * const keyA = keyGenerator.secretKey()
      * const keyB = Morfix.SecretKey()
      * keyB.copy(keyA)
      * // keyB holds a copy of keyA
@@ -150,7 +150,7 @@ export const SecretKey = library => ({
      * @name SecretKey#clone
      * @returns {SecretKey}
      * @example
-     * const keyA = keyGenerator.getSecretKey()
+     * const keyA = keyGenerator.secretKey()
      * const keyB = keyA.clone()
      * // keyB holds a copy of keyA
      */
@@ -176,7 +176,7 @@ export const SecretKey = library => ({
      * @name SecretKey#move
      * @param {SecretKey} key SecretKey to move
      * @example
-     * const keyA = keyGenerator.getSecretKey()
+     * const keyA = keyGenerator.secretKey()
      * const keyB = Morfix.SecretKey()
      * keyB.move(keyA)
      * // keyB holds a the instance of keyA.

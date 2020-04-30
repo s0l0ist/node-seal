@@ -97,7 +97,7 @@ describe('SecretKey', () => {
     expect(array.constructor).toBe(Uint8Array)
   })
   test('It should load from a string', () => {
-    const item = keyGenerator.getSecretKey()
+    const item = keyGenerator.secretKey()
     const newItem = SecretKeyObject()
     const str = item.save()
     const spyOn = jest.spyOn(newItem, 'load')
@@ -106,7 +106,7 @@ describe('SecretKey', () => {
     expect(newItem.save()).toEqual(str)
   })
   test('It should load from a typed array', () => {
-    const item = keyGenerator.getSecretKey()
+    const item = keyGenerator.secretKey()
     const newItem = SecretKeyObject()
     const array = item.saveArray()
     const spyOn = jest.spyOn(newItem, 'loadArray')
@@ -225,14 +225,14 @@ describe('SecretKey', () => {
     )
   })
   test('It should copy another instance', () => {
-    const item = keyGenerator.getSecretKey()
+    const item = keyGenerator.secretKey()
     const newItem = SecretKeyObject()
     const spyOn = jest.spyOn(newItem, 'copy')
     newItem.copy(item)
     expect(spyOn).toHaveBeenCalledWith(item)
   })
   test('It should fail to copy another instance', () => {
-    const item = keyGenerator.getSecretKey()
+    const item = keyGenerator.secretKey()
     const newItem = SecretKeyObject()
     item.delete()
     const spyOn = jest.spyOn(newItem, 'copy')
@@ -258,7 +258,7 @@ describe('SecretKey', () => {
     expect(spyOn).toHaveBeenCalledWith()
   })
   test('It should move another instance into itself and delete the old', () => {
-    const item = keyGenerator.getSecretKey()
+    const item = keyGenerator.secretKey()
     const newItem = SecretKeyObject()
     const spyOn = jest.spyOn(newItem, 'move')
     newItem.move(item)
@@ -266,7 +266,7 @@ describe('SecretKey', () => {
     expect(item.instance).toBeNull()
   })
   test('It should fail to move another instance into itself and delete the old', () => {
-    const item = keyGenerator.getSecretKey()
+    const item = keyGenerator.secretKey()
     const newItem = SecretKeyObject()
     item.delete()
     const spyOn = jest.spyOn(newItem, 'move')

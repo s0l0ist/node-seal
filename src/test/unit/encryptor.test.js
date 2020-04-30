@@ -22,8 +22,8 @@ beforeAll(async () => {
   parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
   keyGenerator = Morfix.KeyGenerator(context)
-  publicKey = keyGenerator.getPublicKey()
-  secretKey = keyGenerator.getSecretKey()
+  publicKey = keyGenerator.publicKey()
+  secretKey = keyGenerator.secretKey()
   decryptor = Morfix.Decryptor(context, secretKey)
 })
 
@@ -54,7 +54,7 @@ describe('Encryptor', () => {
     newParms.setPlainModulus(Morfix.PlainModulus.Batching(2048, 20))
     const newContext = Morfix.Context(newParms)
     const newKeyGenerator = Morfix.KeyGenerator(newContext)
-    const newPublicKey = newKeyGenerator.getPublicKey()
+    const newPublicKey = newKeyGenerator.publicKey()
 
     const Constructor = jest.fn(EncryptorObject)
     expect(() => Constructor(context, newPublicKey)).toThrow()
