@@ -109,7 +109,7 @@ const context = Morfix.Context(
   securityLevel // Enforce a security level
 )
 
-if (!context.parametersSet) {
+if (!context.parametersSet()) {
   throw new Error(
     'Could not set the parameters in the given context. Please try different encryption parameters.'
   )
@@ -136,11 +136,11 @@ You may generate a new Public Key (or even Relin/Galois Keys) from an existing S
 // Create a new KeyGenerator (creates a new keypair internally)
 const keyGenerator = Morfix.KeyGenerator(context)
 
-const secretKey = keyGenerator.getSecretKey()
-const publicKey = keyGenerator.getPublicKey()
-const relinKey = keyGenerator.genRelinKeys()
+const secretKey = keyGenerator.secretKey()
+const publicKey = keyGenerator.publicKey()
+const relinKey = keyGenerator.relinKeys()
 // Generating Galois keys takes a while compared to the others
-const galoisKey = keyGenerator.genGaloisKeys()
+const galoisKey = keyGenerator.galoisKeys()
 
 // Saving a key to a string is the same for each type of key
 const secretBase64Key = secretKey.save()

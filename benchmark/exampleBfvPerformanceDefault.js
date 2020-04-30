@@ -21,45 +21,45 @@ function create() {
   function exampleBfvPerformanceDefault() {
     const parms = seal.EncryptionParameters(seal.SchemeType.BFV)
     let polyModulusDegree = 4096
-    let smallModulus = seal.SmallModulus('786433')
+    let modulus = seal.Modulus('786433')
     let coeffModulus = seal.CoeffModulus.BFVDefault(polyModulusDegree)
     parms.setPolyModulusDegree(polyModulusDegree)
     parms.setCoeffModulus(coeffModulus)
-    parms.setPlainModulus(smallModulus)
+    parms.setPlainModulus(modulus)
     let context = seal.Context(parms)
     bfvPerformanceTest(context, seal)
 
     // Clear data to prevent memory buildup
     context.delete()
-    smallModulus.delete()
+    modulus.delete()
     coeffModulus.delete()
 
     polyModulusDegree = 8192
-    smallModulus = seal.SmallModulus('786433')
+    modulus = seal.Modulus('786433')
     coeffModulus = seal.CoeffModulus.BFVDefault(polyModulusDegree)
     parms.setPolyModulusDegree(polyModulusDegree)
     parms.setCoeffModulus(coeffModulus)
-    parms.setPlainModulus(smallModulus)
+    parms.setPlainModulus(modulus)
     context = seal.Context(parms)
     bfvPerformanceTest(context, seal)
 
     // Clear data to prevent memory buildup
     context.delete()
-    smallModulus.delete()
+    modulus.delete()
     coeffModulus.delete()
 
     polyModulusDegree = 16384
-    smallModulus = seal.SmallModulus('786433')
+    modulus = seal.Modulus('786433')
     coeffModulus = seal.CoeffModulus.BFVDefault(polyModulusDegree)
     parms.setPolyModulusDegree(polyModulusDegree)
     parms.setCoeffModulus(coeffModulus)
-    parms.setPlainModulus(smallModulus)
+    parms.setPlainModulus(modulus)
     context = seal.Context(parms)
     bfvPerformanceTest(context, seal)
 
     // Clear data to prevent memory buildup
     context.delete()
-    smallModulus.delete()
+    modulus.delete()
     coeffModulus.delete()
   }
 
@@ -82,8 +82,8 @@ function create() {
     process.stdout.write(
       `Done [${Math.round((timeEnd - timeStart) * 1000)} microseconds]\r\n`
     )
-    const secretKey = keyGenerator.getSecretKey()
-    const publicKey = keyGenerator.getPublicKey()
+    const secretKey = keyGenerator.secretKey()
+    const publicKey = keyGenerator.publicKey()
 
     const relinKeys = seal.RelinKeys()
     const galoisKeys = seal.GaloisKeys()
@@ -91,14 +91,14 @@ function create() {
     if (context.usingKeyswitching) {
       process.stdout.write('Generating relinearization keys: ')
       timeStart = performance.now()
-      relinKeys.move(keyGenerator.genRelinKeys())
+      relinKeys.move(keyGenerator.relinKeysLocal())
       timeEnd = performance.now()
       process.stdout.write(
         `Done [${Math.round((timeEnd - timeStart) * 1000)} microseconds]\r\n`
       )
       process.stdout.write('Generating Galois keys: ')
       timeStart = performance.now()
-      galoisKeys.move(keyGenerator.genGaloisKeys())
+      galoisKeys.move(keyGenerator.galoisKeysLocal())
       timeEnd = performance.now()
       process.stdout.write(
         `Done [${Math.round((timeEnd - timeStart) * 1000)} microseconds]\r\n`

@@ -91,7 +91,7 @@ describe('EncryptionParameterQualifiers', () => {
     const spyOn = jest.spyOn(newItem, 'unsafeInject')
     newItem.unsafeInject(item.instance)
     expect(spyOn).toHaveBeenCalledWith(item.instance)
-    expect(newItem.parametersSet).toEqual(true)
+    expect(newItem.parametersSet()).toEqual(true)
   })
   test('It should delete the old instance and inject', () => {
     const item = EncryptionParameterQualifiersObject(
@@ -104,7 +104,7 @@ describe('EncryptionParameterQualifiers', () => {
     const spyOn = jest.spyOn(newItem, 'unsafeInject')
     newItem.unsafeInject(item.instance)
     expect(spyOn).toHaveBeenCalledWith(item.instance)
-    expect(newItem.parametersSet).toEqual(true)
+    expect(newItem.parametersSet()).toEqual(true)
   })
   test("It should delete it's instance", () => {
     const item = EncryptionParameterQualifiersObject(
@@ -131,7 +131,7 @@ describe('EncryptionParameterQualifiers', () => {
     const item = EncryptionParameterQualifiersObject(
       contextData.qualifiers.instance
     )
-    expect(item.parametersSet).toEqual(true)
+    expect(item.parametersSet()).toEqual(true)
   })
   test('It should return true if using FFT', () => {
     const item = EncryptionParameterQualifiersObject(

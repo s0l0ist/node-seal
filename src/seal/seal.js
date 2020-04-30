@@ -14,14 +14,17 @@ export const SEAL = library => {
     components.CoeffModulus
   )
   const Vector = applyDependencies({ Exception })(components.Vector)
-  const SmallModulus = applyDependencies({ Exception, ComprModeType, Vector })(
-    components.SmallModulus
+  const Modulus = applyDependencies({ Exception, ComprModeType, Vector })(
+    components.Modulus
   )
   const PlainModulus = applyDependencies({
     Exception,
-    SmallModulus,
+    Modulus,
     Vector
   })(components.PlainModulus)
+  const Serializable = applyDependencies({ Exception, Vector, ComprModeType })(
+    components.Serializable
+  )
   const SchemeType = applyDependencies()(components.SchemeType)
   const Util = applyDependencies()(components.Util)
   const ParmsIdType = applyDependencies({ Exception })(components.ParmsIdType)
@@ -57,7 +60,7 @@ export const SEAL = library => {
   const EncryptionParameters = applyDependencies({
     Exception,
     ComprModeType,
-    SmallModulus,
+    Modulus,
     SchemeType,
     Vector
   })(components.EncryptionParameters)
@@ -79,7 +82,8 @@ export const SEAL = library => {
   const Encryptor = applyDependencies({
     Exception,
     MemoryPoolHandle,
-    CipherText
+    CipherText,
+    Serializable
   })(components.Encryptor)
   const Evaluator = applyDependencies({
     Exception,
@@ -118,6 +122,7 @@ export const SEAL = library => {
     SecretKey,
     RelinKeys,
     GaloisKeys,
+    Serializable,
     ComprModeType
   })(components.KeyGenerator)
 
@@ -297,7 +302,7 @@ export const SEAL = library => {
      * const Morfix = await Seal()
      * ...
      * const keyGenerator = Morfix.KeyGenerator(context)
-     * const secretKey = keyGenerator.getSecretKey()
+     * const secretKey = keyGenerator.secretKey()
      * const base64 = secretKey.save() // Defaults to ComprModeType.deflate
      *
      * // Manually disable compression
@@ -660,7 +665,7 @@ export const SEAL = library => {
      *
      * // Or generate them from a KeyGenerator
      * const keyGenerator = Morfix.KeyGenerator(context)
-     * const galoisKeys = keyGenerator.genGaloisKeys()
+     * const galoisKeys = keyGenerator.galoisKeys()
      */
     GaloisKeys,
 
@@ -711,8 +716,7 @@ export const SEAL = library => {
      * @name SEAL#KeyGenerator
      * @param {Context} context Encryption context
      * @param {SecretKey} [secretKey=null] Previously generated SecretKey
-     * @param {PublicKey} [publicKey=null] Previously generated PublicKey
-     * @returns {KeyGenerator} A KeyGenerator to be used to generate keys depending on how it was initialized
+     * @returns {KeyGenerator} A KeyGenerator to be used to generate keys
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal()
@@ -722,9 +726,6 @@ export const SEAL = library => {
      *
      * // Optionally, pass in an existing SecetKey
      * const keyGenerator = Morfix.KeyGenerator(context, secretKey)
-     *
-     * // In addition, pass in an existing PublicKey with a SecetKey to avoid unnecessary key generation
-     * const keyGenerator = Morfix.KeyGenerator(context, secretKey, publicKey)
      */
     KeyGenerator,
 
@@ -822,7 +823,7 @@ export const SEAL = library => {
      * ...
      * const polyModulusDegree = 4096
      * const bitSize = 20
-     * const smallModulus = Morfix.PlainModulus.Batching(polyModulusDegree, bitSize)
+     * const modulus = Morfix.PlainModulus.Batching(polyModulusDegree, bitSize)
      */
     PlainModulus,
 
@@ -900,7 +901,7 @@ export const SEAL = library => {
      *
      * // Or generate them from a KeyGenerator
      * const keyGenerator = Morfix.KeyGenerator(context)
-     * const publicKey = keyGenerator.getPublicKey()
+     * const publicKey = keyGenerator.publicKey()
      */
     PublicKey,
 
@@ -954,7 +955,7 @@ export const SEAL = library => {
      *
      * // Or generate them from a KeyGenerator
      * const keyGenerator = Morfix.KeyGenerator(context)
-     * const relinKeys = keyGenerator.genRelinKeys()
+     * const relinKeys = keyGenerator.relinKeys()
      */
     RelinKeys,
 
@@ -1000,7 +1001,7 @@ export const SEAL = library => {
      *
      * // Or generate them from a KeyGenerator
      * const keyGenerator = Morfix.KeyGenerator(context)
-     * const secretKey = keyGenerator.getSecretKey()
+     * const secretKey = keyGenerator.secretKey()
      */
     SecretKey,
 
@@ -1027,19 +1028,79 @@ export const SEAL = library => {
 
     /**
      * @description
-     * Create an instance of a SmallModulus
+     * Class to represent a serializable object. Some functions return serializable
+     * objects rather than normal objects. For example, Encryptor can be used in
+     * symmetric-key mode to create symmetric-key ciphertexts, where half of the
+     * ciphertext data is pseudo-random and can be generated from a seed, reducing
+     * the size of the newly created ciphertext object by nearly 50%. However, the
+     * compression only has an effect when the object is serialized with compression
+     * mode compr_mode_type::deflate due to an implementation detail. This makes
+     * sense when, e.g., the ciphertexts need to be communicated from a client to
+     * a server for encrypted computation.
      *
+     * Serializable objects are created only by the following functions:
+     *     - Encryptor::encrypt_symmetric
+     *     - Encryptor::encrypt_zero_symmetric
+     *     - KeyGenerator::relin_keys
+     *     - KeyGenerator::galois_keys
+     *
+     * Serializable objects also expose the save_size function that behaves just
+     * as the save_size functions of other objects in Microsoft SEAL: it returns
+     * an upper bound on the size of a buffer needed to hold the serialized data.
+     *
+     * The following illustrates the use of serializable objects:
+     *
+     *        +--------------------------+
+     *        | Serializable<GaloisKeys> |  Size 2 MB (example)
+     *        +------------+-------------+
+     *                     |
+     *                     |                Serializable<GaloisKeys>::save
+     *                     |                with compr_mode_type::deflate
+     *                     |
+     *             +-------v-------+
+     *             | Stream/Buffer |        Size ~1 MB (example)
+     *             +-------+-------+
+     *                     |
+     *                     |
+     *                  +--v--+
+     *                  Network             Minimized communication
+     *                  +--+--+
+     *                     |
+     *                     |                GaloisKeys::load
+     *                     |
+     *               +-----v------+
+     *               | GaloisKeys |         Size 2 MB (example)
+     *               +------------+
+     *
+     * @private
      * @function
-     * @name SEAL#SmallModulus
-     * @returns {SmallModulus} An empty SmallModulus instance
+     * @name SEAL#Serializable
+     * @returns {Serializable} A serializable object
      * @example
      * import { Seal } from 'node-seal'
      * const Morfix = await Seal()
      * ...
-     * const smallModulus = Morfix.SmallModulus()
-     * smallModulus.setValue('5')
+     * const serializableGaloisKeys = Morfix.KeyGenerator.galoisKeys()
+     * const base64 = serializableGaloisKeys.save(Morfix.ComprModeType.deflate)
+     * const binaryArray = serializableGaloisKeys.saveArray(Morfix.ComprModeType.deflate)
      */
-    SmallModulus,
+    Serializable,
+
+    /**
+     * @description
+     * Create an instance of a Modulus
+     *
+     * @function
+     * @name SEAL#Modulus
+     * @returns {Modulus} An empty Modulus instance
+     * @example
+     * import { Seal } from 'node-seal'
+     * const Morfix = await Seal()
+     * ...
+     * const modulus = Morfix.Modulus()
+     * modulus.setValue('5')
+     */
+    Modulus,
 
     /**
      * @description

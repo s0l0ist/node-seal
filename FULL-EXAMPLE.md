@@ -38,7 +38,7 @@ CommonJS (but also works with `import`)
     securityLevel // Enforce a security level
   )
 
-  if (!context.parametersSet) {
+  if (!context.parametersSet()) {
     throw new Error(
       'Could not set the parameters in the given context. Please try different encryption parameters.'
     )
@@ -46,8 +46,8 @@ CommonJS (but also works with `import`)
 
   const encoder = Morfix.BatchEncoder(context)
   const keyGenerator = Morfix.KeyGenerator(context)
-  const publicKey = keyGenerator.getPublicKey()
-  const secretKey = keyGenerator.getSecretKey()
+  const publicKey = keyGenerator.publicKey()
+  const secretKey = keyGenerator.secretKey()
   const encryptor = Morfix.Encryptor(context, publicKey)
   const decryptor = Morfix.Decryptor(context, secretKey)
   const evaluator = Morfix.Evaluator(context)
