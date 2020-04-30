@@ -11,7 +11,7 @@ Feat:
 - Removed submodule and scripts for `zlib` as this is now contained within SEAL.
 - The seeded versions of Encryptor's symmetric-key encryption and KeyGenerator's RelinKeys and GaloisKeys generation now output Serializable objects. See more details in the [MS SEAL API Changes](https://github.com/microsoft/SEAL/blob/master/Changes.md).
 - `SmallModulus` has been renamed to `Modulus`.
-- `coeffModCount` has been renamed to `coeffModulusSize`
+- `Ciphertext.coeffModCount` has been renamed to `Ciphertext.coeffModulusSize`.
 - Renamed KeyGenerator.[get|gen]\* functions to their original C++ names. Ex: `KeyGenerator.getPublicKey()` -> `KeyGenerator.publicKey()`, `KeyGenerator.genRelinKeys()` -> `KeyGenerator.relinKeys()`.
 - KeyGenerator may only be instantiated with a `SecretKey`.
 
