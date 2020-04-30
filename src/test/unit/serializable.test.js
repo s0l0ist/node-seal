@@ -1,4 +1,4 @@
-import { Seal, getLibrary } from '../../target/wasm'
+import { Seal } from '../../target/wasm'
 import { Serializable } from '../../components'
 
 let Morfix = null
@@ -12,7 +12,6 @@ let encoder = null
 let SerializableObject = null
 beforeAll(async () => {
   Morfix = await Seal()
-  const lib = getLibrary()
   SerializableObject = Serializable()(Morfix)
 
   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
