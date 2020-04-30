@@ -154,7 +154,7 @@ export const Encryptor = library => ({
      * impact.
      *
      * @function
-     * @name Encryptor#encryptSymmetric
+     * @name Encryptor#encryptSymmetricSerializable
      * @param {PlainText} plainText PlainText to encrypt
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} Returns undefined if a CipherText was specified. Otherwise returns a
