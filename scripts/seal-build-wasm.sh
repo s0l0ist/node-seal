@@ -7,6 +7,7 @@ cd ./submodules/SEAL/lib/
 
 emcc \
   -Wall \
+  -flto \
   -O3 \
   libseal-3.5.a \
   --bind \
