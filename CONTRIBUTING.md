@@ -23,7 +23,6 @@ sudo make install
 The repository contains a few submodules:
 
 - [Emscripten SDK](https://github.com/emscripten-core/emsdk)
-- [Zlib](https://github.com/madler/zlib)
 - [Microsoft SEAL](https://github.com/microsoft/SEAL)
 
 To begin development, first clone the repository and related submodules
