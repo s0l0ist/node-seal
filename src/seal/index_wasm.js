@@ -21,21 +21,13 @@ const createSeal = wasm => {
 }
 
 /*
- * Initialize the wasm by resolving on a callback
- */
-const initialize = wasm =>
-  new Promise(
-    resolve => (wasm.onRuntimeInitialized = () => resolve(createSeal(wasm)))
-  )
-
-/*
  * Main module export
  */
 export const Seal = async () => {
   // Webpack will change the name and potentially the path of the `.wasm` file.
   // We provide a `locateFile` hook to redirect to the appropriate path
   // More details: https://kripken.github.io/emscripten-site/docs/api_reference/module.html
-  const wasm = Source({
+  const wasm = await Source({
     locateFile(path) {
       if (path.endsWith('.wasm')) {
         // return SourceWasm
@@ -44,7 +36,7 @@ export const Seal = async () => {
       return path
     }
   })
-  return initialize(wasm)
+  return createSeal(wasm)
 }
 
 export default Seal
