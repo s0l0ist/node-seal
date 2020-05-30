@@ -1,4 +1,4 @@
-import { Seal, getLibrary } from '../../target/wasm'
+import { Seal, getLibrary } from '../../target/wasm/main'
 import { ContextData } from '../../components'
 
 let Morfix = null

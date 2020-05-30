@@ -1,4 +1,4 @@
-import { Seal, getLibrary } from '../../target/wasm'
+import { Seal, getLibrary } from '../../target/wasm/main'
 import { ParmsIdType } from '../../components'
 
 let Morfix = null

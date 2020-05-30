@@ -1,4 +1,4 @@
-import { Seal } from '../../target/wasm'
+import { Seal } from '../../target/wasm/main'
 import { EncryptionParameterQualifiers } from '../../components'
 
 let Morfix = null

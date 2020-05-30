@@ -1,4 +1,4 @@
-import { Seal, getLibrary } from '../../target/wasm'
+import { Seal, getLibrary } from '../../target/wasm/main'
 import { GaloisKeys } from '../../components'
 
 let Morfix = null
