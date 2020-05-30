@@ -17,18 +17,10 @@ const createSeal = wasm => {
 }
 
 /*
- * Initialize the wasm by resolving on a callback
- */
-const initialize = wasm =>
-  new Promise(
-    resolve => (wasm.onRuntimeInitialized = () => resolve(createSeal(wasm)))
-  )
-
-/*
  * Main module export
  */
 export const Seal = async () => {
-  const wasm = Source({
+  const wasm = await Source({
     locateFile(path) {
       if (path.endsWith('.wasm')) {
         return Source
@@ -36,7 +28,7 @@ export const Seal = async () => {
       return path
     }
   })
-  return initialize(wasm)
+  return createSeal(wasm)
 }
 
 export default Seal
