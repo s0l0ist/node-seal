@@ -8,7 +8,7 @@ const environment = process.env.ENVIRONMENT // 'node' or 'web'
 const commonConfig = {
   mode: mode,
   entry: {
-    seal: `./src/target/${target}/main.js`
+    seal: `./src/target/${target}/index.js`
   },
   context: path.resolve(__dirname, '.'),
   devtool: mode !== 'production' ? 'source-map' : 'nosources-source-map',
