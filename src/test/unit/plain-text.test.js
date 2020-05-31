@@ -1,4 +1,4 @@
-import { Seal, getLibrary } from '../../target/wasm/main'
+import { Seal, getLibrary } from '../../target/wasm'
 import { PlainText } from '../../components'
 
 let Morfix,

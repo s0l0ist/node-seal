@@ -1,4 +1,4 @@
-import { Seal } from '../../target/wasm/main'
+import { Seal } from '../../target/wasm'
 import { Serializable } from '../../components'
 
 let Morfix = null
