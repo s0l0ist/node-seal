@@ -1,4 +1,4 @@
-import { Seal, getLibrary } from '../../target/wasm/main'
+import { Seal, getLibrary } from '../../target/wasm'
 import { EncryptionParameters } from '../../components'
 
 let Morfix = null
