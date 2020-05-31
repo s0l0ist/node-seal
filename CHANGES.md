@@ -11,7 +11,7 @@ Fix:
 
 Feat:
 
-- Updated to Seal v3.5.2
+- Updated to Seal v3.5.3
 
 ## Version 4.3.1
 

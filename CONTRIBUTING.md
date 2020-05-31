@@ -42,6 +42,7 @@ First, initialize the Emscripten SDK build environment. This sets up a known wor
 of the SDK to build the project:
 
 ```shell
+# npm run submodule:update # If you forgot to clone recursively
 npm run em:update      # Updates the tag information
 npm run em:init        # Sets up the working toolchain
 ```
