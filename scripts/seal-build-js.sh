@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
-source ./submodules/emsdk/emsdk_env.sh > /dev/null
+cd ./submodules/emsdk/
+source ./emsdk_env.sh > /dev/null
 
 printf "Building Pure JS..."
-cd ./submodules/SEAL/lib/
+cd ../SEAL/lib/
 
 emcc \
   -Wall \
