@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-source ./submodules/emsdk/emsdk_env.sh > /dev/null
-cd ./submodules/SEAL/
+cd ./submodules/emsdk/
+source ./emsdk_env.sh > /dev/null
+cd ../SEAL/
 emcmake cmake \
   -DSEAL_USE_CXX17=ON \
   -DCMAKE_CXX_FLAGS_RELEASE="-DNDEBUG -flto -O3" \
