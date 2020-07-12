@@ -3,6 +3,18 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 4.3.6
+
+This release now supports true 64-bit numbers with the BFV scheme leveraging BigInt. 
+However, there is a performance penalty marshaling data to and from (encoding/decoding)
+JS <-> WASM as they are not natively supported.
+
+Feat:
+
+- Updated to Seal v3.5.5 (hotfix)
+- Modified `BatchEncoder.encode` to also accept `BigInt64Array`/`BigUint64Array` types
+- Added a new function `BatchEncoder.decodeBigInt` for support of 64-bit values using BigInt
+
 ## Version 4.3.5
 
 Feat:
