@@ -101,7 +101,27 @@ describe('BatchEncoder', () => {
     expect(spyOn).toHaveBeenCalledWith(arr)
     expect(plain).toBeDefined()
   })
-  test('It should encode a uint32 array to a plaintext destination', () => {
+  test('It should encode an int64 array to a plaintext destination', () => {
+    const item = BatchEncoderObject(context)
+    const arr = BigInt64Array.from(
+      Array.from({ length: item.slotCount }).map((x, i) => BigInt(-i))
+    )
+    const plain = Morfix.PlainText()
+    const spyOn = jest.spyOn(item, 'encode')
+    item.encode(arr, plain)
+    expect(spyOn).toHaveBeenCalledWith(arr, plain)
+  })
+  test('It should encode an int64 array and return a plaintext', () => {
+    const item = BatchEncoderObject(context)
+    const arr = BigInt64Array.from(
+      Array.from({ length: item.slotCount }).map((x, i) => BigInt(-i))
+    )
+    const spyOn = jest.spyOn(item, 'encode')
+    const plain = item.encode(arr)
+    expect(spyOn).toHaveBeenCalledWith(arr)
+    expect(plain).toBeDefined()
+  })
+  test('It should encode an uint32 array to a plaintext destination', () => {
     const item = BatchEncoderObject(context)
     const arr = Uint32Array.from(
       Array.from({ length: item.slotCount }).map((x, i) => i)
@@ -111,7 +131,7 @@ describe('BatchEncoder', () => {
     item.encode(arr, plain)
     expect(spyOn).toHaveBeenCalledWith(arr, plain)
   })
-  test('It should encode a uint32 array and return a plaintext', () => {
+  test('It should encode an uint32 array and return a plaintext', () => {
     const item = BatchEncoderObject(context)
     const arr = Uint32Array.from(
       Array.from({ length: item.slotCount }).map((x, i) => i)
@@ -124,6 +144,26 @@ describe('BatchEncoder', () => {
     expect(plain).toBeInstanceOf(Object)
     expect(plain.constructor).toBe(Object)
     expect(plain.instance.constructor.name).toBe('Plaintext')
+  })
+  test('It should encode an uint64 array to a plaintext destination', () => {
+    const item = BatchEncoderObject(context)
+    const arr = BigUint64Array.from(
+      Array.from({ length: item.slotCount }).map((x, i) => BigInt(i))
+    )
+    const plain = Morfix.PlainText()
+    const spyOn = jest.spyOn(item, 'encode')
+    item.encode(arr, plain)
+    expect(spyOn).toHaveBeenCalledWith(arr, plain)
+  })
+  test('It should encode an uint64 array and return a plaintext', () => {
+    const item = BatchEncoderObject(context)
+    const arr = BigUint64Array.from(
+      Array.from({ length: item.slotCount }).map((x, i) => BigInt(i))
+    )
+    const spyOn = jest.spyOn(item, 'encode')
+    const plain = item.encode(arr)
+    expect(spyOn).toHaveBeenCalledWith(arr)
+    expect(plain).toBeDefined()
   })
   test('It should fail on unsupported array type', () => {
     const item = BatchEncoderObject(context)
@@ -155,6 +195,18 @@ describe('BatchEncoder', () => {
     expect(spyOn).toHaveBeenCalledWith(plain, true)
     expect(decoded).toEqual(arr)
   })
+  test('It should decode an int64 array', () => {
+    const item = BatchEncoderObject(context)
+    const arr = BigInt64Array.from(
+      Array.from({ length: item.slotCount }).map((x, i) => BigInt(-i))
+    )
+    const plain = Morfix.PlainText()
+    item.encode(arr, plain)
+    const spyOn = jest.spyOn(item, 'decodeBigInt')
+    const decoded = item.decodeBigInt(plain, true)
+    expect(spyOn).toHaveBeenCalledWith(plain, true)
+    expect(decoded).toEqual(arr)
+  })
   test('It should decode an uint32 array', () => {
     const item = BatchEncoderObject(context)
     const arr = Uint32Array.from(
@@ -164,6 +216,18 @@ describe('BatchEncoder', () => {
     item.encode(arr, plain)
     const spyOn = jest.spyOn(item, 'decode')
     const decoded = item.decode(plain, false)
+    expect(spyOn).toHaveBeenCalledWith(plain, false)
+    expect(decoded).toEqual(arr)
+  })
+  test('It should decode a uint64 array', () => {
+    const item = BatchEncoderObject(context)
+    const arr = BigUint64Array.from(
+      Array.from({ length: item.slotCount }).map((x, i) => BigInt(i))
+    )
+    const plain = Morfix.PlainText()
+    item.encode(arr, plain)
+    const spyOn = jest.spyOn(item, 'decodeBigInt')
+    const decoded = item.decodeBigInt(plain, false)
     expect(spyOn).toHaveBeenCalledWith(plain, false)
     expect(decoded).toEqual(arr)
   })
@@ -185,10 +249,34 @@ describe('BatchEncoder', () => {
     expect(() => item.decode(arr, true)).toThrow()
     expect(spyOn).toHaveBeenCalledWith(arr, true)
   })
+  test('It should fail to decodeBigInt unsigned', () => {
+    const item = BatchEncoderObject(context)
+    const arr = BigInt64Array.from(
+      Array.from({ length: item.slotCount * 2 }).map((x, i) => BigInt(i))
+    )
+    const spyOn = jest.spyOn(item, 'decodeBigInt')
+    expect(() => item.decodeBigInt(arr, false)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(arr, false)
+  })
+  test('It should fail to decodeBigInt signed', () => {
+    const item = BatchEncoderObject(context)
+    const arr = BigUint64Array.from(
+      Array.from({ length: item.slotCount * 2 }).map((x, i) => BigInt(i))
+    )
+    const spyOn = jest.spyOn(item, 'decodeBigInt')
+    expect(() => item.decodeBigInt(arr, true)).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(arr, true)
+  })
   test('It fail to decode with no args', () => {
     const item = BatchEncoderObject(context)
     const spyOn = jest.spyOn(item, 'decode')
     expect(() => item.decode()).toThrow()
+    expect(spyOn).toHaveBeenCalledWith()
+  })
+  test('It fail to decodeBigInt with no args', () => {
+    const item = BatchEncoderObject(context)
+    const spyOn = jest.spyOn(item, 'decodeBigInt')
+    expect(() => item.decodeBigInt()).toThrow()
     expect(spyOn).toHaveBeenCalledWith()
   })
 })
