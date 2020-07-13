@@ -23,19 +23,31 @@ yarn add node-seal
 Import the library using `import` or `require` syntax:
 
 ```javascript
-// Auto-detects browser or nodejs. Defaults to use the WASM build
+// Auto-detects browser or nodejs.
+// Defaults to use the WASM build which throws on transparent ciphertexts
 import { Seal } from 'node-seal'
 const { Seal } = require('node-seal')
 ```
 
 Specify a target environment. This is useful for environments that
-aren't detected properly or do not support WebAssembly.
+aren't detected properly or do not support WebAssembly. In addition,
+there are two separate bundles for throwing on transparent ciphertexts
+and another for allowing transparent ciphertexts. If you're unsure what 
+you need, start with the build that throws on transparent ciphertexts.
+This is also the default import that is used.
 
 ```javascript
-import { Seal } from 'node-seal/dist/node/wasm' // Specifies the WASM build for NodeJS
-import { Seal } from 'node-seal/dist/node/js' // Specifies the JS build for NodeJS
-import { Seal } from 'node-seal/dist/web/wasm' // Specifies the WASM build for the browser
-import { Seal } from 'node-seal/dist/web/js' // Specifies the JS build for the browser
+// Pick one that suits your need (throws on transparent ciphertexts)
+import { Seal } from 'node-seal/dist/throws_transparent/node/wasm' // Specifies the WASM build for NodeJS
+import { Seal } from 'node-seal/dist/throws_transparent/node/js' // Specifies the JS build for NodeJS
+import { Seal } from 'node-seal/dist/throws_transparent/web/wasm' // Specifies the WASM build for the browser
+import { Seal } from 'node-seal/dist/throws_transparent/web/js' // Specifies the JS build for the browser
+
+// Pick one that suits your need (allows transparent ciphertexts)
+import { Seal } from 'node-seal/dist/allows_transparent/node/wasm' // Specifies the WASM build for NodeJS
+import { Seal } from 'node-seal/dist/allows_transparent/node/js' // Specifies the JS build for NodeJS
+import { Seal } from 'node-seal/dist/allows_transparent/web/wasm' // Specifies the WASM build for the browser
+import { Seal } from 'node-seal/dist/allows_transparent/web/js' // Specifies the JS build for the browser
 ```
 
 #### React-Native
@@ -53,14 +65,14 @@ not exist. The solution is to spoof the `document` object.
 Simply add an empty `document` object to the `global` provided by react-native:
 
 ```javascript
-import { Seal } from 'node-seal/dist/web/js'
+import { Seal } from 'node-seal/dist/throws_transparent/web/js'
 ;(async () => {
   global.document = {} // mimic browser document
   const seal = await Seal()
 })()
 ```
 
-**Option 2** is harder to implement, but it will allow you to use the faster `dist/web/wasm` build.
+**Option 2** is harder to implement, but it will allow you to use the faster `dist/throws_transparent/web/wasm` build.
 The implementation will need to manage the state within the WebView.
 
 ## Demo

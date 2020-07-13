@@ -1,6 +1,6 @@
 {
   "name": "node-seal",
-  "version": "4.3.6",
+  "version": "4.3.7",
   "description": "Homomorphic Encryption in JavaScript using Microsoft SEAL",
   "repository": {
     "type": "git",
@@ -23,18 +23,26 @@
     "cryptography",
     "cryptosystem"
   ],
-  "main": "dist/node/wasm/index.js",
-  "module": "dist/node/wasm/index.js",
-  "browser": "dist/web/wasm/index.js",
+  "main": "dist/throws_transparent/node/wasm/index.js",
+  "module": "dist/throws_transparent/node/wasm/index.js",
+  "browser": "dist/throws_transparent/web/wasm/index.js",
   "files": [
-    "dist/web/js/index.js",
-    "dist/web/js/index.js.map",
-    "dist/web/wasm/index.js",
-    "dist/web/wasm/index.js.map",
-    "dist/node/js/index.js",
-    "dist/node/js/index.js.map",
-    "dist/node/wasm/index.js",
-    "dist/node/wasm/index.js.map"
+    "dist/throws_transparent/web/js/index.js",
+    "dist/throws_transparent/web/js/index.js.map",
+    "dist/throws_transparent/web/wasm/index.js",
+    "dist/throws_transparent/web/wasm/index.js.map",
+    "dist/throws_transparent/node/js/index.js",
+    "dist/throws_transparent/node/js/index.js.map",
+    "dist/throws_transparent/node/wasm/index.js",
+    "dist/throws_transparent/node/wasm/index.js.map",
+    "dist/allows_transparent/web/js/index.js",
+    "dist/allows_transparent/web/js/index.js.map",
+    "dist/allows_transparent/web/wasm/index.js",
+    "dist/allows_transparent/web/wasm/index.js.map",
+    "dist/allows_transparent/node/js/index.js",
+    "dist/allows_transparent/node/js/index.js.map",
+    "dist/allows_transparent/node/wasm/index.js",
+    "dist/allows_transparent/node/wasm/index.js.map"
   ],
   "license": "MIT",
   "scripts": {
@@ -62,7 +70,12 @@
     "seal:make": "bash scripts/seal-make.sh",
     "seal:build": "npm run seal:build:wasm && npm run seal:build:js",
     "seal:build:js": "bash scripts/seal-build-js.sh",
-    "seal:build:wasm": "bash scripts/seal-build-wasm.sh"
+    "seal:build:wasm": "bash scripts/seal-build-wasm.sh",
+    "seal:compile": "npm run seal:clean && npm run seal:cmake && npm run seal:make && npm run seal:build",
+    "build:transparent:on": "export THROW_ON_TRANSPARENT=OFF && npm run seal:compile && npm run build",
+    "build:transparent:off": "export THROW_ON_TRANSPARENT=ON && npm run seal:compile && npm run build",
+    "build:all": "npm run build:transparent:on && npm run build:transparent:off",
+    "clean": "npm run seal:clean && npm run build:clean"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
