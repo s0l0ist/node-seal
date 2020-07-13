@@ -3,6 +3,12 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 4.3.7
+
+Feat:
+
+- Changed the deep import links to account for additional builds that do _not_ throw on transparent ciphertexts
+
 ## Version 4.3.6
 
 This release now supports true 64-bit numbers with the BFV scheme leveraging BigInt. 
