@@ -5,7 +5,7 @@ const mode = process.env.NODE_ENV // 'production' or 'development'
 const target = process.env.TARGET // 'wasm' or 'js'
 const environment = process.env.ENVIRONMENT // 'node' or 'web'
 const throwOnTrans = process.env.THROW_ON_TRANSPARENT // 'ON' or 'OFF'
-const transparent = (throwOnTrans === 'ON') ? 'allows_transparent' : 'throws_transparent'
+const transparent = (throwOnTrans === 'ON') ? 'throws_transparent' : 'allows_transparent'
 
 const commonConfig = {
   mode: mode,
