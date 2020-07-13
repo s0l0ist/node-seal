@@ -4,6 +4,8 @@ const nodeExternals = require('webpack-node-externals')
 const mode = process.env.NODE_ENV // 'production' or 'development'
 const target = process.env.TARGET // 'wasm' or 'js'
 const environment = process.env.ENVIRONMENT // 'node' or 'web'
+const throwOnTrans = process.env.THROW_ON_TRANSPARENT // 'ON' or 'OFF'
+const transparent = (throwOnTrans === 'ON') ? 'allows_transparent' : 'throws_transparent'
 
 const commonConfig = {
   mode: mode,
@@ -17,7 +19,7 @@ const commonConfig = {
   },
   output: {
     filename: 'index.js',
-    path: path.resolve(__dirname, 'dist', `${environment}`, `${target}`),
+    path: path.resolve(__dirname, 'dist', `${transparent}`, `${environment}`, `${target}`),
     libraryTarget: 'umd',
     globalObject: `(typeof self !== 'undefined' ? self : this)`, // 'global` for RN
     umdNamedDefine: true
@@ -26,7 +28,7 @@ const commonConfig = {
     filename: 'index.js',
     index: `./dev/${target}.html`,
     compress: true,
-    publicPath: `/dist/${environment}/${target}/`,
+    publicPath: `/dist/${transparent}/${environment}/${target}/`,
     port: 9000,
     watchContentBase: true,
     open: true,
@@ -47,7 +49,7 @@ const commonConfig = {
         loader: 'file-loader',
         options: {
           name: '[name].[ext]',
-          publicPath: `/dist/${environment}/${target}/`
+          publicPath: `/dist/${transparent}/${environment}/${target}/`
         }
       }
     ]
