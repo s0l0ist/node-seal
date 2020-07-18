@@ -3,6 +3,13 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 4.3.8
+
+Feat: 
+
+- Updated to Seal v3.5.6
+- Updated emsdk to latest
+
 ## Version 4.3.7
 
 Feat:
