@@ -3,6 +3,13 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 4.3.9
+
+Feat: 
+
+- Added `setScale` function to allow users to manually set the scale on either PlainTexts or CipherTexts
+- Updated emsdk to lastest
+
 ## Version 4.3.8
 
 Feat: 
