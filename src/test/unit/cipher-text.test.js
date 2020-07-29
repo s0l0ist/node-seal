@@ -117,6 +117,7 @@ describe('CipherText', () => {
     expect(cipher).toHaveProperty('isNttForm')
     expect(cipher).toHaveProperty('parmsId')
     expect(cipher).toHaveProperty('scale')
+    expect(cipher).toHaveProperty('setScale')
     expect(cipher).toHaveProperty('pool')
     expect(cipher).toHaveProperty('save')
     expect(cipher).toHaveProperty('saveArray')
@@ -269,6 +270,19 @@ describe('CipherText', () => {
     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
     ckksEncryptor.encrypt(plain, cipher)
     expect(typeof cipher.scale).toBe('number')
+  })
+  test('It should set the scale', () => {
+    const arr = Float64Array.from(
+      Array.from({ length: ckksEncoder.slotCount }).fill(5)
+    )
+    const cipher = CipherTextObject()
+    const scale1 = Math.pow(2, 20)
+    const scale2 = 2097152.32
+    const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
+    ckksEncryptor.encrypt(plain, cipher)
+    expect(cipher.scale).toEqual(scale1)
+    cipher.setScale(scale2)
+    expect(cipher.scale).toEqual(scale2)
   })
   test('It should return the currently used memory pool handle', () => {
     const arr = Float64Array.from(
