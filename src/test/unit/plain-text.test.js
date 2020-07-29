@@ -90,6 +90,7 @@ describe('PlainText', () => {
     expect(plainText).toHaveProperty('toPolynomial')
     expect(plainText).toHaveProperty('isNttForm')
     expect(plainText).toHaveProperty('scale')
+    expect(plainText).toHaveProperty('setScale')
     expect(plainText).toHaveProperty('pool')
     expect(plainText).toHaveProperty('save')
     expect(plainText).toHaveProperty('saveArray')
@@ -282,6 +283,18 @@ describe('PlainText', () => {
     const plainText = PlainTextObject()
     ckksEncoder.encode(arr, Math.pow(2, 20), plainText)
     expect(typeof plainText.scale).toBe('number')
+  })
+  test('It should set the scale (ckks)', () => {
+    const arr = Float64Array.from(
+      Array.from({ length: ckksEncoder.slotCount }).fill(5)
+    )
+    const plainText = PlainTextObject()
+    const scale1 = Math.pow(2, 20)
+    const scale2 = 2097152.32
+    ckksEncoder.encode(arr, scale1, plainText)
+    expect(plainText.scale).toEqual(scale1)
+    plainText.setScale(scale2)
+    expect(plainText.scale).toEqual(scale2)
   })
   test('It should return a parms id type', () => {
     const arr = Int32Array.from(
