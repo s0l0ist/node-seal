@@ -271,6 +271,19 @@ export const PlainText = library => ({
     },
 
     /**
+     * Sets the PlainText scale. This is only needed when using the
+     * CKKS encryption scheme. The user should have little or no reason to ever
+     * change the scale by hand.
+     *
+     * @function
+     * @name PlainText#setScale
+     * @param {Number} scale The scale to set
+     */
+    setScale(scale) {
+      _instance.setScale(scale)
+    },
+
+    /**
      * The currently used MemoryPoolHandle.
      *
      * @readonly
