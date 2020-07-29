@@ -78,26 +78,26 @@
     "clean": "npm run seal:clean && npm run build:clean"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.4",
+    "@babel/core": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
     "babel-jest": "^26.1.0",
     "babel-loader": "^8.1.0",
     "better-docs": "^2.3.0",
-    "codecov": "^3.7.0",
+    "codecov": "^3.7.2",
     "env-cmd": "^10.1.0",
-    "eslint": "^7.4.0",
+    "eslint": "^7.5.0",
     "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-jsdoc": "^28.6.1",
+    "eslint-plugin-jsdoc": "^30.0.3",
     "eslint-plugin-prettier": "^3.1.4",
     "exports-loader": "^0.7.0",
     "file-loader": "^6.0.0",
     "jest": "^26.1.0",
-    "jsdoc": "^3.6.4",
+    "jsdoc": "^3.6.5",
     "prettier": "^2.0.5",
-    "webpack": "^4.43.0",
+    "webpack": "^4.44.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-node-externals": "^2.5.0"
   },
   "browserslist": [
     "since 2017-06"
