@@ -168,6 +168,8 @@ Conversion from C++ to Web Assembly has some limitations:
 - **±2^53 bit numbers:** JavaScript uses 2^53 numbers (not true 64 bit). Values higher than these
   will typically result in inaccuracies. `BFV` users will inherently adhere to these
   limitations due to the Int32/UInt32 TypedArrays. `CKKS` users will need to keep this in mind.
+  There are extra methods that now support 64-bit integers using BigInt for `BFV` at a significant 
+  performance penalty. However, `CKKS` is still limited to 2^53-bit precision.
 
 - **Memory:** Generating large keys and saving them in the browser could be problematic.
   We can control NodeJS heap size, but not inside a user's browser.
