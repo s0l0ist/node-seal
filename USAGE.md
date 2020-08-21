@@ -321,7 +321,7 @@ const plainTextD = decryptor.decrypt(cipherTextD)
 // If you have encrypted a Uint32Array and wish to decrypt it, set
 // this to false.
 const decoded = batchEncoder.decode(
-  plainTextD
+  plainTextD,
   true // Can be omitted since this defaults to true.
 )
 
