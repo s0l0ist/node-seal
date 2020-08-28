@@ -6,7 +6,7 @@ node-seal is a homomorphic encryption library in JavaScript.
 - **Zero dependencies:** Very lean, only contains a low level API which is very close to the C++ calls from Microsoft SEAL.
 - **Node.js or the browser:** Install once, work in any server/client configuration.
 
-**Now supporting Microsoft SEAL 3.5.6**
+**Now supporting Microsoft SEAL 3.5.8**
 
 ## Installation
 
