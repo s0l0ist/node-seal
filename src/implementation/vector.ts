@@ -36,11 +36,11 @@ export type VectorTypes =
   | BigInt64Array
   | BigUint64Array
 
-export type StringTypes = 
-  | 'Uint8Array' 
-  | 'Int32Array' 
-  | 'Uint32Array' 
-  | 'Float64Array' 
+export type StringTypes =
+  | 'Uint8Array'
+  | 'Int32Array'
+  | 'Uint32Array'
+  | 'Float64Array'
   | 'BigInt64Array'
   | 'BigUint64Array'
   | 'Modulus'

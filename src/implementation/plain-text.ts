@@ -89,8 +89,8 @@ const PlainTextConstructor = (library: Library): PlainTextDependencies => ({
     coeffCount,
     pool = MemoryPoolHandle.global
   }: {
-    capacity?: number,
-    coeffCount?: Number,
+    capacity?: number
+    coeffCount?: number
     pool?: MemoryPoolHandle
   }) {
     try {

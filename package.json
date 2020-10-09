@@ -73,11 +73,11 @@
     "build:all": "npm run build:transparent:on && npm run build:transparent:off",
     "clean": "npm run seal:clean && npm run build:clean",
     "compile": "tsc",
-    "format": "prettier --write private_set_intersection/javascript/src",
-    "lint": "eslint --fix 'private_set_intersection/javascript/src/**/*.{js,ts}'",
-    "test": "jest src/__tests__/*.ts",
-    "test:js": "jest src/tsc-out/__tests__/",
-    "coverage": "jest --collectCoverageFrom=src/implementation/**.ts --coverage",
+    "format": "prettier --write src",
+    "lint": "eslint --fix 'src/**/*.ts'",
+    "test": "jest src/",
+    "test:js": "jest src/tsc-out/__tests__/*.js",
+    "coverage": "jest src --coverage",
     "coverage:upload": "env-cmd -f .env codecov"
   },
   "devDependencies": {

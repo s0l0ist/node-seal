@@ -23,10 +23,15 @@ export type PlainModulusConstructorOptions = {
 
 export type PlainModulus = {
   readonly Batching: (polyModulusDegree: number, bitSize: number) => Modulus
-  readonly BatchingVector: (polyModulusDegree: number, bitSizes: Int32Array) => Vector
+  readonly BatchingVector: (
+    polyModulusDegree: number,
+    bitSizes: Int32Array
+  ) => Vector
 }
 
-const PlainModulusConstructor = (library: Library): PlainModulusDependencies => ({
+const PlainModulusConstructor = (
+  library: Library
+): PlainModulusDependencies => ({
   Exception,
   Modulus,
   Vector
@@ -43,7 +48,7 @@ const PlainModulusConstructor = (library: Library): PlainModulusDependencies => 
    * @interface PlainModulus
    */
   return {
-        /**
+    /**
      * Creates a prime number PlainModulus for use as plainPlainModulus encryption
      * parameter that supports batching with a given polyPlainModulusDegree.
      *
@@ -74,11 +79,17 @@ const PlainModulusConstructor = (library: Library): PlainModulusDependencies => 
      * @param {Int32Array} bitSizes Int32Array containing values representing bit-sizes of primes
      * @returns {Vector} Vector of Modulus containing prime numbers
      */
-    BatchingVector(polyPlainModulusDegree: number, bitSizes: Int32Array): Vector {
+    BatchingVector(
+      polyPlainModulusDegree: number,
+      bitSizes: Int32Array
+    ): Vector {
       try {
         const vectBitSizes = Vector()
         vectBitSizes.from(bitSizes)
-        const vect = _BatchingVector(polyPlainModulusDegree, vectBitSizes.instance)
+        const vect = _BatchingVector(
+          polyPlainModulusDegree,
+          vectBitSizes.instance
+        )
         vectBitSizes.delete()
         return vect
       } catch (e) {
@@ -88,7 +99,9 @@ const PlainModulusConstructor = (library: Library): PlainModulusDependencies => 
   }
 }
 
-export const PlainModulusInit = ({ loader }: LoaderOptions): PlainModulusDependencies => {
+export const PlainModulusInit = ({
+  loader
+}: LoaderOptions): PlainModulusDependencies => {
   const library: Library = loader.library
   return PlainModulusConstructor(library)
 }

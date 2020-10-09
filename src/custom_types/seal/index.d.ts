@@ -1,1 +1,1 @@
-declare module 'seal_*';
+declare module 'seal_*'

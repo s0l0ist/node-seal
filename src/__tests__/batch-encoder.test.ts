@@ -4,7 +4,6 @@ import { Context } from 'implementation/context'
 import { Modulus } from 'implementation/modulus'
 import { Vector } from 'implementation/vector'
 import { EncryptionParameters } from 'implementation/encryption-parameters'
-import { PlainText } from 'implementation/plain-text'
 
 let seal: SEALLibrary
 let context: Context

@@ -2,7 +2,6 @@ import { LoaderOptions, Library, Instance } from './emscripten'
 import { Exception } from './exception'
 import { CipherText } from './cipher-text'
 import { Context } from './context'
-import { PublicKey } from './public-key'
 import { SecretKey } from './secret-key'
 import { PlainText, PlainTextConstructorOptions } from './plain-text'
 

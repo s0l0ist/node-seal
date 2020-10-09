@@ -10,10 +10,7 @@ import {
   CKKSEncoderConstructorOptions,
   CKKSEncoderDependencies
 } from './ckks-encoder'
-import {
-  CoeffModulus,
-  CoeffModulusDependencies
-} from './coeff-modulus'
+import { CoeffModulus, CoeffModulusDependencies } from './coeff-modulus'
 import { ComprModeType, ComprModeTypeDependencies } from './compr-mode-type'
 import {
   ContextDataConstructorOptions,

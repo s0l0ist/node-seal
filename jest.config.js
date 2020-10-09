@@ -81,7 +81,7 @@ module.exports = {
   //   compilerOptions.paths /*, { prefix: '<rootDir>/' } */
   // ),
   moduleNameMapper: {
-    'seal_(.*)$': '<rootDir>/bin/seal_$1'
+    'seal_(.*)$': '<rootDir>/src/bin/seal_$1'
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -115,7 +115,7 @@ module.exports = {
   // restoreMocks: false,
 
   // The root directory that Jest should scan for tests and modules within
-  rootDir: './src',
+  rootDir: './',
 
   // A list of paths to directories that Jest should use to search for files in
   // roots: [

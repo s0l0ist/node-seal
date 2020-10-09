@@ -110,10 +110,7 @@ const IntegerEncoderConstructor = (
      * @param {PlainText} [destination] PlainText to store the encoded data
      * @returns {PlainText|undefined} PlainText containing the result or undefined if a destination was supplied
      */
-    encodeInt32(
-      value: number,
-      destination?: PlainText
-    ): PlainText | undefined {
+    encodeInt32(value: number, destination?: PlainText): PlainText | undefined {
       try {
         if (destination) {
           _instance.encodeInt32(value, destination.instance)

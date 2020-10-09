@@ -40,7 +40,9 @@ const ModulusConstructor = (library: Library): ModulusDependencies => ({
   Exception,
   ComprModeType,
   Vector
-}: ModulusDependencyOptions): ModulusConstructorOptions => (value: BigInt): Modulus => {
+}: ModulusDependencyOptions): ModulusConstructorOptions => (
+  value: BigInt
+): Modulus => {
   // Static methods
   const Constructor = library.Modulus
 
@@ -49,8 +51,8 @@ const ModulusConstructor = (library: Library): ModulusDependencies => ({
   function createModulus(value: BigInt) {
     try {
       const inst = new Constructor()
-        inst.setValue(value.toString())
-        return inst
+      inst.setValue(value.toString())
+      return inst
     } catch (e) {
       throw Exception.safe(e)
     }

@@ -2,7 +2,7 @@ import { ComprModeType } from './compr-mode-type'
 import { Context } from './context'
 import { LoaderOptions, Library, Instance } from './emscripten'
 import { Exception } from './exception'
-import { MemoryPoolHandle, MemoryPoolHandleInit } from './memory-pool-handle'
+import { MemoryPoolHandle } from './memory-pool-handle'
 import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
 import { VectorConstructorOptions } from './vector'
 export type CipherTextDependencyOptions = {
@@ -99,23 +99,11 @@ const CipherTextConstructor = (library: Library): CipherTextDependencies => ({
     try {
       if (!context && !parmsId && sizeCapacity === undefined) {
         return new Constructor(pool)
-      } else if (
-        context &&
-        !parmsId &&
-        sizeCapacity === undefined
-      ) {
+      } else if (context && !parmsId && sizeCapacity === undefined) {
         return new Constructor(context.instance, pool)
-      } else if (
-        context &&
-        parmsId&&
-        sizeCapacity === undefined
-      ) {
+      } else if (context && parmsId && sizeCapacity === undefined) {
         return new Constructor(context.instance, parmsId.instance, pool)
-      } else if (
-        context &&
-        parmsId &&
-        sizeCapacity !== undefined
-      ) {
+      } else if (context && parmsId && sizeCapacity !== undefined) {
         return new Constructor(
           context.instance,
           parmsId.instance,

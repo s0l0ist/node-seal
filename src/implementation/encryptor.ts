@@ -61,7 +61,11 @@ const EncryptorConstructor = (library: Library): EncryptorDependencies => ({
   const Constructor = library.Encryptor
   let _instance = constructInstance(context, publicKey, secretKey)
 
-  function constructInstance(context: Context, publicKey: PublicKey, secretKey?: SecretKey) {
+  function constructInstance(
+    context: Context,
+    publicKey: PublicKey,
+    secretKey?: SecretKey
+  ) {
     try {
       if (secretKey) {
         return new Constructor(
