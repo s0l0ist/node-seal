@@ -148,7 +148,7 @@ function create() {
      */
     const slotCount = batchEncoder.slotCount
     const array = new Uint32Array(slotCount)
-    const plainNumber = Number(plainModulus.value)
+    const plainNumber = number(plainModulus.value)
     for (let i = 0; i < slotCount; i++) {
       array[i] = Math.floor(randomIntInc(0, plainNumber) % plainNumber)
     }

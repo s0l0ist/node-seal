@@ -5,3 +5,4 @@
 /src/bin/*.js
 /src/test/*
 /submodules/*
+/tsc-out/

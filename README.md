@@ -32,7 +32,7 @@ const { Seal } = require('node-seal')
 Specify a target environment. This is useful for environments that
 aren't detected properly or do not support WebAssembly. In addition,
 there are two separate bundles for throwing on transparent ciphertexts
-and another for allowing transparent ciphertexts. If you're unsure what 
+and another for allowing transparent ciphertexts. If you're unsure what
 you need, start with the build that throws on transparent ciphertexts.
 This is also the default import that is used.
 
@@ -141,7 +141,7 @@ Encryption Parameters:
 - Coeff Modulus Size: 438 (48 + 48 + 48 + 49 + 49 + 49 + 49 + 49 + 49) bits
 - Plain Modulus: 786433
 
-Number of iterations is **100**, time in **microseconds**. Browser timers are known to be imprecise, variance maybe high.
+number of iterations is **100**, time in **microseconds**. Browser timers are known to be imprecise, variance maybe high.
 
 | 16384, n = 100         | Node\.js | Chrome  | Firefox | Safari  | Seal \(C\+\+\) | Node\.js \(times slower\) | Chrome \(times slower\) | Firefox \(times slower\) | Safari \(times slower\) |
 | ---------------------- | -------- | ------- | ------- | ------- | -------------- | ------------------------- | ----------------------- | ------------------------ | ----------------------- |
@@ -167,8 +167,8 @@ Conversion from C++ to Web Assembly has some limitations:
 
 - **±2^53 bit numbers:** JavaScript uses 2^53 numbers (not true 64 bit). Values higher than these
   will typically result in inaccuracies. `BFV` users will inherently adhere to these
-  limitations due to the Int32/UInt32 TypedArrays. `CKKS` users will need to keep this in mind.
-  There are extra methods that now support 64-bit integers using BigInt for `BFV` at a significant 
+  limitations due to the Int32/Uint32 TypedArrays. `CKKS` users will need to keep this in mind.
+  There are extra methods that now support 64-bit integers using BigInt for `BFV` at a significant
   performance penalty. However, `CKKS` is still limited to 2^53-bit precision.
 
 - **Memory:** Generating large keys and saving them in the browser could be problematic.

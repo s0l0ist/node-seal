@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "declaration": true,
+    "declarationDir": "./src/tsc-out/types",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ES2020",
+    "moduleResolution": "node",
+    "newLine": "LF",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "outDir": "./src/tsc-out",
+    "pretty": true,
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "rootDir": "./src",
+    "sourceMap": true,
+    "strict": true,
+    "target": "ES2019",
+    "typeRoots": ["./node_modules/@types"]
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules", "**/__tests__"]
+}
