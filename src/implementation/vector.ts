@@ -64,7 +64,7 @@ const VectorConstructor = (library: Library): VectorDependencies => ({
   const _jsArrayStringFromVecUint64 = library.jsArrayStringFromVecUint64
   const _jsArrayStringFromVecModulus = library.jsArrayStringFromVecModulus
 
-  let _instance: Instance | null
+  let _instance: Instance
   let _type: StringTypes
   /**
    * @implements Vector

@@ -75,7 +75,7 @@
     "compile": "tsc",
     "format": "prettier --write private_set_intersection/javascript/src",
     "lint": "eslint --fix 'private_set_intersection/javascript/src/**/*.{js,ts}'",
-    "test": "jest src/",
+    "test": "jest src/__tests__/*.ts",
     "test:js": "jest src/tsc-out/__tests__/",
     "coverage": "jest --collectCoverageFrom=src/implementation/**.ts --coverage",
     "coverage:upload": "env-cmd -f .env codecov"

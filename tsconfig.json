@@ -14,15 +14,20 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "outDir": "./src/tsc-out",
+    "paths": {
+      "seal_*": ["./src/bin/seal_*"]
+    },
     "pretty": true,
     "removeComments": true,
     "resolveJsonModule": true,
     "rootDir": "./src",
     "sourceMap": true,
     "strict": true,
-    "target": "ES2019",
-    "typeRoots": ["./node_modules/@types"]
+    "target": "ESNext",
+    "typeRoots": [ 
+      "./src/custom_types",
+      "./node_modules/@types"]
   },
   "include": ["./src/**/*"],
-  "exclude": ["node_modules", "**/__tests__"]
+  "exclude": ["node_modules", "**/tsc-out"]
 }

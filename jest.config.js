@@ -80,9 +80,9 @@ module.exports = {
   // moduleNameMapper: pathsToModuleNameMapper(
   //   compilerOptions.paths /*, { prefix: '<rootDir>/' } */
   // ),
-  // moduleNameMapper: {
-  //   'psi_(.*)$': '<rootDir>/bin/psi_$1'
-  // },
+  moduleNameMapper: {
+    'seal_(.*)$': '<rootDir>/bin/seal_$1'
+  },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],

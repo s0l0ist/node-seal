@@ -11,7 +11,7 @@ import {
   CKKSEncoderDependencies
 } from './ckks-encoder'
 import {
-  CoeffModulusConstructorOptions,
+  CoeffModulus,
   CoeffModulusDependencies
 } from './coeff-modulus'
 import { ComprModeType, ComprModeTypeDependencies } from './compr-mode-type'
@@ -54,6 +54,11 @@ import {
   PlainTextDependencies
 } from './plain-text'
 import {
+  PlainModulusConstructorOptions,
+  PlainModulus,
+  PlainModulusDependencies
+} from './plain-modulus'
+import {
   PublicKeyConstructorOptions,
   PublicKeyDependencies
 } from './public-key'
@@ -77,7 +82,7 @@ export type SEALLibrary = {
   readonly BatchEncoder: BatchEncoderConstructorOptions
   readonly CipherText: CipherTextConstructorOptions
   readonly CKKSEncoder: CKKSEncoderConstructorOptions
-  readonly CoeffModulus: CoeffModulusConstructorOptions
+  readonly CoeffModulus: CoeffModulus
   readonly ComprModeType: ComprModeType
   readonly ContextData: ContextDataConstructorOptions
   readonly Context: ContextConstructorOptions
@@ -93,6 +98,7 @@ export type SEALLibrary = {
   readonly Modulus: ModulusConstructorOptions
   readonly ParmsIdType: ParmsIdTypeConstructorOptions
   readonly PlainText: PlainTextConstructorOptions
+  readonly PlainModulus: PlainModulus
   readonly PublicKey: PublicKeyConstructorOptions
   readonly RelinKeys: RelinKeysConstructorOptions
   readonly SchemeType: SchemeType
@@ -121,6 +127,7 @@ type SEALConstructorOptions = {
   readonly Modulus: ModulusDependencies
   readonly ParmsIdType: ParmsIdTypeDependencies
   readonly PlainText: PlainTextDependencies
+  readonly PlainModulus: PlainModulusDependencies
   readonly PublicKey: PublicKeyDependencies
   readonly RelinKeys: RelinKeysDependencies
   readonly SchemeType: SchemeTypeDependencies
@@ -153,6 +160,7 @@ export const SEALConstructor = ({
   Modulus,
   ParmsIdType,
   PlainText,
+  PlainModulus,
   PublicKey,
   RelinKeys,
   SchemeType,
@@ -177,12 +185,17 @@ export const SEALConstructor = ({
     Exception: exception,
     SecurityLevel: securityLevel,
     Vector: vector
-  })
+  })()
   const modulus = Modulus({
     Exception: exception,
     ComprModeType: comprModeType,
     Vector: vector
   })
+  const plainModulus = PlainModulus({
+    Exception: exception,
+    Modulus: modulus,
+    Vector: vector
+  })()
   const serializable = Serializable({
     Exception: exception,
     Vector: vector,
@@ -282,7 +295,7 @@ export const SEALConstructor = ({
     BatchEncoder: batchEncoder,
     CipherText: cipherText,
     CKKSEncoder: ckksEncoder,
-    CoeffModulus: coeffModulus,
+    CoeffModulus: coeffModulus, // Singleton
     ComprModeType: comprModeType, // Singleton
     ContextData: contextData,
     Context: context,
@@ -298,6 +311,7 @@ export const SEALConstructor = ({
     Modulus: modulus,
     ParmsIdType: parmsIdType,
     PlainText: plainText,
+    PlainModulus: plainModulus, // Singleton
     PublicKey: publicKey,
     RelinKeys: relinKeys,
     SchemeType: schemeType,

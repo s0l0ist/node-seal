@@ -27,7 +27,7 @@ export type EncryptionParameterQualifiers = {
 const EncryptionParameterQualifiersConstructor = (
   library: Library
 ): EncryptionParameterQualifiersDependencies => ({}: EncryptionParameterQualifiersDependencyOptions): EncryptionParameterQualifiersConstructorOptions => (): EncryptionParameterQualifiers => {
-  let _instance: Instance | null
+  let _instance: Instance
   /**
    * @implements EncryptionParameterQualifiers
    */

@@ -26,7 +26,7 @@ const ParmsIdTypeConstructor = (library: Library): ParmsIdTypeDependencies => ({
 }: ParmsIdTypeDependencyOptions): ParmsIdTypeConstructorOptions => (): ParmsIdType => {
   const Constructor = library.ParmsIdType
 
-  let _instance: Instance | null
+  let _instance: Instance
 
   /**
    * @implements ParmsIdType

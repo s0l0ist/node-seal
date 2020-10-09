@@ -144,7 +144,7 @@ const EncryptionParametersConstructor = (
      */
     setCoeffModulus(coeffModulus: Vector) {
       try {
-        _instance.setCoeffModulus(coeffModulus)
+        _instance.setCoeffModulus(coeffModulus.instance)
       } catch (e) {
         throw Exception.safe(e)
       }
@@ -219,7 +219,7 @@ const EncryptionParametersConstructor = (
      */
     get plainModulus() {
       const instance = _instance.plainModulus()
-      const smallModulus = Modulus()
+      const smallModulus = Modulus(BigInt(0))
       smallModulus.inject(instance)
       return smallModulus
     },

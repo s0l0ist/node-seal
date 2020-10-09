@@ -1,4 +1,4 @@
-import sealLibrary from './bin/js/seal'
+import sealLibrary from 'seal_js_worker'
 
 import { NestedLibrary, createLoader } from './loader'
 import { SEALLibrary, SEALConstructor } from './implementation/seal'
@@ -21,6 +21,7 @@ import { MemoryPoolHandleInit } from './implementation/memory-pool-handle'
 import { ModulusInit } from './implementation/modulus'
 import { ParmsIdTypeInit } from './implementation/parms-id-type'
 import { PlainTextInit } from './implementation/plain-text'
+import { PlainModulusInit } from './implementation/plain-modulus'
 import { PublicKeyInit } from './implementation/public-key'
 import { RelinKeysInit } from './implementation/relin-keys'
 import { SchemeTypeInit } from './implementation/scheme-type'
@@ -33,84 +34,89 @@ const Loader = (): Promise<NestedLibrary> => createLoader(sealLibrary)
 /**
  * Main export for the library
  */
-export default async (): Promise<SEALLibrary> =>
-  SEALConstructor({
+export default async (): Promise<SEALLibrary> => {
+  const loader = await Loader()
+  return SEALConstructor({
     BatchEncoder: BatchEncoderInit({
-      loader: await Loader()
+      loader
     }),
     CipherText: CipherTextInit({
-      loader: await Loader()
+      loader
     }),
     CKKSEncoder: CKKSEncoderInit({
-      loader: await Loader()
+      loader
     }),
     CoeffModulus: CoeffModulusInit({
-      loader: await Loader()
+      loader
     }),
     ComprModeType: ComprModeTypeInit({
-      loader: await Loader()
+      loader
     }),
     ContextData: ContextDataInit({
-      loader: await Loader()
+      loader
     }),
     Context: ContextInit({
-      loader: await Loader()
+      loader
     }),
     Decryptor: DecryptorInit({
-      loader: await Loader()
+      loader
     }),
     EncryptionParameterQualifiers: EncryptionParameterQualifiersInit({
-      loader: await Loader()
+      loader
     }),
     EncryptionParameters: EncryptionParametersInit({
-      loader: await Loader()
+      loader
     }),
     Encryptor: EncryptorInit({
-      loader: await Loader()
+      loader
     }),
     Evaluator: EvaluatorInit({
-      loader: await Loader()
+      loader
     }),
     Exception: ExceptionInit({
-      loader: await Loader()
+      loader
     }),
     GaloisKeys: GaloisKeysInit({
-      loader: await Loader()
+      loader
     }),
     IntegerEncoder: IntegerEncoderInit({
-      loader: await Loader()
+      loader
     }),
     MemoryPoolHandle: MemoryPoolHandleInit({
-      loader: await Loader()
+      loader
     }),
     Modulus: ModulusInit({
-      loader: await Loader()
+      loader
     }),
     ParmsIdType: ParmsIdTypeInit({
-      loader: await Loader()
+      loader
     }),
     PlainText: PlainTextInit({
-      loader: await Loader()
+      loader
+    }),
+    PlainModulus: PlainModulusInit({
+      loader
     }),
     PublicKey: PublicKeyInit({
-      loader: await Loader()
+      loader
     }),
     RelinKeys: RelinKeysInit({
-      loader: await Loader()
+      loader
     }),
     SchemeType: SchemeTypeInit({
-      loader: await Loader()
+      loader
     }),
     SecretKey: SecretKeyInit({
-      loader: await Loader()
+      loader
     }),
     SecurityLevel: SecurityLevelInit({
-      loader: await Loader()
+      loader
     }),
     Serializable: SerializableInit({
-      loader: await Loader()
+      loader
     }),
     Vector: VectorInit({
-      loader: await Loader()
+      loader
     })
   })
+}

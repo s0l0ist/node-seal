@@ -18,7 +18,7 @@ export type ModulusDependencies = {
 }
 
 export type ModulusConstructorOptions = {
-  (): Modulus
+  (value: BigInt): Modulus
 }
 
 export type Modulus = {
@@ -40,11 +40,22 @@ const ModulusConstructor = (library: Library): ModulusDependencies => ({
   Exception,
   ComprModeType,
   Vector
-}: ModulusDependencyOptions): ModulusConstructorOptions => (): Modulus => {
+}: ModulusDependencyOptions): ModulusConstructorOptions => (value: BigInt): Modulus => {
   // Static methods
   const Constructor = library.Modulus
 
-  let _instance: Instance | null
+  let _instance = createModulus(value)
+
+  function createModulus(value: BigInt) {
+    try {
+      const inst = new Constructor()
+        inst.setValue(value.toString())
+        return inst
+    } catch (e) {
+      throw Exception.safe(e)
+    }
+  }
+
   /**
    * @implements Modulus
    */
