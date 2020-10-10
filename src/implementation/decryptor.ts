@@ -28,7 +28,7 @@ export type Decryptor = {
   readonly decrypt: (
     cipherText: CipherText,
     plainText?: PlainText
-  ) => PlainText | undefined
+  ) => PlainText | void
   readonly invariantNoiseBudget: (cipherText: CipherText) => number
 }
 
@@ -104,13 +104,10 @@ const DecryptorConstructor = (library: Library): DecryptorDependencies => ({
      * @name Decryptor#decrypt
      * @param {CipherText} cipherText CipherText to decrypt
      * @param {PlainText} [plainText] PlainText destination to store the decrypted result
-     * @returns {PlainText|undefined} Returns undefined if a PlainText was specified. Otherwise returns a
+     * @returns {PlainText|void} Returns undefined if a PlainText was specified. Otherwise returns a
      * PlainText containng the decrypted result
      */
-    decrypt(
-      cipherText: CipherText,
-      plainText?: PlainText
-    ): PlainText | undefined {
+    decrypt(cipherText: CipherText, plainText?: PlainText): PlainText | void {
       try {
         if (plainText) {
           _instance.decrypt(cipherText.instance, plainText.instance)

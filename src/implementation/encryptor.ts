@@ -36,12 +36,12 @@ export type Encryptor = {
     plainText: PlainText,
     cipherText?: CipherText,
     pool?: MemoryPoolHandle
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly encryptSymmetric: (
     plainText: PlainText,
     cipherText?: CipherText,
     pool?: MemoryPoolHandle
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly encryptSymmetricSerializable: (
     plainText: PlainText,
     pool?: MemoryPoolHandle
@@ -140,14 +140,14 @@ const EncryptorConstructor = (library: Library): EncryptorDependencies => ({
      * @param {PlainText} plainText PlainText to encrypt
      * @param {CipherText} [cipherText] CipherText destination to store the encrypted result
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {CipherText|undefined} Returns undefined if a CipherText was specified. Otherwise returns a
+     * @returns {CipherText|void} Returns undefined if a CipherText was specified. Otherwise returns a
      * CipherText containing the encrypted result
      */
     encrypt(
       plainText: PlainText,
       cipherText?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (cipherText) {
           _instance.encrypt(plainText.instance, cipherText.instance, pool)
@@ -177,14 +177,14 @@ const EncryptorConstructor = (library: Library): EncryptorDependencies => ({
      * @param {PlainText} plainText PlainText to encrypt
      * @param {CipherText} [cipherText] CipherText destination to store the encrypted result.
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {CipherText|undefined} Returns undefined if a CipherText was specified. Otherwise returns a
+     * @returns {CipherText|void} Returns undefined if a CipherText was specified. Otherwise returns a
      * CipherText containing the encrypted result
      */
     encryptSymmetric(
       plainText: PlainText,
       cipherText?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (cipherText) {
           _instance.encryptSymmetric(

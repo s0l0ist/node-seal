@@ -36,7 +36,7 @@ export type CKKSEncoder = {
     scale: number,
     plainText?: PlainText,
     pool?: MemoryPoolHandle
-  ) => PlainText | undefined
+  ) => PlainText | void
   readonly decode: (
     plainText: PlainText,
     pool?: MemoryPoolHandle
@@ -122,7 +122,7 @@ const CKKSEncoderConstructor = (library: Library): CKKSEncoderDependencies => ({
      * @param {number} scale Scaling parameter defining encoding precision
      * @param {PlainText} [plainText] Destination to store the encoded result
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {PlainText|undefined} A new PlainText holding the encoded data or undefined if one was provided
+     * @returns {PlainText|void} A new PlainText holding the encoded data or void if one was provided
      * @example
      * import { Seal } from 'node-seal'
      * const seal = await Seal()
@@ -136,7 +136,7 @@ const CKKSEncoderConstructor = (library: Library): CKKSEncoderDependencies => ({
       scale: number,
       plainText?: PlainText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): PlainText | undefined {
+    ): PlainText | void {
       try {
         if (array.constructor === Float64Array) {
           if (plainText) {

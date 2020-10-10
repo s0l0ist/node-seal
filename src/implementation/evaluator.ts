@@ -36,142 +36,142 @@ export type Evaluator = {
   readonly negate: (
     encrypted: CipherText,
     destination?: CipherText
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly add: (
     a: CipherText,
     b: CipherText,
     destination?: CipherText
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly sub: (
     a: CipherText,
     b: CipherText,
     destination?: CipherText
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly multiply: (
     a: CipherText,
     b: CipherText,
     destination?: CipherText,
     pool?: MemoryPoolHandle
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly square: (
     encrypted: CipherText,
     destination?: CipherText,
     pool?: MemoryPoolHandle
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly relinearize: (
     encrypted: CipherText,
     relinKeys: RelinKeys,
     destination?: CipherText,
     pool?: MemoryPoolHandle
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly cipherModSwitchToNext: (
     encrypted: CipherText,
     destination?: CipherText,
     pool?: MemoryPoolHandle
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly cipherModSwitchTo: (
     encrypted: CipherText,
     parmsId: ParmsIdType,
     destination?: CipherText,
     pool?: MemoryPoolHandle
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly plainModSwitchToNext: (
     plain: PlainText,
     destination?: PlainText
-  ) => PlainText | undefined
+  ) => PlainText | void
   readonly plainModSwitchTo: (
     plain: PlainText,
     parmsId: ParmsIdType,
     destination?: PlainText
-  ) => PlainText | undefined
+  ) => PlainText | void
   readonly rescaleToNext: (
     encrypted: CipherText,
     destination?: CipherText,
     pool?: MemoryPoolHandle
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly rescaleTo: (
     encrypted: CipherText,
     parmsId: ParmsIdType,
     destination?: CipherText,
     pool?: MemoryPoolHandle
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly exponentiate: (
     encrypted: CipherText,
     exponent: number,
     relinKeys: RelinKeys,
     destination?: CipherText,
     pool?: MemoryPoolHandle
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly addPlain: (
     encrypted: CipherText,
     plain: PlainText,
     destination?: CipherText
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly subPlain: (
     encrypted: CipherText,
     plain: PlainText,
     destination?: CipherText
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly multiplyPlain: (
     encrypted: CipherText,
     plain: PlainText,
     destination?: CipherText,
     pool?: MemoryPoolHandle
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly plainTransformToNtt: (
     plain: PlainText,
     parmsId: ParmsIdType,
     destinationNtt?: PlainText,
     pool?: MemoryPoolHandle
-  ) => PlainText | undefined
+  ) => PlainText | void
   readonly cipherTransformToNtt: (
     encrypted: CipherText,
     destinationNtt?: CipherText
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly cipherTransformFromNtt: (
     encryptedNtt: CipherText,
     destination?: CipherText
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly applyGalois: (
     encrypted: CipherText,
     galoisElt: number,
     galoisKeys: GaloisKeys,
     destination?: CipherText,
     pool?: MemoryPoolHandle
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly rotateRows: (
     encrypted: CipherText,
     steps: number,
     galoisKeys: GaloisKeys,
     destination?: CipherText,
     pool?: MemoryPoolHandle
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly rotateColumns: (
     encrypted: CipherText,
     galoisKeys: GaloisKeys,
     destination?: CipherText,
     pool?: MemoryPoolHandle
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly rotateVector: (
     encrypted: CipherText,
     steps: number,
     galoisKeys: GaloisKeys,
     destination?: CipherText,
     pool?: MemoryPoolHandle
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly complexConjugate: (
     encrypted: CipherText,
     galoisKeys: GaloisKeys,
     destination?: CipherText,
     pool?: MemoryPoolHandle
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly sumElements: (
     encrypted: CipherText,
     galoisKeys: GaloisKeys,
     scheme: SchemeType,
     destination?: CipherText,
     pool?: MemoryPoolHandle
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly dotProduct: (
     a: CipherText,
     b: CipherText,
@@ -180,7 +180,7 @@ export type Evaluator = {
     scheme: SchemeType,
     destination?: CipherText,
     pool?: MemoryPoolHandle
-  ) => CipherText | undefined
+  ) => CipherText | void
   readonly dotProductPlain: (
     a: CipherText,
     b: PlainText,
@@ -188,7 +188,7 @@ export type Evaluator = {
     scheme: SchemeType,
     destination?: CipherText,
     pool?: MemoryPoolHandle
-  ) => CipherText | undefined
+  ) => CipherText | void
 }
 
 const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
@@ -264,7 +264,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @name Evaluator#negate
      * @param {CipherText} encrypted CipherText to negate
      * @param {CipherText} [destination] CipherText to store the negated results
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const cipherText = seal.CipherText()
      * // ... after encrypting some data ...
@@ -273,10 +273,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * const cipherDest = seal.CipherText()
      * evaluator.negate(encrypted, cipherDest)
      */
-    negate(
-      encrypted: CipherText,
-      destination?: CipherText
-    ): CipherText | undefined {
+    negate(encrypted: CipherText, destination?: CipherText): CipherText | void {
       try {
         if (destination) {
           _instance.negate(encrypted.instance, destination.instance)
@@ -299,7 +296,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {CipherText} a CipherText operand A
      * @param {CipherText} b CipherText operand B
      * @param {CipherText} [destination] CipherText destination to store the sum
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const cipherTextA = seal.CipherText()
      * const cipherTextB = seal.CipherText()
@@ -313,7 +310,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       a: CipherText,
       b: CipherText,
       destination?: CipherText
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.add(a.instance, b.instance, destination.instance)
@@ -336,7 +333,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {CipherText} a CipherText operand A
      * @param {CipherText} b CipherText operand B
      * @param {CipherText} [destination] CipherText destination to store the difference
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const cipherTextA = seal.CipherText()
      * const cipherTextB = seal.CipherText()
@@ -350,7 +347,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       a: CipherText,
       b: CipherText,
       destination?: CipherText
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.sub(a.instance, b.instance, destination.instance)
@@ -376,7 +373,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {CipherText} b CipherText operand B
      * @param {CipherText} [destination] CipherText destination to store the product
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const cipherTextA = seal.CipherText()
      * const cipherTextB = seal.CipherText()
@@ -391,7 +388,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       b: CipherText,
       destination?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.multiply(a.instance, b.instance, destination.instance, pool)
@@ -416,7 +413,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {CipherText} encrypted CipherText to square
      * @param {CipherText} [destination] CipherText destination to store the squared result
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
@@ -429,7 +426,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       encrypted: CipherText,
       destination?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.square(encrypted.instance, destination.instance, pool)
@@ -456,7 +453,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {RelinKeys} relinKeys RelinKey used to perform relinearization
      * @param {CipherText} [destination] CipherText destination to store the relinearized result
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const relinKeys = keyGenerator.relinKeys()
      * const cipherTextA = seal.CipherText()
@@ -471,7 +468,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       relinKeys: RelinKeys,
       destination?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.relinearize(
@@ -506,7 +503,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {CipherText} encrypted CipherText to switch its modulus down
      * @param {CipherText} [destination] CipherText destination to store the switched result
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
@@ -519,7 +516,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       encrypted: CipherText,
       destination?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.cipherModSwitchToNext(
@@ -549,7 +546,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {ParmsIdType} parmsId Target parmsId to switch to
      * @param {CipherText} [destination] CipherText destination to store the switched result
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const context = seal.Context(encParms, true)
      * const cipherTextA = seal.CipherText()
@@ -565,7 +562,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       parmsId: ParmsIdType,
       destination?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.cipherModSwitchTo(
@@ -597,7 +594,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @name Evaluator#plainModSwitchToNext
      * @param {PlainText} plain PlainText to switch its modulus down
      * @param {PlainText} [destination] PlainText destination to store the switched result
-     * @returns {PlainText|undefined} PlainText containing the result or undefined if a destination was supplied
+     * @returns {PlainText|void} PlainText containing the result or void if a destination was supplied
      * @example
      * const plainTextA = seal.PlainText()
      * // ... after encoding some data ...
@@ -609,7 +606,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
     plainModSwitchToNext(
       plain: PlainText,
       destination?: PlainText
-    ): PlainText | undefined {
+    ): PlainText | void {
       try {
         if (destination) {
           _instance.plainModSwitchToNext(plain.instance, destination.instance)
@@ -633,7 +630,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {PlainText} plain PlainText to switch its modulus down
      * @param {ParmsIdType} parmsId Target parmsId to switch to
      * @param {PlainText} [destination] PlainText destination to store the switched result
-     * @returns {PlainText|undefined} PlainText containing the result or undefined if a destination was supplied
+     * @returns {PlainText|void} PlainText containing the result or void if a destination was supplied
      * @example
      * const context = seal.Context(encParms, true)
      * const plainTextA = seal.PlainText()
@@ -648,7 +645,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       plain: PlainText,
       parmsId: ParmsIdType,
       destination?: PlainText
-    ): PlainText | undefined {
+    ): PlainText | void {
       try {
         if (destination) {
           _instance.plainModSwitchTo(
@@ -682,7 +679,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {CipherText} encrypted CipherText to rescale
      * @param {CipherText} [destination] CipherText destination to store the rescaled result
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
@@ -695,7 +692,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       encrypted: CipherText,
       destination?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.rescaleToNext(
@@ -726,7 +723,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {ParmsIdType} parmsId Target parmsId to rescale to
      * @param {CipherText} [destination] CipherText destination to store the rescaled result
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const context = seal.Context(encParms, true)
      * const cipherTextA = seal.CipherText()
@@ -742,7 +739,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       parmsId: ParmsIdType,
       destination?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.rescaleTo(
@@ -781,7 +778,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {RelinKeys} relinKeys RelinKeys used to perform relinearization after each exponentiation
      * @param {CipherText} [destination] CipherText destination to store the exponentiated result
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const relinKeys = keyGenerator.relinKeys()
      * const cipherTextA = seal.CipherText()
@@ -797,7 +794,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       relinKeys: RelinKeys,
       destination?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.exponentiate(
@@ -833,7 +830,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {CipherText} encrypted CipherText operand A
      * @param {PlainText} plain PlainText operand B
      * @param {CipherText} [destination] CipherText destination to store the sum
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const cipherTextA = seal.CipherText()
      * const plainTextB = seal.PlainText()
@@ -847,7 +844,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       encrypted: CipherText,
       plain: PlainText,
       destination?: CipherText
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.addPlain(
@@ -875,7 +872,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {CipherText} encrypted CipherText operand A
      * @param {PlainText} plain PlainText operand B
      * @param {CipherText} [destination] CipherText destination to store the difference
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const cipherTextA = seal.CipherText()
      * const plainTextB = seal.PlainText()
@@ -889,7 +886,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       encrypted: CipherText,
       plain: PlainText,
       destination?: CipherText
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.subPlain(
@@ -920,7 +917,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {PlainText} plain PlainText operand B
      * @param {CipherText} [destination] CipherText destination to store the product
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {CipherText?} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText?} CipherText containing the result or void if a destination was supplied
      * @example
      * const cipherTextA = seal.CipherText()
      * const plainTextB = seal.PlainText()
@@ -935,7 +932,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       plain: PlainText,
       destination?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.multiplyPlain(
@@ -978,7 +975,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {ParmsIdType} parmsId target parmsId to perform NTT transformation
      * @param {PlainText} [destinationNtt] PlainText destination to store the transformed result
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {PlainText|undefined} PlainText containing the result or undefined if a destination was supplied
+     * @returns {PlainText|void} PlainText containing the result or void if a destination was supplied
      * @example
      * const context = seal.Context(encParms, true)
      * const plainTextA = seal.PlainText()
@@ -994,7 +991,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       parmsId: ParmsIdType,
       destinationNtt?: PlainText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): PlainText | undefined {
+    ): PlainText | void {
       try {
         if (destinationNtt) {
           _instance.plainTransformToNtt(
@@ -1027,7 +1024,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @name Evaluator#cipherTransformToNtt
      * @param {CipherText} encrypted CipherText to transform
      * @param {CipherText} [destinationNtt] CipherText destination to store the transformed result
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
@@ -1039,7 +1036,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
     cipherTransformToNtt(
       encrypted: CipherText,
       destinationNtt?: CipherText
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destinationNtt) {
           _instance.cipherTransformToNtt(
@@ -1065,7 +1062,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @name Evaluator#cipherTransformFromNtt
      * @param {CipherText} encryptedNtt CipherText to transform
      * @param {CipherText} [destination] CipherText destination to store the transformed result
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * // ... after cipherTransformToNtt ...
      * const resultCipher = evaluator.cipherTransformFromNtt(cipherTextANtt)
@@ -1076,7 +1073,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
     cipherTransformFromNtt(
       encryptedNtt: CipherText,
       destination?: CipherText
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.cipherTransformFromNtt(
@@ -1116,7 +1113,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {GaloisKeys} galoisKeys GaloisKeys used to perform rotations
      * @param {CipherText} [destination] CipherText destination to store the result
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * ...
      * const evaluator = seal.Evaluator(context)
@@ -1133,7 +1130,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       galoisKeys: GaloisKeys,
       destination?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.applyGalois(
@@ -1176,7 +1173,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {GaloisKeys} galoisKeys GaloisKeys used to perform rotations
      * @param {CipherText} [destination] CipherText destination to store the rotated result
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const galoisKeys = keyGenerator.galoisKeys()
      * const cipherTextA = seal.CipherText()
@@ -1192,7 +1189,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       galoisKeys: GaloisKeys,
       destination?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.rotateRows(
@@ -1233,7 +1230,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {GaloisKeys} galoisKeys GaloisKeys used to perform rotations
      * @param {CipherText} [destination] CipherText destination to store the rotated result
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const galoisKeys = keyGenerator.galoisKeys()
      * const cipherTextA = seal.CipherText()
@@ -1248,7 +1245,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       galoisKeys: GaloisKeys,
       destination?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.rotateColumns(
@@ -1288,7 +1285,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {GaloisKeys} galoisKeys GaloisKeys used to perform rotations
      * @param {CipherText} [destination] CipherText destination to store the rotated result
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const galoisKeys = keyGenerator.galoisKeys()
      * const cipherTextA = seal.CipherText()
@@ -1304,7 +1301,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       galoisKeys: GaloisKeys,
       destination?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.rotateVector(
@@ -1343,7 +1340,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {GaloisKeys} galoisKeys GaloisKeys used to perform rotations
      * @param {CipherText} [destination] CipherText destination to store the conjugated result
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const galoisKeys = keyGenerator.galoisKeys()
      * const cipherTextA = seal.CipherText()
@@ -1358,7 +1355,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       galoisKeys: GaloisKeys,
       destination?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.complexConjugate(
@@ -1392,7 +1389,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {SchemeType} scheme Scheme that was used for encryption
      * @param {CipherText} [destination] CipherText destination to store the result
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const galoisKeys = keyGenerator.galoisKeys()
      * const cipherTextA = seal.CipherText()
@@ -1408,7 +1405,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       scheme: SchemeType,
       destination?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.sumElements(
@@ -1448,7 +1445,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {SchemeType} scheme Scheme that was used for encryption
      * @param {CipherText} [destination] CipherText destination to store the result
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const relinKeys = keyGenerator.relinKeys()
      * const galoisKeys = keyGenerator.galoisKeys()
@@ -1468,7 +1465,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       scheme: SchemeType,
       destination?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.multiply(a.instance, b.instance, destination.instance, pool)
@@ -1521,7 +1518,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {SchemeType} scheme Scheme that was used for encryption
      * @param {CipherText} [destination] CipherText destination to store the result
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
+     * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
      * const galoisKeys = keyGenerator.galoisKeys()
      * const cipherTextA = seal.CipherText()
@@ -1539,7 +1536,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
       scheme: SchemeType,
       destination?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): CipherText | undefined {
+    ): CipherText | void {
       try {
         if (destination) {
           _instance.multiplyPlain(

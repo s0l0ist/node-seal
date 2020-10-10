@@ -263,7 +263,7 @@ be generated from the [demo](https://morfix.io/sandbox).
 // Both types of encoders accept a plainText as an optional parameter.
 // If not provided, will return a new plainText conatining the encoded
 // data. If one is specified, it will be modified and the function
-// will return an undefined.
+// will return void.
 // Ex:
 //
 // // Create a plainText
@@ -281,16 +281,14 @@ be generated from the [demo](https://morfix.io/sandbox).
 
 // Encode data to a PlainText
 const plainTextA = batchEncoder.encode(
-  Int32Array.from([1,2,3]) // This could also be a Uint32Array
+  Int32Array.from([1, 2, 3]) // This could also be a Uint32Array
 )
-
-
 
 // An encryptor and decryptor also accept a cihperText and plainText
 // optional parameter. If not provided, an encryptor will
 // return a new cipherText and a decyprtor will return a new plainText.
 // If the optional parameter is specified, it will be modified and both
-// methods will return an undefined.
+// methods will return void.
 // Ex:
 //
 // // Create a plainText
@@ -325,5 +323,5 @@ const decoded = batchEncoder.decode(
   true // Can be omitted since this defaults to true.
 )
 
-console.log('decoded', decoded )
+console.log('decoded', decoded)
 ```

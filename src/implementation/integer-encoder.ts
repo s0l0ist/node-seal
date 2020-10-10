@@ -26,11 +26,11 @@ export type IntegerEncoder = {
   readonly encodeInt32: (
     value: number,
     destination?: PlainText
-  ) => PlainText | undefined
+  ) => PlainText | void
   readonly encodeUint32: (
     value: number,
     destination?: PlainText
-  ) => PlainText | undefined
+  ) => PlainText | void
   readonly decodeInt32: (plainText: PlainText) => number
   readonly decodeUint32: (plainText: PlainText) => number
 }
@@ -108,9 +108,9 @@ const IntegerEncoderConstructor = (
      * @name IntegerEncoder#encodeInt32
      * @param {number} value Integer to encode
      * @param {PlainText} [destination] PlainText to store the encoded data
-     * @returns {PlainText|undefined} PlainText containing the result or undefined if a destination was supplied
+     * @returns {PlainText|void} PlainText containing the result or void if a destination was supplied
      */
-    encodeInt32(value: number, destination?: PlainText): PlainText | undefined {
+    encodeInt32(value: number, destination?: PlainText): PlainText | void {
       try {
         if (destination) {
           _instance.encodeInt32(value, destination.instance)
@@ -131,12 +131,9 @@ const IntegerEncoderConstructor = (
      * @name IntegerEncoder#encodeUint32
      * @param {number} value Unsigned integer to encode
      * @param {PlainText} [destination] PlainText to store the encoded data
-     * @returns {PlainText|undefined} PlainText containing the result or undefined if a destination was supplied
+     * @returns {PlainText|void} PlainText containing the result or void if a destination was supplied
      */
-    encodeUint32(
-      value: number,
-      destination?: PlainText
-    ): PlainText | undefined {
+    encodeUint32(value: number, destination?: PlainText): PlainText | void {
       try {
         if (destination) {
           _instance.encodeUint32(value, destination.instance)

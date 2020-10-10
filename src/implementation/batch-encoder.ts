@@ -38,7 +38,7 @@ export type BatchEncoder = {
   readonly encode: (
     array: BatchEncoderTypes,
     plainText?: PlainText
-  ) => PlainText | undefined
+  ) => PlainText | void
   readonly decode: (
     plainText: PlainText,
     signed?: boolean,
@@ -136,7 +136,7 @@ const BatchEncoderConstructor = (
      * @name BatchEncoder#encode
      * @param {Int32Array|Uint32Array|BigInt64Array|BigUint64Array} array Data to encode
      * @param {PlainText} [plainText=null] Destination to store the encoded result
-     * @returns {PlainText|undefined} A new PlainText holding the encoded data or undefined if one was provided
+     * @returns {PlainText|void} A new PlainText holding the encoded data or void if one was provided
      * @example
      * import { Seal } from 'node-seal'
      * const seal = await Seal()
@@ -148,7 +148,7 @@ const BatchEncoderConstructor = (
     encode(
       array: Int32Array | Uint32Array | BigInt64Array | BigUint64Array,
       plainText?: PlainText
-    ): PlainText | undefined {
+    ): PlainText | void {
       try {
         if (array.constructor === Int32Array) {
           if (plainText) {
@@ -230,7 +230,7 @@ const BatchEncoderConstructor = (
      */
     decode(
       plainText: PlainText,
-      signed = true,
+      signed: boolean = true,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
     ): Int32Array | Uint32Array {
       try {
@@ -285,7 +285,7 @@ const BatchEncoderConstructor = (
      */
     decodeBigInt(
       plainText: PlainText,
-      signed = true,
+      signed: boolean = true,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
     ): BigInt64Array | BigUint64Array {
       try {
