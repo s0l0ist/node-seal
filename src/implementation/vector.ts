@@ -18,7 +18,7 @@ export type Vector = {
   readonly instance: Instance
   readonly unsafeInject: (instance: Instance) => void
   readonly delete: () => void
-  readonly from: (array: VectorTypes) => Instance
+  readonly from: (array: VectorTypes, type?: StringTypes) => Instance
   readonly type: string
   readonly setType: (type: StringTypes) => void
   readonly size: number
@@ -126,9 +126,17 @@ const VectorConstructor = (library: Library): VectorDependencies => ({
       }
     },
 
-    from(array: VectorTypes) {
+    /**
+     * Converts a JS TypedArray into a vector
+     *
+     * @function
+     * @name Vector#from
+     * @param {VectorTypes} array The TypedArray to convert
+     * @param {StringTypes} [type] An optional type override - useful for 'Modulus' only
+     */
+    from(array: VectorTypes, type?: StringTypes) {
       try {
-        _type = array.constructor.name as StringTypes
+        _type = type ? type : (array.constructor.name as StringTypes)
         switch (_type) {
           case 'Uint8Array':
             _instance = _vecFromArrayUint8(array)

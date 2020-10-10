@@ -11,7 +11,6 @@ import { PublicKey } from 'implementation/public-key'
 import { CKKSEncoder } from 'implementation/ckks-encoder'
 import { Decryptor } from 'implementation/decryptor'
 import { SecretKey } from 'implementation/secret-key'
-import { Evaluator } from 'implementation/evaluator'
 import { PlainText } from 'implementation/plain-text'
 import { CipherText } from 'implementation/cipher-text'
 import { RelinKeys } from 'implementation/relin-keys'
@@ -30,7 +29,6 @@ let bfvRelinKeys: RelinKeys
 let bfvGaloisKeys: GaloisKeys
 let bfvEncryptor: Encryptor
 let bfvDecryptor: Decryptor
-let bfvEvaluator: Evaluator
 
 let ckksContext: Context
 let ckksCoeffModulus: Vector
@@ -71,7 +69,6 @@ beforeAll(async () => {
   )
   bfvEncryptor = seal.Encryptor(bfvContext, bfvPublicKey)
   bfvDecryptor = seal.Decryptor(bfvContext, bfvSecretKey)
-  bfvEvaluator = seal.Evaluator(bfvContext)
 
   ckksEncParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
   ckksEncParms.setPolyModulusDegree(polyModulusDegree)

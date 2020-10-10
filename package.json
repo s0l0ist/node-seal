@@ -76,7 +76,7 @@
     "format": "prettier --write src",
     "lint": "eslint --fix 'src/**/*.ts'",
     "test": "jest src/**/*.ts",
-    "test:js": "jest src/tsc-out/__tests__/*.js",
+    "test:js": "jest tsc-out/__tests__/*.js",
     "coverage": "jest src --coverage",
     "coverage:upload": "env-cmd -f .env codecov"
   },
