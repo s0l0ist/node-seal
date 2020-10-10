@@ -5,10 +5,7 @@ import { Vector } from 'implementation/vector'
 import { EncryptionParameters } from 'implementation/encryption-parameters'
 import { BatchEncoder } from 'implementation/batch-encoder'
 import { CKKSEncoder } from 'implementation/ckks-encoder'
-import { Encryptor } from 'implementation/encryptor'
-import { KeyGenerator } from 'implementation/key-generator'
 import { Modulus } from 'implementation/modulus'
-import { PublicKey } from 'implementation/public-key'
 import { PlainText } from 'implementation/plain-text'
 
 let seal: SEALLibrary
@@ -17,16 +14,10 @@ let coeffModulus: Vector
 let plainModulus: Modulus
 let bfvEncParms: EncryptionParameters
 let batchEncoder: BatchEncoder
-let bfvKeyGenerator: KeyGenerator
-let bfvPublicKey: PublicKey
-let bfvEncryptor: Encryptor
 
 let ckksContext: Context
 let ckksEncParms: EncryptionParameters
 let ckksEncoder: CKKSEncoder
-let ckksKeyGenerator: KeyGenerator
-let ckksPublicKey: PublicKey
-let ckksEncryptor: Encryptor
 beforeAll(async () => {
   seal = await SEAL()
   const securityLevel = seal.SecurityLevel.tc128
@@ -41,18 +32,12 @@ beforeAll(async () => {
   bfvEncParms.setPlainModulus(plainModulus)
   bfvContext = seal.Context(bfvEncParms, true, securityLevel)
   batchEncoder = seal.BatchEncoder(bfvContext)
-  bfvKeyGenerator = seal.KeyGenerator(bfvContext)
-  bfvPublicKey = bfvKeyGenerator.publicKey()
-  bfvEncryptor = seal.Encryptor(bfvContext, bfvPublicKey)
 
   ckksEncParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
   ckksEncParms.setPolyModulusDegree(polyModulusDegree)
   ckksEncParms.setCoeffModulus(coeffModulus)
   ckksContext = seal.Context(ckksEncParms, true, securityLevel)
   ckksEncoder = seal.CKKSEncoder(ckksContext)
-  ckksKeyGenerator = seal.KeyGenerator(ckksContext)
-  ckksPublicKey = ckksKeyGenerator.publicKey()
-  ckksEncryptor = seal.Encryptor(ckksContext, ckksPublicKey)
 })
 
 describe('CKKSEncoder', () => {
@@ -141,7 +126,9 @@ describe('CKKSEncoder', () => {
       (_, i) => i
     )
     const spyOn = jest.spyOn(ckksEncoder, 'encode')
-    expect(() => ckksEncoder.encode(arr as any, Math.pow(2, 20))).toThrow()
+    expect(() =>
+      ckksEncoder.encode((arr as unknown) as Float64Array, Math.pow(2, 20))
+    ).toThrow()
     expect(spyOn).toHaveBeenCalledWith(arr, Math.pow(2, 20))
   })
   test('It should decode an float64 array', () => {

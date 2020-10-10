@@ -16,33 +16,20 @@ describe('Exception', () => {
   test('It should have properties', () => {
     expect(seal.Exception).toHaveProperty('safe')
   })
-  test('It should attempt to get a safe error from a wasm number', () => {
-    const parms = seal.EncryptionParameters(seal.SchemeType.none)
-    try {
-      parms.setPolyModulusDegree(4096)
-    } catch (e) {
-      const spyOn = jest.spyOn(seal.Exception, 'safe')
-      seal.Exception.safe(e)
-      expect(spyOn).toHaveBeenCalledWith(e)
-    }
-  })
   test('It should attempt to get a safe error from an error instance', () => {
-    try {
-      throw new Error('test error')
-    } catch (e) {
-      const spyOn = jest.spyOn(seal.Exception, 'safe')
-      seal.Exception.safe(e)
-      expect(spyOn).toHaveBeenCalledWith(e)
-    }
+    const spyOn = jest.spyOn(seal.Exception, 'safe')
+    const err = new Error('test error')
+    seal.Exception.safe(err)
+    expect(spyOn).toHaveBeenCalledWith(err)
   })
-  test('It should attempt to get a safe error from an unknown exception string', () => {
+  test('It should attempt to get a safe error from a string', () => {
     const spyOn = jest.spyOn(seal.Exception, 'safe')
     seal.Exception.safe('unknown error')
     expect(spyOn).toHaveBeenCalledWith('unknown error')
   })
-  //   test('It should attempt to get a safe error from an unknown exception', () => {
-  //     const spyOn = jest.spyOn(seal.Exception, 'safe')
-  //     seal.Exception.safe(55)
-  //     expect(spyOn).toHaveBeenCalledWith()
-  //   })
+  // test('It should attempt to get a safe error from an emscripten pointer (number)', () => {
+  //   const spyOn = jest.spyOn(seal.Exception, 'safe')
+  //   seal.Exception.safe(55)
+  //   expect(spyOn).toHaveBeenCalledWith(55)
+  // })
 })

@@ -66,7 +66,7 @@ describe('EncryptionParameters', () => {
     expect(encParms.instance).toBeUndefined()
     expect(() => encParms.polyModulusDegree).toThrow(TypeError)
   })
-  test('It should delete the old instance and inject', () => {
+  test('It should skip deleting twice', () => {
     const encParms = seal.EncryptionParameters()
     const spyOn = jest.spyOn(encParms, 'delete')
     encParms.delete()

@@ -15,6 +15,7 @@ import { PlainText } from 'implementation/plain-text'
 import { CipherText } from 'implementation/cipher-text'
 import { RelinKeys } from 'implementation/relin-keys'
 import { GaloisKeys } from 'implementation/galois-keys'
+import { ParmsIdType } from 'implementation/parms-id-type'
 
 let seal: SEALLibrary
 let bfvContext: Context
@@ -1856,8 +1857,10 @@ describe('Evaluator', () => {
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }, _ => 10)
     const plain = ckksEncoder.encode(arr, Math.pow(2, 20)) as PlainText
     const spyOn = jest.spyOn(item, 'plainTransformToNtt')
-    expect(() => item.plainTransformToNtt(plain, plain as any)).toThrow()
-    expect(spyOn).toHaveBeenCalledWith(plain, plain)
+    expect(() =>
+      item.plainTransformToNtt(plain, (null as unknown) as ParmsIdType)
+    ).toThrow()
+    expect(spyOn).toHaveBeenCalledWith(plain, null)
   })
   // cipherTransformToNtt
   test('It should fail to cipherTransformToNtt a plain', () => {

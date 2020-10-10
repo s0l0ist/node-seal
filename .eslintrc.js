@@ -10,7 +10,7 @@ module.exports = {
     'plugin:jest/recommended'
   ],
   parserOptions: {
-    ecmaVersion: 2020,
+    ecmaVersion: 2019,
     sourceType: 'module'
   },
   plugins: ['@typescript-eslint', 'jsdoc', 'jest', 'prettier'],

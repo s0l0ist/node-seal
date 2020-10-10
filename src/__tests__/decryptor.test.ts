@@ -9,8 +9,6 @@ import { Encryptor } from 'implementation/encryptor'
 import { KeyGenerator } from 'implementation/key-generator'
 import { PublicKey } from 'implementation/public-key'
 import { PlainText } from 'implementation/plain-text'
-import { CKKSEncoder } from 'implementation/ckks-encoder'
-import { Decryptor } from 'implementation/decryptor'
 import { SecretKey } from 'implementation/secret-key'
 import { Evaluator } from 'implementation/evaluator'
 
@@ -24,17 +22,9 @@ let bfvKeyGenerator: KeyGenerator
 let bfvSecretKey: SecretKey
 let bfvPublicKey: PublicKey
 let bfvEncryptor: Encryptor
-let bfvDecryptor: Decryptor
 let bfvEvaluator: Evaluator
 
-let ckksContext: Context
 let ckksEncParms: EncryptionParameters
-let ckksEncoder: CKKSEncoder
-let ckksKeyGenerator: KeyGenerator
-let ckksSecretKey: SecretKey
-let ckksPublicKey: PublicKey
-let ckksEncryptor: Encryptor
-let ckksDecryptor: Decryptor
 beforeAll(async () => {
   seal = await SEAL()
   const securityLevel = seal.SecurityLevel.tc128
@@ -53,19 +43,11 @@ beforeAll(async () => {
   bfvSecretKey = bfvKeyGenerator.secretKey()
   bfvPublicKey = bfvKeyGenerator.publicKey()
   bfvEncryptor = seal.Encryptor(bfvContext, bfvPublicKey)
-  bfvDecryptor = seal.Decryptor(bfvContext, bfvSecretKey)
   bfvEvaluator = seal.Evaluator(bfvContext)
 
   ckksEncParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
   ckksEncParms.setPolyModulusDegree(polyModulusDegree)
   ckksEncParms.setCoeffModulus(coeffModulus)
-  ckksContext = seal.Context(ckksEncParms, true, securityLevel)
-  ckksEncoder = seal.CKKSEncoder(ckksContext)
-  ckksKeyGenerator = seal.KeyGenerator(ckksContext)
-  ckksSecretKey = ckksKeyGenerator.secretKey()
-  ckksPublicKey = ckksKeyGenerator.publicKey()
-  ckksEncryptor = seal.Encryptor(ckksContext, ckksPublicKey)
-  ckksDecryptor = seal.Decryptor(ckksContext, ckksSecretKey)
 })
 
 describe('Decryptor', () => {

@@ -4,6 +4,7 @@ import { Context } from 'implementation/context'
 import { Modulus } from 'implementation/modulus'
 import { Vector } from 'implementation/vector'
 import { EncryptionParameters } from 'implementation/encryption-parameters'
+import { BatchEncoderTypes } from 'implementation/batch-encoder'
 
 let seal: SEALLibrary
 let context: Context
@@ -41,7 +42,7 @@ describe('BatchEncoder', () => {
   })
   test('It should fail to construct an instance', () => {
     const Constructor = jest.fn(seal.BatchEncoder)
-    expect(() => Constructor(null as any)).toThrow()
+    expect(() => Constructor((null as unknown) as Context)).toThrow()
     expect(Constructor).toBeCalledWith(null)
   })
   test('It should have properties', () => {
@@ -174,7 +175,7 @@ describe('BatchEncoder', () => {
       Array.from({ length: item.slotCount }).map((_, i) => i)
     )
     const spyOn = jest.spyOn(item, 'encode')
-    expect(() => item.encode(arr as any)).toThrow()
+    expect(() => item.encode((arr as unknown) as BatchEncoderTypes)).toThrow()
     expect(spyOn).toHaveBeenCalledWith(arr)
   })
   test('It should fail on encoding bad data', () => {

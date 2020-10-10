@@ -45,7 +45,7 @@ describe('IntegerEncoder', () => {
   })
   test('It should fail to construct an instance', () => {
     const Constructor = jest.fn(seal.IntegerEncoder)
-    expect(() => Constructor(null as any)).toThrow()
+    expect(() => Constructor((null as unknown) as Context)).toThrow()
     expect(Constructor).toBeCalledWith(null)
   })
   test('It should have properties', () => {

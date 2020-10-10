@@ -4,14 +4,10 @@ import { Context } from 'implementation/context'
 import { Modulus } from 'implementation/modulus'
 import { Vector } from 'implementation/vector'
 import { EncryptionParameters } from 'implementation/encryption-parameters'
-import { BatchEncoder } from 'implementation/batch-encoder'
-import { Encryptor } from 'implementation/encryptor'
 import { KeyGenerator } from 'implementation/key-generator'
 import { PublicKey } from 'implementation/public-key'
-import { CKKSEncoder } from 'implementation/ckks-encoder'
 import { Decryptor } from 'implementation/decryptor'
 import { SecretKey } from 'implementation/secret-key'
-import { Evaluator } from 'implementation/evaluator'
 import { PlainText } from 'implementation/plain-text'
 import { CipherText } from 'implementation/cipher-text'
 
@@ -20,22 +16,16 @@ let bfvContext: Context
 let coeffModulus: Vector
 let plainModulus: Modulus
 let bfvEncParms: EncryptionParameters
-let batchEncoder: BatchEncoder
 let bfvKeyGenerator: KeyGenerator
 let bfvSecretKey: SecretKey
 let bfvPublicKey: PublicKey
-let bfvEncryptor: Encryptor
 let bfvDecryptor: Decryptor
-let bfvEvaluator: Evaluator
 
 let ckksContext: Context
 let ckksEncParms: EncryptionParameters
-let ckksEncoder: CKKSEncoder
 let ckksKeyGenerator: KeyGenerator
 let ckksSecretKey: SecretKey
 let ckksPublicKey: PublicKey
-let ckksEncryptor: Encryptor
-let ckksDecryptor: Decryptor
 beforeAll(async () => {
   seal = await SEAL()
   const polyModulusDegree = 4096
@@ -47,24 +37,18 @@ beforeAll(async () => {
   bfvEncParms.setCoeffModulus(coeffModulus)
   bfvEncParms.setPlainModulus(plainModulus)
   bfvContext = seal.Context(bfvEncParms)
-  batchEncoder = seal.BatchEncoder(bfvContext)
   bfvKeyGenerator = seal.KeyGenerator(bfvContext)
   bfvSecretKey = bfvKeyGenerator.secretKey()
   bfvPublicKey = bfvKeyGenerator.publicKey()
-  bfvEncryptor = seal.Encryptor(bfvContext, bfvPublicKey)
   bfvDecryptor = seal.Decryptor(bfvContext, bfvSecretKey)
-  bfvEvaluator = seal.Evaluator(bfvContext)
 
   ckksEncParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
   ckksEncParms.setPolyModulusDegree(polyModulusDegree)
   ckksEncParms.setCoeffModulus(coeffModulus)
   ckksContext = seal.Context(ckksEncParms)
-  ckksEncoder = seal.CKKSEncoder(ckksContext)
   ckksKeyGenerator = seal.KeyGenerator(ckksContext)
   ckksSecretKey = ckksKeyGenerator.secretKey()
   ckksPublicKey = ckksKeyGenerator.publicKey()
-  ckksEncryptor = seal.Encryptor(ckksContext, ckksPublicKey)
-  ckksDecryptor = seal.Decryptor(ckksContext, ckksSecretKey)
 })
 
 describe('Encryptor', () => {
