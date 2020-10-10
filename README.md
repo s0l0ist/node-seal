@@ -159,9 +159,7 @@ number of iterations is **100**, time in **microseconds**. Browser timers are kn
 Conversion from C++ to Web Assembly has some limitations:
 
 - **±2^53 bit numbers:** JavaScript uses 2^53 numbers (not true 64 bit). Values higher than these
-  will typically result in inaccuracies. If you're using the `CKKS` scheme, you need to keep this in mind.
-  `BFV` users will inherently adhere to these limitations due to the Int32Array/Uint32Array TypedArrays.
-  Recently, `BFV` users now have support for BigInt64Array/BigUint64Array TypedArrays
+  will typically result in inaccuracies. If you're using the `CKKS` scheme, you need to keep this in mind. `BFV` users will inherently adhere to these limitations due to the Int32Array/Uint32Array TypedArrays. Recently, `BFV` users now have support for BigInt64Array/BigUint64Array TypedArrays
   but at a significant encode/decode penalty - encyption/evaluation/decryption performance is the same.
 
 - **Memory:** Generating large keys and saving them in the browser could be problematic.

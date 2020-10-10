@@ -115,7 +115,7 @@ const ModulusConstructor = (library: Library): ModulusDependencies => ({
      *
      * @function
      * @name Modulus#setValue
-     * @param {BigInt} value string representation of a uint64 value
+     * @param {BigInt} value BigInt value to set
      */
     setValue(value: BigInt) {
       try {

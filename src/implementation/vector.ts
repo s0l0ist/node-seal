@@ -25,7 +25,6 @@ export type Vector = {
   readonly getValue: (index: number) => number
   readonly resize: (size: number, fill: number) => void
   readonly toArray: () => VectorTypes
-  readonly create: () => Vector
 }
 
 export type VectorTypes =
@@ -74,15 +73,6 @@ const VectorConstructor = (library: Library): VectorDependencies => ({
    * @interface Vector
    */
   return {
-    /**
-     * Create an empty instance
-     * @function
-     * @name Vector#create
-     * @returns {Vector}
-     */
-    create(): Vector {
-      return VectorConstructor(library)({ Exception })()
-    },
     /**
      * Get the underlying WASM instance
      *
