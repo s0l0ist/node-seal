@@ -3,23 +3,42 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 4.4.0
+
+### Highlights
+
+- Updated the entire library to TypeScript which fixed numerous inconsistencies
+- Added support for more builds:
+  - [`js`, `wasm`] each with [`node`, `web`, `worker`] each with [`cjs`, `es`, `iife`] builds
+- Support for WebAssembly in React Native
+- More consistencies with 64-bit types using `BigInt`
+
+Feat:
+
+- Supporting Seal v3.5.9
+- `SecretKey.save()` now uses compression (`deflate`) by default
+- `ParmsIdType.values()` returns a `BigUint64Array` containing the underlying values
+- `PlainModulus.Batching()` returns a `Modulus` type instead of the raw WASM instance
+- `Modulus` supports constructing with a `BigInt`
+- `Modulus.setValue()` accepts a `BigInt`
+
 ## Version 4.3.10
 
-Feat: 
+Feat:
 
 - Updated to Seal v3.5.8 (v3.5.7 skipped because of a bug)
 - Updated emsdk to latest
 
 ## Version 4.3.9
 
-Feat: 
+Feat:
 
 - Added `setScale` function to allow users to manually set the scale on either PlainTexts or CipherTexts
 - Updated emsdk to lastest
 
 ## Version 4.3.8
 
-Feat: 
+Feat:
 
 - Updated to Seal v3.5.6
 - Updated emsdk to latest
@@ -32,7 +51,7 @@ Feat:
 
 ## Version 4.3.6
 
-This release now supports true 64-bit numbers with the BFV scheme leveraging BigInt. 
+This release now supports true 64-bit numbers with the BFV scheme leveraging BigInt.
 However, there is a performance penalty marshaling data to and from (encoding/decoding)
 JS <-> WASM as they are not natively supported.
 
