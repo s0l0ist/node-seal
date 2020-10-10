@@ -1,5 +1,5 @@
 import SEAL from '../index_wasm_node'
-import { SEALLibrary } from '../implementation/seal'
+import { SEALLibrary } from 'implementation/seal'
 import { Context } from 'implementation/context'
 import { Vector } from 'implementation/vector'
 import { EncryptionParameters } from 'implementation/encryption-parameters'

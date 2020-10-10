@@ -21,8 +21,8 @@ export type ContextDependencies = {
 export type ContextConstructorOptions = {
   (
     encryptionParams: EncryptionParameters,
-    expandModChain: boolean,
-    securityLevel: SecurityLevel
+    expandModChain?: boolean,
+    securityLevel?: SecurityLevel
   ): Context
 }
 
@@ -48,7 +48,7 @@ const ContextConstructor = (library: Library): ContextDependencies => ({
   SecurityLevel
 }: ContextDependencyOptions): ContextConstructorOptions => (
   encryptionParams,
-  expandModChain,
+  expandModChain = true,
   securityLevel = SecurityLevel.tc128
 ): Context => {
   // Static methods
