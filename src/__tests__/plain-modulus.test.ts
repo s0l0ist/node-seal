@@ -1,10 +1,8 @@
 import SEAL from '../index_wasm_node'
 import { SEALLibrary } from 'implementation/seal'
 import { EncryptionParameters } from 'implementation/encryption-parameters'
-import { Context } from 'implementation/context'
 let seal: SEALLibrary
 let parms: EncryptionParameters
-let context: Context
 beforeAll(async () => {
   seal = await SEAL()
   parms = seal.EncryptionParameters(seal.SchemeType.BFV)
@@ -13,7 +11,6 @@ beforeAll(async () => {
     seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
   )
   parms.setPlainModulus(seal.PlainModulus.Batching(4096, 20))
-  context = seal.Context(parms, true, seal.SecurityLevel.tc128)
 })
 
 describe('PlainModulus', () => {

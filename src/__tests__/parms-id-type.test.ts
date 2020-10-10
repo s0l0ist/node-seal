@@ -30,7 +30,6 @@ describe('ParmsIdType', () => {
     expect(Constructor).toBeCalledWith()
   })
   test('It should construct from an existing an instance', () => {
-    const parmsId = context.firstParmsId
     const Constructor = jest.fn(seal.ParmsIdType)
     Constructor()
     expect(Constructor).toBeCalledWith()

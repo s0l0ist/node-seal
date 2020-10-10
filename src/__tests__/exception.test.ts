@@ -27,9 +27,4 @@ describe('Exception', () => {
     seal.Exception.safe('unknown error')
     expect(spyOn).toHaveBeenCalledWith('unknown error')
   })
-  // test('It should attempt to get a safe error from an emscripten pointer (number)', () => {
-  //   const spyOn = jest.spyOn(seal.Exception, 'safe')
-  //   seal.Exception.safe(55)
-  //   expect(spyOn).toHaveBeenCalledWith(55)
-  // })
 })

@@ -4,7 +4,6 @@ import { Context } from 'implementation/context'
 import { Modulus } from 'implementation/modulus'
 import { Vector } from 'implementation/vector'
 import { EncryptionParameters } from 'implementation/encryption-parameters'
-import { BatchEncoder } from 'implementation/batch-encoder'
 import { KeyGenerator } from 'implementation/key-generator'
 
 let seal: SEALLibrary
@@ -12,7 +11,6 @@ let bfvContext: Context
 let coeffModulus: Vector
 let plainModulus: Modulus
 let bfvEncParms: EncryptionParameters
-let batchEncoder: BatchEncoder
 let bfvKeyGenerator: KeyGenerator
 
 beforeAll(async () => {
@@ -26,7 +24,6 @@ beforeAll(async () => {
   bfvEncParms.setCoeffModulus(coeffModulus)
   bfvEncParms.setPlainModulus(plainModulus)
   bfvContext = seal.Context(bfvEncParms)
-  batchEncoder = seal.BatchEncoder(bfvContext)
   bfvKeyGenerator = seal.KeyGenerator(bfvContext)
 })
 

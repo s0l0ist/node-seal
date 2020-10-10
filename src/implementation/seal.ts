@@ -50,11 +50,7 @@ import {
   PlainTextConstructorOptions,
   PlainTextDependencies
 } from './plain-text'
-import {
-  PlainModulusConstructorOptions,
-  PlainModulus,
-  PlainModulusDependencies
-} from './plain-modulus'
+import { PlainModulus, PlainModulusDependencies } from './plain-modulus'
 import {
   PublicKeyConstructorOptions,
   PublicKeyDependencies
@@ -76,8 +72,7 @@ import {
 import { VectorConstructorOptions, VectorDependencies } from './vector'
 import {
   KeyGeneratorConstructorOptions,
-  KeyGeneratorDependencies,
-  KeyGeneratorInit
+  KeyGeneratorDependencies
 } from './key-generator'
 
 export type SEALLibrary = {

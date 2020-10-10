@@ -5,9 +5,6 @@ import { Modulus } from 'implementation/modulus'
 import { Vector } from 'implementation/vector'
 import { EncryptionParameters } from 'implementation/encryption-parameters'
 import { BatchEncoder } from 'implementation/batch-encoder'
-import { Encryptor } from 'implementation/encryptor'
-import { KeyGenerator } from 'implementation/key-generator'
-import { PublicKey } from 'implementation/public-key'
 import { CKKSEncoder } from 'implementation/ckks-encoder'
 import { Evaluator } from 'implementation/evaluator'
 import { PlainText } from 'implementation/plain-text'
@@ -18,17 +15,11 @@ let coeffModulus: Vector
 let plainModulus: Modulus
 let bfvEncParms: EncryptionParameters
 let batchEncoder: BatchEncoder
-let bfvKeyGenerator: KeyGenerator
-let bfvPublicKey: PublicKey
-let bfvEncryptor: Encryptor
 let bfvEvaluator: Evaluator
 
 let ckksContext: Context
 let ckksEncParms: EncryptionParameters
 let ckksEncoder: CKKSEncoder
-let ckksKeyGenerator: KeyGenerator
-let ckksPublicKey: PublicKey
-let ckksEncryptor: Encryptor
 beforeAll(async () => {
   seal = await SEAL()
   const securityLevel = seal.SecurityLevel.tc128
@@ -43,9 +34,6 @@ beforeAll(async () => {
   bfvEncParms.setPlainModulus(plainModulus)
   bfvContext = seal.Context(bfvEncParms, true, securityLevel)
   batchEncoder = seal.BatchEncoder(bfvContext)
-  bfvKeyGenerator = seal.KeyGenerator(bfvContext)
-  bfvPublicKey = bfvKeyGenerator.publicKey()
-  bfvEncryptor = seal.Encryptor(bfvContext, bfvPublicKey)
   bfvEvaluator = seal.Evaluator(bfvContext)
 
   ckksEncParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
@@ -53,9 +41,6 @@ beforeAll(async () => {
   ckksEncParms.setCoeffModulus(coeffModulus)
   ckksContext = seal.Context(ckksEncParms, true, securityLevel)
   ckksEncoder = seal.CKKSEncoder(ckksContext)
-  ckksKeyGenerator = seal.KeyGenerator(ckksContext)
-  ckksPublicKey = ckksKeyGenerator.publicKey()
-  ckksEncryptor = seal.Encryptor(ckksContext, ckksPublicKey)
 })
 
 describe('PlainText', () => {
@@ -91,7 +76,6 @@ describe('PlainText', () => {
   })
   test('It should fail to construct an instance from bad parameters', () => {
     const Constructor = jest.fn(seal.PlainText)
-    const parmsId = bfvContext.firstParmsId
     expect(() => Constructor({ capacity: 2 })).toThrow()
     expect(Constructor).toBeCalledWith({ capacity: 2 })
   })

@@ -60,13 +60,6 @@ describe('Vector', () => {
     expect(spyOn).toHaveBeenCalledWith(BigUint64Array.from([]))
     expect(vector.type).toEqual('BigUint64Array')
   })
-  test('It should construct an instance with of biguint64', () => {
-    const vector = seal.Vector()
-    const spyOn = jest.spyOn(vector, 'from')
-    vector.from(BigUint64Array.from([]))
-    expect(spyOn).toHaveBeenCalledWith(BigUint64Array.from([]))
-    expect(vector.type).toEqual('BigUint64Array')
-  })
   test('It should construct an instance with of modulus', () => {
     const vector = seal.Vector()
     const spyOn = jest.spyOn(vector, 'from')
