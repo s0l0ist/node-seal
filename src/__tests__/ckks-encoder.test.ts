@@ -110,7 +110,8 @@ describe('CKKSEncoder', () => {
   })
   test('It should encode an float64 array and return plaintext', () => {
     const arr = Float64Array.from(
-      Array.from({ length: ckksEncoder.slotCount }).map((_, i) => i)
+      { length: ckksEncoder.slotCount },
+      (_, i) => i
     )
     const spyOn = jest.spyOn(ckksEncoder, 'encode')
     const plain = ckksEncoder.encode(arr, Math.pow(2, 20)) as PlainText
@@ -133,7 +134,8 @@ describe('CKKSEncoder', () => {
   })
   test('It should decode an float64 array', () => {
     const arr = Float64Array.from(
-      Array.from({ length: ckksEncoder.slotCount }).map((_, i) => i)
+      { length: ckksEncoder.slotCount },
+      (_, i) => i
     )
     const plain = seal.PlainText()
     ckksEncoder.encode(arr, Math.pow(2, 20), plain)

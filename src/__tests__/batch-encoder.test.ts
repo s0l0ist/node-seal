@@ -91,9 +91,7 @@ describe('BatchEncoder', () => {
   })
   test('It should encode an int32 array to a plaintext destination', () => {
     const item = seal.BatchEncoder(context)
-    const arr = Int32Array.from(
-      Array.from({ length: item.slotCount }).map((_, i) => -i)
-    )
+    const arr = Int32Array.from({ length: item.slotCount }, (_, i) => -i)
     const plain = seal.PlainText()
     const spyOn = jest.spyOn(item, 'encode')
     item.encode(arr, plain)
@@ -101,9 +99,7 @@ describe('BatchEncoder', () => {
   })
   test('It should encode an int32 array and return a plaintext', () => {
     const item = seal.BatchEncoder(context)
-    const arr = Int32Array.from(
-      Array.from({ length: item.slotCount }).map((_, i) => -i)
-    )
+    const arr = Int32Array.from({ length: item.slotCount }, (_, i) => -i)
     const spyOn = jest.spyOn(item, 'encode')
     const plain = item.encode(arr)
     expect(spyOn).toHaveBeenCalledWith(arr)
@@ -111,8 +107,8 @@ describe('BatchEncoder', () => {
   })
   test('It should encode an int64 array to a plaintext destination', () => {
     const item = seal.BatchEncoder(context)
-    const arr = BigInt64Array.from(
-      Array.from({ length: item.slotCount }).map((_, i) => BigInt(-i))
+    const arr = BigInt64Array.from({ length: item.slotCount }, (_, i) =>
+      BigInt(-i)
     )
     const plain = seal.PlainText()
     const spyOn = jest.spyOn(item, 'encode')
@@ -121,8 +117,8 @@ describe('BatchEncoder', () => {
   })
   test('It should encode an int64 array and return a plaintext', () => {
     const item = seal.BatchEncoder(context)
-    const arr = BigInt64Array.from(
-      Array.from({ length: item.slotCount }).map((_, i) => BigInt(-i))
+    const arr = BigInt64Array.from({ length: item.slotCount }, (_, i) =>
+      BigInt(-i)
     )
     const spyOn = jest.spyOn(item, 'encode')
     const plain = item.encode(arr)
@@ -131,9 +127,7 @@ describe('BatchEncoder', () => {
   })
   test('It should encode an uint32 array to a plaintext destination', () => {
     const item = seal.BatchEncoder(context)
-    const arr = Uint32Array.from(
-      Array.from({ length: item.slotCount }).map((_, i) => i)
-    )
+    const arr = Uint32Array.from({ length: item.slotCount }, (_, i) => i)
     const plain = seal.PlainText()
     const spyOn = jest.spyOn(item, 'encode')
     item.encode(arr, plain)
@@ -141,9 +135,7 @@ describe('BatchEncoder', () => {
   })
   test('It should encode an uint32 array and return a plaintext', () => {
     const item = seal.BatchEncoder(context)
-    const arr = Uint32Array.from(
-      Array.from({ length: item.slotCount }).map((_, i) => i)
-    )
+    const arr = Uint32Array.from({ length: item.slotCount }, (_, i) => i)
     const spyOn = jest.spyOn(item, 'encode')
     const plain = item.encode(arr)
     expect(spyOn).toHaveBeenCalledWith(arr)
@@ -151,8 +143,8 @@ describe('BatchEncoder', () => {
   })
   test('It should encode an uint64 array to a plaintext destination', () => {
     const item = seal.BatchEncoder(context)
-    const arr = BigUint64Array.from(
-      Array.from({ length: item.slotCount }).map((_, i) => BigInt(i))
+    const arr = BigUint64Array.from({ length: item.slotCount }, (_, i) =>
+      BigInt(i)
     )
     const plain = seal.PlainText()
     const spyOn = jest.spyOn(item, 'encode')
@@ -161,8 +153,8 @@ describe('BatchEncoder', () => {
   })
   test('It should encode an uint64 array and return a plaintext', () => {
     const item = seal.BatchEncoder(context)
-    const arr = BigUint64Array.from(
-      Array.from({ length: item.slotCount }).map((_, i) => BigInt(i))
+    const arr = BigUint64Array.from({ length: item.slotCount }, (_, i) =>
+      BigInt(i)
     )
     const spyOn = jest.spyOn(item, 'encode')
     const plain = item.encode(arr)
@@ -171,27 +163,21 @@ describe('BatchEncoder', () => {
   })
   test('It should fail on unsupported array type', () => {
     const item = seal.BatchEncoder(context)
-    const arr = Float64Array.from(
-      Array.from({ length: item.slotCount }).map((_, i) => i)
-    )
+    const arr = Float64Array.from({ length: item.slotCount }, (_, i) => i)
     const spyOn = jest.spyOn(item, 'encode')
     expect(() => item.encode((arr as unknown) as BatchEncoderTypes)).toThrow()
     expect(spyOn).toHaveBeenCalledWith(arr)
   })
   test('It should fail on encoding bad data', () => {
     const item = seal.BatchEncoder(context)
-    const arr = Int32Array.from(
-      Array.from({ length: item.slotCount * 2 }).map((x, i) => i)
-    )
+    const arr = Int32Array.from({ length: item.slotCount * 2 }, (_, i) => i)
     const spyOn = jest.spyOn(item, 'encode')
     expect(() => item.encode(arr)).toThrow()
     expect(spyOn).toHaveBeenCalledWith(arr)
   })
   test('It should decode an int32 array', () => {
     const item = seal.BatchEncoder(context)
-    const arr = Int32Array.from(
-      Array.from({ length: item.slotCount }).map((_, i) => -i)
-    )
+    const arr = Int32Array.from({ length: item.slotCount }, (_, i) => -i)
     const plain = seal.PlainText()
     item.encode(arr, plain)
     const spyOn = jest.spyOn(item, 'decode')
@@ -201,8 +187,8 @@ describe('BatchEncoder', () => {
   })
   test('It should decode an int64 array', () => {
     const item = seal.BatchEncoder(context)
-    const arr = BigInt64Array.from(
-      Array.from({ length: item.slotCount }).map((_, i) => BigInt(-i))
+    const arr = BigInt64Array.from({ length: item.slotCount }, (_, i) =>
+      BigInt(-i)
     )
     const plain = seal.PlainText()
     item.encode(arr, plain)
@@ -213,9 +199,7 @@ describe('BatchEncoder', () => {
   })
   test('It should decode an uint32 array', () => {
     const item = seal.BatchEncoder(context)
-    const arr = Uint32Array.from(
-      Array.from({ length: item.slotCount }).map((_, i) => i)
-    )
+    const arr = Uint32Array.from({ length: item.slotCount }, (_, i) => i)
     const plain = seal.PlainText()
     item.encode(arr, plain)
     const spyOn = jest.spyOn(item, 'decode')
@@ -225,8 +209,8 @@ describe('BatchEncoder', () => {
   })
   test('It should decode a uint64 array', () => {
     const item = seal.BatchEncoder(context)
-    const arr = BigUint64Array.from(
-      Array.from({ length: item.slotCount }).map((_, i) => BigInt(i))
+    const arr = BigUint64Array.from({ length: item.slotCount }, (_, i) =>
+      BigInt(i)
     )
     const plain = seal.PlainText()
     item.encode(arr, plain)

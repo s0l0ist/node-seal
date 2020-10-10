@@ -1,7 +1,7 @@
 {
   "name": "node-seal",
-  "version": "4.3.10",
-  "description": "Homomorphic Encryption in JavaScript using Microsoft SEAL",
+  "version": "4.4.0",
+  "description": "Homomorphic Encryption for JavaScript using Microsoft SEAL",
   "repository": {
     "type": "git",
     "url": "https://github.com/morfix-io/node-seal"
