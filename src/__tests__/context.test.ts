@@ -84,7 +84,7 @@ describe('Context', () => {
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(item.instance).toBeNull()
+    expect(item.instance).toBeUndefined()
     expect(() => item.usingKeyswitching).toThrow(TypeError)
   })
   test('It should skip deleting twice', () => {
@@ -93,7 +93,7 @@ describe('Context', () => {
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(item.instance).toBeNull()
+    expect(item.instance).toBeUndefined()
     expect(() => item.usingKeyswitching).toThrow(TypeError)
   })
   test('It should return the human readable string of the context', () => {

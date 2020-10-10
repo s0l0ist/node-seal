@@ -178,14 +178,14 @@ describe('Evaluator', () => {
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(item.instance).toBeNull()
+    expect(item.instance).toBeUndefined()
   })
   test('It should skip deleting twice', () => {
     const item = seal.Evaluator(bfvContext)
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(item.instance).toBeNull()
+    expect(item.instance).toBeUndefined()
   })
   // Negate
   test('It should fail to negate a cipher', () => {

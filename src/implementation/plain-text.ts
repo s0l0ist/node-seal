@@ -138,7 +138,7 @@ const PlainTextConstructor = (library: Library): PlainTextDependencies => ({
     unsafeInject(instance: Instance) {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
       _instance = instance
     },
@@ -154,7 +154,7 @@ const PlainTextConstructor = (library: Library): PlainTextDependencies => ({
     delete() {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
     },
 

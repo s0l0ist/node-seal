@@ -85,7 +85,7 @@
 //     const spyOn = jest.spyOn(item, 'delete')
 //     item.delete()
 //     expect(spyOn).toHaveBeenCalled()
-//     expect(item.instance).toBeNull()
+//     expect(item.instance).toBeUndefined()
 //     expect(() => item.getValue(0)).toThrow(TypeError)
 //   })
 //   test('It should skip deleting twice', () => {
@@ -94,7 +94,7 @@
 //     const spyOn = jest.spyOn(item, 'delete')
 //     item.delete()
 //     expect(spyOn).toHaveBeenCalled()
-//     expect(item.instance).toBeNull()
+//     expect(item.instance).toBeUndefined()
 //     expect(() => item.getValue(0)).toThrow(TypeError)
 //   })
 //   test('It should return type Uint8Array', () => {

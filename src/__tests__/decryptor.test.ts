@@ -131,7 +131,7 @@ describe('Decryptor', () => {
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(item.instance).toBeNull()
+    expect(item.instance).toBeUndefined()
   })
   test('It should skip deleting twice', () => {
     const item = seal.Decryptor(bfvContext, bfvSecretKey)
@@ -139,7 +139,7 @@ describe('Decryptor', () => {
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(item.instance).toBeNull()
+    expect(item.instance).toBeUndefined()
   })
   test('It should encrypt a ciphertext to a destination plain', () => {
     const item = seal.Decryptor(bfvContext, bfvSecretKey)

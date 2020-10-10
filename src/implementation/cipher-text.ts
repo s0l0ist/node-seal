@@ -150,7 +150,7 @@ const CipherTextConstructor = (library: Library): CipherTextDependencies => ({
     unsafeInject(instance: Instance) {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
       _instance = instance
     },
@@ -166,7 +166,7 @@ const CipherTextConstructor = (library: Library): CipherTextDependencies => ({
     delete() {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
     },
 

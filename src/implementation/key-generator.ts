@@ -100,7 +100,7 @@ const KeyGeneratorConstructor = (
     unsafeInject(instance: Instance) {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
       _instance = instance
     },
@@ -116,7 +116,7 @@ const KeyGeneratorConstructor = (
     delete() {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
     },
 

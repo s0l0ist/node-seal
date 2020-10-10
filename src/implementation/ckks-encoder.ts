@@ -90,7 +90,7 @@ const CKKSEncoderConstructor = (library: Library): CKKSEncoderDependencies => ({
     unsafeInject(instance: Instance) {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
       _instance = instance
     },
@@ -106,7 +106,7 @@ const CKKSEncoderConstructor = (library: Library): CKKSEncoderDependencies => ({
     delete() {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
     },
 

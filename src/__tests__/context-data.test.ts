@@ -86,7 +86,7 @@ describe('ContextData', () => {
     const spyOn = jest.spyOn(contextData, 'delete')
     contextData.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(contextData.instance).toBeNull()
+    expect(contextData.instance).toBeUndefined()
     expect(() => contextData.totalCoeffModulusBitCount).toThrow(TypeError)
   })
   test('It should skip deleting twice', () => {
@@ -96,7 +96,7 @@ describe('ContextData', () => {
     const spyOn = jest.spyOn(contextData, 'delete')
     contextData.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(contextData.instance).toBeNull()
+    expect(contextData.instance).toBeUndefined()
     expect(() => contextData.totalCoeffModulusBitCount).toThrow(TypeError)
   })
   test('It should return a the previous context data', () => {

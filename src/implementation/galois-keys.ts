@@ -77,7 +77,7 @@ const GaloisKeysConstructor = (library: Library): GaloisKeysDependencies => ({
     inject(instance: Instance) {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
       _instance = new Constructor(instance)
       instance.delete()
@@ -94,7 +94,7 @@ const GaloisKeysConstructor = (library: Library): GaloisKeysDependencies => ({
     delete() {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
     },
 

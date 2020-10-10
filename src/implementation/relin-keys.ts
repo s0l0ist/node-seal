@@ -77,7 +77,7 @@ const RelinKeysConstructor = (library: Library): RelinKeysDependencies => ({
     inject(instance: Instance) {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
       _instance = new Constructor(instance)
       instance.delete()
@@ -94,7 +94,7 @@ const RelinKeysConstructor = (library: Library): RelinKeysDependencies => ({
     delete() {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
     },
 

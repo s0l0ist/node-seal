@@ -74,7 +74,7 @@ const PublicKeyConstructor = (library: Library): PublicKeyDependencies => ({
     inject(instance: Instance) {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
       _instance = new Constructor(instance)
       instance.delete()
@@ -91,7 +91,7 @@ const PublicKeyConstructor = (library: Library): PublicKeyDependencies => ({
     delete() {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
     },
 

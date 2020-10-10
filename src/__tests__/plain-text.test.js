@@ -124,7 +124,7 @@
 //     const spyOn = jest.spyOn(plainText, 'delete')
 //     plainText.delete()
 //     expect(spyOn).toHaveBeenCalled()
-//     expect(plainText.instance).toBeNull()
+//     expect(plainText.instance).toBeUndefined()
 //   })
 //   test('It should skip deleting twice', () => {
 //     const plainText = PlainTextObject()
@@ -132,7 +132,7 @@
 //     const spyOn = jest.spyOn(plainText, 'delete')
 //     plainText.delete()
 //     expect(spyOn).toHaveBeenCalled()
-//     expect(plainText.instance).toBeNull()
+//     expect(plainText.instance).toBeUndefined()
 //   })
 //   test('It should reserve memory', () => {
 //     const arr = Int32Array.from(
@@ -537,7 +537,7 @@
 //     const spyOn = jest.spyOn(newPlainText, 'move')
 //     newPlainText.move(plainText)
 //     expect(spyOn).toHaveBeenCalledWith(plainText)
-//     expect(plainText.instance).toBeNull()
+//     expect(plainText.instance).toBeUndefined()
 //     expect(() => plainText.isZero).toThrow(TypeError)
 //     expect(newPlainText.save()).toEqual(str)
 //   })

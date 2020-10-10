@@ -63,7 +63,7 @@ describe('EncryptionParameters', () => {
     const spyOn = jest.spyOn(encParms, 'delete')
     encParms.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(encParms.instance).toBeNull()
+    expect(encParms.instance).toBeUndefined()
     expect(() => encParms.polyModulusDegree).toThrow(TypeError)
   })
   test('It should delete the old instance and inject', () => {
@@ -71,7 +71,7 @@ describe('EncryptionParameters', () => {
     const spyOn = jest.spyOn(encParms, 'delete')
     encParms.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(encParms.instance).toBeNull()
+    expect(encParms.instance).toBeUndefined()
     expect(() => encParms.polyModulusDegree).toThrow(TypeError)
   })
   test('It should set the poly modulus degree (bfv)', () => {

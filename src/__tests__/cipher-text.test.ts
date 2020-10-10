@@ -166,7 +166,7 @@ describe('CipherText', () => {
     const spyOn = jest.spyOn(cipher, 'delete')
     cipher.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(cipher.instance).toBeNull()
+    expect(cipher.instance).toBeUndefined()
   })
   test('It should skip deleting twice', () => {
     const cipher = seal.CipherText()
@@ -174,7 +174,7 @@ describe('CipherText', () => {
     const spyOn = jest.spyOn(cipher, 'delete')
     cipher.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(cipher.instance).toBeNull()
+    expect(cipher.instance).toBeUndefined()
   })
   test('It should reserve memory', () => {
     const cipher = seal.CipherText()
@@ -503,7 +503,7 @@ describe('CipherText', () => {
     const spyOn = jest.spyOn(newCipher, 'move')
     newCipher.move(cipher)
     expect(spyOn).toHaveBeenCalledWith(cipher)
-    expect(cipher.instance).toBeNull()
+    expect(cipher.instance).toBeUndefined()
     expect(() => cipher.size).toThrow(TypeError)
     expect(newCipher.save()).toEqual(str)
   })

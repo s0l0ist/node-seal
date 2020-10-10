@@ -74,7 +74,7 @@ const SecretKeyConstructor = (library: Library): SecretKeyDependencies => ({
     inject(instance: Instance) {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
       _instance = new Constructor(instance)
       instance.delete()
@@ -91,7 +91,7 @@ const SecretKeyConstructor = (library: Library): SecretKeyDependencies => ({
     delete() {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
     },
 

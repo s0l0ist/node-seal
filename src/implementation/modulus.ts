@@ -89,7 +89,7 @@ const ModulusConstructor = (library: Library): ModulusDependencies => ({
     inject(instance: Instance) {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
       _instance = new Constructor(instance)
       instance.delete()
@@ -106,7 +106,7 @@ const ModulusConstructor = (library: Library): ModulusDependencies => ({
     delete() {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
     },
 

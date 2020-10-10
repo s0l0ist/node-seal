@@ -82,7 +82,7 @@ describe('GaloisKeys', () => {
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(item.instance).toBeNull()
+    expect(item.instance).toBeUndefined()
     expect(() => item.save()).toThrow(TypeError)
   })
   test('It should skip deleting twice', () => {
@@ -91,7 +91,7 @@ describe('GaloisKeys', () => {
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(item.instance).toBeNull()
+    expect(item.instance).toBeUndefined()
     expect(() => item.size).toThrow(TypeError)
   })
   test('It should get the index of a galois element', () => {
@@ -301,7 +301,7 @@ describe('GaloisKeys', () => {
     const spyOn = jest.spyOn(newItem, 'move')
     newItem.move(item)
     expect(spyOn).toHaveBeenCalledWith(item)
-    expect(item.instance).toBeNull()
+    expect(item.instance).toBeUndefined()
   })
   test('It should fail to move another instance into itself and delete the old', () => {
     const item = bfvKeyGenerator.galoisKeysLocal()

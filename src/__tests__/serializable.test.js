@@ -47,7 +47,7 @@
 //   })
 //   test('It should not have an instance by default', () => {
 //     const item = SerializableObject()
-//     expect(item.instance).toBeNull()
+//     expect(item.instance).toBeUndefined()
 //   })
 //   test('It should inject', () => {
 //     const arr = Int32Array.from({ length: encoder.slotCount }, (_, i) => i)
@@ -83,7 +83,7 @@
 //     const spyOn = jest.spyOn(newItem, 'delete')
 //     newItem.delete()
 //     expect(spyOn).toHaveBeenCalled()
-//     expect(newItem.instance).toBeNull()
+//     expect(newItem.instance).toBeUndefined()
 //     expect(() => newItem.save()).toThrow(TypeError)
 //   })
 //   test('It should skip deleting twice', () => {
@@ -96,7 +96,7 @@
 //     const spyOn = jest.spyOn(newItem, 'delete')
 //     newItem.delete()
 //     expect(spyOn).toHaveBeenCalled()
-//     expect(newItem.instance).toBeNull()
+//     expect(newItem.instance).toBeUndefined()
 //   })
 //   test('It should save to a string', () => {
 //     const arr = Int32Array.from({ length: encoder.slotCount }, (_, i) => i)

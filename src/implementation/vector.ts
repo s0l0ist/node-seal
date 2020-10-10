@@ -106,7 +106,7 @@ const VectorConstructor = (library: Library): VectorDependencies => ({
     unsafeInject(instance: Instance) {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
       _instance = instance
     },
@@ -122,7 +122,7 @@ const VectorConstructor = (library: Library): VectorDependencies => ({
     delete() {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
     },
 

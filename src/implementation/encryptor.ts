@@ -110,7 +110,7 @@ const EncryptorConstructor = (library: Library): EncryptorDependencies => ({
     unsafeInject(instance: Instance) {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
       _instance = instance
     },
@@ -126,7 +126,7 @@ const EncryptorConstructor = (library: Library): EncryptorDependencies => ({
     delete() {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
     },
 

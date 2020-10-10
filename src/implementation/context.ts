@@ -91,7 +91,7 @@ const ContextConstructor = (library: Library): ContextDependencies => ({
     unsafeInject(instance: Instance) {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
       _instance = instance
     },
@@ -107,7 +107,7 @@ const ContextConstructor = (library: Library): ContextDependencies => ({
     delete() {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
     },
 

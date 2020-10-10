@@ -59,7 +59,7 @@ const ParmsIdTypeConstructor = (library: Library): ParmsIdTypeDependencies => ({
     inject(instance: Instance) {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
       _instance = new Constructor(instance)
       instance.delete()
@@ -76,7 +76,7 @@ const ParmsIdTypeConstructor = (library: Library): ParmsIdTypeDependencies => ({
     delete() {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
     },
 
@@ -88,7 +88,7 @@ const ParmsIdTypeConstructor = (library: Library): ParmsIdTypeDependencies => ({
     create() {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
       _instance = new Constructor()
     },

@@ -102,7 +102,7 @@ describe('CKKSEncoder', () => {
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(item.instance).toBeNull()
+    expect(item.instance).toBeUndefined()
     expect(() => item.slotCount).toThrow(TypeError)
   })
   test('It should skip deleting twice', () => {
@@ -111,7 +111,7 @@ describe('CKKSEncoder', () => {
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(item.instance).toBeNull()
+    expect(item.instance).toBeUndefined()
     expect(() => item.slotCount).toThrow(TypeError)
   })
   test('It should encode an float64 array to a plain destination', () => {

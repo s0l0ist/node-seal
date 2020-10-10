@@ -39,6 +39,11 @@ describe('BatchEncoder', () => {
     Constructor(context)
     expect(Constructor).toBeCalledWith(context)
   })
+  test('It should fail to construct an instance', () => {
+    const Constructor = jest.fn(seal.BatchEncoder)
+    expect(() => Constructor(null as any)).toThrow()
+    expect(Constructor).toBeCalledWith(null)
+  })
   test('It should have properties', () => {
     const item = seal.BatchEncoder(context)
     // Test properties
@@ -73,7 +78,7 @@ describe('BatchEncoder', () => {
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(item.instance).toBeNull()
+    expect(item.instance).toBeUndefined()
   })
   test('It should skip deleting twice', () => {
     const item = seal.BatchEncoder(context)
@@ -81,7 +86,7 @@ describe('BatchEncoder', () => {
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
     expect(spyOn).toHaveBeenCalled()
-    expect(item.instance).toBeNull()
+    expect(item.instance).toBeUndefined()
   })
   test('It should encode an int32 array to a plaintext destination', () => {
     const item = seal.BatchEncoder(context)

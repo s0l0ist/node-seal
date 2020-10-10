@@ -77,7 +77,7 @@ const DecryptorConstructor = (library: Library): DecryptorDependencies => ({
     unsafeInject(instance: Instance) {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
       _instance = instance
     },
@@ -93,7 +93,7 @@ const DecryptorConstructor = (library: Library): DecryptorDependencies => ({
     delete() {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
     },
 

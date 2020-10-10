@@ -89,7 +89,7 @@ const EncryptionParametersConstructor = (
     unsafeInject(instance: Instance) {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
       _instance = instance
     },
@@ -105,7 +105,7 @@ const EncryptionParametersConstructor = (
     delete() {
       if (_instance) {
         _instance.delete()
-        _instance = null
+        _instance = undefined
       }
     },
 
