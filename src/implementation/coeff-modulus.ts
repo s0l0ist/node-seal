@@ -84,7 +84,11 @@ const CoeffModulusConstructor = (
       securityLevel: SecurityLevel = SecurityLevel.tc128
     ): Vector {
       try {
-        return _BFVDefault(polyModulusDegree, securityLevel)
+        const vectorModulus = Vector()
+        const instance = _BFVDefault(polyModulusDegree, securityLevel)
+        vectorModulus.unsafeInject(instance)
+        vectorModulus.setType('Modulus')
+        return vectorModulus
       } catch (e) {
         throw Exception.safe(e)
       }
@@ -108,6 +112,7 @@ const CoeffModulusConstructor = (
         const vectorModulus = Vector()
         const instance = _CreateFromArray(polyModulusDegree, bitSizes)
         vectorModulus.unsafeInject(instance)
+        vectorModulus.setType('Modulus')
         return vectorModulus
       } catch (e) {
         throw Exception.safe(e)
