@@ -17,7 +17,6 @@ export type ParmsIdType = {
   readonly instance: Instance
   readonly inject: (instance: Instance) => void
   readonly delete: () => void
-  readonly create: () => void
   readonly values: BigUint64Array
 }
 
@@ -78,19 +77,6 @@ const ParmsIdTypeConstructor = (library: Library): ParmsIdTypeDependencies => ({
         _instance.delete()
         _instance = undefined
       }
-    },
-
-    /**
-     * Create an empty instance
-     * @function
-     * @name ParmsIdType#create
-     */
-    create() {
-      if (_instance) {
-        _instance.delete()
-        _instance = undefined
-      }
-      _instance = new Constructor()
     },
 
     /**
