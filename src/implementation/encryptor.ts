@@ -34,12 +34,12 @@ export type Encryptor = {
   readonly delete: () => void
   readonly encrypt: (
     plainText: PlainText,
-    cipherText: CipherText,
+    cipherText?: CipherText,
     pool?: MemoryPoolHandle
   ) => CipherText | undefined
   readonly encryptSymmetric: (
     plainText: PlainText,
-    cipherText: CipherText,
+    cipherText?: CipherText,
     pool?: MemoryPoolHandle
   ) => CipherText | undefined
   readonly encryptSymmetricSerializable: (
@@ -145,7 +145,7 @@ const EncryptorConstructor = (library: Library): EncryptorDependencies => ({
      */
     encrypt(
       plainText: PlainText,
-      cipherText: CipherText,
+      cipherText?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
     ): CipherText | undefined {
       try {
@@ -182,7 +182,7 @@ const EncryptorConstructor = (library: Library): EncryptorDependencies => ({
      */
     encryptSymmetric(
       plainText: PlainText,
-      cipherText: CipherText,
+      cipherText?: CipherText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
     ): CipherText | undefined {
       try {
