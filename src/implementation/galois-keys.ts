@@ -26,6 +26,9 @@ export type GaloisKeys = {
   readonly instance: Instance
   readonly inject: (instance: Instance) => void
   readonly delete: () => void
+  readonly size: number
+  readonly getIndex: (galoisElt: number) => number
+  readonly hasKey: (galoisElt: number) => boolean
   readonly save: (compression?: ComprModeType) => string
   readonly saveArray: (compression?: ComprModeType) => Uint8Array
   readonly load: (context: Context, encoded: string) => void
@@ -95,6 +98,51 @@ const GaloisKeysConstructor = (library: Library): GaloisKeysDependencies => ({
       }
     },
 
+    /**
+     * Returns the current number of keyswitching keys. Only keys that are
+     * non-empty are counted.
+     *
+     * @readonly
+     * @name GaloisKeys#size
+     * @type {number}
+     */
+    get size() {
+      return _instance.size()
+    },
+
+    /**
+     * Returns the index of a Galois key in the backing KSwitchKeys instance that
+     * corresponds to the given Galois element, assuming that it exists in the
+     * backing KSwitchKeys.
+     *
+     * @function
+     * @name GaloisKeys#getIndex
+     * @param {number} galoisElt The Galois element
+     * @returns {number} The index of the galois element
+     */
+    getIndex(galoisElt: number): number {
+      try {
+        return _instance.getIndex(galoisElt)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Returns whether a Galois key corresponding to a given Galois element exists.
+     *
+     * @function
+     * @name GaloisKeys#hasKey
+     * @param {number} galoisElt The Galois element
+     * @returns {boolean} True if the key exists
+     */
+    hasKey(galoisElt: number): boolean {
+      try {
+        return _instance.hasKey(galoisElt)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
     /**
      * Save the Encryption Parameters to a base64 string
      *

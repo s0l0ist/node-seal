@@ -26,6 +26,9 @@ export type RelinKeys = {
   readonly instance: Instance
   readonly inject: (instance: Instance) => void
   readonly delete: () => void
+  readonly size: number
+  readonly getIndex: (keyPower: number) => number
+  readonly hasKey: (keyPower: number) => boolean
   readonly save: (compression?: ComprModeType) => string
   readonly saveArray: (compression?: ComprModeType) => Uint8Array
   readonly load: (context: Context, encoded: string) => void
@@ -92,6 +95,53 @@ const RelinKeysConstructor = (library: Library): RelinKeysDependencies => ({
       if (_instance) {
         _instance.delete()
         _instance = null
+      }
+    },
+
+    /**
+     * Returns the current number of keyswitching keys. Only keys that are
+     * non-empty are counted.
+     *
+     * @readonly
+     * @name RelinKeys#size
+     * @type {number}
+     */
+    get size() {
+      return _instance.size()
+    },
+
+    /**
+     * Returns the index of a relinearization key in the backing KSwitchKeys
+     * instance that corresponds to the given secret key power, assuming that
+     * it exists in the backing KSwitchKeys.
+     *
+     * @function
+     * @name RelinKeys#getIndex
+     * @param {number} keyPower The power of the secret key
+     * @returns {number} The index of the relin key
+     */
+    getIndex(keyPower: number): number {
+      try {
+        return _instance.getIndex(keyPower)
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Returns whether a relinearization key corresponding to a given power of
+     * the secret key exists.
+     *
+     * @function
+     * @name RelinKeys#hasKey
+     * @param {number} keyPower The power of the secret key
+     * @returns {boolean} True if the power exists
+     */
+    hasKey(keyPower: number): boolean {
+      try {
+        return _instance.hasKey(keyPower)
+      } catch (e) {
+        throw Exception.safe(e)
       }
     },
 
