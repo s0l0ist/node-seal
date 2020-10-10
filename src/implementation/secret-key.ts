@@ -26,8 +26,8 @@ export type SecretKey = {
   readonly instance: Instance
   readonly inject: (instance: Instance) => void
   readonly delete: () => void
-  readonly save: (compression: ComprModeType) => string
-  readonly saveArray: (compression: ComprModeType) => Uint8Array
+  readonly save: (compression?: ComprModeType) => string
+  readonly saveArray: (compression?: ComprModeType) => Uint8Array
   readonly load: (context: Context, encoded: string) => void
   readonly loadArray: (context: Context, array: Uint8Array) => void
   readonly copy: (key: SecretKey) => void
@@ -169,7 +169,7 @@ const SecretKeyConstructor = (library: Library): SecretKeyDependencies => ({
      * @param {SecretKey} key SecretKey to copy
      * @example
      * const keyA = keyGenerator.secretKey()
-     * const keyB = Morfix.SecretKey()
+     * const keyB = seal.SecretKey()
      * keyB.copy(keyA)
      * // keyB holds a copy of keyA
      */
@@ -215,7 +215,7 @@ const SecretKeyConstructor = (library: Library): SecretKeyDependencies => ({
      * @param {SecretKey} key SecretKey to move
      * @example
      * const keyA = keyGenerator.secretKey()
-     * const keyB = Morfix.SecretKey()
+     * const keyB = seal.SecretKey()
      * keyB.move(keyA)
      * // keyB holds a the instance of keyA.
      * // keyA no longer holds an instance

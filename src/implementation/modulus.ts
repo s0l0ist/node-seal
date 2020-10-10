@@ -30,8 +30,8 @@ export type Modulus = {
   readonly bitCount: number
   readonly isZero: boolean
   readonly isPrime: boolean
-  readonly save: (compression: ComprModeType) => string
-  readonly saveArray: (compression: ComprModeType) => Uint8Array
+  readonly save: (compression?: ComprModeType) => string
+  readonly saveArray: (compression?: ComprModeType) => Uint8Array
   readonly load: (encoded: string) => void
   readonly loadArray: (array: Uint8Array) => void
 }

@@ -25,8 +25,8 @@ export type Serializable = {
   readonly instance: Instance
   readonly unsafeInject: (instance: Instance) => void
   readonly delete: () => void
-  readonly save: (compression: ComprModeType) => string
-  readonly saveArray: (compression: ComprModeType) => Uint8Array
+  readonly save: (compression?: ComprModeType) => string
+  readonly saveArray: (compression?: ComprModeType) => Uint8Array
 }
 
 const SerializableConstructor = (

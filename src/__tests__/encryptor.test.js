@@ -1,7 +1,7 @@
 // import { Seal, getLibrary } from '../../target/wasm'
 // import { Encryptor } from '../../components'
 
-// let Morfix,
+// let seal,
 //   parms,
 //   context,
 //   keyGenerator,
@@ -10,21 +10,21 @@
 //   decryptor,
 //   EncryptorObject = null
 // beforeAll(async () => {
-//   Morfix = await Seal()
+//   seal = await Seal()
 //   const lib = getLibrary()
-//   EncryptorObject = Encryptor(lib)(Morfix)
+//   EncryptorObject = Encryptor(lib)(seal)
 
-//   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+//   parms = seal.EncryptionParameters(seal.SchemeType.BFV)
 //   parms.setPolyModulusDegree(4096)
 //   parms.setCoeffModulus(
-//     Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
+//     seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
 //   )
-//   parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
-//   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
-//   keyGenerator = Morfix.KeyGenerator(context)
+//   parms.setPlainModulus(seal.PlainModulus.Batching(4096, 20))
+//   context = seal.Context(parms, true, seal.SecurityLevel.tc128)
+//   keyGenerator = seal.KeyGenerator(context)
 //   publicKey = keyGenerator.publicKey()
 //   secretKey = keyGenerator.secretKey()
-//   decryptor = Morfix.Decryptor(context, secretKey)
+//   decryptor = seal.Decryptor(context, secretKey)
 // })
 
 // describe('Encryptor', () => {
@@ -46,14 +46,14 @@
 //     expect(Constructor).toBeCalledWith(context, publicKey, secretKey)
 //   })
 //   test('It should fail to construct an instance', () => {
-//     const newParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+//     const newParms = seal.EncryptionParameters(seal.SchemeType.BFV)
 //     newParms.setPolyModulusDegree(2048)
 //     newParms.setCoeffModulus(
-//       Morfix.CoeffModulus.BFVDefault(2048, Morfix.SecurityLevel.tc128)
+//       seal.CoeffModulus.BFVDefault(2048, seal.SecurityLevel.tc128)
 //     )
-//     newParms.setPlainModulus(Morfix.PlainModulus.Batching(2048, 20))
-//     const newContext = Morfix.Context(newParms)
-//     const newKeyGenerator = Morfix.KeyGenerator(newContext)
+//     newParms.setPlainModulus(seal.PlainModulus.Batching(2048, 20))
+//     const newContext = seal.Context(newParms)
+//     const newKeyGenerator = seal.KeyGenerator(newContext)
 //     const newPublicKey = newKeyGenerator.publicKey()
 
 //     const Constructor = jest.fn(EncryptorObject)
@@ -109,10 +109,10 @@
 //   })
 //   test('It should encrypt a plaintext to a destination cipher', () => {
 //     const item = EncryptorObject(context, publicKey)
-//     const encoder = Morfix.BatchEncoder(context)
+//     const encoder = seal.BatchEncoder(context)
 //     const arr = Int32Array.from({ length: encoder.slotCount }).fill(5)
-//     const plain = Morfix.PlainText()
-//     const cipher = Morfix.CipherText()
+//     const plain = seal.PlainText()
+//     const cipher = seal.CipherText()
 //     encoder.encode(arr, plain)
 //     const spyOn = jest.spyOn(item, 'encrypt')
 //     item.encrypt(plain, cipher)
@@ -123,9 +123,9 @@
 //   })
 //   test('It should encrypt a plaintext and return a cipher', () => {
 //     const item = EncryptorObject(context, publicKey)
-//     const encoder = Morfix.BatchEncoder(context)
+//     const encoder = seal.BatchEncoder(context)
 //     const arr = Int32Array.from({ length: encoder.slotCount }).fill(5)
-//     const plain = Morfix.PlainText()
+//     const plain = seal.PlainText()
 //     encoder.encode(arr, plain)
 //     const spyOn = jest.spyOn(item, 'encrypt')
 //     const cipher = item.encrypt(plain)
@@ -141,10 +141,10 @@
 //   })
 //   test('It should symmetrically encrypt a plaintext to a destination cipher', () => {
 //     const item = EncryptorObject(context, publicKey, secretKey)
-//     const encoder = Morfix.BatchEncoder(context)
+//     const encoder = seal.BatchEncoder(context)
 //     const arr = Int32Array.from({ length: encoder.slotCount }).fill(5)
-//     const plain = Morfix.PlainText()
-//     const cipher = Morfix.CipherText()
+//     const plain = seal.PlainText()
+//     const cipher = seal.CipherText()
 //     encoder.encode(arr, plain)
 //     const spyOn = jest.spyOn(item, 'encryptSymmetric')
 //     item.encryptSymmetric(plain, cipher)
@@ -155,9 +155,9 @@
 //   })
 //   test('It should symmetrically encrypt a plaintext and return a cipher', () => {
 //     const item = EncryptorObject(context, publicKey, secretKey)
-//     const encoder = Morfix.BatchEncoder(context)
+//     const encoder = seal.BatchEncoder(context)
 //     const arr = Int32Array.from({ length: encoder.slotCount }).fill(5)
-//     const plain = Morfix.PlainText()
+//     const plain = seal.PlainText()
 //     encoder.encode(arr, plain)
 //     const spyOn = jest.spyOn(item, 'encryptSymmetric')
 //     const cipher = item.encryptSymmetric(plain)
@@ -167,7 +167,7 @@
 //     expect(cipher).toBeInstanceOf(Object)
 //     expect(cipher.constructor).toBe(Object)
 //     expect(cipher.instance.constructor.name).toBe('Ciphertext')
-//     const cipherTest = Morfix.CipherText()
+//     const cipherTest = seal.CipherText()
 //     cipherTest.load(context, cipher.save())
 //     const plainResult = decryptor.decrypt(cipherTest)
 //     const decoded = encoder.decode(plainResult, true)
@@ -175,9 +175,9 @@
 //   })
 //   test('It should fail to encrypt', () => {
 //     const item = EncryptorObject(context, publicKey)
-//     const encoder = Morfix.BatchEncoder(context)
+//     const encoder = seal.BatchEncoder(context)
 //     const arr = Int32Array.from({ length: encoder.slotCount }).fill(0)
-//     const plain = Morfix.PlainText()
+//     const plain = seal.PlainText()
 //     encoder.encode(arr, plain)
 //     const spyOn = jest.spyOn(item, 'encrypt')
 //     expect(() => item.encrypt()).toThrow()
@@ -185,9 +185,9 @@
 //   })
 //   test('It should fail to symmetrically encrypt', () => {
 //     const item = EncryptorObject(context, publicKey, secretKey)
-//     const encoder = Morfix.BatchEncoder(context)
+//     const encoder = seal.BatchEncoder(context)
 //     const arr = Int32Array.from({ length: encoder.slotCount }).fill(0)
-//     const plain = Morfix.PlainText()
+//     const plain = seal.PlainText()
 //     encoder.encode(arr, plain)
 //     const spyOn = jest.spyOn(item, 'encryptSymmetric')
 //     expect(() => item.encryptSymmetric()).toThrow()
@@ -195,9 +195,9 @@
 //   })
 //   test('It should symmetrically encrypt a plaintext and return a serializable ciphertext', () => {
 //     const item = EncryptorObject(context, publicKey, secretKey)
-//     const encoder = Morfix.BatchEncoder(context)
+//     const encoder = seal.BatchEncoder(context)
 //     const arr = Int32Array.from({ length: encoder.slotCount }).fill(5)
-//     const plain = Morfix.PlainText()
+//     const plain = seal.PlainText()
 //     encoder.encode(arr, plain)
 //     const spyOn = jest.spyOn(item, 'encryptSymmetricSerializable')
 //     const serialized = item.encryptSymmetricSerializable(plain)
@@ -209,7 +209,7 @@
 //     expect(serialized.instance.constructor.name).toBe(
 //       'Serializable$Ciphertext$'
 //     )
-//     const cipher = Morfix.CipherText()
+//     const cipher = seal.CipherText()
 //     cipher.load(context, serialized.save())
 //     const plainResult = decryptor.decrypt(cipher)
 //     const decoded = encoder.decode(plainResult, true)
@@ -217,9 +217,9 @@
 //   })
 //   test('It should fail to symmetrically encrypt and return a serializable ciphertext', () => {
 //     const item = EncryptorObject(context, publicKey, secretKey)
-//     const encoder = Morfix.BatchEncoder(context)
+//     const encoder = seal.BatchEncoder(context)
 //     const arr = Int32Array.from({ length: encoder.slotCount }).fill(0)
-//     const plain = Morfix.PlainText()
+//     const plain = seal.PlainText()
 //     encoder.encode(arr, plain)
 //     const spyOn = jest.spyOn(item, 'encryptSymmetricSerializable')
 //     expect(() => item.encryptSymmetricSerializable()).toThrow()

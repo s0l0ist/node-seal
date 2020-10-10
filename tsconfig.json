@@ -2,10 +2,10 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "declaration": true,
-    "declarationDir": "./src/tsc-out/types",
+    "declarationDir": "./tsc-out/types",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "ES2020",
+    "module": "commonjs",
     "moduleResolution": "node",
     "newLine": "LF",
     "noEmitOnError": true,
@@ -13,7 +13,7 @@
     "noImplicitReturns": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "outDir": "./src/tsc-out",
+    "outDir": "./tsc-out",
     "paths": {
       "seal_*": ["./src/bin/seal_*"]
     },
@@ -23,10 +23,8 @@
     "rootDir": "./src",
     "sourceMap": true,
     "strict": true,
-    "target": "ESNext",
-    "typeRoots": [ 
-      "./src/custom_types",
-      "./node_modules/@types"]
+    "target": "ES2019",
+    "typeRoots": ["./src/custom_types", "./node_modules/@types"]
   },
   "include": ["./src/**/*"],
   "exclude": ["node_modules", "**/tsc-out"]

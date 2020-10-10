@@ -1,7 +1,7 @@
 // import { Seal } from '../../target/wasm'
 // import { EncryptionParameterQualifiers } from '../../components'
 
-// let Morfix = null
+// let seal = null
 // let parms = null
 // let context = null
 // let contextData = null
@@ -13,24 +13,24 @@
 // let EncryptionParameterQualifiersObject = null
 
 // beforeAll(async () => {
-//   Morfix = await Seal()
+//   seal = await Seal()
 //   EncryptionParameterQualifiersObject = EncryptionParameterQualifiers()()
 
-//   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+//   parms = seal.EncryptionParameters(seal.SchemeType.BFV)
 //   parms.setPolyModulusDegree(4096)
 //   parms.setCoeffModulus(
-//     Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
+//     seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
 //   )
-//   parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
-//   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
+//   parms.setPlainModulus(seal.PlainModulus.Batching(4096, 20))
+//   context = seal.Context(parms, true, seal.SecurityLevel.tc128)
 //   contextData = context.firstContextData
 
-//   ckksParms = Morfix.EncryptionParameters(Morfix.SchemeType.CKKS)
+//   ckksParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
 //   ckksParms.setPolyModulusDegree(4096)
 //   ckksParms.setCoeffModulus(
-//     Morfix.CoeffModulus.Create(4096, Int32Array.from([46, 16, 46]))
+//     seal.CoeffModulus.Create(4096, Int32Array.from([46, 16, 46]))
 //   )
-//   ckksContext = Morfix.Context(ckksParms, true, Morfix.SecurityLevel.tc128)
+//   ckksContext = seal.Context(ckksParms, true, seal.SecurityLevel.tc128)
 //   ckksContextData = ckksContext.firstContextData
 // })
 
@@ -167,6 +167,6 @@
 //     const item = EncryptionParameterQualifiersObject(
 //       contextData.qualifiers.instance
 //     )
-//     expect(item.securityLevel).toEqual(Morfix.SecurityLevel.tc128)
+//     expect(item.securityLevel).toEqual(seal.SecurityLevel.tc128)
 //   })
 // })

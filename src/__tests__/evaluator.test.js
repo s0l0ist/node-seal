@@ -1,7 +1,7 @@
 // import { Seal, getLibrary } from '../../target/wasm'
 // import { Evaluator } from '../../components'
 
-// let Morfix = null
+// let seal = null
 // let parms = null
 // let context = null
 // let keyGenerator = null
@@ -29,42 +29,42 @@
 
 // let EvaluatorObject = null
 // beforeAll(async () => {
-//   Morfix = await Seal()
+//   seal = await Seal()
 //   const lib = getLibrary()
-//   EvaluatorObject = Evaluator(lib)(Morfix)
+//   EvaluatorObject = Evaluator(lib)(seal)
 
-//   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+//   parms = seal.EncryptionParameters(seal.SchemeType.BFV)
 //   parms.setPolyModulusDegree(4096)
 //   parms.setCoeffModulus(
-//     Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
+//     seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
 //   )
-//   parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
-//   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
-//   keyGenerator = Morfix.KeyGenerator(context)
-//   encoder = Morfix.BatchEncoder(context)
+//   parms.setPlainModulus(seal.PlainModulus.Batching(4096, 20))
+//   context = seal.Context(parms, true, seal.SecurityLevel.tc128)
+//   keyGenerator = seal.KeyGenerator(context)
+//   encoder = seal.BatchEncoder(context)
 //   publicKey = keyGenerator.publicKey()
 //   secretKey = keyGenerator.secretKey()
 //   relinKeys = keyGenerator.relinKeysLocal()
 //   galoisKeys = keyGenerator.galoisKeysLocal(
 //     Int32Array.from([1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0])
 //   )
-//   encryptor = Morfix.Encryptor(context, publicKey)
-//   decryptor = Morfix.Decryptor(context, secretKey)
+//   encryptor = seal.Encryptor(context, publicKey)
+//   decryptor = seal.Decryptor(context, secretKey)
 
-//   ckksParms = Morfix.EncryptionParameters(Morfix.SchemeType.CKKS)
+//   ckksParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
 //   ckksParms.setPolyModulusDegree(4096)
 //   ckksParms.setCoeffModulus(
-//     Morfix.CoeffModulus.Create(4096, Int32Array.from([46, 16, 46]))
+//     seal.CoeffModulus.Create(4096, Int32Array.from([46, 16, 46]))
 //   )
-//   ckksContext = Morfix.Context(ckksParms, true, Morfix.SecurityLevel.tc128)
-//   ckksKeyGenerator = Morfix.KeyGenerator(ckksContext)
-//   ckksEncoder = Morfix.CKKSEncoder(ckksContext)
+//   ckksContext = seal.Context(ckksParms, true, seal.SecurityLevel.tc128)
+//   ckksKeyGenerator = seal.KeyGenerator(ckksContext)
+//   ckksEncoder = seal.CKKSEncoder(ckksContext)
 //   ckksPublicKey = ckksKeyGenerator.publicKey()
 //   ckksSecretKey = ckksKeyGenerator.secretKey()
 //   ckksRelinKeys = ckksKeyGenerator.relinKeysLocal()
 //   ckksGaloisKeys = ckksKeyGenerator.galoisKeysLocal()
-//   ckksEncryptor = Morfix.Encryptor(ckksContext, ckksPublicKey)
-//   ckksDecryptor = Morfix.Decryptor(ckksContext, ckksSecretKey)
+//   ckksEncryptor = seal.Encryptor(ckksContext, ckksPublicKey)
+//   ckksDecryptor = seal.Decryptor(ckksContext, ckksSecretKey)
 
 //   const arr2 = Float64Array.from({ length: ckksEncoder.slotCount / 2 }).map(
 //     (x, i) => 5
@@ -75,7 +75,7 @@
 
 // describe('Evaluator', () => {
 //   test('It should be a factory', () => {
-//     expect(Morfix).toHaveProperty('Evaluator')
+//     expect(seal).toHaveProperty('Evaluator')
 //     expect(EvaluatorObject).toBeDefined()
 //     expect(typeof EvaluatorObject.constructor).toBe('function')
 //     expect(EvaluatorObject).toBeInstanceOf(Object)
@@ -89,15 +89,15 @@
 //     expect(Constructor).toBeCalledWith(context)
 //   })
 //   test('It should fail to construct an instance', () => {
-//     const newParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+//     const newParms = seal.EncryptionParameters(seal.SchemeType.BFV)
 //     newParms.setPolyModulusDegree(4096)
 //     newParms.setCoeffModulus(
-//       Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
+//       seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
 //     )
-//     const newContext = Morfix.Context(
+//     const newContext = seal.Context(
 //       newParms,
 //       true,
-//       Morfix.SecurityLevel.tc128
+//       seal.SecurityLevel.tc128
 //     )
 //     const Constructor = jest.fn(EvaluatorObject)
 //     expect(() => Constructor(newContext)).toThrow()
@@ -178,7 +178,7 @@
 //   // Negate
 //   test('It should fail to negate a cipher', () => {
 //     const item = EvaluatorObject(context)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'negate')
 //     expect(() => item.negate(invalidCkksCipher, cipherDest)).toThrow()
 //     expect(spyOn).toHaveBeenCalledWith(invalidCkksCipher, cipherDest)
@@ -188,7 +188,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'negate')
 //     item.negate(cipher, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
@@ -218,7 +218,7 @@
 //     const arr = BigInt64Array.from(Array.from({ length: encoder.slotCount }).map((x, i) => BigInt(-i)))
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'negate')
 //     item.negate(cipher, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
@@ -248,7 +248,7 @@
 //     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => 5)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'negate')
 //     item.negate(cipher, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
@@ -278,7 +278,7 @@
 //     const arr = BigUint64Array.from(Array.from({ length: encoder.slotCount }).map((x, i) => 5n))
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'negate')
 //     item.negate(cipher, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
@@ -310,7 +310,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'negate')
 //     item.negate(cipher, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
@@ -344,7 +344,7 @@
 //   // Add
 //   test('It should fail to add ciphers', () => {
 //     const item = EvaluatorObject(context)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'add')
 //     expect(() => item.add(invalidCkksCipher, cipherDest)).toThrow()
 //     expect(spyOn).toHaveBeenCalledWith(invalidCkksCipher, cipherDest)
@@ -354,7 +354,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'add')
 //     item.add(cipher, cipher, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipher, cipherDest)
@@ -384,7 +384,7 @@
 //     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => i)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'add')
 //     item.add(cipher, cipher, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipher, cipherDest)
@@ -416,7 +416,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'add')
 //     item.add(cipher, cipher, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipher, cipherDest)
@@ -450,7 +450,7 @@
 //   // Sub
 //   test('It should fail to sub ciphers', () => {
 //     const item = EvaluatorObject(context)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'sub')
 //     expect(() => item.sub(invalidCkksCipher, cipherDest)).toThrow()
 //     expect(spyOn).toHaveBeenCalledWith(invalidCkksCipher, cipherDest)
@@ -465,7 +465,7 @@
 //     const plain2 = encoder.encode(arr2)
 //     const cipher = encryptor.encrypt(plain)
 //     const cipher2 = encryptor.encrypt(plain2)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'sub')
 //     item.sub(cipher, cipher2, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipher2, cipherDest)
@@ -507,7 +507,7 @@
 //     const plain2 = encoder.encode(arr2)
 //     const cipher = encryptor.encrypt(plain)
 //     const cipher2 = encryptor.encrypt(plain2)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'sub')
 //     item.sub(cipher, cipher2, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipher2, cipherDest)
@@ -551,7 +551,7 @@
 //     const plain2 = ckksEncoder.encode(arr2, Math.pow(2, 20))
 //     const cipher = ckksEncryptor.encrypt(plain)
 //     const cipher2 = ckksEncryptor.encrypt(plain2)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'sub')
 //     item.sub(cipher, cipher2, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipher2, cipherDest)
@@ -590,7 +590,7 @@
 //   // Multiply
 //   test('It should fail to multiply ciphers', () => {
 //     const item = EvaluatorObject(context)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'multiply')
 //     expect(() =>
 //       item.multiply(invalidCkksCipher, cipherDest, invalidCkksCipher)
@@ -606,7 +606,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'multiply')
 //     item.multiply(cipher, cipher, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipher, cipherDest)
@@ -639,7 +639,7 @@
 //     )
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'multiply')
 //     item.multiply(cipher, cipher, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipher, cipherDest)
@@ -673,7 +673,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'multiply')
 //     item.multiply(cipher, cipher, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipher, cipherDest)
@@ -707,7 +707,7 @@
 //   // Square
 //   test('It should fail to square ciphers', () => {
 //     const item = EvaluatorObject(context)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'square')
 //     expect(() => item.square(invalidCkksCipher, cipherDest)).toThrow()
 //     expect(spyOn).toHaveBeenCalledWith(invalidCkksCipher, cipherDest)
@@ -717,7 +717,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'square')
 //     item.square(cipher, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
@@ -749,7 +749,7 @@
 //     )
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'square')
 //     item.square(cipher, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
@@ -783,7 +783,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'square')
 //     item.square(cipher, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
@@ -817,7 +817,7 @@
 //   // Relinearize
 //   test('It should fail to relinearize a cipher', () => {
 //     const item = EvaluatorObject(context)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'relinearize')
 //     expect(() =>
 //       item.relinearize(invalidCkksCipher, relinKeys, cipherDest)
@@ -829,7 +829,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'relinearize')
 //     item.square(cipher, cipherDest)
 //     item.relinearize(cipherDest, relinKeys, cipherDest)
@@ -863,7 +863,7 @@
 //     )
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     item.square(cipher, cipherDest)
 //     const spyOn = jest.spyOn(item, 'relinearize')
 //     item.relinearize(cipherDest, relinKeys, cipherDest)
@@ -899,7 +899,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     item.square(cipher, cipherDest)
 //     const spyOn = jest.spyOn(item, 'relinearize')
 //     item.relinearize(cipherDest, ckksRelinKeys, cipherDest)
@@ -935,7 +935,7 @@
 //   // CipherModSwitchToNext
 //   test('It should fail to cipherModSwitchToNext a cipher', () => {
 //     const item = EvaluatorObject(context)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'cipherModSwitchToNext')
 //     expect(() =>
 //       item.cipherModSwitchToNext(invalidCkksCipher, cipherDest)
@@ -947,7 +947,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'cipherModSwitchToNext')
 //     item.cipherModSwitchToNext(cipher, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
@@ -979,7 +979,7 @@
 //     )
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'cipherModSwitchToNext')
 //     item.cipherModSwitchToNext(cipher, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
@@ -1013,7 +1013,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'cipherModSwitchToNext')
 //     item.cipherModSwitchToNext(cipher, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
@@ -1047,7 +1047,7 @@
 //   // cipherModSwitchTo
 //   test('It should fail to cipherModSwitchTo a cipher', () => {
 //     const item = EvaluatorObject(context)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const parmsId = context.lastParmsId
 
 //     const spyOn = jest.spyOn(item, 'cipherModSwitchTo')
@@ -1061,7 +1061,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const parmsId = context.lastParmsId
 //     const spyOn = jest.spyOn(item, 'cipherModSwitchTo')
 //     item.cipherModSwitchTo(cipher, parmsId, cipherDest)
@@ -1095,7 +1095,7 @@
 //     )
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const parmsId = context.lastParmsId
 //     const spyOn = jest.spyOn(item, 'cipherModSwitchTo')
 //     item.cipherModSwitchTo(cipher, parmsId, cipherDest)
@@ -1131,7 +1131,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const parmsId = ckksContext.lastParmsId
 //     const spyOn = jest.spyOn(item, 'cipherModSwitchTo')
 //     item.cipherModSwitchTo(cipher, parmsId, cipherDest)
@@ -1169,7 +1169,7 @@
 //     const item = EvaluatorObject(context)
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
 //     const plain = encoder.encode(arr)
-//     const plainDest = Morfix.PlainText()
+//     const plainDest = seal.PlainText()
 //     const parmsId = context.firstParmsId
 //     item.plainTransformToNtt(plain, parmsId, plain)
 //     const spyOn = jest.spyOn(item, 'plainModSwitchToNext')
@@ -1182,7 +1182,7 @@
 //     const item = EvaluatorObject(context)
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
 //     const plain = encoder.encode(arr)
-//     const plainDest = Morfix.PlainText()
+//     const plainDest = seal.PlainText()
 //     const parmsId = context.firstParmsId
 //     item.plainTransformToNtt(plain, parmsId, plain)
 //     const spyOn = jest.spyOn(item, 'plainModSwitchToNext')
@@ -1210,7 +1210,7 @@
 //       (x, i) => 10
 //     )
 //     const plain = encoder.encode(arr)
-//     const plainDest = Morfix.PlainText()
+//     const plainDest = seal.PlainText()
 //     const parmsId = context.firstParmsId
 //     item.plainTransformToNtt(plain, parmsId, plain)
 //     const spyOn = jest.spyOn(item, 'plainModSwitchToNext')
@@ -1240,7 +1240,7 @@
 //       (x, i) => 6
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
-//     const plainDest = Morfix.PlainText()
+//     const plainDest = seal.PlainText()
 //     const spyOn = jest.spyOn(item, 'plainModSwitchToNext')
 //     item.plainModSwitchToNext(plain, plainDest)
 //     expect(spyOn).toHaveBeenCalledWith(plain, plainDest)
@@ -1273,7 +1273,7 @@
 //     const item = EvaluatorObject(context)
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
 //     const plain = encoder.encode(arr)
-//     const plainDest = Morfix.PlainText()
+//     const plainDest = seal.PlainText()
 //     const parmsId = context.firstParmsId
 //     item.plainTransformToNtt(plain, parmsId, plain)
 //     const spyOn = jest.spyOn(item, 'plainModSwitchTo')
@@ -1313,7 +1313,7 @@
 //       (x, i) => 10
 //     )
 //     const plain = encoder.encode(arr)
-//     const plainDest = Morfix.PlainText()
+//     const plainDest = seal.PlainText()
 //     const parmsId = context.firstParmsId
 //     item.plainTransformToNtt(plain, parmsId, plain)
 //     const spyOn = jest.spyOn(item, 'plainModSwitchTo')
@@ -1343,7 +1343,7 @@
 //       (x, i) => 6
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
-//     const plainDest = Morfix.PlainText()
+//     const plainDest = seal.PlainText()
 //     const parmsId = ckksContext.lastParmsId
 //     const spyOn = jest.spyOn(item, 'plainModSwitchTo')
 //     item.plainModSwitchTo(plain, parmsId, plainDest)
@@ -1376,7 +1376,7 @@
 //   // rescaleToNext
 //   test('It should fail to rescaleToNext a cipher', () => {
 //     const item = EvaluatorObject(context)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'rescaleToNext')
 //     expect(() => item.rescaleToNext(invalidCkksCipher, cipherDest)).toThrow()
 //     expect(spyOn).toHaveBeenCalledWith(invalidCkksCipher, cipherDest)
@@ -1386,7 +1386,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'rescaleToNext')
 //     expect(() => item.rescaleToNext(cipher, cipherDest)).toThrow()
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
@@ -1399,7 +1399,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 35))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'rescaleToNext')
 //     item.rescaleToNext(cipher, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
@@ -1436,7 +1436,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const parmsId = context.firstParmsId
 //     const spyOn = jest.spyOn(item, 'rescaleTo')
 //     expect(() => item.rescaleTo(cipher, parmsId, cipherDest)).toThrow()
@@ -1450,7 +1450,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 35))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const parmsId = ckksContext.firstParmsId
 //     const spyOn = jest.spyOn(item, 'rescaleTo')
 //     item.rescaleTo(cipher, parmsId, cipherDest)
@@ -1486,7 +1486,7 @@
 //   // Exponentiate
 //   test('It should fail to exponentiate a cipher', () => {
 //     const item = EvaluatorObject(context)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'exponentiate')
 //     expect(() =>
 //       item.exponentiate(invalidCkksCipher, 2, relinKeys, cipherDest)
@@ -1503,7 +1503,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'exponentiate')
 //     item.exponentiate(cipher, 2, relinKeys, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, 2, relinKeys, cipherDest)
@@ -1535,7 +1535,7 @@
 //     )
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'exponentiate')
 //     item.exponentiate(cipher, 2, relinKeys, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, 2, relinKeys, cipherDest)
@@ -1569,7 +1569,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'exponentiate')
 //     expect(() =>
 //       item.exponentiate(cipher, 2, ckksRelinKeys, cipherDest)
@@ -1582,7 +1582,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'addPlain')
 //     expect(() => item.addPlain(cipher, invalidCkksPlain, cipherDest)).toThrow()
 //     expect(spyOn).toHaveBeenCalledWith(cipher, invalidCkksPlain, cipherDest)
@@ -1592,7 +1592,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'addPlain')
 //     item.addPlain(cipher, plain, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, plain, cipherDest)
@@ -1622,7 +1622,7 @@
 //     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => i)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'addPlain')
 //     item.addPlain(cipher, plain, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, plain, cipherDest)
@@ -1654,7 +1654,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'addPlain')
 //     item.addPlain(cipher, plain, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, plain, cipherDest)
@@ -1691,7 +1691,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'subPlain')
 //     expect(() => item.subPlain(cipher, invalidCkksPlain, cipherDest)).toThrow()
 //     expect(spyOn).toHaveBeenCalledWith(cipher, invalidCkksPlain, cipherDest)
@@ -1705,7 +1705,7 @@
 //     const plain = encoder.encode(arr)
 //     const plain2 = encoder.encode(arr2)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'subPlain')
 //     item.subPlain(cipher, plain2, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, plain2, cipherDest)
@@ -1745,7 +1745,7 @@
 //     const plain = encoder.encode(arr)
 //     const plain2 = encoder.encode(arr2)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'subPlain')
 //     item.subPlain(cipher, plain2, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, plain2, cipherDest)
@@ -1787,7 +1787,7 @@
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
 //     const plain2 = ckksEncoder.encode(arr2, Math.pow(2, 20))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'subPlain')
 //     item.subPlain(cipher, plain2, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, plain2, cipherDest)
@@ -1828,7 +1828,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -i)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'multiplyPlain')
 //     expect(() =>
 //       item.multiplyPlain(cipher, invalidCkksPlain, cipherDest)
@@ -1840,7 +1840,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'multiplyPlain')
 //     item.multiplyPlain(cipher, plain, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, plain, cipherDest)
@@ -1872,7 +1872,7 @@
 //     )
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'multiplyPlain')
 //     item.multiplyPlain(cipher, plain, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, plain, cipherDest)
@@ -1906,7 +1906,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'multiplyPlain')
 //     item.multiplyPlain(cipher, plain, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, plain, cipherDest)
@@ -1942,7 +1942,7 @@
 //     const item = EvaluatorObject(context)
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => -5)
 //     const plain = encoder.encode(arr)
-//     const plainDest = Morfix.PlainText()
+//     const plainDest = seal.PlainText()
 //     const parmsId = context.firstParmsId
 //     item.plainTransformToNtt(plain, parmsId, plain)
 //     const spyOn = jest.spyOn(item, 'plainTransformToNtt')
@@ -2152,7 +2152,7 @@
 //   // applyGalois
 //   test('It should fail to applyGalois on a cipher', () => {
 //     const item = EvaluatorObject(context)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const galElt = 2 * parms.polyModulusDegree - 1
 //     const spyOn = jest.spyOn(item, 'applyGalois')
 //     expect(() =>
@@ -2170,7 +2170,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => i)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const galElt = 2 * parms.polyModulusDegree - 1
 //     const spyOn = jest.spyOn(item, 'applyGalois')
 //     item.applyGalois(cipher, galElt, galoisKeys, cipherDest)
@@ -2196,7 +2196,7 @@
 //     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => i)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const galElt = 2 * parms.polyModulusDegree - 1
 //     const spyOn = jest.spyOn(item, 'applyGalois')
 //     item.applyGalois(cipher, galElt, galoisKeys, cipherDest)
@@ -2224,7 +2224,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const galElt = 2 * parms.polyModulusDegree - 1
 //     const spyOn = jest.spyOn(item, 'applyGalois')
 //     item.applyGalois(cipher, galElt, ckksGaloisKeys, cipherDest)
@@ -2258,7 +2258,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => i)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'rotateRows')
 //     item.rotateRows(cipher, 5, galoisKeys, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, 5, galoisKeys, cipherDest)
@@ -2282,7 +2282,7 @@
 //     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => i)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'rotateRows')
 //     item.rotateRows(cipher, 5, galoisKeys, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, 5, galoisKeys, cipherDest)
@@ -2308,7 +2308,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'rotateRows')
 //     expect(() =>
 //       item.rotateRows(cipher, 5, ckksGaloisKeys, cipherDest)
@@ -2321,7 +2321,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => i)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'rotateColumns')
 //     item.rotateColumns(cipher, galoisKeys, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, galoisKeys, cipherDest)
@@ -2345,7 +2345,7 @@
 //     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => i)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'rotateColumns')
 //     item.rotateColumns(cipher, galoisKeys, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, galoisKeys, cipherDest)
@@ -2371,7 +2371,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'rotateColumns')
 //     expect(() =>
 //       item.rotateColumns(cipher, ckksGaloisKeys, cipherDest)
@@ -2384,7 +2384,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => i)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'rotateVector')
 //     expect(() => item.rotateVector(cipher, 5, galoisKeys, cipherDest)).toThrow()
 //     expect(spyOn).toHaveBeenCalledWith(cipher, 5, galoisKeys, cipherDest)
@@ -2396,7 +2396,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'rotateVector')
 //     item.rotateVector(cipher, 5, ckksGaloisKeys, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, 5, ckksGaloisKeys, cipherDest)
@@ -2423,7 +2423,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => i)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'complexConjugate')
 //     expect(() =>
 //       item.complexConjugate(cipher, galoisKeys, cipherDest)
@@ -2437,7 +2437,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'complexConjugate')
 //     item.complexConjugate(cipher, ckksGaloisKeys, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, ckksGaloisKeys, cipherDest)
@@ -2461,7 +2461,7 @@
 //   // sumElements
 //   test('It should fail to sumElements on a cipher', () => {
 //     const item = EvaluatorObject(context)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'sumElements')
 //     expect(() =>
 //       item.sumElements(invalidCkksCipher, galoisKeys, parms.scheme, cipherDest)
@@ -2478,7 +2478,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => 5)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'sumElements')
 //     item.sumElements(cipher, galoisKeys, parms.scheme, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(
@@ -2515,7 +2515,7 @@
 //     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => 5)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'sumElements')
 //     item.sumElements(cipher, galoisKeys, parms.scheme, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(
@@ -2554,7 +2554,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 27))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'sumElements')
 //     item.sumElements(cipher, ckksGaloisKeys, ckksParms.scheme, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(
@@ -2587,7 +2587,7 @@
 //   // dotProduct
 //   test('It should fail to dotProduct two ciphers', () => {
 //     const item = EvaluatorObject(context)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'dotProduct')
 //     expect(() =>
 //       item.dotProduct(
@@ -2614,7 +2614,7 @@
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
 //     const cipher2 = cipher.clone()
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'dotProduct')
 //     item.dotProduct(
 //       cipher,
@@ -2674,7 +2674,7 @@
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
 //     const cipher2 = cipher.clone()
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'dotProduct')
 //     item.dotProduct(
 //       cipher,
@@ -2736,7 +2736,7 @@
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
 //     const cipher = ckksEncryptor.encrypt(plain)
 //     const cipher2 = cipher.clone()
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'dotProduct')
 //     item.dotProduct(
 //       cipher,
@@ -2791,7 +2791,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
 //     const item = EvaluatorObject(context)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'dotProductPlain')
 //     expect(() =>
 //       item.dotProductPlain(
@@ -2815,7 +2815,7 @@
 //     const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => 5)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'dotProductPlain')
 //     item.dotProductPlain(cipher, plain, galoisKeys, parms.scheme, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(
@@ -2858,7 +2858,7 @@
 //     const arr = Uint32Array.from({ length: encoder.slotCount }).map((x, i) => 5)
 //     const plain = encoder.encode(arr)
 //     const cipher = encryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'dotProductPlain')
 //     item.dotProductPlain(cipher, plain, galoisKeys, parms.scheme, cipherDest)
 //     expect(spyOn).toHaveBeenCalledWith(
@@ -2903,7 +2903,7 @@
 //     )
 //     const plain = ckksEncoder.encode(arr, Math.pow(2, 20))
 //     const cipher = ckksEncryptor.encrypt(plain)
-//     const cipherDest = Morfix.CipherText()
+//     const cipherDest = seal.CipherText()
 //     const spyOn = jest.spyOn(item, 'dotProductPlain')
 //     item.dotProductPlain(
 //       cipher,

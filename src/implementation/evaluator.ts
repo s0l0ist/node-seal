@@ -266,11 +266,11 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {CipherText} [destination] CipherText to store the negated results
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const cipherText = Morfix.CipherText()
+     * const cipherText = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.negate(cipherText)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.negate(encrypted, cipherDest)
      */
     negate(
@@ -301,12 +301,12 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {CipherText} [destination] CipherText destination to store the sum
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const cipherTextA = Morfix.CipherText()
-     * const cipherTextB = Morfix.CipherText()
+     * const cipherTextA = seal.CipherText()
+     * const cipherTextB = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.add(cipherTextA, cipherTextB)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.add(cipherTextA, cipherTextB, cipherDest)
      */
     add(
@@ -338,12 +338,12 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {CipherText} [destination] CipherText destination to store the difference
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const cipherTextA = Morfix.CipherText()
-     * const cipherTextB = Morfix.CipherText()
+     * const cipherTextA = seal.CipherText()
+     * const cipherTextB = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.sub(cipherTextA, cipherTextB)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.sub(cipherTextA, cipherTextB, cipherDest)
      */
     sub(
@@ -378,12 +378,12 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const cipherTextA = Morfix.CipherText()
-     * const cipherTextB = Morfix.CipherText()
+     * const cipherTextA = seal.CipherText()
+     * const cipherTextB = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.multiply(cipherTextA, cipherTextB)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.multiply(cipherTextA, cipherTextB, cipherDest)
      */
     multiply(
@@ -418,11 +418,11 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const cipherTextA = Morfix.CipherText()
+     * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.square(cipherTextA, cipherTextB)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.square(cipherTextA, cipherDest)
      */
     square(
@@ -459,11 +459,11 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
      * const relinKeys = keyGenerator.relinKeys()
-     * const cipherTextA = Morfix.CipherText()
+     * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.relinearize(cipherTextA, relinKeys)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.relinearize(cipherTextA, relinKeys, cipherDest)
      */
     relinearize(
@@ -508,11 +508,11 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const cipherTextA = Morfix.CipherText()
+     * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.cipherModSwitchToNext(cipherTextA)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.cipherModSwitchToNext(cipherTextA, cipherDest)
      */
     cipherModSwitchToNext(
@@ -551,13 +551,13 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const context = Morfix.Context(encParms, true)
-     * const cipherTextA = Morfix.CipherText()
+     * const context = seal.Context(encParms, true)
+     * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
      * const parmsId = context.lastParmsId
      * const resultCipher = evaluator.cipherModSwitchTo(cipherTextA, parmsId)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.cipherModSwitchTo(cipherTextA, parmsId, cipherDest)
      */
     cipherModSwitchTo(
@@ -599,11 +599,11 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {PlainText} [destination] PlainText destination to store the switched result
      * @returns {PlainText|undefined} PlainText containing the result or undefined if a destination was supplied
      * @example
-     * const plainTextA = Morfix.PlainText()
+     * const plainTextA = seal.PlainText()
      * // ... after encoding some data ...
      * const resultCipher = evaluator.plainModSwitchToNext(plainTextA)
      * // or
-     * const plainDest = Morfix.PlainText()
+     * const plainDest = seal.PlainText()
      * evaluator.plainModSwitchToNext(plainTextA, plainDest)
      */
     plainModSwitchToNext(
@@ -635,13 +635,13 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {PlainText} [destination] PlainText destination to store the switched result
      * @returns {PlainText|undefined} PlainText containing the result or undefined if a destination was supplied
      * @example
-     * const context = Morfix.Context(encParms, true)
-     * const plainTextA = Morfix.PlainText()
+     * const context = seal.Context(encParms, true)
+     * const plainTextA = seal.PlainText()
      * // ... after encoding some data ...
      * const parmsId = context.lastParmsId
      * const resultCipher = evaluator.plainModSwitchTo(plainTextA, parmsId)
      * // or
-     * const plainDest = Morfix.PlainText()
+     * const plainDest = seal.PlainText()
      * evaluator.plainModSwitchTo(plainTextA, parmsId, plainDest)
      */
     plainModSwitchTo(
@@ -684,11 +684,11 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const cipherTextA = Morfix.CipherText()
+     * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.rescaleToNext(cipherTextA)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.rescaleToNext(cipherTextA, cipherDest)
      */
     rescaleToNext(
@@ -728,13 +728,13 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const context = Morfix.Context(encParms, true)
-     * const cipherTextA = Morfix.CipherText()
+     * const context = seal.Context(encParms, true)
+     * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
      * const parmsId = context.lastParmsId
      * const resultCipher = evaluator.rescaleTo(cipherTextA, parmsId)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.rescaleTo(cipherTextA, parmsId, cipherDest)
      */
     rescaleTo(
@@ -784,11 +784,11 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
      * const relinKeys = keyGenerator.relinKeys()
-     * const cipherTextA = Morfix.CipherText()
+     * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.exponentiate(cipherTextA, 3, relinKeys)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.exponentiate(cipherTextA, 3, relinKeys, cipherDest)
      */
     exponentiate(
@@ -835,12 +835,12 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {CipherText} [destination] CipherText destination to store the sum
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const cipherTextA = Morfix.CipherText()
-     * const plainTextB = Morfix.PlainText()
+     * const cipherTextA = seal.CipherText()
+     * const plainTextB = seal.PlainText()
      * // ... after encrypting/encoding some data ...
      * const resultCipher = evaluator.addPlain(cipherTextA, plainTextB)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.addPlain(cipherTextA, plainTextB, cipherDest)
      */
     addPlain(
@@ -877,12 +877,12 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {CipherText} [destination] CipherText destination to store the difference
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const cipherTextA = Morfix.CipherText()
-     * const plainTextB = Morfix.PlainText()
+     * const cipherTextA = seal.CipherText()
+     * const plainTextB = seal.PlainText()
      * // ... after encrypting/encoding some data ...
      * const resultCipher = evaluator.subPlain(cipherTextA, plainTextB)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.subPlain(cipherTextA, plainTextB, cipherDest)
      */
     subPlain(
@@ -922,12 +922,12 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText?} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const cipherTextA = Morfix.CipherText()
-     * const plainTextB = Morfix.PlainText()
+     * const cipherTextA = seal.CipherText()
+     * const plainTextB = seal.PlainText()
      * // ... after encrypting/encoding some data ...
      * const resultCipher = evaluator.multiplyPlain(cipherTextA, plainTextB)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.multiplyPlain(cipherTextA, plainTextB, cipherDest)
      */
     multiplyPlain(
@@ -980,13 +980,13 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {PlainText|undefined} PlainText containing the result or undefined if a destination was supplied
      * @example
-     * const context = Morfix.Context(encParms, true)
-     * const plainTextA = Morfix.PlainText()
+     * const context = seal.Context(encParms, true)
+     * const plainTextA = seal.PlainText()
      * // ... after encoding some data ...
      * const parmsId = context.lastParmsId
      * const resultCipher = evaluator.plainTransformToNtt(plainTextA, parmsId)
      * // or
-     * const plainDest = Morfix.PlainText()
+     * const plainDest = seal.PlainText()
      * evaluator.plainTransformToNtt(plainTextA, parmsId, plainDest)
      */
     plainTransformToNtt(
@@ -1029,11 +1029,11 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {CipherText} [destinationNtt] CipherText destination to store the transformed result
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
-     * const cipherTextA = Morfix.CipherText()
+     * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.cipherTransformToNtt(cipherTextA)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.cipherTransformToNtt(cipherTextA, cipherDest)
      */
     cipherTransformToNtt(
@@ -1070,7 +1070,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * // ... after cipherTransformToNtt ...
      * const resultCipher = evaluator.cipherTransformFromNtt(cipherTextANtt)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.cipherTransformFromNtt(cipherTextANtt, cipherDest)
      */
     cipherTransformFromNtt(
@@ -1119,11 +1119,11 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
      * ...
-     * const evaluator = Morfix.Evaluator(context)
+     * const evaluator = seal.Evaluator(context)
      * const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => i)
      * const plain = encoder.encode(arr)
      * const cipher = encryptor.encrypt(plain)
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * const galElt = 2 * parms.polyModulusDegree - 1
      * evaluator.applyGalois(cipher, galElt, galoisKeys, cipherDest)
      */
@@ -1179,11 +1179,11 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
      * const galoisKeys = keyGenerator.galoisKeys()
-     * const cipherTextA = Morfix.CipherText()
+     * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.rotateRows(cipherTextA, 3, galoisKeys)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.rotateRows(cipherTextA, 3, galoisKeys, cipherDest)
      */
     rotateRows(
@@ -1236,11 +1236,11 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
      * const galoisKeys = keyGenerator.galoisKeys()
-     * const cipherTextA = Morfix.CipherText()
+     * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.rotateColumns(cipherTextA, galoisKeys)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.rotateColumns(cipherTextA, galoisKeys, cipherDest)
      */
     rotateColumns(
@@ -1291,11 +1291,11 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
      * const galoisKeys = keyGenerator.galoisKeys()
-     * const cipherTextA = Morfix.CipherText()
+     * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.rotateVector(cipherTextA, 3, galoisKeys)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.rotateVector(cipherTextA, 3, galoisKeys, cipherDest)
      */
     rotateVector(
@@ -1346,11 +1346,11 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
      * const galoisKeys = keyGenerator.galoisKeys()
-     * const cipherTextA = Morfix.CipherText()
+     * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.complexConjugate(cipherTextA, galoisKeys)
      * // or
-     * const cipherDest = Morfix.CipherText()
+     * const cipherDest = seal.CipherText()
      * evaluator.complexConjugate(cipherTextA, galoisKeys, cipherDest)
      */
     complexConjugate(
@@ -1395,12 +1395,12 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
      * const galoisKeys = keyGenerator.galoisKeys()
-     * const cipherTextA = Morfix.CipherText()
+     * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
-     * const resultCipher = evaluator.sumElements(cipherTextA, galoisKeys, Morfix.SchemeTypes.BFV)
+     * const resultCipher = evaluator.sumElements(cipherTextA, galoisKeys, seal.SchemeTypes.BFV)
      * // or
-     * const cipherDest = Morfix.CipherText()
-     * evaluator.sumElements(cipherTextA, galoisKeys, Morfix.SchemeTypes.BFV, cipherDest)
+     * const cipherDest = seal.CipherText()
+     * evaluator.sumElements(cipherTextA, galoisKeys, seal.SchemeTypes.BFV, cipherDest)
      */
     sumElements(
       encrypted: CipherText,
@@ -1452,13 +1452,13 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @example
      * const relinKeys = keyGenerator.relinKeys()
      * const galoisKeys = keyGenerator.galoisKeys()
-     * const cipherTextA = Morfix.CipherText()
-     * const cipherTextB = Morfix.CipherText()
+     * const cipherTextA = seal.CipherText()
+     * const cipherTextB = seal.CipherText()
      * // ... after encrypting some data ...
-     * const resultCipher = evaluator.dotProduct(cipherTextA, cipherTextB, relinKeys, galoisKeys, Morfix.SchemeTypes.BFV)
+     * const resultCipher = evaluator.dotProduct(cipherTextA, cipherTextB, relinKeys, galoisKeys, seal.SchemeTypes.BFV)
      * // or
-     * const cipherDest = Morfix.CipherText()
-     * evaluator.dotProduct(cipherTextA, cipherTextB, relinKeys, galoisKeys, Morfix.SchemeTypes.BFV, cipherDest)
+     * const cipherDest = seal.CipherText()
+     * evaluator.dotProduct(cipherTextA, cipherTextB, relinKeys, galoisKeys, seal.SchemeTypes.BFV, cipherDest)
      */
     dotProduct(
       a: CipherText,
@@ -1524,13 +1524,13 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @returns {CipherText|undefined} CipherText containing the result or undefined if a destination was supplied
      * @example
      * const galoisKeys = keyGenerator.galoisKeys()
-     * const cipherTextA = Morfix.CipherText()
-     * const plainTextB = Morfix.PlainText()
+     * const cipherTextA = seal.CipherText()
+     * const plainTextB = seal.PlainText()
      * // ... after encoding / encrypting some data ...
-     * const resultCipher = evaluator.dotProductPlain(cipherTextA, plainTextB, galoisKeys, Morfix.SchemeTypes.BFV)
+     * const resultCipher = evaluator.dotProductPlain(cipherTextA, plainTextB, galoisKeys, seal.SchemeTypes.BFV)
      * // or
-     * const cipherDest = Morfix.CipherText()
-     * evaluator.dotProductPlain(cipherTextA, plainTextB, galoisKeys, Morfix.SchemeTypes.BFV, cipherDest)
+     * const cipherDest = seal.CipherText()
+     * evaluator.dotProductPlain(cipherTextA, plainTextB, galoisKeys, seal.SchemeTypes.BFV, cipherDest)
      */
     dotProductPlain(
       a: CipherText,

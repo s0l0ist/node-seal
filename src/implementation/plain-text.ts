@@ -55,8 +55,8 @@ export type PlainText = {
   readonly scale: number
   readonly setScale: (scale: number) => void
   readonly pool: MemoryPoolHandle
-  readonly save: (compression: ComprModeType) => string
-  readonly saveArray: (compression: ComprModeType) => Uint8Array
+  readonly save: (compression?: ComprModeType) => string
+  readonly saveArray: (compression?: ComprModeType) => Uint8Array
   readonly load: (context: Context, encoded: string) => void
   readonly loadArray: (context: Context, array: Uint8Array) => void
   readonly copy: (plain: PlainText) => void
@@ -444,9 +444,9 @@ const PlainTextConstructor = (library: Library): PlainTextDependencies => ({
      * @name PlainText#copy
      * @param {PlainText} plain PlainText to copy
      * @example
-     * const plainTextA = Morfix.PlainText()
+     * const plainTextA = seal.PlainText()
      * // ... after encoding some data ...
-     * const plainTextB = Morfix.PlainText()
+     * const plainTextB = seal.PlainText()
      * plainTextB.copy(plainTextA)
      * // plainTextB holds a copy of plainTextA
      */
@@ -465,7 +465,7 @@ const PlainTextConstructor = (library: Library): PlainTextDependencies => ({
      * @name PlainText#clone
      * @returns {PlainText}
      * @example
-     * const plainTextA = Morfix.PlainText()
+     * const plainTextA = seal.PlainText()
      * // ... after encoding some data ...
      * const plainTextB = plainTextA.clone()
      * // plainTextB holds a copy of plainTextA
@@ -494,9 +494,9 @@ const PlainTextConstructor = (library: Library): PlainTextDependencies => ({
      * @name PlainText#move
      * @param {PlainText} plain PlainText to move
      * @example
-     * const plainTextA = Morfix.PlainText()
+     * const plainTextA = seal.PlainText()
      * // ... after encoding some data ...
-     * const plainTextB = Morfix.PlainText()
+     * const plainTextB = seal.PlainText()
      * plainTextB.move(plainTextA)
      * // plainTextB holds a the instance of plainTextA.
      * // plainTextA no longer holds an instance

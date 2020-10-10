@@ -1,13 +1,13 @@
 // import { Seal, getLibrary } from '../../target/wasm'
 // import { PlainModulus } from '../../components'
 
-// let Morfix = null
+// let seal = null
 // let PlainModulusObject = null
 
 // beforeAll(async () => {
-//   Morfix = await Seal()
+//   seal = await Seal()
 //   const lib = getLibrary()
-//   PlainModulusObject = PlainModulus(lib)(Morfix)
+//   PlainModulusObject = PlainModulus(lib)(seal)
 // })
 
 // describe('PlainModulus', () => {

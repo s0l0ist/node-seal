@@ -1,12 +1,12 @@
 // import { Seal, getLibrary } from '../../target/wasm'
 // import { Modulus } from '../../components'
 
-// let Morfix = null
+// let seal = null
 // let ModulusObject = null
 // beforeAll(async () => {
-//   Morfix = await Seal()
+//   seal = await Seal()
 //   const lib = getLibrary()
-//   ModulusObject = Modulus(lib)(Morfix)
+//   ModulusObject = Modulus(lib)(seal)
 // })
 
 // describe('Modulus', () => {

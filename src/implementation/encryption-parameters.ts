@@ -38,8 +38,8 @@ export type EncryptionParameters = {
   readonly polyModulusDegree: number
   readonly coeffModulus: BigUint64Array
   readonly plainModulus: Modulus
-  readonly save: (compression: ComprModeType) => string
-  readonly saveArray: (compression: ComprModeType) => Uint8Array
+  readonly save: (compression?: ComprModeType) => string
+  readonly saveArray: (compression?: ComprModeType) => Uint8Array
   readonly load: (encoded: string) => void
   readonly loadArray: (array: Uint8Array) => void
 }

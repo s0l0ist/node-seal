@@ -1,4 +1,4 @@
-import sealLibrary from 'seal_wasm_woker'
+import sealLibrary from 'seal_wasm_worker'
 
 import { NestedLibrary, createLoader } from './loader'
 import { SEALLibrary, SEALConstructor } from './implementation/seal'
@@ -16,6 +16,7 @@ import { EncryptorInit } from './implementation/encryptor'
 import { EvaluatorInit } from './implementation/evaluator'
 import { ExceptionInit } from './implementation/exception'
 import { GaloisKeysInit } from './implementation/galois-keys'
+import { KeyGeneratorInit } from './implementation/key-generator'
 import { IntegerEncoderInit } from './implementation/integer-encoder'
 import { MemoryPoolHandleInit } from './implementation/memory-pool-handle'
 import { ModulusInit } from './implementation/modulus'
@@ -77,6 +78,9 @@ export default async (): Promise<SEALLibrary> => {
       loader
     }),
     GaloisKeys: GaloisKeysInit({
+      loader
+    }),
+    KeyGenerator: KeyGeneratorInit({
       loader
     }),
     IntegerEncoder: IntegerEncoderInit({

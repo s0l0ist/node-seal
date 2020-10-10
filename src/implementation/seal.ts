@@ -74,6 +74,11 @@ import {
   SerializableDependencies
 } from './serializable'
 import { VectorConstructorOptions, VectorDependencies } from './vector'
+import {
+  KeyGeneratorConstructorOptions,
+  KeyGeneratorDependencies,
+  KeyGeneratorInit
+} from './key-generator'
 
 export type SEALLibrary = {
   readonly BatchEncoder: BatchEncoderConstructorOptions
@@ -90,6 +95,7 @@ export type SEALLibrary = {
   readonly Evaluator: EvaluatorConstructorOptions
   readonly Exception: Exception
   readonly GaloisKeys: GaloisKeysConstructorOptions
+  readonly KeyGenerator: KeyGeneratorConstructorOptions
   readonly IntegerEncoder: IntegerEncoderConstructorOptions
   readonly MemoryPoolHandle: MemoryPoolHandle
   readonly Modulus: ModulusConstructorOptions
@@ -119,6 +125,7 @@ type SEALConstructorOptions = {
   readonly Evaluator: EvaluatorDependencies
   readonly Exception: ExceptionDependencies
   readonly GaloisKeys: GaloisKeysDependencies
+  readonly KeyGenerator: KeyGeneratorDependencies
   readonly IntegerEncoder: IntegerEncoderDependencies
   readonly MemoryPoolHandle: MemoryPoolHandleDependencies
   readonly Modulus: ModulusDependencies
@@ -152,6 +159,7 @@ export const SEALConstructor = ({
   Evaluator,
   Exception,
   GaloisKeys,
+  KeyGenerator,
   IntegerEncoder,
   MemoryPoolHandle,
   Modulus,
@@ -284,6 +292,14 @@ export const SEALConstructor = ({
     Exception: exception,
     PlainText: plainText
   })
+  const keyGenerator = KeyGenerator({
+    Exception: exception,
+    PublicKey: publicKey,
+    SecretKey: secretKey,
+    RelinKeys: relinKeys,
+    GaloisKeys: galoisKeys,
+    Serializable: serializable
+  })
 
   /**
    * @interface SEAL
@@ -303,6 +319,7 @@ export const SEALConstructor = ({
     Evaluator: evaluator,
     Exception: exception, // Singleton
     GaloisKeys: galoisKeys,
+    KeyGenerator: keyGenerator,
     IntegerEncoder: integerEncoder,
     MemoryPoolHandle: memoryPoolHandle, // Singleton
     Modulus: modulus,

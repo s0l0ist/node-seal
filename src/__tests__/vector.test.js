@@ -1,12 +1,12 @@
 // import { Seal, getLibrary } from '../../target/wasm'
 // import { Vector } from '../../components'
 
-// let Morfix = null
+// let seal = null
 // let VectorObject = null
 // beforeAll(async () => {
-//   Morfix = await Seal()
+//   seal = await Seal()
 //   const lib = getLibrary()
-//   VectorObject = Vector(lib)(Morfix)
+//   VectorObject = Vector(lib)(seal)
 // })
 
 // describe('Vector', () => {

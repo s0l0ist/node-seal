@@ -139,9 +139,9 @@ const BatchEncoderConstructor = (
      * @returns {PlainText|undefined} A new PlainText holding the encoded data or undefined if one was provided
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal()
+     * const seal = await Seal()
      * ...
-     * const batchEncoder = Morfix.BatchEncoder(context)
+     * const batchEncoder = seal.BatchEncoder(context)
      *
      * const plainText = batchEncoder.encode(Int32Array.from([1, -2, 3]))
      */
@@ -218,9 +218,9 @@ const BatchEncoderConstructor = (
      * @returns {Int32Array|Uint32Array} TypedArray containing the decoded data
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal()
+     * const seal = await Seal()
      * ...
-     * const batchEncoder = Morfix.BatchEncoder(context)
+     * const batchEncoder = seal.BatchEncoder(context)
      *
      * const plainText = batchEncoder.encode(Int32Array.from([1, -2, 3]))
      * const plainTextU = batchEncoder.encode(Uint32Array.from([1, 2, 3]))
@@ -273,9 +273,9 @@ const BatchEncoderConstructor = (
      * @returns {BigInt64Array|BigUint64Array} TypedArray containing the decoded data
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal()
+     * const seal = await Seal()
      * ...
-     * const batchEncoder = Morfix.BatchEncoder(context)
+     * const batchEncoder = seal.BatchEncoder(context)
      *
      * const plainText = batchEncoder.encode(BigInt64Array.from([1n, -2n, 3n]))
      * const plainTextU = batchEncoder.encode(BigUint64Array.from([1n, 2n, 3n]))

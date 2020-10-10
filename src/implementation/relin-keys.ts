@@ -26,8 +26,8 @@ export type RelinKeys = {
   readonly instance: Instance
   readonly inject: (instance: Instance) => void
   readonly delete: () => void
-  readonly save: (compression: ComprModeType) => string
-  readonly saveArray: (compression: ComprModeType) => Uint8Array
+  readonly save: (compression?: ComprModeType) => string
+  readonly saveArray: (compression?: ComprModeType) => Uint8Array
   readonly load: (context: Context, encoded: string) => void
   readonly loadArray: (context: Context, array: Uint8Array) => void
   readonly copy: (key: RelinKeys) => void
@@ -169,7 +169,7 @@ const RelinKeysConstructor = (library: Library): RelinKeysDependencies => ({
      * @param {RelinKeys} key RelinKeys to copy
      * @example
      * const keyA = keyGenerator.relinKeys()
-     * const keyB = Morfix.RelinKeys()
+     * const keyB = seal.RelinKeys()
      * keyB.copy(keyA)
      * // keyB holds a copy of keyA
      */
@@ -215,7 +215,7 @@ const RelinKeysConstructor = (library: Library): RelinKeysDependencies => ({
      * @param {RelinKeys} key RelinKeys to move
      * @example
      * const keyA = keyGenerator.relinKeys()
-     * const keyB = Morfix.RelinKeys()
+     * const keyB = seal.RelinKeys()
      * keyB.move(keyA)
      * // keyB holds a the instance of keyA.
      * // keyA no longer holds an instance

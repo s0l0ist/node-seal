@@ -1,7 +1,7 @@
 // import { Seal, getLibrary } from '../../target/wasm'
 // import { KeyGenerator } from '../../components'
 
-// let Morfix,
+// let seal,
 //   parms,
 //   context,
 //   keyGen,
@@ -10,27 +10,27 @@
 //   invalidContext,
 //   KeyGeneratorObject = null
 // beforeAll(async () => {
-//   Morfix = await Seal()
+//   seal = await Seal()
 //   const lib = getLibrary()
-//   KeyGeneratorObject = KeyGenerator(lib)(Morfix)
+//   KeyGeneratorObject = KeyGenerator(lib)(seal)
 
-//   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+//   parms = seal.EncryptionParameters(seal.SchemeType.BFV)
 //   parms.setPolyModulusDegree(4096)
 //   parms.setCoeffModulus(
-//     Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
+//     seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
 //   )
-//   parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
-//   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
-//   keyGen = Morfix.KeyGenerator(context)
+//   parms.setPlainModulus(seal.PlainModulus.Batching(4096, 20))
+//   context = seal.Context(parms, true, seal.SecurityLevel.tc128)
+//   keyGen = seal.KeyGenerator(context)
 //   secretKey = keyGen.secretKey()
 
-//   invalidParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+//   invalidParms = seal.EncryptionParameters(seal.SchemeType.BFV)
 //   invalidParms.setPolyModulusDegree(1024)
 //   invalidParms.setCoeffModulus(
-//     Morfix.CoeffModulus.Create(1024, Int32Array.from([27]))
+//     seal.CoeffModulus.Create(1024, Int32Array.from([27]))
 //   )
-//   invalidParms.setPlainModulus(Morfix.PlainModulus.Batching(1024, 20))
-//   invalidContext = Morfix.Context(invalidParms)
+//   invalidParms.setPlainModulus(seal.PlainModulus.Batching(1024, 20))
+//   invalidContext = seal.Context(invalidParms)
 // })
 
 // describe('KeyGenerator', () => {

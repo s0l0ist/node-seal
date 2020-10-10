@@ -28,7 +28,7 @@ export type KeyGeneratorDependencies = {
 }
 
 export type KeyGeneratorConstructorOptions = {
-  (context: Context, secretKey: SecretKey): KeyGenerator
+  (context: Context, secretKey?: SecretKey): KeyGenerator
 }
 
 export type KeyGenerator = {
@@ -59,7 +59,7 @@ const KeyGeneratorConstructor = (
   const Constructor = library.KeyGenerator
   let _instance = constructInstance(context, secretKey)
 
-  function constructInstance(context: Context, secretKey: SecretKey) {
+  function constructInstance(context: Context, secretKey?: SecretKey) {
     try {
       if (secretKey) {
         return new Constructor(context.instance, secretKey.instance)

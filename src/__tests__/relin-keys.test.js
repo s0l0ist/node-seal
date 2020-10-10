@@ -1,24 +1,24 @@
 // import { Seal, getLibrary } from '../../target/wasm'
 // import { RelinKeys } from '../../components'
 
-// let Morfix = null
+// let seal = null
 // let parms = null
 // let context = null
 // let keyGenerator = null
 // let RelinKeysObject = null
 // beforeAll(async () => {
-//   Morfix = await Seal()
+//   seal = await Seal()
 //   const lib = getLibrary()
-//   RelinKeysObject = RelinKeys(lib)(Morfix)
+//   RelinKeysObject = RelinKeys(lib)(seal)
 
-//   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+//   parms = seal.EncryptionParameters(seal.SchemeType.BFV)
 //   parms.setPolyModulusDegree(4096)
 //   parms.setCoeffModulus(
-//     Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
+//     seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
 //   )
-//   parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
-//   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
-//   keyGenerator = Morfix.KeyGenerator(context)
+//   parms.setPlainModulus(seal.PlainModulus.Batching(4096, 20))
+//   context = seal.Context(parms, true, seal.SecurityLevel.tc128)
+//   keyGenerator = seal.KeyGenerator(context)
 // })
 
 // describe('RelinKeys', () => {

@@ -1,12 +1,12 @@
 // import { Seal, getLibrary } from '../../target/wasm'
 // import { CoeffModulus } from '../../components'
 
-// let Morfix = null
+// let seal = null
 // let CoeffModulusObject = null
 // beforeAll(async () => {
-//   Morfix = await Seal()
+//   seal = await Seal()
 //   const lib = getLibrary()
-//   CoeffModulusObject = CoeffModulus(lib)(Morfix)
+//   CoeffModulusObject = CoeffModulus(lib)(seal)
 // })
 
 // describe('CoeffModulus', () => {
@@ -33,9 +33,9 @@
 //     const spyOn = jest.spyOn(CoeffModulusObject, 'MaxBitCount')
 //     const count = CoeffModulusObject.MaxBitCount(
 //       4096,
-//       Morfix.SecurityLevel.tc256
+//       seal.SecurityLevel.tc256
 //     )
-//     expect(spyOn).toHaveBeenCalledWith(4096, Morfix.SecurityLevel.tc256)
+//     expect(spyOn).toHaveBeenCalledWith(4096, seal.SecurityLevel.tc256)
 //     expect(typeof count).toBe('number')
 //   })
 //   test('It should a return a default Vector of Modulus with a default security level', () => {
@@ -49,8 +49,8 @@
 //   })
 //   test('It should a return a default Vector of Modulus with a specified security level', () => {
 //     const spyOn = jest.spyOn(CoeffModulusObject, 'BFVDefault')
-//     const vect = CoeffModulusObject.BFVDefault(4096, Morfix.SecurityLevel.tc256)
-//     expect(spyOn).toHaveBeenCalledWith(4096, Morfix.SecurityLevel.tc256)
+//     const vect = CoeffModulusObject.BFVDefault(4096, seal.SecurityLevel.tc256)
+//     expect(spyOn).toHaveBeenCalledWith(4096, seal.SecurityLevel.tc256)
 //     expect(vect).toBeDefined()
 //     expect(typeof vect.constructor).toBe('function')
 //     expect(vect).toBeInstanceOf(Object)
@@ -59,9 +59,9 @@
 //   test('It should fail to return a default Vector of Modulus', () => {
 //     const spyOn = jest.spyOn(CoeffModulusObject, 'BFVDefault')
 //     expect(() =>
-//       CoeffModulusObject.BFVDefault(4095, Morfix.SecurityLevel.tc128)
+//       CoeffModulusObject.BFVDefault(4095, seal.SecurityLevel.tc128)
 //     ).toThrow()
-//     expect(spyOn).toHaveBeenCalledWith(4095, Morfix.SecurityLevel.tc128)
+//     expect(spyOn).toHaveBeenCalledWith(4095, seal.SecurityLevel.tc128)
 //   })
 //   test('It should a create a Vector of Modulus', () => {
 //     const spyOn = jest.spyOn(CoeffModulusObject, 'Create')

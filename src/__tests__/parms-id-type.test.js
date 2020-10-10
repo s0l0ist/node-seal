@@ -1,12 +1,12 @@
 // import { Seal, getLibrary } from '../../target/wasm'
 // import { ParmsIdType } from '../../components'
 
-// let Morfix = null
+// let seal = null
 // let ParmsIdTypeObject = null
 // beforeAll(async () => {
-//   Morfix = await Seal()
+//   seal = await Seal()
 //   const lib = getLibrary()
-//   ParmsIdTypeObject = ParmsIdType(lib)(Morfix)
+//   ParmsIdTypeObject = ParmsIdType(lib)(seal)
 // })
 
 // describe('ParmsIdType', () => {
@@ -23,13 +23,13 @@
 //     expect(Constructor).toBeCalledWith()
 //   })
 //   test('It should construct from an existing an instance', () => {
-//     const parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+//     const parms = seal.EncryptionParameters(seal.SchemeType.BFV)
 //     parms.setPolyModulusDegree(4096)
 //     parms.setCoeffModulus(
-//       Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
+//       seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
 //     )
-//     parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
-//     const context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
+//     parms.setPlainModulus(seal.PlainModulus.Batching(4096, 20))
+//     const context = seal.Context(parms, true, seal.SecurityLevel.tc128)
 //     const parmsId = context.firstParmsId
 //     const Constructor = jest.fn(ParmsIdTypeObject)
 //     Constructor(parmsId.instance)
@@ -79,13 +79,13 @@
 //     expect(parmsId.instance).toBeNull()
 //   })
 //   test('It should return values', () => {
-//     const parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+//     const parms = seal.EncryptionParameters(seal.SchemeType.BFV)
 //     parms.setPolyModulusDegree(4096)
 //     parms.setCoeffModulus(
-//       Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
+//       seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
 //     )
-//     parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
-//     const context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
+//     parms.setPlainModulus(seal.PlainModulus.Batching(4096, 20))
+//     const context = seal.Context(parms, true, seal.SecurityLevel.tc128)
 //     const parmsId = context.firstParmsId
 //     const values = parmsId.values
 //     expect(Array.isArray(values)).toBe(true)

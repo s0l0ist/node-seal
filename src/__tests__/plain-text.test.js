@@ -1,7 +1,7 @@
 // import { Seal, getLibrary } from '../../target/wasm'
 // import { PlainText } from '../../components'
 
-// let Morfix,
+// let seal,
 //   parms,
 //   context,
 //   encoder,
@@ -11,27 +11,27 @@
 //   ckksEncoder,
 //   PlainTextObject = null
 // beforeAll(async () => {
-//   Morfix = await Seal()
+//   seal = await Seal()
 //   const lib = getLibrary()
-//   PlainTextObject = PlainText(lib)(Morfix)
+//   PlainTextObject = PlainText(lib)(seal)
 
-//   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+//   parms = seal.EncryptionParameters(seal.SchemeType.BFV)
 //   parms.setPolyModulusDegree(4096)
 //   parms.setCoeffModulus(
-//     Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
+//     seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
 //   )
-//   parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
-//   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
-//   encoder = Morfix.BatchEncoder(context)
-//   evaluator = Morfix.Evaluator(context)
+//   parms.setPlainModulus(seal.PlainModulus.Batching(4096, 20))
+//   context = seal.Context(parms, true, seal.SecurityLevel.tc128)
+//   encoder = seal.BatchEncoder(context)
+//   evaluator = seal.Evaluator(context)
 
-//   ckksParms = Morfix.EncryptionParameters(Morfix.SchemeType.CKKS)
+//   ckksParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
 //   ckksParms.setPolyModulusDegree(4096)
 //   ckksParms.setCoeffModulus(
-//     Morfix.CoeffModulus.Create(4096, Int32Array.from([46, 16, 46]))
+//     seal.CoeffModulus.Create(4096, Int32Array.from([46, 16, 46]))
 //   )
-//   ckksContext = Morfix.Context(ckksParms, true, Morfix.SecurityLevel.tc128)
-//   ckksEncoder = Morfix.CKKSEncoder(ckksContext)
+//   ckksContext = seal.Context(ckksParms, true, seal.SecurityLevel.tc128)
+//   ckksEncoder = seal.CKKSEncoder(ckksContext)
 // })
 
 // describe('PlainText', () => {

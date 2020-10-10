@@ -125,9 +125,9 @@ const CKKSEncoderConstructor = (library: Library): CKKSEncoderDependencies => ({
      * @returns {PlainText|undefined} A new PlainText holding the encoded data or undefined if one was provided
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal()
+     * const seal = await Seal()
      * ...
-     * const ckksEncoder = Morfix.CKKSEncoder(context)
+     * const ckksEncoder = seal.CKKSEncoder(context)
      *
      * const plainText = ckksEncoder.encode(Float64Array.from([1.11, -2.222, 3.333]), Math.pow(2, 20))
      */
@@ -168,9 +168,9 @@ const CKKSEncoderConstructor = (library: Library): CKKSEncoderDependencies => ({
      * @returns {Float64Array} TypedArray containing the decoded data
      * @example
      * import { Seal } from 'node-seal'
-     * const Morfix = await Seal()
+     * const seal = await Seal()
      * ...
-     * const ckksEncoder = Morfix.CKKSEncoder(context)
+     * const ckksEncoder = seal.CKKSEncoder(context)
      *
      * const plainText = ckksEncoder.encode(Float64Array.from([1, 2, 3]))
      *

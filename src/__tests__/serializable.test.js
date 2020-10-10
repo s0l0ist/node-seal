@@ -1,7 +1,7 @@
 // import { Seal } from '../../target/wasm'
 // import { Serializable } from '../../components'
 
-// let Morfix = null
+// let seal = null
 // let parms = null
 // let context = null
 // let keyGenerator = null
@@ -11,21 +11,21 @@
 // let encoder = null
 // let SerializableObject = null
 // beforeAll(async () => {
-//   Morfix = await Seal()
-//   SerializableObject = Serializable()(Morfix)
+//   seal = await Seal()
+//   SerializableObject = Serializable()(seal)
 
-//   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+//   parms = seal.EncryptionParameters(seal.SchemeType.BFV)
 //   parms.setPolyModulusDegree(4096)
 //   parms.setCoeffModulus(
-//     Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
+//     seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
 //   )
-//   parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
-//   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
-//   keyGenerator = Morfix.KeyGenerator(context)
+//   parms.setPlainModulus(seal.PlainModulus.Batching(4096, 20))
+//   context = seal.Context(parms, true, seal.SecurityLevel.tc128)
+//   keyGenerator = seal.KeyGenerator(context)
 //   publicKey = keyGenerator.publicKey()
 //   secretKey = keyGenerator.secretKey()
-//   encryptor = Morfix.Encryptor(context, publicKey, secretKey)
-//   encoder = Morfix.BatchEncoder(context)
+//   encryptor = seal.Encryptor(context, publicKey, secretKey)
+//   encoder = seal.BatchEncoder(context)
 // })
 
 // describe('SecretKey', () => {

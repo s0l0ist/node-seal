@@ -26,8 +26,8 @@ export type GaloisKeys = {
   readonly instance: Instance
   readonly inject: (instance: Instance) => void
   readonly delete: () => void
-  readonly save: (compression: ComprModeType) => string
-  readonly saveArray: (compression: ComprModeType) => Uint8Array
+  readonly save: (compression?: ComprModeType) => string
+  readonly saveArray: (compression?: ComprModeType) => Uint8Array
   readonly load: (context: Context, encoded: string) => void
   readonly loadArray: (context: Context, array: Uint8Array) => void
   readonly copy: (key: GaloisKeys) => void
@@ -169,7 +169,7 @@ const GaloisKeysConstructor = (library: Library): GaloisKeysDependencies => ({
      * @param {GaloisKeys} key GaloisKeys to copy
      * @example
      * const keyA = keyGenerator.galoisKeys()
-     * const keyB = Morfix.GaloisKeys()
+     * const keyB = seal.GaloisKeys()
      * keyB.copy(keyA)
      * // keyB holds a copy of keyA
      */
@@ -215,7 +215,7 @@ const GaloisKeysConstructor = (library: Library): GaloisKeysDependencies => ({
      * @param {GaloisKeys} key GaloisKeys to move
      * @example
      * const keyA = keyGenerator.galoisKeys()
-     * const keyB = Morfix.GaloisKeys()
+     * const keyB = seal.GaloisKeys()
      * keyB.move(keyA)
      * // keyB holds a the instance of keyA.
      * // keyA no longer holds an instance

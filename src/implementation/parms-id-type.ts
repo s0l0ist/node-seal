@@ -18,7 +18,7 @@ export type ParmsIdType = {
   readonly inject: (instance: Instance) => void
   readonly delete: () => void
   readonly create: () => void
-  readonly values: BigInt64Array
+  readonly values: BigUint64Array
 }
 
 const ParmsIdTypeConstructor = (library: Library): ParmsIdTypeDependencies => ({
@@ -98,12 +98,12 @@ const ParmsIdTypeConstructor = (library: Library): ParmsIdTypeDependencies => ({
      *
      * @readonly
      * @name ParmsIdType#values
-     * @type {BigInt64Array}
+     * @type {BigUint64Array}
      */
     get values() {
       try {
         const instance = _instance.values()
-        return BigInt64Array.from(instance)
+        return BigUint64Array.from(instance)
       } catch (e) {
         throw Exception.safe(e)
       }

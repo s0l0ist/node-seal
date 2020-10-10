@@ -54,8 +54,8 @@ export type CipherText = {
   readonly scale: number
   readonly setScale: (scale: number) => void
   readonly pool: MemoryPoolHandle
-  readonly save: (compression: ComprModeType) => string
-  readonly saveArray: (compression: ComprModeType) => Uint8Array
+  readonly save: (compression?: ComprModeType) => string
+  readonly saveArray: (compression?: ComprModeType) => Uint8Array
   readonly load: (context: Context, encoded: string) => void
   readonly loadArray: (context: Context, array: Uint8Array) => void
   readonly copy: (cipher: CipherText) => void
@@ -417,9 +417,9 @@ const CipherTextConstructor = (library: Library): CipherTextDependencies => ({
      * @name CipherText#copy
      * @param {CipherText} cipher CipherText to copy
      * @example
-     * const cipherTextA = Morfix.CipherText()
+     * const cipherTextA = seal.CipherText()
      * // ... after encoding some data ...
-     * const cipherTextB = Morfix.CipherText()
+     * const cipherTextB = seal.CipherText()
      * cipherTextB.copy(cipherTextA)
      * // cipherTextB holds a copy of cipherTextA
      */
@@ -438,7 +438,7 @@ const CipherTextConstructor = (library: Library): CipherTextDependencies => ({
      * @name CipherText#clone
      * @returns {CipherText}
      * @example
-     * const cipherTextA = Morfix.CipherText()
+     * const cipherTextA = seal.CipherText()
      * // ... after encoding some data ...
      * const cipherTextB = cipherTextA.clone()
      * // cipherTextB holds a copy of cipherTextA
@@ -467,9 +467,9 @@ const CipherTextConstructor = (library: Library): CipherTextDependencies => ({
      * @name CipherText#move
      * @param {CipherText} cipher CipherText to move
      * @example
-     * const cipherTextA = Morfix.CipherText()
+     * const cipherTextA = seal.CipherText()
      * // ... after encoding some data ...
-     * const cipherTextB = Morfix.CipherText()
+     * const cipherTextB = seal.CipherText()
      * cipherTextB.move(cipherTextA)
      * // cipherTextB holds a the instance of cipherTextA.
      * // cipherTextA no longer holds an instance

@@ -26,8 +26,8 @@ export type PublicKey = {
   readonly instance: Instance
   readonly inject: (instance: Instance) => void
   readonly delete: () => void
-  readonly save: (compression: ComprModeType) => string
-  readonly saveArray: (compression: ComprModeType) => Uint8Array
+  readonly save: (compression?: ComprModeType) => string
+  readonly saveArray: (compression?: ComprModeType) => Uint8Array
   readonly load: (context: Context, encoded: string) => void
   readonly loadArray: (context: Context, array: Uint8Array) => void
   readonly copy: (key: PublicKey) => void
@@ -169,7 +169,7 @@ const PublicKeyConstructor = (library: Library): PublicKeyDependencies => ({
      * @param {PublicKey} key PublicKey to copy
      * @example
      * const keyA = keyGenerator.publicKey()
-     * const keyB = Morfix.PublicKey()
+     * const keyB = seal.PublicKey()
      * keyB.copy(keyA)
      * // keyB holds a copy of keyA
      */
@@ -215,7 +215,7 @@ const PublicKeyConstructor = (library: Library): PublicKeyDependencies => ({
      * @param {PublicKey} key PublicKey to move
      * @example
      * const keyA = keyGenerator.publicKey()
-     * const keyB = Morfix.PublicKey()
+     * const keyB = seal.PublicKey()
      * keyB.move(keyA)
      * // keyB holds a the instance of keyA.
      * // keyA no longer holds an instance

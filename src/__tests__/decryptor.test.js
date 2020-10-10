@@ -1,7 +1,7 @@
 // import { Seal, getLibrary } from '../../target/wasm'
 // import { Decryptor } from '../../components'
 
-// let Morfix,
+// let seal,
 //   parms,
 //   context,
 //   keyGenerator,
@@ -12,23 +12,23 @@
 //   evaluator,
 //   DecryptorObject = null
 // beforeAll(async () => {
-//   Morfix = await Seal()
+//   seal = await Seal()
 //   const lib = getLibrary()
-//   DecryptorObject = Decryptor(lib)(Morfix)
+//   DecryptorObject = Decryptor(lib)(seal)
 
-//   parms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+//   parms = seal.EncryptionParameters(seal.SchemeType.BFV)
 //   parms.setPolyModulusDegree(4096)
 //   parms.setCoeffModulus(
-//     Morfix.CoeffModulus.BFVDefault(4096, Morfix.SecurityLevel.tc128)
+//     seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
 //   )
-//   parms.setPlainModulus(Morfix.PlainModulus.Batching(4096, 20))
-//   context = Morfix.Context(parms, true, Morfix.SecurityLevel.tc128)
-//   encoder = Morfix.BatchEncoder(context)
-//   keyGenerator = Morfix.KeyGenerator(context)
+//   parms.setPlainModulus(seal.PlainModulus.Batching(4096, 20))
+//   context = seal.Context(parms, true, seal.SecurityLevel.tc128)
+//   encoder = seal.BatchEncoder(context)
+//   keyGenerator = seal.KeyGenerator(context)
 //   publicKey = keyGenerator.publicKey()
 //   secretKey = keyGenerator.secretKey()
-//   evaluator = Morfix.Evaluator(context)
-//   encryptor = Morfix.Encryptor(context, publicKey)
+//   evaluator = seal.Evaluator(context)
+//   encryptor = seal.Encryptor(context, publicKey)
 // })
 
 // describe('Decryptor', () => {
@@ -45,14 +45,14 @@
 //     expect(Constructor).toBeCalledWith(context, secretKey)
 //   })
 //   test('It should fail to construct an instance', () => {
-//     const newParms = Morfix.EncryptionParameters(Morfix.SchemeType.BFV)
+//     const newParms = seal.EncryptionParameters(seal.SchemeType.BFV)
 //     newParms.setPolyModulusDegree(2048)
 //     newParms.setCoeffModulus(
-//       Morfix.CoeffModulus.BFVDefault(2048, Morfix.SecurityLevel.tc128)
+//       seal.CoeffModulus.BFVDefault(2048, seal.SecurityLevel.tc128)
 //     )
-//     newParms.setPlainModulus(Morfix.PlainModulus.Batching(2048, 20))
-//     const newContext = Morfix.Context(newParms)
-//     const newKeyGenerator = Morfix.KeyGenerator(newContext)
+//     newParms.setPlainModulus(seal.PlainModulus.Batching(2048, 20))
+//     const newContext = seal.Context(newParms)
+//     const newKeyGenerator = seal.KeyGenerator(newContext)
 //     const newSecretKey = newKeyGenerator.secretKey()
 
 //     const Constructor = jest.fn(DecryptorObject)
@@ -109,11 +109,11 @@
 //   test('It should encrypt a ciphertext to a destination plain', () => {
 //     const item = DecryptorObject(context, secretKey)
 //     const arr = Int32Array.from({ length: encoder.slotCount }).fill(5)
-//     const plain = Morfix.PlainText()
-//     const cipher = Morfix.CipherText()
+//     const plain = seal.PlainText()
+//     const cipher = seal.CipherText()
 //     encoder.encode(arr, plain)
 //     encryptor.encrypt(plain, cipher)
-//     const plainResult = Morfix.PlainText()
+//     const plainResult = seal.PlainText()
 //     const spyOn = jest.spyOn(item, 'decrypt')
 //     item.decrypt(cipher, plainResult)
 //     expect(spyOn).toHaveBeenCalledWith(cipher, plainResult)
@@ -123,8 +123,8 @@
 //   test('It should encrypt a ciphertext and return a plain', () => {
 //     const item = DecryptorObject(context, secretKey)
 //     const arr = Int32Array.from({ length: encoder.slotCount }).fill(5)
-//     const plain = Morfix.PlainText()
-//     const cipher = Morfix.CipherText()
+//     const plain = seal.PlainText()
+//     const cipher = seal.CipherText()
 //     encoder.encode(arr, plain)
 //     encryptor.encrypt(plain, cipher)
 //     const spyOn = jest.spyOn(item, 'decrypt')
@@ -141,8 +141,8 @@
 //   test('It should return the invariant noise budget', () => {
 //     const item = DecryptorObject(context, secretKey)
 //     const arr = Int32Array.from({ length: encoder.slotCount }).fill(5)
-//     const plain = Morfix.PlainText()
-//     const cipher = Morfix.CipherText()
+//     const plain = seal.PlainText()
+//     const cipher = seal.CipherText()
 //     encoder.encode(arr, plain)
 //     encryptor.encrypt(plain, cipher)
 //     const spyOn = jest.spyOn(item, 'invariantNoiseBudget')
@@ -153,8 +153,8 @@
 //   test('It should fail to return the invariant noise budget', () => {
 //     const item = DecryptorObject(context, secretKey)
 //     const arr = Int32Array.from({ length: encoder.slotCount }).fill(5)
-//     const plain = Morfix.PlainText()
-//     const cipher = Morfix.CipherText()
+//     const plain = seal.PlainText()
+//     const cipher = seal.CipherText()
 //     encoder.encode(arr, plain)
 //     encryptor.encrypt(plain, cipher)
 //     evaluator.cipherTransformToNtt(cipher, cipher)
