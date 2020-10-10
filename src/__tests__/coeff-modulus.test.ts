@@ -74,7 +74,7 @@ describe('CoeffModulus', () => {
       ])
     )
   })
-  test('It should fail to create a Vector of Modulus', () => {
+  test('It should throw invalid type', () => {
     const spyOn = jest.spyOn(seal.CoeffModulus, 'Create')
     expect(() => seal.CoeffModulus.Create(4095, [36, 36, 37] as any)).toThrow()
     expect(spyOn).toHaveBeenCalledWith(4095, [36, 36, 37])
