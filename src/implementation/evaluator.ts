@@ -1117,7 +1117,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @example
      * ...
      * const evaluator = seal.Evaluator(context)
-     * const arr = Int32Array.from({ length: encoder.slotCount }).map((x, i) => i)
+     * const arr = Int32Array.from({ length: encoder.slotCount }, (_, i) => i)
      * const plain = encoder.encode(arr)
      * const cipher = encryptor.encrypt(plain)
      * const cipherDest = seal.CipherText()
