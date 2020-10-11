@@ -25,8 +25,7 @@ Feat:
 
 Breaking
 
-- Importing/Requiring syntax has changed from `import { Seal } from ...` => `import SEAL from ...` (you may use any default name)
-- 
+- Importing/Requiring syntax has changed from `import { Seal } from node-seal/dist/throws_transparent/node/wasm/cjs` => `import SEAL from node-seal/throws_wasm_node`. You may use any default name.
 
 ## Version 4.3.10
 
