@@ -1,4 +1,4 @@
-const { Seal } = require('../dist/throws_transparent/node/wasm')
+const SEAL = require('../dist/throws_wasm_node')
 const { performance } = require('perf_hooks')
 
 ;(async function () {
@@ -15,7 +15,7 @@ function create() {
   }
 
   async function init() {
-    seal = await Seal()
+    seal = await SEAL()
   }
 
   function exampleBfvPerformanceDefault() {
@@ -148,7 +148,7 @@ function create() {
      */
     const slotCount = batchEncoder.slotCount
     const array = new Uint32Array(slotCount)
-    const plainNumber = number(plainModulus.value)
+    const plainNumber = Number(plainModulus.value)
     for (let i = 0; i < slotCount; i++) {
       array[i] = Math.floor(randomIntInc(0, plainNumber) % plainNumber)
     }

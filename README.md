@@ -26,7 +26,7 @@ Import the library using `import` or `require` syntax:
 // Auto-detects browser or nodejs.
 // Defaults to "node-seal/throws_wasm_node" for NodeJS
 // Defaults to "node-seal/throws_wasm_web" for Browsers
-import { Seal } from 'node-seal'
+import SEAL from 'node-seal'
 const { Seal } = require('node-seal')
 ```
 
@@ -45,10 +45,10 @@ The deep import link is structured like the following:
 ```javascript
 // Always Pick a variant which throws on transparent ciphertexts unless you
 // have a specific reason to allow the use of transparent ciphertexts.
-import { Seal } from 'node-seal/throws_wasm_node'
+import SEAL from 'node-seal/throws_wasm_node'
 
 // Or pick a variant which allows transparent ciphertexts (only use this if you know what you're doing)
-import { Seal } from 'node-seal/allows_wasm_node'
+import SEAL from 'node-seal/allows_wasm_node'
 ```
 
 #### React-Native
@@ -58,12 +58,12 @@ The bundle needs a bit of extra work. Specifically, it expects the browser `cryp
 ```javascript
 // Provide a CSPRNG mapping to crypto.getRandomValues()
 import 'react-native-get-random-values'
-import { Seal } from 'node-seal/allows_wasm_web'
+import SEAL from 'node-seal/allows_wasm_web'
 ;(async () => {
   // Spoof the browser document
   global.document = {}
   // Wait for the library to initialize
-  const seal = await Seal()
+  const seal = await SEAL()
   //...
 })()
 ```

@@ -138,8 +138,8 @@ const BatchEncoderConstructor = (
      * @param {PlainText} [plainText=null] Destination to store the encoded result
      * @returns {PlainText|void} A new PlainText holding the encoded data or void if one was provided
      * @example
-     * import { Seal } from 'node-seal'
-     * const seal = await Seal()
+     * import SEAL from 'node-seal'
+     * const seal = await SEAL()
      * ...
      * const batchEncoder = seal.BatchEncoder(context)
      *
@@ -217,8 +217,8 @@ const BatchEncoderConstructor = (
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}]
      * @returns {Int32Array|Uint32Array} TypedArray containing the decoded data
      * @example
-     * import { Seal } from 'node-seal'
-     * const seal = await Seal()
+     * import SEAL from 'node-seal'
+     * const seal = await SEAL()
      * ...
      * const batchEncoder = seal.BatchEncoder(context)
      *
@@ -272,8 +272,8 @@ const BatchEncoderConstructor = (
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}]
      * @returns {BigInt64Array|BigUint64Array} TypedArray containing the decoded data
      * @example
-     * import { Seal } from 'node-seal'
-     * const seal = await Seal()
+     * import SEAL from 'node-seal'
+     * const seal = await SEAL()
      * ...
      * const batchEncoder = seal.BatchEncoder(context)
      *

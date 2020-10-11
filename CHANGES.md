@@ -9,7 +9,7 @@ for more details on each SEAL version change.
 
 - Updated the entire library to TypeScript which fixed numerous inconsistencies
 - Added support for more builds:
-  - [`allows`, `throws`] each with [`js`, `wasm`] each with [`node`, `web`, `worker`] each with [`cjs`, `es`, `iife`] builds
+  - [`allows`, `throws`] each with [`js`, `wasm`] each with [`node`, `web`, `worker`] builds
 - Support for WebAssembly in React Native
 - More consistencies with 64-bit types using `BigInt`
 
@@ -21,6 +21,10 @@ Feat:
 - `PlainModulus.Batching()` returns a `Modulus` type instead of the raw WASM instance
 - `Modulus` supports constructing with a `BigInt`
 - `Modulus.setValue()` accepts a `BigInt`
+
+Breaking
+
+- Importing/Requiring syntax has changed from `import { Seal } from ...` => `import SEAL from ...` so you may import the library with any name.
 
 ## Version 4.3.10
 

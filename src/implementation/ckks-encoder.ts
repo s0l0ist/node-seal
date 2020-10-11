@@ -124,8 +124,8 @@ const CKKSEncoderConstructor = (library: Library): CKKSEncoderDependencies => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {PlainText|void} A new PlainText holding the encoded data or void if one was provided
      * @example
-     * import { Seal } from 'node-seal'
-     * const seal = await Seal()
+     * import SEAL from 'node-seal'
+     * const seal = await SEAL()
      * ...
      * const ckksEncoder = seal.CKKSEncoder(context)
      *
@@ -167,8 +167,8 @@ const CKKSEncoderConstructor = (library: Library): CKKSEncoderDependencies => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {Float64Array} TypedArray containing the decoded data
      * @example
-     * import { Seal } from 'node-seal'
-     * const seal = await Seal()
+     * import SEAL from 'node-seal'
+     * const seal = await SEAL()
      * ...
      * const ckksEncoder = seal.CKKSEncoder(context)
      *
