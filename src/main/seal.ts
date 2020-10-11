@@ -27,11 +27,14 @@ import { SecretKeyInit } from '../implementation/secret-key'
 import { SecurityLevelInit } from '../implementation/security-level'
 import { SerializableInit } from '../implementation/serializable'
 import { VectorInit } from '../implementation/vector'
+import { Loader } from './loader'
 
 /**
  * Main export for the library
  */
-export const SEAL = async (Loader: any): Promise<SEALLibrary> => {
+export const SEAL = async (
+  Loader: () => Promise<Loader>
+): Promise<SEALLibrary> => {
   const loader = await Loader()
   return SEALConstructor({
     BatchEncoder: BatchEncoderInit({

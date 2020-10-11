@@ -1,9 +1,8 @@
 import { Library } from '../implementation/emscripten'
 
-export type NestedLibrary = {
+export type Loader = {
   readonly library: Library
 }
-export type Loader = NestedLibrary
 
 /**
  * Export a default function which instantiates the library
@@ -11,6 +10,6 @@ export type Loader = NestedLibrary
  */
 export const createLoader = async (
   bin: () => Promise<Library>
-): Promise<NestedLibrary> => ({
+): Promise<Loader> => ({
   library: await bin()
 })
