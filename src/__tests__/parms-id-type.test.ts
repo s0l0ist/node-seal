@@ -56,7 +56,9 @@ describe('ParmsIdType', () => {
   })
   test('It should delete the old instance and inject', () => {
     const parmsId = context.firstParmsId
+    const parmsId2 = context.firstParmsId
     const newParmsId = seal.ParmsIdType()
+    newParmsId.inject(parmsId2.instance)
     const spyOn = jest.spyOn(newParmsId, 'inject')
     newParmsId.inject(parmsId.instance)
     expect(spyOn).toHaveBeenCalledWith(parmsId.instance)
