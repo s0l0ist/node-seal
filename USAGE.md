@@ -12,8 +12,8 @@ asynchronously.
 ```javascript
 // ES6 import
 // import { Seal } from 'node-seal'
-const { Seal } = require('node-seal')
-const Morfix = await Seal()
+const SEAL = require('node-seal')
+const seal = await SEAL()
 ```
 
 ### Encryption Parameters
@@ -35,18 +35,18 @@ of parameters for an application, but there is a methodology behind optimization
 There are two `SchemeTypes`:
 
 ```javascript
-Morfix.SchemeType.BFV
-Morfix.SchemeType.CKKS
+seal.SchemeType.BFV
+seal.SchemeType.CKKS
 ```
 
 A security level determines the bit level security of the encrypted data.
 There are 3 modes you should be primarily concerned with:
 
 ```javascript
-Morfix.SecurityLevel.none // Use unless you know what you're doing
-Morfix.SecurityLevel.tc128
-Morfix.SecurityLevel.tc192
-Morfix.SecurityLevel.tc256
+seal.SecurityLevel.none // Use unless you know what you're doing
+seal.SecurityLevel.tc128
+seal.SecurityLevel.tc192
+seal.SecurityLevel.tc256
 ```
 
 PolyModulusDegree needs to be a power of 2. We've set up initial helpers on the demo to create the following:
@@ -70,26 +70,24 @@ Example:
 // Encryption Parameters
 ////////////////////////
 
-const schemeType = Morfix.SchemeType.BFV
-const securityLevel = Morfix.SecurityLevel.tc128
+const schemeType = seal.SchemeType.BFV
+const securityLevel = seal.SecurityLevel.tc128
 const polyModulusDegree = 4096
 const bitSizes = [36, 36, 37]
 const bitSize = 20
 
-const encParms = Morfix.EncryptionParameters(schemeType)
+const encParms = seal.EncryptionParameters(schemeType)
 
 // Set the PolyModulusDegree
 encParms.setPolyModulusDegree(polyModulusDegree)
 
 // Create a suitable set of CoeffModulus primes
 encParms.setCoeffModulus(
-  Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes))
+  seal.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes))
 )
 
 // Set the PlainModulus to a prime of bitSize 20.
-encParms.setPlainModulus(
-  Morfix.PlainModulus.Batching(polyModulusDegree, bitSize)
-)
+encParms.setPlainModulus(seal.PlainModulus.Batching(polyModulusDegree, bitSize))
 ```
 
 ### Context
@@ -103,7 +101,7 @@ other instances which execute within the same **context** as the encryption para
 ////////////////////////
 
 // Create a new Context
-const context = Morfix.Context(
+const context = seal.Context(
   parms, // Encryption Parameters
   true, // ExpandModChain
   securityLevel // Enforce a security level
@@ -134,7 +132,7 @@ You may generate a new Public Key (or even Relin/Galois Keys) from an existing S
 ////////////////////////
 
 // Create a new KeyGenerator (creates a new keypair internally)
-const keyGenerator = Morfix.KeyGenerator(context)
+const keyGenerator = seal.KeyGenerator(context)
 
 const secretKey = keyGenerator.secretKey()
 const publicKey = keyGenerator.publicKey()
@@ -151,7 +149,7 @@ const galoisBase64Key = galoisKey.save()
 
 // Loading a key from a base64 string is the same for each type of key
 // Load from the base64 encoded string
-const UploadedSecretKey = Morfix.SecretKey()
+const UploadedSecretKey = seal.SecretKey()
 UploadedSecretKey.load(context, secretBase64Key)
 ...
 
@@ -162,25 +160,25 @@ UploadedSecretKey.load(context, secretBase64Key)
 // new Relin/Galois keys with a previously generated SecretKey.
 
 // Uploading a SecretKey: first, create an Empty SecretKey to load
-const UploadedSecretKey = Morfix.SecretKey()
+const UploadedSecretKey = seal.SecretKey()
 
 // Load from the base64 encoded string
 UploadedSecretKey.load(context, secretBase64Key)
 
 // Create a new KeyGenerator (use uploaded secretKey)
-const keyGenerator = Morfix.KeyGenerator(context, UploadedSecretKey)
+const keyGenerator = seal.KeyGenerator(context, UploadedSecretKey)
 
 // Similarly, you may also create a KeyGenerator with a PublicKey. However, the benefit is purley to
 // save time by not generating a new PublicKey
 
 // Uploading a PublicKey: first, create an Empty PublicKey to load
-const UploadedPublicKey = Morfix.PublicKey()
+const UploadedPublicKey = seal.PublicKey()
 
 // Load from the base64 encoded string
 UploadedPublicKey.load(context, publicBase64Key)
 
 // Create a new KeyGenerator (use both uploaded keys)
-const keyGenerator = Morfix.KeyGenerator(context, UploadedSecretKey, UploadedPublicKey)
+const keyGenerator = seal.KeyGenerator(context, UploadedSecretKey, UploadedPublicKey)
 
 
 ```
@@ -196,19 +194,19 @@ provide. CipherTexts store encrypted values of the encoded PlainText. Homomorphi
 ////////////////////////
 
 // Creating PlainText(s)
-const plainA = Morfix.PlainText()
-const plainB = Morfix.PlainText()
+const plainA = seal.PlainText()
+const plainB = seal.PlainText()
 
 // Creating CipherText(s)
-const cipherA = Morfix.CipherText()
-const cipherB = Morfix.CipherText()
+const cipherA = seal.CipherText()
+const cipherB = seal.CipherText()
 
 // Saving
 // ... after some encoding...
 const plainAbase64 = plainA.save() // Saves as a base64 string.
 
 // Loading. Create an empty instance, then use the following method
-const uploadedPlain = Morfix.PlainText()
+const uploadedPlain = seal.PlainText()
 uploadedPlain.load(context, plainAbase64)
 
 // Saving
@@ -216,7 +214,7 @@ uploadedPlain.load(context, plainAbase64)
 const cipherAbase64 = cipherA.save() // Saves as a base64 string.
 
 // Loading. Create an empty instance, then use the following method
-const uploadedCipherText = Morfix.CipherText()
+const uploadedCipherText = seal.CipherText()
 uploadedCipherText.load(context, cipherAbase64)
 ```
 
@@ -235,19 +233,19 @@ To perform homomorphic evaluations, we need to construct a few helpers:
 ////////////////////////
 
 // Create an Evaluator which will allow HE functions to execute
-const evaluator = Morfix.Evaluator(context)
+const evaluator = seal.Evaluator(context)
 
 // Create a BatchEncoder (only BFV SchemeType)
-const encoder = Morfix.BatchEncoder(context)
+const encoder = seal.BatchEncoder(context)
 
 // Or a CKKSEncoder (only CKKS SchemeType)
-// const encoder = Morfix.CKKSEncoder(context)
+// const encoder = seal.CKKSEncoder(context)
 
 // Create an Encryptor to encrypt PlainTexts
-const encryptor = Morfix.Encryptor(context, publicKey)
+const encryptor = seal.Encryptor(context, publicKey)
 
 // Create a Decryptor to decrypt CipherTexts
-const decryptor = Morfix.Decryptor(context, secretKey)
+const decryptor = seal.Decryptor(context, secretKey)
 ```
 
 ### Functions
@@ -263,11 +261,11 @@ be generated from the [demo](https://morfix.io/sandbox).
 // Both types of encoders accept a plainText as an optional parameter.
 // If not provided, will return a new plainText conatining the encoded
 // data. If one is specified, it will be modified and the function
-// will return an undefined.
+// will return void.
 // Ex:
 //
 // // Create a plainText
-// const plainTextA = Morfix.PlainText()
+// const plainTextA = seal.PlainText()
 //
 // //... some time later ...
 //
@@ -281,20 +279,18 @@ be generated from the [demo](https://morfix.io/sandbox).
 
 // Encode data to a PlainText
 const plainTextA = batchEncoder.encode(
-  Int32Array.from([1,2,3]) // This could also be a Uint32Array
+  Int32Array.from([1, 2, 3]) // This could also be a Uint32Array
 )
-
-
 
 // An encryptor and decryptor also accept a cihperText and plainText
 // optional parameter. If not provided, an encryptor will
 // return a new cipherText and a decyprtor will return a new plainText.
 // If the optional parameter is specified, it will be modified and both
-// methods will return an undefined.
+// methods will return void.
 // Ex:
 //
 // // Create a plainText
-// const cipherTextA = Morfix.CipherText()
+// const cipherTextA = seal.CipherText()
 //
 // //... some time later ...
 //
@@ -310,7 +306,7 @@ const plainTextA = batchEncoder.encode(
 const cipherTextA = encryptor.encrypt(plainTextA)
 
 // Add CipherText B to CipherText A and store the sum in a destination CipherText
-const cipherTextD = Morfix.CipherText()
+const cipherTextD = seal.CipherText()
 
 evaluator.add(cipherTextA, cipherTextA, cipherTextD)
 
@@ -325,5 +321,5 @@ const decoded = batchEncoder.decode(
   true // Can be omitted since this defaults to true.
 )
 
-console.log('decoded', decoded )
+console.log('decoded', decoded)
 ```
