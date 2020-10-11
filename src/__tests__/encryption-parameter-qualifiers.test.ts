@@ -1,4 +1,4 @@
-import SEAL from '../throws_wasm_node'
+import SEAL from '../throws_wasm_node_umd'
 import { SEALLibrary } from 'implementation/seal'
 import { Context } from 'implementation/context'
 import { Modulus } from 'implementation/modulus'

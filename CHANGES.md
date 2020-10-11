@@ -3,6 +3,17 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 4.4.1
+
+Feat:
+
+- Add bundle suffix to builds for `umd`
+- New bundle for `es` for support. ex: `throws_wasm_node_es`
+
+Breaking:
+
+- Importing/Requiring syntax has changed from `import SEAL from node-seal/throws_wasm_node` => `import SEAL from node-seal/throws_wasm_node_umd`.
+
 ## Version 4.4.0
 
 ### Highlights
