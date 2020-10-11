@@ -1,6 +1,6 @@
 # [node-seal](https://morfix.io/sandbox) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/morfix-io/node-seal/blob/master/LICENSE) [![codecov](https://codecov.io/gh/morfix-io/node-seal/branch/master/graph/badge.svg)](https://codecov.io/gh/morfix-io/node-seal) [![npm version](https://badge.fury.io/js/node-seal.svg)](https://www.npmjs.com/package/node-seal) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmorfix-io%2Fnode-seal.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmorfix-io%2Fnode-seal?ref=badge_shield)
 
-node-seal is a homomorphic encryption library for JavaScript.
+node-seal is a homomorphic encryption library for TypeScript or JavaScript.
 
 - **Web Assembly:** Fastest web implementation of the C++ [Microsoft SEAL](https://github.com/microsoft/SEAL) library
 - **Zero dependencies:** Very lean, only contains a low level API which is very close to the C++ calls from Microsoft SEAL.
@@ -24,8 +24,9 @@ Import the library using `import` or `require` syntax:
 
 ```javascript
 // Auto-detects browser or nodejs.
-// Defaults to "node-seal/throws_wasm_node" for NodeJS
-// Defaults to "node-seal/throws_wasm_web" for Browsers
+// Defaults to "node-seal/throws_wasm_node_umd" for NodeJS
+// Defaults to "node-seal/throws_wasm_web_umd" for Browsers
+// Defaults to "node-seal/throws_wasm_web_es" for Modules
 import SEAL from 'node-seal'
 const { Seal } = require('node-seal')
 ```
@@ -40,15 +41,15 @@ default import that is used.
 
 The deep import link is structured like the following:
 
-`node-seal / <throws|allows>_<wasm|js>_<node|web|worker>`
+`node-seal / <throws|allows>_<wasm|js>_<node|web|worker>_<umd|es>`
 
 ```javascript
 // Always Pick a variant which throws on transparent ciphertexts unless you
 // have a specific reason to allow the use of transparent ciphertexts.
-import SEAL from 'node-seal/throws_wasm_node'
+import SEAL from 'node-seal/throws_wasm_node_umd'
 
 // Or pick a variant which allows transparent ciphertexts (only use this if you know what you're doing)
-import SEAL from 'node-seal/allows_wasm_node'
+import SEAL from 'node-seal/allows_wasm_node_umd'
 ```
 
 #### React-Native
@@ -58,7 +59,7 @@ The bundle needs a bit of extra work. Specifically, it expects the browser `cryp
 ```javascript
 // Provide a CSPRNG mapping to crypto.getRandomValues()
 import 'react-native-get-random-values'
-import SEAL from 'node-seal/allows_wasm_web'
+import SEAL from 'node-seal/throws_wasm_web_umd'
 ;(async () => {
   // Spoof the browser document
   global.document = {}

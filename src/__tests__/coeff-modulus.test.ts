@@ -1,4 +1,4 @@
-import SEAL from '../throws_wasm_node'
+import SEAL from '../throws_wasm_node_umd'
 import { SEALLibrary } from 'implementation/seal'
 let seal: SEALLibrary
 beforeAll(async () => {
