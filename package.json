@@ -32,8 +32,6 @@
   ],
   "license": "MIT",
   "scripts": {
-    "start:wasm": "export NODE_ENV=development && export ENVIRONMENT=web && export TARGET=wasm && webpack-dev-server --host 0.0.0.0",
-    "start:js": "export NODE_ENV=development && export ENVIRONMENT=web && export TARGET=js && webpack-dev-server --host 0.0.0.0",
     "docs": "rm -rf ./docs/* && jsdoc -c jsdoc.json",
     "benchmark:bfv": "node ./benchmark/exampleBfvPerformanceDefault.js",
     "benchmark:ckks": "node ./benchmark/exampleCkksPerformanceDefault.js",
