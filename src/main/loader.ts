@@ -1,4 +1,4 @@
-import { Library } from './implementation/emscripten'
+import { Library } from '../implementation/emscripten'
 
 export type NestedLibrary = {
   readonly library: Library

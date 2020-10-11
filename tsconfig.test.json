@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "declaration": true,
-    "declarationDir": "./tsc-out",
+    "declarationDir": "./tsc-out/types",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
@@ -27,5 +27,5 @@
     "typeRoots": ["./src/custom_types", "./node_modules/@types"]
   },
   "include": ["./src/**/*"],
-  "exclude": ["./node_modules/**/*", "./tsc-out/**/*", "./src/__tests__/**/*"]
+  "exclude": ["node_modules", "**/tsc-out"]
 }

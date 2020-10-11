@@ -23,11 +23,12 @@
     "cryptography",
     "cryptosystem"
   ],
-  "main": "throws/wasm/node/cjs/index.js",
-  "browser": "throws/wasm/web/iife/index.js",
-  "module": "throws/wasm/web/es/index.js",
+  "main": "throws_wasm_node.js",
+  "browser": "throws_wasm_web.js",
+  "module": "throws_wasm_web.js",
+  "types": "throws_wasm_web.d.ts",
   "files": [
-    "**/*.js"
+    "**/*"
   ],
   "license": "MIT",
   "scripts": {
@@ -61,7 +62,6 @@
     "format": "prettier --write src",
     "lint": "eslint --fix 'src/**/*.ts'",
     "test": "jest src/**/*.ts",
-    "test:js": "jest tsc-out/__tests__/*.js",
     "coverage": "jest src --coverage",
     "coverage:upload": "env-cmd -f .env codecov",
     "rollup": "NODE_OPTIONS=--max_old_space_size=16384 rollup -c",
@@ -78,6 +78,9 @@
     "@types/jest": "^26.0.14",
     "@typescript-eslint/eslint-plugin": "^4.4.0",
     "@typescript-eslint/parser": "^4.4.0",
+    "better-docs": "^2.3.2",
+    "codecov": "^3.8.0",
+    "env-cmd": "^10.1.0",
     "eslint": "^7.11.0",
     "eslint-config-prettier": "^6.12.0",
     "eslint-plugin-jest": "^24.1.0",
@@ -85,18 +88,16 @@
     "eslint-plugin-prettier": "^3.1.4",
     "esm": "^3.2.25",
     "jest": "^26.5.2",
+    "jsdoc": "^3.6.6",
     "path": "^0.12.7",
     "prettier": "^2.1.2",
     "rollup": "^2.29.0",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.27.3",
     "ts-jest": "^26.4.1",
-    "typescript": "^4.0.3",
-    "better-docs": "^2.3.2",
-    "codecov": "^3.8.0",
-    "env-cmd": "^10.1.0",
-    "jsdoc": "^3.6.6"
+    "typescript": "^4.0.3"
   },
   "browserslist": [
     "since 2017-06"

@@ -1,7 +1,7 @@
-import { SEALLibrary } from 'implementation/seal'
-import sealLibrary from 'seal_throws_wasm_worker'
-import { NestedLibrary, createLoader } from './loader'
-import { SEAL } from './seal'
+import { SEALLibrary } from './implementation/seal'
+import sealLibrary from 'seal_allows_wasm_web'
+import { NestedLibrary, createLoader } from './main/loader'
+import { SEAL } from './main/seal'
 /**
  * Export a function which loads the proper build
  */
