@@ -16,6 +16,7 @@ for more details on each SEAL version change.
 Feat:
 
 - Supporting Seal v3.5.9
+- `Context` can be created with only the `EncryptionParameters`. By default, it will set expandModulus = `true`, security = `tc128`.
 - `SecretKey.save()` now uses compression (`deflate`) by default
 - `ParmsIdType.values()` returns a `BigUint64Array` containing the underlying values
 - `PlainModulus.Batching()` returns a `Modulus` type instead of the raw WASM instance
@@ -24,7 +25,8 @@ Feat:
 
 Breaking
 
-- Importing/Requiring syntax has changed from `import { Seal } from ...` => `import SEAL from ...` so you may import the library with any name.
+- Importing/Requiring syntax has changed from `import { Seal } from ...` => `import SEAL from ...` (you may use any default name)
+- 
 
 ## Version 4.3.10
 
