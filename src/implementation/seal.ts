@@ -173,11 +173,11 @@ export const SEALConstructor = ({
   // so we need to load them in order.
 
   // Define our singletons
-  const exception = Exception({})()
-  const comprModeType = ComprModeType({})()
-  const memoryPoolHandle = MemoryPoolHandle({})()
-  const securityLevel = SecurityLevel({})()
-  const schemeType = SchemeType({})()
+  const exception = Exception()()
+  const comprModeType = ComprModeType()()
+  const memoryPoolHandle = MemoryPoolHandle()()
+  const securityLevel = SecurityLevel()()
+  const schemeType = SchemeType()()
 
   // Define our constructors (ORDER MATTERS)
   const vector = Vector({ Exception: exception })
@@ -228,7 +228,7 @@ export const SEALConstructor = ({
     PlainText: plainText,
     Vector: vector
   })
-  const encryptionParameterQualifiers = EncryptionParameterQualifiers({})
+  const encryptionParameterQualifiers = EncryptionParameterQualifiers()
   const encryptionParameters = EncryptionParameters({
     Exception: exception,
     ComprModeType: comprModeType,

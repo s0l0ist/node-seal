@@ -1,10 +1,8 @@
 import { LoaderOptions, Library } from './emscripten'
 
 export type SecurityLevelDependencies = {
-  ({}: SecurityLevelDependencyOptions): SecurityLevelConstructorOptions
+  (): SecurityLevelConstructorOptions
 }
-
-export type SecurityLevelDependencyOptions = {}
 
 export type SecurityLevelConstructorOptions = {
   (): SecurityLevel
@@ -19,7 +17,7 @@ export type SecurityLevel = {
 
 const SecurityLevelConstructor = (
   library: Library
-): SecurityLevelDependencies => ({}: SecurityLevelDependencyOptions): SecurityLevelConstructorOptions => (): SecurityLevel => {
+): SecurityLevelDependencies => (): SecurityLevelConstructorOptions => (): SecurityLevel => {
   // Static methods
   const _none = library.SecLevelType.none
   const _tc128 = library.SecLevelType.tc128

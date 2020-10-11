@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "declaration": true,
-    "declarationDir": "./tsc-out/types",
+    "declarationDir": "./tsc-out",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",

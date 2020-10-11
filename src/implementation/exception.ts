@@ -1,10 +1,8 @@
 import { LoaderOptions, Library } from './emscripten'
 
 export type ExceptionDependencies = {
-  ({}: ExceptionDependencyOptions): ExceptionConstructorOptions
+  (): ExceptionConstructorOptions
 }
-
-export type ExceptionDependencyOptions = {}
 
 export type ExceptionConstructorOptions = {
   (): Exception
@@ -16,7 +14,7 @@ export type Exception = {
 
 const ExceptionConstructor = (
   library: Library
-): ExceptionDependencies => ({}: ExceptionDependencyOptions): ExceptionConstructorOptions => (): Exception => {
+): ExceptionDependencies => (): ExceptionConstructorOptions => (): Exception => {
   // Static methods
   const _getException = library.getException
 

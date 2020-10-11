@@ -1,10 +1,8 @@
-import { LoaderOptions, Library, Instance } from './emscripten'
+import { Instance } from './emscripten'
 import { SecurityLevel } from './security-level'
 
-export type EncryptionParameterQualifiersDependencyOptions = {}
-
 export type EncryptionParameterQualifiersDependencies = {
-  ({}: EncryptionParameterQualifiersDependencyOptions): EncryptionParameterQualifiersConstructorOptions
+  (): EncryptionParameterQualifiersConstructorOptions
 }
 
 export type EncryptionParameterQualifiersConstructorOptions = {
@@ -24,9 +22,7 @@ export type EncryptionParameterQualifiers = {
   readonly securityLevel: SecurityLevel
 }
 
-const EncryptionParameterQualifiersConstructor = (
-  library: Library
-): EncryptionParameterQualifiersDependencies => ({}: EncryptionParameterQualifiersDependencyOptions): EncryptionParameterQualifiersConstructorOptions => (): EncryptionParameterQualifiers => {
+const EncryptionParameterQualifiersConstructor = (): EncryptionParameterQualifiersDependencies => (): EncryptionParameterQualifiersConstructorOptions => (): EncryptionParameterQualifiers => {
   let _instance: Instance
   /**
    * @implements EncryptionParameterQualifiers
@@ -188,9 +184,6 @@ const EncryptionParameterQualifiersConstructor = (
   }
 }
 
-export const EncryptionParameterQualifiersInit = ({
-  loader
-}: LoaderOptions): EncryptionParameterQualifiersDependencies => {
-  const library: Library = loader.library
-  return EncryptionParameterQualifiersConstructor(library)
+export const EncryptionParameterQualifiersInit = (): EncryptionParameterQualifiersDependencies => {
+  return EncryptionParameterQualifiersConstructor()
 }

@@ -1,4 +1,4 @@
-import { LoaderOptions, Library, Instance } from './emscripten'
+import { Instance } from './emscripten'
 import { Exception } from './exception'
 import { VectorConstructorOptions } from './vector'
 import { ComprModeType } from './compr-mode-type'
@@ -29,9 +29,7 @@ export type Serializable = {
   readonly saveArray: (compression?: ComprModeType) => Uint8Array
 }
 
-const SerializableConstructor = (
-  _library: Library
-): SerializableDependencies => ({
+const SerializableConstructor = (): SerializableDependencies => ({
   Exception,
   Vector,
   ComprModeType
@@ -125,9 +123,6 @@ const SerializableConstructor = (
   }
 }
 
-export const SerializableInit = ({
-  loader
-}: LoaderOptions): SerializableDependencies => {
-  const library: Library = loader.library
-  return SerializableConstructor(library)
+export const SerializableInit = (): SerializableDependencies => {
+  return SerializableConstructor()
 }

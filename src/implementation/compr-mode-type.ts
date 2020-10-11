@@ -1,10 +1,8 @@
 import { LoaderOptions, Library } from './emscripten'
 
 export type ComprModeTypeDependencies = {
-  ({}: ComprModeTypeDependencyOptions): ComprModeTypeConstructorOptions
+  (): ComprModeTypeConstructorOptions
 }
-
-export type ComprModeTypeDependencyOptions = {}
 
 export type ComprModeTypeConstructorOptions = {
   (): ComprModeType
@@ -17,7 +15,7 @@ export type ComprModeType = {
 
 const ComprModeTypeConstructor = (
   library: Library
-): ComprModeTypeDependencies => ({}: ComprModeTypeDependencyOptions): ComprModeTypeConstructorOptions => (): ComprModeType => {
+): ComprModeTypeDependencies => (): ComprModeTypeConstructorOptions => (): ComprModeType => {
   // Static methods
   const _none = library.ComprModeType.none
   const _deflate = library.ComprModeType.deflate

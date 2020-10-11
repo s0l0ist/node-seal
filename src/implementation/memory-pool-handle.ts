@@ -1,9 +1,7 @@
 import { LoaderOptions, Library } from './emscripten'
 
-export type MemoryPoolHandleDependencyOptions = {}
-
 export type MemoryPoolHandleDependencies = {
-  ({}: MemoryPoolHandleDependencyOptions): MemoryPoolHandleConstructorOptions
+  (): MemoryPoolHandleConstructorOptions
 }
 
 export type MemoryPoolHandleConstructorOptions = {
@@ -17,7 +15,7 @@ export type MemoryPoolHandle = {
 
 const MemoryPoolHandleConstructor = (
   library: Library
-): MemoryPoolHandleDependencies => ({}: MemoryPoolHandleDependencyOptions): MemoryPoolHandleConstructorOptions => (): MemoryPoolHandle => {
+): MemoryPoolHandleDependencies => (): MemoryPoolHandleConstructorOptions => (): MemoryPoolHandle => {
   // Static methods
   const _global = library.MemoryPoolHandle.MemoryPoolHandleGlobal
   const _threadLocal = library.MemoryPoolHandle.MemoryPoolHandleThreadLocal

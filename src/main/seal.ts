@@ -61,9 +61,7 @@ export const SEAL = async (
     Decryptor: DecryptorInit({
       loader
     }),
-    EncryptionParameterQualifiers: EncryptionParameterQualifiersInit({
-      loader
-    }),
+    EncryptionParameterQualifiers: EncryptionParameterQualifiersInit(),
     EncryptionParameters: EncryptionParametersInit({
       loader
     }),
@@ -115,9 +113,7 @@ export const SEAL = async (
     SecurityLevel: SecurityLevelInit({
       loader
     }),
-    Serializable: SerializableInit({
-      loader
-    }),
+    Serializable: SerializableInit(),
     Vector: VectorInit({
       loader
     })

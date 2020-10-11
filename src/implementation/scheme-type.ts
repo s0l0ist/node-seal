@@ -1,10 +1,8 @@
 import { LoaderOptions, Library } from './emscripten'
 
 export type SchemeTypeDependencies = {
-  ({}: SchemeTypeDependencyOptions): SchemeTypeConstructorOptions
+  (): SchemeTypeConstructorOptions
 }
-
-export type SchemeTypeDependencyOptions = {}
 
 export type SchemeTypeConstructorOptions = {
   (): SchemeType
@@ -18,7 +16,7 @@ export type SchemeType = {
 
 const SchemeTypeConstructor = (
   library: Library
-): SchemeTypeDependencies => ({}: SchemeTypeDependencyOptions): SchemeTypeConstructorOptions => (): SchemeType => {
+): SchemeTypeDependencies => (): SchemeTypeConstructorOptions => (): SchemeType => {
   // Static methods
   const _none = library.SchemeType.none
   const _BFV = library.SchemeType.BFV
