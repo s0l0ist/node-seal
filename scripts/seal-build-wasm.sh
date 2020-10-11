@@ -5,9 +5,9 @@ source ./emsdk_env.sh > /dev/null
 
 cd ../SEAL/lib/
 
-if [[ "$THROWS_ON_TRANSPARENT" == "ON" ]]; then
+if [[ "$THROW_ON_TRANSPARENT" == "ON" ]]; then
   TYPE="throws_transparent"
-else
+elif [[ "$THROW_ON_TRANSPARENT" == "OFF" ]]; then
   TYPE="allows_transparent"
 fi
 
@@ -36,6 +36,6 @@ emcc \
   -s SINGLE_FILE=1 \
   -s ENVIRONMENT="${ENVIRONMENT}" \
   --closure 1
-cp "${FILE_NAME}" ../../../src/bin/$FILE_NAME.js
+cp "${FILE_NAME}" ../../../src/bin/"${FILE_NAME}"
 printf "done\n"
 cd ../../

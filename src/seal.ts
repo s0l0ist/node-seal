@@ -1,6 +1,3 @@
-import sealLibrary from 'seal_js_web'
-
-import { NestedLibrary, createLoader } from './loader'
 import { SEALLibrary, SEALConstructor } from './implementation/seal'
 import { BatchEncoderInit } from './implementation/batch-encoder'
 import { CipherTextInit } from './implementation/cipher-text'
@@ -30,12 +27,11 @@ import { SecretKeyInit } from './implementation/secret-key'
 import { SecurityLevelInit } from './implementation/security-level'
 import { SerializableInit } from './implementation/serializable'
 import { VectorInit } from './implementation/vector'
-const Loader = (): Promise<NestedLibrary> => createLoader(sealLibrary)
 
 /**
  * Main export for the library
  */
-export default async (): Promise<SEALLibrary> => {
+export const SEAL = async (Loader: any): Promise<SEALLibrary> => {
   const loader = await Loader()
   return SEALConstructor({
     BatchEncoder: BatchEncoderInit({
