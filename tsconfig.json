@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "declaration": true,
+    "declarationDir": "./tsc-out",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "newLine": "LF",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "outDir": "./tsc-out",
+    "paths": {
+      "seal_*": ["./src/bin/seal_*"]
+    },
+    "pretty": true,
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "rootDir": "./src",
+    "sourceMap": true,
+    "strict": true,
+    "target": "ES2019",
+    "typeRoots": ["./src/custom_types", "./node_modules/@types"]
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["./node_modules/**/*", "./tsc-out/**/*", "./src/__tests__/**/*"]
+}

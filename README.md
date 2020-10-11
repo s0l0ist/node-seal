@@ -1,12 +1,12 @@
-# [node-seal](https://morfix.io/sandbox) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/morfix-io/node-seal/blob/master/LICENSE) [![codecov](https://codecov.io/gh/morfix-io/node-seal/branch/master/graph/badge.svg)](https://codecov.io/gh/morfix-io/node-seal) [![CodeFactor](https://www.codefactor.io/repository/github/morfix-io/node-seal/badge)](https://www.codefactor.io/repository/github/morfix-io/node-seal) [![DeepScan grade](https://deepscan.io/api/teams/6431/projects/8438/branches/100710/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=6431&pid=8438&bid=100710) [![npm version](https://badge.fury.io/js/node-seal.svg)](https://www.npmjs.com/package/node-seal) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmorfix-io%2Fnode-seal.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmorfix-io%2Fnode-seal?ref=badge_shield)
+# [node-seal](https://morfix.io/sandbox) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/morfix-io/node-seal/blob/master/LICENSE) [![codecov](https://codecov.io/gh/morfix-io/node-seal/branch/master/graph/badge.svg)](https://codecov.io/gh/morfix-io/node-seal) [![npm version](https://badge.fury.io/js/node-seal.svg)](https://www.npmjs.com/package/node-seal) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmorfix-io%2Fnode-seal.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmorfix-io%2Fnode-seal?ref=badge_shield)
 
-node-seal is a homomorphic encryption library in JavaScript.
+node-seal is a homomorphic encryption library for JavaScript.
 
 - **Web Assembly:** Fastest web implementation of the C++ [Microsoft SEAL](https://github.com/microsoft/SEAL) library
 - **Zero dependencies:** Very lean, only contains a low level API which is very close to the C++ calls from Microsoft SEAL.
-- **Node.js or the browser:** Install once, work in any server/client configuration.
+- **Node.js, Browser, React Native:** Install once, work in any server/client configuration.
 
-**Now supporting Microsoft SEAL 3.5.8**
+**Now supporting Microsoft SEAL 3.5.9**
 
 ## Installation
 
@@ -24,56 +24,49 @@ Import the library using `import` or `require` syntax:
 
 ```javascript
 // Auto-detects browser or nodejs.
-// Defaults to use the WASM build which throws on transparent ciphertexts
-import { Seal } from 'node-seal'
+// Defaults to "node-seal/throws_wasm_node" for NodeJS
+// Defaults to "node-seal/throws_wasm_web" for Browsers
+import SEAL from 'node-seal'
 const { Seal } = require('node-seal')
 ```
 
-Specify a target environment. This is useful for environments that
-aren't detected properly or do not support WebAssembly. In addition,
-there are two separate bundles for throwing on transparent ciphertexts
-and another for allowing transparent ciphertexts. If you're unsure what 
-you need, start with the build that throws on transparent ciphertexts.
-This is also the default import that is used.
+You may also specify a deep import to target your environment better.
+This is useful for environments that aren't detected properly or do
+not support WebAssembly. In addition, there are two separate bundles
+for throwing on transparent ciphertexts and another for allowing
+transparent ciphertexts. If you're unsure what you need, start with
+the build that **throws** on transparent ciphertexts. This is also the
+default import that is used.
+
+The deep import link is structured like the following:
+
+`node-seal / <throws|allows>_<wasm|js>_<node|web|worker>`
 
 ```javascript
-// Pick one that suits your need (throws on transparent ciphertexts)
-import { Seal } from 'node-seal/dist/throws_transparent/node/wasm' // Specifies the WASM build for NodeJS
-import { Seal } from 'node-seal/dist/throws_transparent/node/js' // Specifies the JS build for NodeJS
-import { Seal } from 'node-seal/dist/throws_transparent/web/wasm' // Specifies the WASM build for the browser
-import { Seal } from 'node-seal/dist/throws_transparent/web/js' // Specifies the JS build for the browser
+// Always Pick a variant which throws on transparent ciphertexts unless you
+// have a specific reason to allow the use of transparent ciphertexts.
+import SEAL from 'node-seal/throws_wasm_node'
 
-// Pick one that suits your need (allows transparent ciphertexts)
-import { Seal } from 'node-seal/dist/allows_transparent/node/wasm' // Specifies the WASM build for NodeJS
-import { Seal } from 'node-seal/dist/allows_transparent/node/js' // Specifies the JS build for NodeJS
-import { Seal } from 'node-seal/dist/allows_transparent/web/wasm' // Specifies the WASM build for the browser
-import { Seal } from 'node-seal/dist/allows_transparent/web/js' // Specifies the JS build for the browser
+// Or pick a variant which allows transparent ciphertexts (only use this if you know what you're doing)
+import SEAL from 'node-seal/allows_wasm_node'
 ```
 
 #### React-Native
 
-In react-native environments, there are two ways of using node-seal.
-
-1. Load the pure JS build
-2. Create a WebView and manage node-seal inside.
-
-**Option 1** is the easiest method, but performance is
-significantly reduced. Because emscripten expects either a NodeJS or Web environment,
-loading node-seal will fail because it expects a browser global object that doesn't
-not exist. The solution is to spoof the `document` object.
-
-Simply add an empty `document` object to the `global` provided by react-native:
+The bundle needs a bit of extra work. Specifically, it expects the browser `crypto.getRandomValues` which it will not find by default as react-native doesn't support the crypto builtin. It can be fixed by `npm install react-native-get-random-values` which provides access to this global while supporting a CSPRNG. The library also needs to have the browser `document` which is an artifact from the build system. Simply provide `global.document = {}`. Finally, it requires the following deep import structure:
 
 ```javascript
-import { Seal } from 'node-seal/dist/throws_transparent/web/js'
+// Provide a CSPRNG mapping to crypto.getRandomValues()
+import 'react-native-get-random-values'
+import SEAL from 'node-seal/allows_wasm_web'
 ;(async () => {
-  global.document = {} // mimic browser document
-  const seal = await Seal()
+  // Spoof the browser document
+  global.document = {}
+  // Wait for the library to initialize
+  const seal = await SEAL()
+  //...
 })()
 ```
-
-**Option 2** is harder to implement, but it will allow you to use the faster `dist/throws_transparent/web/wasm` build.
-The implementation will need to manage the state within the WebView.
 
 ## Demo
 
@@ -141,7 +134,7 @@ Encryption Parameters:
 - Coeff Modulus Size: 438 (48 + 48 + 48 + 49 + 49 + 49 + 49 + 49 + 49) bits
 - Plain Modulus: 786433
 
-Number of iterations is **100**, time in **microseconds**. Browser timers are known to be imprecise, variance maybe high.
+number of iterations is **100**, time in **microseconds**. Browser timers are known to be imprecise, variance maybe high.
 
 | 16384, n = 100         | Node\.js | Chrome  | Firefox | Safari  | Seal \(C\+\+\) | Node\.js \(times slower\) | Chrome \(times slower\) | Firefox \(times slower\) | Safari \(times slower\) |
 | ---------------------- | -------- | ------- | ------- | ------- | -------------- | ------------------------- | ----------------------- | ------------------------ | ----------------------- |
@@ -166,10 +159,8 @@ Number of iterations is **100**, time in **microseconds**. Browser timers are kn
 Conversion from C++ to Web Assembly has some limitations:
 
 - **±2^53 bit numbers:** JavaScript uses 2^53 numbers (not true 64 bit). Values higher than these
-  will typically result in inaccuracies. `BFV` users will inherently adhere to these
-  limitations due to the Int32/UInt32 TypedArrays. `CKKS` users will need to keep this in mind.
-  There are extra methods that now support 64-bit integers using BigInt for `BFV` at a significant 
-  performance penalty. However, `CKKS` is still limited to 2^53-bit precision.
+  will typically result in inaccuracies. If you're using the `CKKS` scheme, you need to keep this in mind. `BFV` users will inherently adhere to these limitations due to the Int32Array/Uint32Array TypedArrays. Recently, `BFV` users now have support for BigInt64Array/BigUint64Array TypedArrays
+  but at a significant encode/decode penalty - encyption/evaluation/decryption performance is the same.
 
 - **Memory:** Generating large keys and saving them in the browser could be problematic.
   We can control NodeJS heap size, but not inside a user's browser.

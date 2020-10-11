@@ -1,4 +1,4 @@
-const { Seal } = require('../dist/throws_transparent/node/wasm')
+const SEAL = require('../dist/throws_wasm_node')
 const { performance } = require('perf_hooks')
 
 ;(async function () {
@@ -15,7 +15,7 @@ function create() {
   }
 
   async function init() {
-    seal = await Seal()
+    seal = await SEAL()
   }
 
   function exampleCkksPerformanceDefault() {

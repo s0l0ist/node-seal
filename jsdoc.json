@@ -1,15 +1,15 @@
 {
   "tags": {
-    "allowUnknownTags": ["par", "warning", "optional", "helpwanted", "category"]
+    "allowUnknownTags": ["par", "warning", "optional"]
   },
   "source": {
-    "include": ["./src/seal", "./src/components"],
-    "includePattern": ".js$"
+    "include": ["./src/implementation"],
+    "includePattern": "\\.(ts)$"
   },
   "opts": {
     "destination": "./docs/",
     "readme": "README.md",
     "template": "node_modules/better-docs"
   },
-  "plugins": ["node_modules/better-docs/category"]
+  "plugins": ["node_modules/better-docs/typescript"]
 }

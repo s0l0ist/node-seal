@@ -1,0 +1,30 @@
+import SEAL from '../throws_wasm_node'
+import { SEALLibrary } from 'implementation/seal'
+let seal: SEALLibrary
+beforeAll(async () => {
+  seal = await SEAL()
+})
+
+describe('Exception', () => {
+  test('It should be a static instance', () => {
+    expect(seal.Exception).toBeDefined()
+    expect(typeof seal.Exception.constructor).toBe('function')
+    expect(seal.Exception).toBeInstanceOf(Object)
+    expect(seal.Exception.constructor).toBe(Object)
+    expect(seal.Exception.constructor.name).toBe('Object')
+  })
+  test('It should have properties', () => {
+    expect(seal.Exception).toHaveProperty('safe')
+  })
+  test('It should attempt to get a safe error from an error instance', () => {
+    const spyOn = jest.spyOn(seal.Exception, 'safe')
+    const err = new Error('test error')
+    seal.Exception.safe(err)
+    expect(spyOn).toHaveBeenCalledWith(err)
+  })
+  test('It should attempt to get a safe error from a string', () => {
+    const spyOn = jest.spyOn(seal.Exception, 'safe')
+    seal.Exception.safe('unknown error')
+    expect(spyOn).toHaveBeenCalledWith('unknown error')
+  })
+})
