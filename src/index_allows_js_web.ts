@@ -1,5 +1,5 @@
 import { SEALLibrary } from 'implementation/seal'
-import sealLibrary from 'seal_allows_transparent_js_web'
+import sealLibrary from 'seal_allows_js_web'
 import { NestedLibrary, createLoader } from './loader'
 import { SEAL } from './seal'
 /**

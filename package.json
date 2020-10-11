@@ -23,26 +23,11 @@
     "cryptography",
     "cryptosystem"
   ],
-  "main": "dist/throws_transparent/node/wasm/index.js",
-  "module": "dist/throws_transparent/node/wasm/index.js",
-  "browser": "dist/throws_transparent/web/wasm/index.js",
+  "main": "throws/wasm/node/cjs/index.js",
+  "browser": "throws/wasm/web/iife/index.js",
+  "module": "throws/wasm/web/es/index.js",
   "files": [
-    "dist/throws_transparent/web/js/index.js",
-    "dist/throws_transparent/web/js/index.js.map",
-    "dist/throws_transparent/web/wasm/index.js",
-    "dist/throws_transparent/web/wasm/index.js.map",
-    "dist/throws_transparent/node/js/index.js",
-    "dist/throws_transparent/node/js/index.js.map",
-    "dist/throws_transparent/node/wasm/index.js",
-    "dist/throws_transparent/node/wasm/index.js.map",
-    "dist/allows_transparent/web/js/index.js",
-    "dist/allows_transparent/web/js/index.js.map",
-    "dist/allows_transparent/web/wasm/index.js",
-    "dist/allows_transparent/web/wasm/index.js.map",
-    "dist/allows_transparent/node/js/index.js",
-    "dist/allows_transparent/node/js/index.js.map",
-    "dist/allows_transparent/node/wasm/index.js",
-    "dist/allows_transparent/node/wasm/index.js.map"
+    "**/*.js"
   ],
   "license": "MIT",
   "scripts": {
@@ -78,7 +63,12 @@
     "test": "jest src/**/*.ts",
     "test:js": "jest tsc-out/__tests__/*.js",
     "coverage": "jest src --coverage",
-    "coverage:upload": "env-cmd -f .env codecov"
+    "coverage:upload": "env-cmd -f .env codecov",
+    "rollup": "NODE_OPTIONS=--max_old_space_size=16384 rollup -c",
+    "postrollup": "bash scripts/postrollup.sh",
+    "prepublishOnly": "echo 'Please run \"npm run publish\" instead' && exit 1",
+    "publish:test": "npm --dry-run publish dist/node-seal-*.tgz",
+    "publish": "npm publish dist/node-seal-*.tgz"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",

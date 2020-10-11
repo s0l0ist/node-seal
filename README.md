@@ -24,9 +24,9 @@ Import the library using `import` or `require` syntax:
 
 ```javascript
 // Auto-detects browser or nodejs.
-// Defaults to (node-seal/throws_transparent/wasm/node/cjs) for NodeJS
-// Defaults to (node-seal/throws_transparent/wasm/web/iife) for Browsers
-// Defaults to (node-seal/throws_transparent/wasm/web/es) for Modules
+// Defaults to (node-seal/throws/wasm/node/cjs) for NodeJS
+// Defaults to (node-seal/throws/wasm/web/iife) for Browsers
+// Defaults to (node-seal/throws/wasm/web/es) for Modules
 import { Seal } from 'node-seal'
 const { Seal } = require('node-seal')
 ```
@@ -41,14 +41,15 @@ default import that is used.
 
 The deep import link is structured like the following:
 
-`node-seal / <throws_transparent|allows_transparent> / <wasm|js> / <node|web|worker> / <cjs|es|iife>`
+`node-seal / <throws|allows> / <wasm|js> / <node|web|worker> / <cjs|es|iife>`
 
 ```javascript
-// Pick a variant which throws on transparent ciphertexts
-import { Seal } from 'node-seal/throws_transparent/wasm/node/cjs'
+// Always Pick a variant which throws on transparent ciphertexts unless you
+// have a specific reason to allow the use of transparent ciphertexts.
+import { Seal } from 'node-seal/throws/wasm/node/cjs'
 
 // Or pick a variant which allows transparent ciphertexts (only use this if you know what you're doing)
-import { Seal } from 'node-seal/allows_transparent/wasm/node/cjs'
+import { Seal } from 'node-seal/allows/wasm/node/cjs'
 ```
 
 #### React-Native
@@ -58,7 +59,7 @@ The bundle needs a bit of extra work. Specifically, it expects the browser `cryp
 ```javascript
 // Provide a CSPRNG mapping to crypto.getRandomValues()
 import 'react-native-get-random-values'
-import { Seal } from 'node-seal/allows_transparent/wasm/web/es'
+import { Seal } from 'node-seal/allows/wasm/web/es'
 ;(async () => {
   // Spoof the browser document
   global.document = {}

@@ -1,5 +1,5 @@
 import { SEALLibrary } from 'implementation/seal'
-import sealLibrary from 'seal_throws_transparent_wasm_worker'
+import sealLibrary from 'seal_throws_wasm_worker'
 import { NestedLibrary, createLoader } from './loader'
 import { SEAL } from './seal'
 /**

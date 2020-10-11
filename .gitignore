@@ -12,3 +12,5 @@ yarn-error.log*
 .env
 .vscode
 /tsc-out
+/src/bin/*
+/dist/*

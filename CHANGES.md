@@ -9,7 +9,7 @@ for more details on each SEAL version change.
 
 - Updated the entire library to TypeScript which fixed numerous inconsistencies
 - Added support for more builds:
-  - [`js`, `wasm`] each with [`node`, `web`, `worker`] each with [`cjs`, `es`, `iife`] builds
+  - [`allows`, `throws`] each with [`js`, `wasm`] each with [`node`, `web`, `worker`] each with [`cjs`, `es`, `iife`] builds
 - Support for WebAssembly in React Native
 - More consistencies with 64-bit types using `BigInt`
 

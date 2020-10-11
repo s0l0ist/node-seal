@@ -1,5 +1,5 @@
 import { SEALLibrary } from 'implementation/seal'
-import sealLibrary from 'seal_allows_transparent_wasm_node'
+import sealLibrary from 'seal_allows_wasm_node'
 import { NestedLibrary, createLoader } from './loader'
 import { SEAL } from './seal'
 /**

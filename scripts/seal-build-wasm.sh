@@ -6,9 +6,9 @@ source ./emsdk_env.sh > /dev/null
 cd ../SEAL/lib/
 
 if [[ "$THROW_ON_TRANSPARENT" == "ON" ]]; then
-  TYPE="throws_transparent"
+  TYPE="throws"
 elif [[ "$THROW_ON_TRANSPARENT" == "OFF" ]]; then
-  TYPE="allows_transparent"
+  TYPE="allows"
 fi
 
 if [[ "$ENVIRONMENT" == "node" ]]; then
