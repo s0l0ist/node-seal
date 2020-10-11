@@ -1,6 +1,6 @@
 {
   "name": "node-seal",
-  "version": "4.4.0",
+  "version": "4.4.1",
   "description": "Homomorphic Encryption for JavaScript using Microsoft SEAL",
   "repository": {
     "type": "git",
@@ -23,10 +23,10 @@
     "cryptography",
     "cryptosystem"
   ],
-  "main": "throws_wasm_node.js",
-  "browser": "throws_wasm_web.js",
-  "module": "throws_wasm_web.js",
-  "types": "throws_wasm_web.d.ts",
+  "main": "throws_wasm_node_umd.js",
+  "browser": "throws_wasm_web_umd.js",
+  "module": "throws_wasm_web_es.js",
+  "types": "throws_wasm_web_es.d.ts",
   "files": [
     "**/*"
   ],

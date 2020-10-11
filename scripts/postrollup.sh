@@ -10,7 +10,7 @@ cp -rf CHANGES.md dist/
 # Change directory into dist and pack to get
 # shorter deep import links.
 # Ex: 
-# import SEAL from 'node-seal/throws_wasm_node'
+# import SEAL from 'node-seal/throws_wasm_node_umd'
 cd dist/
 
 # Pack

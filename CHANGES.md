@@ -3,6 +3,12 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 4.4.1
+
+Feat:
+
+- Add bundle suffixes for `umd` and `es` for support in `deno`
+
 ## Version 4.4.0
 
 ### Highlights
@@ -25,7 +31,7 @@ Feat:
 
 Breaking
 
-- Importing/Requiring syntax has changed from `import { Seal } from node-seal/dist/throws_transparent/node/wasm/cjs` => `import SEAL from node-seal/throws_wasm_node`. You may use any default name.
+- Importing/Requiring syntax has changed from `import { Seal } from node-seal/dist/throws_transparent/node/wasm/cjs` => `import SEAL from node-seal/throws_wasm_node_umd`. You may use any default name.
 
 ## Version 4.3.10
 

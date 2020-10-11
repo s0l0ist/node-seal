@@ -1,7 +1,7 @@
 import { terser } from 'rollup-plugin-terser'
 import alias from '@rollup/plugin-alias'
 import typescript from 'rollup-plugin-typescript2'
-const formats = ['umd']
+const formats = ['umd', 'es']
 const targets = ['allows', 'throws']
 const variants = ['wasm', 'js']
 const environments = ['node', 'web', 'worker']
@@ -18,9 +18,9 @@ const outputs = formats.reduce(
               (acc, environment) => [
                 ...acc,
                 {
-                  input: `src/${target}_${variant}_${environment}.ts`,
+                  input: `src/${target}_${variant}_${environment}_${format}.ts`,
                   output: {
-                    file: `dist/${target}_${variant}_${environment}.js`,
+                    file: `dist/${target}_${variant}_${environment}_${format}.js`,
                     sourcemap: true,
                     format,
                     name: 'SEAL',
