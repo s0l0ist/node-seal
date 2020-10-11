@@ -42,7 +42,6 @@ First, initialize the Emscripten SDK build environment. This sets up a known wor
 of the SDK to build the project:
 
 ```shell
-# npm run submodule:update # If you forgot to clone recursively
 npm run em:update      # Updates the tag information
 npm run em:init        # Sets up the working toolchain
 ```
@@ -50,19 +49,17 @@ npm run em:init        # Sets up the working toolchain
 Finally, configure the Microsoft SEAL build settings:
 
 ```shell
-npm run seal:clean     # When you want to remove all artifacts
-npm run seal:cmake     # Do this once
-npm run seal:make      # Will begin building the SEAL static library
-npm run seal:build     # Will compile both the Web Assembly and JS build from the library
-npm run build          # Will build both the web and node supporting JS and Web Assembly to be packed for npm
+npm run build          # Will build the two MS-SEAL variants (allows, throws), supporting `node`, `web`, and `worker` emscripten environments
+npm run test           # Will run jest tests on the *.ts files
+npm run compile        # Test compile before bundling, useful for debugging
+npm run coverage       # Check coverage
+
+npm run clean          # Removes _all_ artifacts
 ```
 
-Testing requires a seal:build to have completed successfully.
-All test should pass and coverage should be 100% when making contributions.
-**Note**: this could a few minutes and is very CPU/memory intensive.
+If you want to build your own bundle, perform the steps above and then the following:
 
 ```shell
-npm run coverage
+npm run rollup         # Compiles all TS files, generates declarations, performs minification and places them into `./dist`
+npm run publish:test   # Simulates publishing the bundle to `node-seal`
 ```
-
-If successful, submit PR!
