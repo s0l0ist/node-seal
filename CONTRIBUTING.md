@@ -51,10 +51,14 @@ Finally, configure the Microsoft SEAL build settings:
 ```shell
 npm run build          # Will build the two MS-SEAL variants (allows, throws), supporting `node`, `web`, and `worker` emscripten environments
 npm run test           # Will run jest tests on the *.ts files
-npm run compile        # Test compile before bundling, useful for debugging
 npm run coverage       # Check coverage
+npm run compile        # Test compile before bundling, useful for debugging
+```
 
-npm run clean          # Removes _all_ artifacts
+To clean all generated artifacts:
+
+```shell
+npm run clean
 ```
 
 If you want to build your own bundle, perform the steps above and then the following:
