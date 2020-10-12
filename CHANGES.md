@@ -12,7 +12,7 @@ Feat:
 
 Breaking:
 
-- Importing/Requiring syntax has changed from `import SEAL from node-seal/throws_wasm_node` => `import SEAL from node-seal/throws_wasm_node_umd`.
+- Importing/Requiring syntax has changed from `import SEAL from 'node-seal/throws_wasm_node'` => `import SEAL from 'node-seal/throws_wasm_node_umd'`.
 
 ## Version 4.4.0
 
@@ -36,7 +36,7 @@ Feat:
 
 Breaking
 
-- Importing/Requiring syntax has changed from `import { Seal } from node-seal/dist/throws_transparent/node/wasm/cjs` => `import SEAL from node-seal/throws_wasm_node`. You may use any default name.
+- Importing/Requiring syntax has changed from `import { Seal } from 'node-seal/dist/throws_transparent/node/wasm/cjs'` => `import SEAL from 'node-seal/throws_wasm_node'`. You may use any default name.
 
 ## Version 4.3.10
 

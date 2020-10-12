@@ -11,7 +11,7 @@ asynchronously.
 
 ```javascript
 // ES6 import
-// import { Seal } from 'node-seal'
+// import SEAL from 'node-seal'
 const SEAL = require('node-seal')
 const seal = await SEAL()
 ```

@@ -28,7 +28,7 @@ Import the library using `import` or `require` syntax:
 // Defaults to "node-seal/throws_wasm_web_umd" for Browsers
 // Defaults to "node-seal/throws_wasm_web_es" for Modules
 import SEAL from 'node-seal'
-const { Seal } = require('node-seal')
+const SEAL = require('node-seal')
 ```
 
 You may also specify a deep import to target your environment better.
