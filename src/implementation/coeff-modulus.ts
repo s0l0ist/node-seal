@@ -1,4 +1,4 @@
-import { LoaderOptions, Library } from './emscripten'
+import { LoaderOptions, Library } from './seal'
 import { Exception } from './exception'
 import { SecurityLevel } from './security-level'
 import { Vector, VectorConstructorOptions } from './vector'

@@ -1,6 +1,6 @@
 {
   "name": "node-seal",
-  "version": "4.4.1",
+  "version": "4.4.2",
   "description": "Homomorphic Encryption for TypeScript or JavaScript using Microsoft SEAL",
   "repository": {
     "type": "git",
@@ -74,8 +74,8 @@
     "@rollup/plugin-alias": "^3.1.1",
     "@rollup/plugin-typescript": "^6.0.0",
     "@types/jest": "^26.0.14",
-    "@typescript-eslint/eslint-plugin": "^4.4.0",
-    "@typescript-eslint/parser": "^4.4.0",
+    "@typescript-eslint/eslint-plugin": "^4.4.1",
+    "@typescript-eslint/parser": "^4.4.1",
     "better-docs": "^2.3.2",
     "codecov": "^3.8.0",
     "env-cmd": "^10.1.0",
@@ -85,7 +85,7 @@
     "eslint-plugin-jsdoc": "^30.6.4",
     "eslint-plugin-prettier": "^3.1.4",
     "esm": "^3.2.25",
-    "jest": "^26.5.2",
+    "jest": "^26.5.3",
     "jsdoc": "^3.6.6",
     "path": "^0.12.7",
     "prettier": "^2.1.2",

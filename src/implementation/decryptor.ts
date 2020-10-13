@@ -1,4 +1,4 @@
-import { LoaderOptions, Library, Instance } from './emscripten'
+import { LoaderOptions, Library, Instance } from './seal'
 import { Exception } from './exception'
 import { CipherText } from './cipher-text'
 import { Context } from './context'

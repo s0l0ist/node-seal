@@ -1,4 +1,4 @@
-import { LoaderOptions, Library, Instance } from './emscripten'
+import { LoaderOptions, Library, Instance } from './seal'
 import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
 import { ContextData, ContextDataConstructorOptions } from './context-data'
 import { EncryptionParameters } from './encryption-parameters'

@@ -1,4 +1,4 @@
-import { Library } from '../implementation/emscripten'
+import { Library } from '../implementation/seal'
 
 export type Loader = {
   readonly library: Library
