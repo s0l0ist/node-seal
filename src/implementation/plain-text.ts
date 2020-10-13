@@ -1,10 +1,11 @@
 import { ComprModeType } from './compr-mode-type'
 import { Context } from './context'
-import { LoaderOptions, Library, Instance } from './emscripten'
+import { LoaderOptions, Library, Instance } from './seal'
 import { Exception } from './exception'
 import { MemoryPoolHandle } from './memory-pool-handle'
 import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
 import { VectorConstructorOptions } from './vector'
+import { INVALID_PLAIN_CONSRUCTOR_OPTIONS } from './constants'
 export type PlainTextDependencyOptions = {
   readonly Exception: Exception
   readonly ComprModeType: ComprModeType
@@ -101,7 +102,7 @@ const PlainTextConstructor = (library: Library): PlainTextDependencies => ({
       } else if (capacity !== undefined && coeffCount !== undefined) {
         return new Constructor(capacity, coeffCount, pool)
       } else {
-        throw new Error('Must specify a (coeffCount), (coeffCount, capacity)')
+        throw new Error(INVALID_PLAIN_CONSRUCTOR_OPTIONS)
       }
     } catch (e) {
       throw Exception.safe(e)

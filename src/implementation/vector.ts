@@ -1,4 +1,4 @@
-import { LoaderOptions, Instance, Library } from './emscripten'
+import { LoaderOptions, Instance, Library } from './seal'
 import { Exception } from './exception'
 import { INSTANCE_DELETED, UNSUPPORTED_VECTOR_TYPE } from './constants'
 

@@ -1,4 +1,4 @@
-import { LoaderOptions, Instance, Library } from './emscripten'
+import { LoaderOptions, Instance, Library } from './seal'
 import { Exception } from './exception'
 
 export type ParmsIdTypeDependencyOptions = {

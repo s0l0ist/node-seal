@@ -1,9 +1,10 @@
-import { LoaderOptions, Library, Instance } from './emscripten'
+import { LoaderOptions, Library, Instance } from './seal'
 import { Exception } from './exception'
 import { VectorConstructorOptions } from './vector'
 import { MemoryPoolHandle } from './memory-pool-handle'
 import { PlainText, PlainTextConstructorOptions } from './plain-text'
 import { Context } from './context'
+import { UNSUPPORTED_BATCH_ENCODE_ARRAY_TYPE } from './constants'
 
 export type BatchEncoderDependencyOptions = {
   readonly Exception: Exception
@@ -194,9 +195,7 @@ const BatchEncoderConstructor = (
           return plain
         }
 
-        throw new Error(
-          'Unsupported array type! `array` must be of type Int32Array, Uint32Array, BigInt64Array, or BigUint64Array.'
-        )
+        throw new Error(UNSUPPORTED_BATCH_ENCODE_ARRAY_TYPE)
       } catch (e) {
         throw Exception.safe(e)
       }

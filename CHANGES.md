@@ -3,6 +3,12 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 4.4.2
+
+Fix:
+
+- Consolidate type definitions for deno
+
 ## Version 4.4.1
 
 Feat:

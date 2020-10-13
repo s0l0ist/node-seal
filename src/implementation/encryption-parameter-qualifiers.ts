@@ -1,4 +1,4 @@
-import { Instance } from './emscripten'
+import { Instance } from './seal'
 import { SecurityLevel } from './security-level'
 
 export type EncryptionParameterQualifiersDependencies = {

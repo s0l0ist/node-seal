@@ -1,4 +1,4 @@
-import { LoaderOptions, Library } from './emscripten'
+import { LoaderOptions, Library } from './seal'
 import { Exception } from './exception'
 import { Modulus, ModulusConstructorOptions } from './modulus'
 import { Vector, VectorConstructorOptions } from './vector'

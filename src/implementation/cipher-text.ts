@@ -1,10 +1,11 @@
 import { ComprModeType } from './compr-mode-type'
 import { Context } from './context'
-import { LoaderOptions, Library, Instance } from './emscripten'
+import { LoaderOptions, Library, Instance } from './seal'
 import { Exception } from './exception'
 import { MemoryPoolHandle } from './memory-pool-handle'
 import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
 import { VectorConstructorOptions } from './vector'
+import { INVALID_CIPHER_CONSTRUCTOR_OPTIONS } from './constants'
 export type CipherTextDependencyOptions = {
   readonly Exception: Exception
   readonly ComprModeType: ComprModeType
@@ -111,9 +112,7 @@ const CipherTextConstructor = (library: Library): CipherTextDependencies => ({
           pool
         )
       } else {
-        throw new Error(
-          'Must specify a (context), (context, parmsId), or (context, parmsId, sizeCapacity)'
-        )
+        throw new Error(INVALID_CIPHER_CONSTRUCTOR_OPTIONS)
       }
     } catch (e) {
       throw Exception.safe(e)
