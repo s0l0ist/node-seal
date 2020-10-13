@@ -1,9 +1,10 @@
-import { LoaderOptions, Library, Instance } from './emscripten'
+import { LoaderOptions, Library, Instance } from './seal'
 import { Exception } from './exception'
 import { VectorConstructorOptions } from './vector'
 import { MemoryPoolHandle } from './memory-pool-handle'
 import { PlainText, PlainTextConstructorOptions } from './plain-text'
 import { Context } from './context'
+import { UNSUPPORTED_CKKS_ENCODE_ARRAY_TYPE } from './constants'
 
 export type CKKSEncoderDependencyOptions = {
   readonly Exception: Exception
@@ -147,9 +148,7 @@ const CKKSEncoderConstructor = (library: Library): CKKSEncoderDependencies => ({
           _instance.encode(array, scale, plain.instance, pool)
           return plain
         } else {
-          throw new Error(
-            'Unsupported array type! `array` must be of type Float64Array.'
-          )
+          throw new Error(UNSUPPORTED_CKKS_ENCODE_ARRAY_TYPE)
         }
       } catch (e) {
         throw Exception.safe(e)

@@ -1,4 +1,4 @@
-import { LoaderOptions, Library, Instance } from './emscripten'
+import { LoaderOptions, Library, Instance } from './seal'
 import { Exception } from './exception'
 import { VectorConstructorOptions } from './vector'
 import { ComprModeType } from './compr-mode-type'

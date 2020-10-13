@@ -1,4 +1,4 @@
-import { Instance } from './emscripten'
+import { Instance } from './seal'
 import { Exception } from './exception'
 import { VectorConstructorOptions } from './vector'
 import { ComprModeType } from './compr-mode-type'

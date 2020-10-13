@@ -1,4 +1,4 @@
-import { LoaderOptions, Library } from './emscripten'
+import { LoaderOptions, Library } from './seal'
 
 export type SchemeTypeDependencies = {
   (): SchemeTypeConstructorOptions
