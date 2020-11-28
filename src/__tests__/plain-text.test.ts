@@ -28,7 +28,7 @@ beforeAll(async () => {
   const bitSize = 20
   coeffModulus = seal.CoeffModulus.Create(polyModulusDegree, bitSizes)
   plainModulus = seal.PlainModulus.Batching(polyModulusDegree, bitSize)
-  bfvEncParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+  bfvEncParms = seal.EncryptionParameters(seal.SchemeType.bfv)
   bfvEncParms.setPolyModulusDegree(polyModulusDegree)
   bfvEncParms.setCoeffModulus(coeffModulus)
   bfvEncParms.setPlainModulus(plainModulus)
@@ -36,7 +36,7 @@ beforeAll(async () => {
   batchEncoder = seal.BatchEncoder(bfvContext)
   bfvEvaluator = seal.Evaluator(bfvContext)
 
-  ckksEncParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
+  ckksEncParms = seal.EncryptionParameters(seal.SchemeType.ckks)
   ckksEncParms.setPolyModulusDegree(polyModulusDegree)
   ckksEncParms.setCoeffModulus(coeffModulus)
   ckksContext = seal.Context(ckksEncParms, true, securityLevel)

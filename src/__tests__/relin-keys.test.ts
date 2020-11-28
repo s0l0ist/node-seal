@@ -9,7 +9,7 @@ let context: Context
 let keyGenerator: KeyGenerator
 beforeAll(async () => {
   seal = await SEAL()
-  parms = seal.EncryptionParameters(seal.SchemeType.BFV)
+  parms = seal.EncryptionParameters(seal.SchemeType.bfv)
   parms.setPolyModulusDegree(4096)
   parms.setCoeffModulus(
     seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
@@ -124,7 +124,7 @@ describe('RelinKeys', () => {
     expect(array.constructor).toBe(Uint8Array)
   })
   test('It should load from a string', () => {
-    const item = keyGenerator.relinKeysLocal()
+    const item = keyGenerator.createRelinKeys()
     const newItem = seal.RelinKeys()
     const str = item.save()
     const spyOn = jest.spyOn(newItem, 'load')
@@ -133,7 +133,7 @@ describe('RelinKeys', () => {
     expect(newItem.save()).toEqual(str)
   })
   test('It should load from a typed array', () => {
-    const item = keyGenerator.relinKeysLocal()
+    const item = keyGenerator.createRelinKeys()
     const newItem = seal.RelinKeys()
     const array = item.saveArray()
     const spyOn = jest.spyOn(newItem, 'loadArray')
@@ -252,14 +252,14 @@ describe('RelinKeys', () => {
     )
   })
   test('It should copy another instance', () => {
-    const item = keyGenerator.relinKeysLocal()
+    const item = keyGenerator.createRelinKeys()
     const newItem = seal.RelinKeys()
     const spyOn = jest.spyOn(newItem, 'copy')
     newItem.copy(item)
     expect(spyOn).toHaveBeenCalledWith(item)
   })
   test('It should fail to copy another instance', () => {
-    const item = keyGenerator.relinKeysLocal()
+    const item = keyGenerator.createRelinKeys()
     const newItem = seal.RelinKeys()
     item.delete()
     const spyOn = jest.spyOn(newItem, 'copy')
@@ -285,7 +285,7 @@ describe('RelinKeys', () => {
     expect(spyOn).toHaveBeenCalledWith()
   })
   test('It should move another instance into itself and delete the old', () => {
-    const item = keyGenerator.relinKeysLocal()
+    const item = keyGenerator.createRelinKeys()
     const newItem = seal.RelinKeys()
     const spyOn = jest.spyOn(newItem, 'move')
     newItem.move(item)
@@ -293,7 +293,7 @@ describe('RelinKeys', () => {
     expect(item.instance).toBeUndefined()
   })
   test('It should fail to move another instance into itself and delete the old', () => {
-    const item = keyGenerator.relinKeysLocal()
+    const item = keyGenerator.createRelinKeys()
     const newItem = seal.RelinKeys()
     item.delete()
     const spyOn = jest.spyOn(newItem, 'move')

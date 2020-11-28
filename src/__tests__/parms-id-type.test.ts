@@ -7,7 +7,7 @@ let parms: EncryptionParameters
 let context: Context
 beforeAll(async () => {
   seal = await SEAL()
-  parms = seal.EncryptionParameters(seal.SchemeType.BFV)
+  parms = seal.EncryptionParameters(seal.SchemeType.bfv)
   parms.setPolyModulusDegree(4096)
   parms.setCoeffModulus(
     seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)

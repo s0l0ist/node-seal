@@ -42,7 +42,7 @@ describe('EncryptionParameters', () => {
   })
   test('It should inject', () => {
     const encParms = seal.EncryptionParameters()
-    const newEncParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+    const newEncParms = seal.EncryptionParameters(seal.SchemeType.bfv)
     newEncParms.delete()
     const spyOn = jest.spyOn(newEncParms, 'unsafeInject')
     newEncParms.unsafeInject(encParms.instance)
@@ -51,7 +51,7 @@ describe('EncryptionParameters', () => {
   })
   test('It should delete the old instance and inject', () => {
     const encParms = seal.EncryptionParameters()
-    const newEncParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+    const newEncParms = seal.EncryptionParameters(seal.SchemeType.bfv)
     const spyOn = jest.spyOn(newEncParms, 'unsafeInject')
     newEncParms.unsafeInject(encParms.instance)
     expect(spyOn).toHaveBeenCalledWith(encParms.instance)
@@ -75,7 +75,7 @@ describe('EncryptionParameters', () => {
     expect(() => encParms.polyModulusDegree).toThrow(TypeError)
   })
   test('It should set the poly modulus degree (bfv)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+    const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
     const spyOn = jest.spyOn(encParms, 'setPolyModulusDegree')
     encParms.setPolyModulusDegree(4096)
     expect(spyOn).toHaveBeenCalledWith(4096)
@@ -93,7 +93,7 @@ describe('EncryptionParameters', () => {
     expect(spyOn).toHaveBeenCalledWith(coeffModulus)
   })
   test('It should set the coeff modulus (bfv)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+    const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
     const coeffModulus = seal.CoeffModulus.BFVDefault(
       4096,
       seal.SecurityLevel.tc128
@@ -112,7 +112,7 @@ describe('EncryptionParameters', () => {
     )
   })
   test('It should set the coeff modulus (ckks)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
+    const encParms = seal.EncryptionParameters(seal.SchemeType.ckks)
     const coeffModulus = seal.CoeffModulus.Create(
       4096,
       Int32Array.from([46, 16, 46])
@@ -138,7 +138,7 @@ describe('EncryptionParameters', () => {
     expect(spyOn).toHaveBeenCalledWith(plainModulus)
   })
   test('It should set the plain modulus (bfv)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+    const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
     const plainModulus = seal.Modulus(BigInt('786433'))
     const spyOn = jest.spyOn(encParms, 'setPlainModulus')
     encParms.setPlainModulus(plainModulus)
@@ -156,12 +156,12 @@ describe('EncryptionParameters', () => {
     expect(encParms.polyModulusDegree).not.toEqual(4096)
   })
   test('It should return the poly modulus degree (bfv)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+    const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
     encParms.setPolyModulusDegree(4096)
     expect(encParms.polyModulusDegree).toEqual(4096)
   })
   test('It should return the poly modulus degree (ckks)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
+    const encParms = seal.EncryptionParameters(seal.SchemeType.ckks)
     encParms.setPolyModulusDegree(4096)
     expect(encParms.polyModulusDegree).toEqual(4096)
   })
@@ -175,7 +175,7 @@ describe('EncryptionParameters', () => {
     ).toThrow()
   })
   test('It should return the coeff modulus (bfv)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+    const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
     encParms.setCoeffModulus(
       seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
     )
@@ -190,7 +190,7 @@ describe('EncryptionParameters', () => {
     )
   })
   test('It should return the coeff modulus (ckks)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
+    const encParms = seal.EncryptionParameters(seal.SchemeType.ckks)
     encParms.setCoeffModulus(
       seal.CoeffModulus.Create(4096, Int32Array.from([46, 16, 46]))
     )
@@ -211,12 +211,12 @@ describe('EncryptionParameters', () => {
     ).toThrow()
   })
   test('It should return the plain modulus (bfv)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+    const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
     encParms.setPlainModulus(seal.Modulus(BigInt('786433')))
     expect(encParms.plainModulus.value).toBe(BigInt(786433))
   })
   test('It should fail to return the plain modulus (ckks)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
+    const encParms = seal.EncryptionParameters(seal.SchemeType.ckks)
     expect(() =>
       encParms.setPlainModulus(seal.Modulus(BigInt('786433')))
     ).toThrow()
@@ -229,7 +229,7 @@ describe('EncryptionParameters', () => {
     expect(typeof str).toBe('string')
   })
   test('It should save to a string', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+    const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
     encParms.setPolyModulusDegree(4096)
     encParms.setCoeffModulus(
       seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
@@ -241,7 +241,7 @@ describe('EncryptionParameters', () => {
     expect(typeof str).toBe('string')
   })
   test('It should save to an array', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+    const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
     encParms.setPolyModulusDegree(4096)
     encParms.setCoeffModulus(
       seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
@@ -256,7 +256,7 @@ describe('EncryptionParameters', () => {
     const encParms = seal.EncryptionParameters()
     const str = encParms.save()
     encParms.delete()
-    const newEncParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+    const newEncParms = seal.EncryptionParameters(seal.SchemeType.bfv)
     const spyOn = jest.spyOn(newEncParms, 'load')
     newEncParms.load(str)
     expect(spyOn).toHaveBeenCalledWith(str)
@@ -265,7 +265,7 @@ describe('EncryptionParameters', () => {
     const encParms = seal.EncryptionParameters()
     const array = encParms.saveArray()
     encParms.delete()
-    const newEncParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+    const newEncParms = seal.EncryptionParameters(seal.SchemeType.bfv)
     const spyOn = jest.spyOn(newEncParms, 'loadArray')
     newEncParms.loadArray(array)
     expect(spyOn).toHaveBeenCalledWith(array)

@@ -92,10 +92,10 @@ const SerializableConstructor = (): SerializableDependencies => ({
      *
      * @function
      * @name Serializable#save
-     * @param {ComprModeType} [compression={@link ComprModeType.deflate}] The compression mode to use
+     * @param {ComprModeType} [compression={@link ComprModeType.zstd}] The compression mode to use
      * @returns {string} Base64 encoded string
      */
-    save(compression: ComprModeType = ComprModeType.deflate): string {
+    save(compression: ComprModeType = ComprModeType.zstd): string {
       try {
         return _instance.saveToString(compression)
       } catch (e) {
@@ -108,10 +108,10 @@ const SerializableConstructor = (): SerializableDependencies => ({
      *
      * @function
      * @name Serializable#saveArray
-     * @param {ComprModeType} [compression={@link ComprModeType.deflate}] The compression mode to use
+     * @param {ComprModeType} [compression={@link ComprModeType.zstd}] The compression mode to use
      * @returns {Uint8Array} A byte array containing the Serializable object in binary form
      */
-    saveArray(compression: ComprModeType = ComprModeType.deflate): Uint8Array {
+    saveArray(compression: ComprModeType = ComprModeType.zstd): Uint8Array {
       const tempVect = Vector()
       const instance = _instance.saveToArray(compression)
       tempVect.unsafeInject(instance)

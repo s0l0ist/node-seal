@@ -32,23 +32,23 @@ beforeAll(async () => {
   const bitSize = 20
   coeffModulus = seal.CoeffModulus.BFVDefault(polyModulusDegree)
   plainModulus = seal.PlainModulus.Batching(polyModulusDegree, bitSize)
-  bfvEncParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+  bfvEncParms = seal.EncryptionParameters(seal.SchemeType.bfv)
   bfvEncParms.setPolyModulusDegree(polyModulusDegree)
   bfvEncParms.setCoeffModulus(coeffModulus)
   bfvEncParms.setPlainModulus(plainModulus)
   bfvContext = seal.Context(bfvEncParms)
   bfvKeyGenerator = seal.KeyGenerator(bfvContext)
   bfvSecretKey = bfvKeyGenerator.secretKey()
-  bfvPublicKey = bfvKeyGenerator.publicKey()
+  bfvPublicKey = bfvKeyGenerator.createPublicKey()
   bfvDecryptor = seal.Decryptor(bfvContext, bfvSecretKey)
 
-  ckksEncParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
+  ckksEncParms = seal.EncryptionParameters(seal.SchemeType.ckks)
   ckksEncParms.setPolyModulusDegree(polyModulusDegree)
   ckksEncParms.setCoeffModulus(coeffModulus)
   ckksContext = seal.Context(ckksEncParms)
   ckksKeyGenerator = seal.KeyGenerator(ckksContext)
   ckksSecretKey = ckksKeyGenerator.secretKey()
-  ckksPublicKey = ckksKeyGenerator.publicKey()
+  ckksPublicKey = ckksKeyGenerator.createPublicKey()
 })
 
 describe('Encryptor', () => {
@@ -70,7 +70,7 @@ describe('Encryptor', () => {
     expect(Constructor).toBeCalledWith(bfvContext, bfvPublicKey, bfvSecretKey)
   })
   test('It should fail to construct an instance', () => {
-    const newParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+    const newParms = seal.EncryptionParameters(seal.SchemeType.bfv)
     newParms.setPolyModulusDegree(2048)
     newParms.setCoeffModulus(
       seal.CoeffModulus.BFVDefault(2048, seal.SecurityLevel.tc128)
@@ -78,7 +78,7 @@ describe('Encryptor', () => {
     newParms.setPlainModulus(seal.PlainModulus.Batching(2048, 20))
     const newContext = seal.Context(newParms)
     const newKeyGenerator = seal.KeyGenerator(newContext)
-    const newPublicKey = newKeyGenerator.publicKey()
+    const newPublicKey = newKeyGenerator.createPublicKey()
 
     const Constructor = jest.fn(seal.Encryptor)
     expect(() => Constructor(bfvContext, newPublicKey)).toThrow()

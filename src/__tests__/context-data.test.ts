@@ -9,14 +9,14 @@ let bfvContext: Context
 let ckksContext: Context
 beforeAll(async () => {
   seal = await SEAL()
-  bfvEncParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+  bfvEncParms = seal.EncryptionParameters(seal.SchemeType.bfv)
   bfvEncParms.setPolyModulusDegree(4096)
   bfvEncParms.setCoeffModulus(
     seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
   )
   bfvEncParms.setPlainModulus(seal.PlainModulus.Batching(4096, 20))
   bfvContext = seal.Context(bfvEncParms, true, seal.SecurityLevel.tc128)
-  ckksEncParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
+  ckksEncParms = seal.EncryptionParameters(seal.SchemeType.ckks)
   ckksEncParms.setPolyModulusDegree(4096)
   ckksEncParms.setCoeffModulus(
     seal.CoeffModulus.Create(4096, Int32Array.from([46, 16, 46]))

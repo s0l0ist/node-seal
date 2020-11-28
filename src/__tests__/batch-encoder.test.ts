@@ -13,7 +13,7 @@ let plainModulus: Modulus
 let encParms: EncryptionParameters
 beforeAll(async () => {
   seal = await SEAL()
-  const schemeType = seal.SchemeType.BFV
+  const schemeType = seal.SchemeType.bfv
   const securityLevel = seal.SecurityLevel.tc128
   const polyModulusDegree = 1024
   const bitSizes = Int32Array.from([27])

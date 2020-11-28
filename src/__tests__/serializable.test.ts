@@ -14,7 +14,7 @@ let keyGenerator: KeyGenerator
 let encryptor: Encryptor
 beforeAll(async () => {
   seal = await SEAL()
-  parms = seal.EncryptionParameters(seal.SchemeType.BFV)
+  parms = seal.EncryptionParameters(seal.SchemeType.bfv)
   parms.setPolyModulusDegree(4096)
   parms.setCoeffModulus(
     seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
@@ -24,7 +24,7 @@ beforeAll(async () => {
   encoder = seal.BatchEncoder(context)
   keyGenerator = seal.KeyGenerator(context)
   const secretKey = keyGenerator.secretKey()
-  const publicKey = keyGenerator.publicKey()
+  const publicKey = keyGenerator.createPublicKey()
   encryptor = seal.Encryptor(context, publicKey, secretKey)
 })
 

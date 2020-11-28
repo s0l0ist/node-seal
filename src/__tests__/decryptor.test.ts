@@ -33,7 +33,7 @@ beforeAll(async () => {
   const bitSize = 20
   coeffModulus = seal.CoeffModulus.Create(polyModulusDegree, bitSizes)
   plainModulus = seal.PlainModulus.Batching(polyModulusDegree, bitSize)
-  bfvEncParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+  bfvEncParms = seal.EncryptionParameters(seal.SchemeType.bfv)
   bfvEncParms.setPolyModulusDegree(polyModulusDegree)
   bfvEncParms.setCoeffModulus(coeffModulus)
   bfvEncParms.setPlainModulus(plainModulus)
@@ -41,11 +41,11 @@ beforeAll(async () => {
   batchEncoder = seal.BatchEncoder(bfvContext)
   bfvKeyGenerator = seal.KeyGenerator(bfvContext)
   bfvSecretKey = bfvKeyGenerator.secretKey()
-  bfvPublicKey = bfvKeyGenerator.publicKey()
+  bfvPublicKey = bfvKeyGenerator.createPublicKey()
   bfvEncryptor = seal.Encryptor(bfvContext, bfvPublicKey)
   bfvEvaluator = seal.Evaluator(bfvContext)
 
-  ckksEncParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
+  ckksEncParms = seal.EncryptionParameters(seal.SchemeType.ckks)
   ckksEncParms.setPolyModulusDegree(polyModulusDegree)
   ckksEncParms.setCoeffModulus(coeffModulus)
 })
@@ -64,7 +64,7 @@ describe('Decryptor', () => {
     expect(Constructor).toBeCalledWith(bfvContext, bfvSecretKey)
   })
   test('It should fail to construct an instance', () => {
-    const newParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+    const newParms = seal.EncryptionParameters(seal.SchemeType.bfv)
     newParms.setPolyModulusDegree(2048)
     newParms.setCoeffModulus(
       seal.CoeffModulus.BFVDefault(2048, seal.SecurityLevel.tc128)

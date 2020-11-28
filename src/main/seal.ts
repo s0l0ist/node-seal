@@ -14,7 +14,6 @@ import { EvaluatorInit } from '../implementation/evaluator'
 import { ExceptionInit } from '../implementation/exception'
 import { GaloisKeysInit } from '../implementation/galois-keys'
 import { KeyGeneratorInit } from '../implementation/key-generator'
-import { IntegerEncoderInit } from '../implementation/integer-encoder'
 import { MemoryPoolHandleInit } from '../implementation/memory-pool-handle'
 import { ModulusInit } from '../implementation/modulus'
 import { ParmsIdTypeInit } from '../implementation/parms-id-type'
@@ -78,9 +77,6 @@ export const SEAL = async (
       loader
     }),
     KeyGenerator: KeyGeneratorInit({
-      loader
-    }),
-    IntegerEncoder: IntegerEncoderInit({
       loader
     }),
     MemoryPoolHandle: MemoryPoolHandleInit({
