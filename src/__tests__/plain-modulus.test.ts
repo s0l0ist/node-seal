@@ -1,6 +1,6 @@
 import SEAL from '../throws_wasm_node_umd'
-import { SEALLibrary } from 'implementation/seal'
-import { EncryptionParameters } from 'implementation/encryption-parameters'
+import { SEALLibrary } from '../implementation/seal'
+import { EncryptionParameters } from '../implementation/encryption-parameters'
 let seal: SEALLibrary
 let parms: EncryptionParameters
 beforeAll(async () => {

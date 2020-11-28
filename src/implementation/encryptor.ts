@@ -40,7 +40,7 @@ export type Encryptor = {
   readonly encryptSerializable: (
     plainText: PlainText,
     pool?: MemoryPoolHandle
-  ) => Serializable | void
+  ) => Serializable
   readonly encryptSymmetric: (
     plainText: PlainText,
     cipherText?: CipherText,
@@ -184,7 +184,7 @@ const EncryptorConstructor = (library: Library): EncryptorDependencies => ({
     encryptSerializable(
       plainText: PlainText,
       pool: MemoryPoolHandle = MemoryPoolHandle.global
-    ): Serializable | void {
+    ): Serializable {
       try {
         const temp = Serializable()
         const instance = _instance.encryptSerializable(plainText.instance, pool)

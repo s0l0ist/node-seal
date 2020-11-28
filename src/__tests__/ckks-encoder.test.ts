@@ -1,12 +1,12 @@
 import SEAL from '../throws_wasm_node_umd'
-import { SEALLibrary } from 'implementation/seal'
-import { Context } from 'implementation/context'
-import { Vector } from 'implementation/vector'
-import { EncryptionParameters } from 'implementation/encryption-parameters'
-import { BatchEncoder } from 'implementation/batch-encoder'
-import { CKKSEncoder } from 'implementation/ckks-encoder'
-import { Modulus } from 'implementation/modulus'
-import { PlainText } from 'implementation/plain-text'
+import { SEALLibrary } from '../implementation/seal'
+import { Context } from '../implementation/context'
+import { Vector } from '../implementation/vector'
+import { EncryptionParameters } from '../implementation/encryption-parameters'
+import { BatchEncoder } from '../implementation/batch-encoder'
+import { CKKSEncoder } from '../implementation/ckks-encoder'
+import { Modulus } from '../implementation/modulus'
+import { PlainText } from '../implementation/plain-text'
 
 let seal: SEALLibrary
 let bfvContext: Context

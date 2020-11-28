@@ -1,11 +1,11 @@
 import SEAL from '../throws_wasm_node_umd'
-import { SEALLibrary } from 'implementation/seal'
-import { Context } from 'implementation/context'
-import { Modulus } from 'implementation/modulus'
-import { Vector } from 'implementation/vector'
-import { EncryptionParameters } from 'implementation/encryption-parameters'
-import { KeyGenerator } from 'implementation/key-generator'
-import { SecretKey } from 'implementation/secret-key'
+import { SEALLibrary } from '../implementation/seal'
+import { Context } from '../implementation/context'
+import { Modulus } from '../implementation/modulus'
+import { Vector } from '../implementation/vector'
+import { EncryptionParameters } from '../implementation/encryption-parameters'
+import { KeyGenerator } from '../implementation/key-generator'
+import { SecretKey } from '../implementation/secret-key'
 
 let seal: SEALLibrary
 let context: Context
@@ -118,38 +118,45 @@ describe('KeyGenerator', () => {
     expect(spyOn).toHaveBeenCalledWith()
     expect(key.instance).toBeDefined()
   })
-  test('It should return its public key', () => {
+  test('It should create a public key', () => {
     const item = seal.KeyGenerator(context)
     const spyOn = jest.spyOn(item, 'createPublicKey')
     const key = item.createPublicKey()
     expect(spyOn).toHaveBeenCalledWith()
     expect(key.instance).toBeDefined()
   })
-  test('It should generate and return relinKeys', () => {
+  test('It should create a serializable public key', () => {
+    const item = seal.KeyGenerator(context)
+    const spyOn = jest.spyOn(item, 'createPublicKeySerializable')
+    const serializable = item.createPublicKeySerializable()
+    expect(spyOn).toHaveBeenCalledWith()
+    expect(serializable.instance).toBeDefined()
+  })
+  test('It should create a set of relin keys', () => {
     const item = seal.KeyGenerator(context)
     const spyOn = jest.spyOn(item, 'createRelinKeys')
     const key = item.createRelinKeys()
     expect(spyOn).toHaveBeenCalledWith()
     expect(key.instance).toBeDefined()
   })
-  test('It should fail to generate and return relinKeys', () => {
+  test('It should fail to create a set of relin keys', () => {
     const item = seal.KeyGenerator(invalidContext)
     const spyOn = jest.spyOn(item, 'createRelinKeys')
     expect(() => item.createRelinKeys()).toThrow()
     expect(spyOn).toHaveBeenCalledWith()
   })
-  test('It should generate and a serializable relinkeys object', () => {
+  test('It should create serializable relin keys', () => {
     const item = seal.KeyGenerator(context)
-    const spyOn = jest.spyOn(item, 'createRelinKeys')
-    const serializable = item.createRelinKeys()
+    const spyOn = jest.spyOn(item, 'createRelinKeysSerializable')
+    const serializable = item.createRelinKeysSerializable()
     const serialized = serializable.save()
     expect(spyOn).toHaveBeenCalledWith()
     expect(typeof serialized).toBe('string')
   })
-  test('It should fail to generate and a serializable relinkeys object', () => {
+  test('It should fail to create serializable relin keys', () => {
     const item = seal.KeyGenerator(invalidContext)
-    const spyOn = jest.spyOn(item, 'createRelinKeys')
-    expect(() => item.createRelinKeys()).toThrow()
+    const spyOn = jest.spyOn(item, 'createRelinKeysSerializable')
+    expect(() => item.createRelinKeysSerializable()).toThrow()
     expect(spyOn).toHaveBeenCalledWith()
   })
   test('It should generate and return all galoisKeys', () => {
@@ -201,5 +208,19 @@ describe('KeyGenerator', () => {
     const spyOn = jest.spyOn(item, 'createGaloisKeys')
     expect(() => item.createGaloisKeys(Int32Array.from([99999]))).toThrow()
     expect(spyOn).toHaveBeenCalledWith(Int32Array.from([99999]))
+  })
+  test('It should create serializable galois keys', () => {
+    const item = seal.KeyGenerator(context)
+    const spyOn = jest.spyOn(item, 'createGaloisKeysSerializable')
+    const serializable = item.createGaloisKeysSerializable()
+    const serialized = serializable.save()
+    expect(spyOn).toHaveBeenCalledWith()
+    expect(typeof serialized).toBe('string')
+  })
+  test('It should fail to create serializable galois keys', () => {
+    const item = seal.KeyGenerator(invalidContext)
+    const spyOn = jest.spyOn(item, 'createGaloisKeysSerializable')
+    expect(() => item.createGaloisKeysSerializable()).toThrow()
+    expect(spyOn).toHaveBeenCalledWith()
   })
 })

@@ -1,11 +1,11 @@
 import SEAL from '../throws_wasm_node_umd'
-import { SEALLibrary } from 'implementation/seal'
-import { EncryptionParameters } from 'implementation/encryption-parameters'
-import { Context } from 'implementation/context'
-import { KeyGenerator } from 'implementation/key-generator'
-import { BatchEncoder } from 'implementation/batch-encoder'
-import { Encryptor } from 'implementation/encryptor'
-import { PlainText } from 'implementation/plain-text'
+import { SEALLibrary } from '../implementation/seal'
+import { EncryptionParameters } from '../implementation/encryption-parameters'
+import { Context } from '../implementation/context'
+import { KeyGenerator } from '../implementation/key-generator'
+import { BatchEncoder } from '../implementation/batch-encoder'
+import { Encryptor } from '../implementation/encryptor'
+import { PlainText } from '../implementation/plain-text'
 let seal: SEALLibrary
 let parms: EncryptionParameters
 let context: Context
