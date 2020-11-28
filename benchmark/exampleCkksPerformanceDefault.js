@@ -19,7 +19,7 @@ function create() {
   }
 
   function exampleCkksPerformanceDefault() {
-    const parms = seal.EncryptionParameters(seal.SchemeType.CKKS)
+    const parms = seal.EncryptionParameters(seal.SchemeType.ckks)
     let polyModulusDegree = 4096
     let coeffModulus = seal.CoeffModulus.BFVDefault(polyModulusDegree)
     parms.setPolyModulusDegree(polyModulusDegree)

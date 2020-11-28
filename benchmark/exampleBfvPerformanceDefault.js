@@ -19,7 +19,7 @@ function create() {
   }
 
   function exampleBfvPerformanceDefault() {
-    const parms = seal.EncryptionParameters(seal.SchemeType.BFV)
+    const parms = seal.EncryptionParameters(seal.SchemeType.bfv)
     let polyModulusDegree = 4096
     let modulus = seal.Modulus('786433')
     let coeffModulus = seal.CoeffModulus.BFVDefault(polyModulusDegree)
