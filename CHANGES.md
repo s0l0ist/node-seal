@@ -3,6 +3,26 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 4.5.0
+
+### Highlights
+
+- Updated to **SEAL v3.6.0** (See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md))
+
+Feat:
+
+- Renamed all key generator functions to match the new MS API.
+  - `publicKey` -> `createPublicKey`
+  - `relinKeysLocal` -> `createRelinKeys`
+  - `galoisKeysLocal` -> `createGaloisKeys`
+- Added `*Serializable` functions to match the new MS API overloads.
+  - `createPublicKeySerializable`
+  - `createRelinKeysSerializable`
+  - `createGaloisKeysSerializable`
+- Added the evaulator function, `encryptSerializable`, as well as two missing functions `encryptZero`, `encryptZeroSerializable`.
+- All enum types (scheme type, compression mode) have been made lower case. Ex: `SchemeType.BFV` -> `SchemeType.bfv`
+- Added a new compression mode type to support zstandard `ComprModeType.zstd` which is used by default. This version can decompress previous serialized objects (using `deflate`), but all new serialized objects will use `zstd`.
+
 ## Version 4.4.2
 
 Fix:

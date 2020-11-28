@@ -35,8 +35,8 @@ of parameters for an application, but there is a methodology behind optimization
 There are two `SchemeTypes`:
 
 ```javascript
-seal.SchemeType.BFV
-seal.SchemeType.CKKS
+seal.SchemeType.bfv
+seal.SchemeType.ckks
 ```
 
 A security level determines the bit level security of the encrypted data.
@@ -70,7 +70,7 @@ Example:
 // Encryption Parameters
 ////////////////////////
 
-const schemeType = seal.SchemeType.BFV
+const schemeType = seal.SchemeType.bfv
 const securityLevel = seal.SecurityLevel.tc128
 const polyModulusDegree = 4096
 const bitSizes = [36, 36, 37]
