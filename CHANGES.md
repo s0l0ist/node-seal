@@ -22,6 +22,7 @@ Feat:
 - Added the evaulator function, `encryptSerializable`, as well as two missing functions `encryptZero`, `encryptZeroSerializable`.
 - All enum types (scheme type, compression mode) have been made lower case. Ex: `SchemeType.BFV` -> `SchemeType.bfv`
 - Added a new compression mode type to support zstandard `ComprModeType.zstd` which is used by default. This version can decompress previous serialized objects (using `deflate`), but all new serialized objects will use `zstd`.
+- Removed the `IntegerEncoder`.
 
 ## Version 4.4.2
 
