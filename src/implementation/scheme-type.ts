@@ -10,8 +10,8 @@ export type SchemeTypeConstructorOptions = {
 
 export type SchemeType = {
   readonly none: any
-  readonly BFV: any
-  readonly CKKS: any
+  readonly bfv: any
+  readonly ckks: any
 }
 
 const SchemeTypeConstructor = (
@@ -19,8 +19,8 @@ const SchemeTypeConstructor = (
 ): SchemeTypeDependencies => (): SchemeTypeConstructorOptions => (): SchemeType => {
   // Static methods
   const _none = library.SchemeType.none
-  const _BFV = library.SchemeType.BFV
-  const _CKKS = library.SchemeType.CKKS
+  const _bfv = library.SchemeType.bfv
+  const _ckks = library.SchemeType.ckks
 
   /**
    * @implements SchemeType
@@ -45,31 +45,31 @@ const SchemeTypeConstructor = (
     },
 
     /**
-     * Return the 'BFV' scheme type
+     * Return the 'bfv' scheme type
      *
      * @readonly
-     * @name SchemeType.BFV
-     * @type {SchemeType.BFV}
+     * @name SchemeType.bfv
+     * @type {SchemeType.bfv}
      */
-    get BFV() {
+    get bfv() {
       /**
-       * @typedef {SchemeType.BFV} SchemeType.BFV
+       * @typedef {SchemeType.bfv} SchemeType.bfv
        */
-      return _BFV
+      return _bfv
     },
 
     /**
-     * Return the 'CKKS' scheme type
+     * Return the 'ckks' scheme type
      *
      * @readonly
-     * @name SchemeType.CKKS
-     * @type {SchemeType.CKKS}
+     * @name SchemeType.ckks
+     * @type {SchemeType.ckks}
      */
-    get CKKS() {
+    get ckks() {
       /**
-       * @typedef {SchemeType.CKKS} SchemeType.CKKS
+       * @typedef {SchemeType.ckks} SchemeType.ckks
        */
-      return _CKKS
+      return _ckks
     }
   }
 }

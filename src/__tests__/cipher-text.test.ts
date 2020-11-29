@@ -1,15 +1,15 @@
 import SEAL from '../throws_wasm_node_umd'
-import { SEALLibrary } from 'implementation/seal'
-import { Context } from 'implementation/context'
-import { Modulus } from 'implementation/modulus'
-import { Vector } from 'implementation/vector'
-import { EncryptionParameters } from 'implementation/encryption-parameters'
-import { BatchEncoder } from 'implementation/batch-encoder'
-import { Encryptor } from 'implementation/encryptor'
-import { KeyGenerator } from 'implementation/key-generator'
-import { PublicKey } from 'implementation/public-key'
-import { PlainText } from 'implementation/plain-text'
-import { CKKSEncoder } from 'implementation/ckks-encoder'
+import { SEALLibrary } from '../implementation/seal'
+import { Context } from '../implementation/context'
+import { Modulus } from '../implementation/modulus'
+import { Vector } from '../implementation/vector'
+import { EncryptionParameters } from '../implementation/encryption-parameters'
+import { BatchEncoder } from '../implementation/batch-encoder'
+import { Encryptor } from '../implementation/encryptor'
+import { KeyGenerator } from '../implementation/key-generator'
+import { PublicKey } from '../implementation/public-key'
+import { PlainText } from '../implementation/plain-text'
+import { CKKSEncoder } from '../implementation/ckks-encoder'
 
 let seal: SEALLibrary
 let bfvContext: Context
@@ -35,23 +35,23 @@ beforeAll(async () => {
   const bitSize = 20
   coeffModulus = seal.CoeffModulus.Create(polyModulusDegree, bitSizes)
   plainModulus = seal.PlainModulus.Batching(polyModulusDegree, bitSize)
-  bfvEncParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+  bfvEncParms = seal.EncryptionParameters(seal.SchemeType.bfv)
   bfvEncParms.setPolyModulusDegree(polyModulusDegree)
   bfvEncParms.setCoeffModulus(coeffModulus)
   bfvEncParms.setPlainModulus(plainModulus)
   bfvContext = seal.Context(bfvEncParms, true, securityLevel)
   batchEncoder = seal.BatchEncoder(bfvContext)
   bfvKeyGenerator = seal.KeyGenerator(bfvContext)
-  bfvPublicKey = bfvKeyGenerator.publicKey()
+  bfvPublicKey = bfvKeyGenerator.createPublicKey()
   bfvEncryptor = seal.Encryptor(bfvContext, bfvPublicKey)
 
-  ckksEncParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
+  ckksEncParms = seal.EncryptionParameters(seal.SchemeType.ckks)
   ckksEncParms.setPolyModulusDegree(polyModulusDegree)
   ckksEncParms.setCoeffModulus(coeffModulus)
   ckksContext = seal.Context(ckksEncParms, true, securityLevel)
   ckksEncoder = seal.CKKSEncoder(ckksContext)
   ckksKeyGenerator = seal.KeyGenerator(ckksContext)
-  ckksPublicKey = ckksKeyGenerator.publicKey()
+  ckksPublicKey = ckksKeyGenerator.createPublicKey()
   ckksEncryptor = seal.Encryptor(ckksContext, ckksPublicKey)
 })
 
@@ -328,7 +328,7 @@ describe('CipherText', () => {
     const cipher = seal.CipherText()
     const plain = batchEncoder.encode(arr) as PlainText
     bfvEncryptor.encrypt(plain, cipher)
-    const array = cipher.saveArray(seal.ComprModeType.deflate)
+    const array = cipher.saveArray(seal.ComprModeType.zstd)
     cipher.delete()
     const newCipher = seal.CipherText()
     const spyOn = jest.spyOn(newCipher, 'loadArray')

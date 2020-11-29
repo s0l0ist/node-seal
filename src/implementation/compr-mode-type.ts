@@ -10,7 +10,8 @@ export type ComprModeTypeConstructorOptions = {
 
 export type ComprModeType = {
   readonly none: any
-  readonly deflate: any
+  readonly zlib: any
+  readonly zstd: any
 }
 
 const ComprModeTypeConstructor = (
@@ -18,7 +19,8 @@ const ComprModeTypeConstructor = (
 ): ComprModeTypeDependencies => (): ComprModeTypeConstructorOptions => (): ComprModeType => {
   // Static methods
   const _none = library.ComprModeType.none
-  const _deflate = library.ComprModeType.deflate
+  const _zlib = library.ComprModeType.zlib
+  const _zstd = library.ComprModeType.zstd
 
   /**
    * @implements ComprModeType
@@ -43,17 +45,31 @@ const ComprModeTypeConstructor = (
     },
 
     /**
-     * The `deflate` Compression Mode Type
+     * The `zlib` Compression Mode Type
      *
      * @readonly
-     * @name ComprModeType.deflate
-     * @type {ComprModeType.deflate}
+     * @name ComprModeType.zlib
+     * @type {ComprModeType.zlib}
      */
-    get deflate() {
+    get zlib() {
       /**
-       * @typedef {ComprModeType.deflate} ComprModeType.deflate
+       * @typedef {ComprModeType.zlib} ComprModeType.zlib
        */
-      return _deflate
+      return _zlib
+    },
+
+    /**
+     * The `zstd` Compression Mode Type
+     *
+     * @readonly
+     * @name ComprModeType.zstd
+     * @type {ComprModeType.zstd}
+     */
+    get zstd() {
+      /**
+       * @typedef {ComprModeType.zstd} ComprModeType.zstd
+       */
+      return _zstd
     }
   }
 }

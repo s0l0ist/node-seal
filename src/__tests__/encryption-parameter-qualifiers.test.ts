@@ -1,10 +1,10 @@
 import SEAL from '../throws_wasm_node_umd'
-import { SEALLibrary } from 'implementation/seal'
-import { Context } from 'implementation/context'
-import { Modulus } from 'implementation/modulus'
-import { Vector } from 'implementation/vector'
-import { EncryptionParameters } from 'implementation/encryption-parameters'
-import { ContextData } from 'implementation/context-data'
+import { SEALLibrary } from '../implementation/seal'
+import { Context } from '../implementation/context'
+import { Modulus } from '../implementation/modulus'
+import { Vector } from '../implementation/vector'
+import { EncryptionParameters } from '../implementation/encryption-parameters'
+import { ContextData } from '../implementation/context-data'
 
 let seal: SEALLibrary
 let coeffModulus: Vector
@@ -23,13 +23,13 @@ beforeAll(async () => {
   const bitSize = 20
   coeffModulus = seal.CoeffModulus.Create(polyModulusDegree, bitSizes)
   plainModulus = seal.PlainModulus.Batching(polyModulusDegree, bitSize)
-  bfvEncParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+  bfvEncParms = seal.EncryptionParameters(seal.SchemeType.bfv)
   bfvEncParms.setPolyModulusDegree(polyModulusDegree)
   bfvEncParms.setCoeffModulus(coeffModulus)
   bfvEncParms.setPlainModulus(plainModulus)
   bfvContext = seal.Context(bfvEncParms)
   bfvContextData = bfvContext.firstContextData
-  ckksEncParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
+  ckksEncParms = seal.EncryptionParameters(seal.SchemeType.ckks)
   ckksEncParms.setPolyModulusDegree(polyModulusDegree)
   ckksEncParms.setCoeffModulus(coeffModulus)
   ckksContext = seal.Context(ckksEncParms)

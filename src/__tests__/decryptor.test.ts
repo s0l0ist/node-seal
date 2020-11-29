@@ -1,16 +1,16 @@
 import SEAL from '../throws_wasm_node_umd'
-import { SEALLibrary } from 'implementation/seal'
-import { Context } from 'implementation/context'
-import { Modulus } from 'implementation/modulus'
-import { Vector } from 'implementation/vector'
-import { EncryptionParameters } from 'implementation/encryption-parameters'
-import { BatchEncoder } from 'implementation/batch-encoder'
-import { Encryptor } from 'implementation/encryptor'
-import { KeyGenerator } from 'implementation/key-generator'
-import { PublicKey } from 'implementation/public-key'
-import { PlainText } from 'implementation/plain-text'
-import { SecretKey } from 'implementation/secret-key'
-import { Evaluator } from 'implementation/evaluator'
+import { SEALLibrary } from '../implementation/seal'
+import { Context } from '../implementation/context'
+import { Modulus } from '../implementation/modulus'
+import { Vector } from '../implementation/vector'
+import { EncryptionParameters } from '../implementation/encryption-parameters'
+import { BatchEncoder } from '../implementation/batch-encoder'
+import { Encryptor } from '../implementation/encryptor'
+import { KeyGenerator } from '../implementation/key-generator'
+import { PublicKey } from '../implementation/public-key'
+import { PlainText } from '../implementation/plain-text'
+import { SecretKey } from '../implementation/secret-key'
+import { Evaluator } from '../implementation/evaluator'
 
 let seal: SEALLibrary
 let bfvContext: Context
@@ -33,7 +33,7 @@ beforeAll(async () => {
   const bitSize = 20
   coeffModulus = seal.CoeffModulus.Create(polyModulusDegree, bitSizes)
   plainModulus = seal.PlainModulus.Batching(polyModulusDegree, bitSize)
-  bfvEncParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+  bfvEncParms = seal.EncryptionParameters(seal.SchemeType.bfv)
   bfvEncParms.setPolyModulusDegree(polyModulusDegree)
   bfvEncParms.setCoeffModulus(coeffModulus)
   bfvEncParms.setPlainModulus(plainModulus)
@@ -41,11 +41,11 @@ beforeAll(async () => {
   batchEncoder = seal.BatchEncoder(bfvContext)
   bfvKeyGenerator = seal.KeyGenerator(bfvContext)
   bfvSecretKey = bfvKeyGenerator.secretKey()
-  bfvPublicKey = bfvKeyGenerator.publicKey()
+  bfvPublicKey = bfvKeyGenerator.createPublicKey()
   bfvEncryptor = seal.Encryptor(bfvContext, bfvPublicKey)
   bfvEvaluator = seal.Evaluator(bfvContext)
 
-  ckksEncParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
+  ckksEncParms = seal.EncryptionParameters(seal.SchemeType.ckks)
   ckksEncParms.setPolyModulusDegree(polyModulusDegree)
   ckksEncParms.setCoeffModulus(coeffModulus)
 })
@@ -64,7 +64,7 @@ describe('Decryptor', () => {
     expect(Constructor).toBeCalledWith(bfvContext, bfvSecretKey)
   })
   test('It should fail to construct an instance', () => {
-    const newParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+    const newParms = seal.EncryptionParameters(seal.SchemeType.bfv)
     newParms.setPolyModulusDegree(2048)
     newParms.setCoeffModulus(
       seal.CoeffModulus.BFVDefault(2048, seal.SecurityLevel.tc128)

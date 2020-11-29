@@ -1,15 +1,15 @@
 import SEAL from '../throws_wasm_node_umd'
-import { SEALLibrary } from 'implementation/seal'
-import { EncryptionParameters } from 'implementation/encryption-parameters'
-import { Context } from 'implementation/context'
-import { KeyGenerator } from 'implementation/key-generator'
+import { SEALLibrary } from '../implementation/seal'
+import { EncryptionParameters } from '../implementation/encryption-parameters'
+import { Context } from '../implementation/context'
+import { KeyGenerator } from '../implementation/key-generator'
 let seal: SEALLibrary
 let parms: EncryptionParameters
 let context: Context
 let keyGenerator: KeyGenerator
 beforeAll(async () => {
   seal = await SEAL()
-  parms = seal.EncryptionParameters(seal.SchemeType.BFV)
+  parms = seal.EncryptionParameters(seal.SchemeType.bfv)
   parms.setPolyModulusDegree(4096)
   parms.setCoeffModulus(
     seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
@@ -95,7 +95,7 @@ describe('PublicKey', () => {
     expect(array.constructor).toBe(Uint8Array)
   })
   test('It should load from a string', () => {
-    const item = keyGenerator.publicKey()
+    const item = keyGenerator.createPublicKey()
     const newItem = seal.PublicKey()
     const str = item.save()
     const spyOn = jest.spyOn(newItem, 'load')
@@ -104,7 +104,7 @@ describe('PublicKey', () => {
     expect(newItem.save()).toEqual(str)
   })
   test('It should load from a typed array', () => {
-    const item = keyGenerator.publicKey()
+    const item = keyGenerator.createPublicKey()
     const newItem = seal.PublicKey()
     const array = item.saveArray()
     const spyOn = jest.spyOn(newItem, 'loadArray')
@@ -223,14 +223,14 @@ describe('PublicKey', () => {
     )
   })
   test('It should copy another instance', () => {
-    const item = keyGenerator.publicKey()
+    const item = keyGenerator.createPublicKey()
     const newItem = seal.PublicKey()
     const spyOn = jest.spyOn(newItem, 'copy')
     newItem.copy(item)
     expect(spyOn).toHaveBeenCalledWith(item)
   })
   test('It should fail to copy another instance', () => {
-    const item = keyGenerator.publicKey()
+    const item = keyGenerator.createPublicKey()
     const newItem = seal.PublicKey()
     item.delete()
     const spyOn = jest.spyOn(newItem, 'copy')
@@ -256,7 +256,7 @@ describe('PublicKey', () => {
     expect(spyOn).toHaveBeenCalledWith()
   })
   test('It should move another instance into itself and delete the old', () => {
-    const item = keyGenerator.publicKey()
+    const item = keyGenerator.createPublicKey()
     const newItem = seal.PublicKey()
     const spyOn = jest.spyOn(newItem, 'move')
     newItem.move(item)
@@ -264,7 +264,7 @@ describe('PublicKey', () => {
     expect(item.instance).toBeUndefined()
   })
   test('It should fail to move another instance into itself and delete the old', () => {
-    const item = keyGenerator.publicKey()
+    const item = keyGenerator.createPublicKey()
     const newItem = seal.PublicKey()
     item.delete()
     const spyOn = jest.spyOn(newItem, 'move')
