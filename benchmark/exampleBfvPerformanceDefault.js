@@ -83,7 +83,7 @@ function create() {
       `Done [${Math.round((timeEnd - timeStart) * 1000)} microseconds]\r\n`
     )
     const secretKey = keyGenerator.secretKey()
-    const publicKey = keyGenerator.publicKey()
+    const publicKey = keyGenerator.createPublicKey()
 
     const relinKeys = seal.RelinKeys()
     const galoisKeys = seal.GaloisKeys()
@@ -91,14 +91,14 @@ function create() {
     if (context.usingKeyswitching) {
       process.stdout.write('Generating relinearization keys: ')
       timeStart = performance.now()
-      relinKeys.move(keyGenerator.relinKeysLocal())
+      relinKeys.move(keyGenerator.createRelinKeys())
       timeEnd = performance.now()
       process.stdout.write(
         `Done [${Math.round((timeEnd - timeStart) * 1000)} microseconds]\r\n`
       )
       process.stdout.write('Generating Galois keys: ')
       timeStart = performance.now()
-      galoisKeys.move(keyGenerator.galoisKeysLocal())
+      galoisKeys.move(keyGenerator.createGaloisKeys())
       timeEnd = performance.now()
       process.stdout.write(
         `Done [${Math.round((timeEnd - timeStart) * 1000)} microseconds]\r\n`
