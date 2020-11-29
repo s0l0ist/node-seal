@@ -1,21 +1,21 @@
 import SEAL from '../throws_wasm_node_umd'
-import { SEALLibrary } from 'implementation/seal'
-import { Context } from 'implementation/context'
-import { Modulus } from 'implementation/modulus'
-import { Vector } from 'implementation/vector'
-import { EncryptionParameters } from 'implementation/encryption-parameters'
-import { BatchEncoder } from 'implementation/batch-encoder'
-import { Encryptor } from 'implementation/encryptor'
-import { KeyGenerator } from 'implementation/key-generator'
-import { PublicKey } from 'implementation/public-key'
-import { CKKSEncoder } from 'implementation/ckks-encoder'
-import { Decryptor } from 'implementation/decryptor'
-import { SecretKey } from 'implementation/secret-key'
-import { PlainText } from 'implementation/plain-text'
-import { CipherText } from 'implementation/cipher-text'
-import { RelinKeys } from 'implementation/relin-keys'
-import { GaloisKeys } from 'implementation/galois-keys'
-import { ParmsIdType } from 'implementation/parms-id-type'
+import { SEALLibrary } from '../implementation/seal'
+import { Context } from '../implementation/context'
+import { Modulus } from '../implementation/modulus'
+import { Vector } from '../implementation/vector'
+import { EncryptionParameters } from '../implementation/encryption-parameters'
+import { BatchEncoder } from '../implementation/batch-encoder'
+import { Encryptor } from '../implementation/encryptor'
+import { KeyGenerator } from '../implementation/key-generator'
+import { PublicKey } from '../implementation/public-key'
+import { CKKSEncoder } from '../implementation/ckks-encoder'
+import { Decryptor } from '../implementation/decryptor'
+import { SecretKey } from '../implementation/secret-key'
+import { PlainText } from '../implementation/plain-text'
+import { CipherText } from '../implementation/cipher-text'
+import { RelinKeys } from '../implementation/relin-keys'
+import { GaloisKeys } from '../implementation/galois-keys'
+import { ParmsIdType } from '../implementation/parms-id-type'
 
 let seal: SEALLibrary
 let bfvContext: Context
@@ -55,7 +55,7 @@ beforeAll(async () => {
     Int32Array.from([46, 16, 46])
   )
   plainModulus = seal.PlainModulus.Batching(polyModulusDegree, bitSize)
-  bfvEncParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+  bfvEncParms = seal.EncryptionParameters(seal.SchemeType.bfv)
   bfvEncParms.setPolyModulusDegree(polyModulusDegree)
   bfvEncParms.setCoeffModulus(bfvCoeffModulus)
   bfvEncParms.setPlainModulus(plainModulus)
@@ -63,24 +63,24 @@ beforeAll(async () => {
   batchEncoder = seal.BatchEncoder(bfvContext)
   bfvKeyGenerator = seal.KeyGenerator(bfvContext)
   bfvSecretKey = bfvKeyGenerator.secretKey()
-  bfvPublicKey = bfvKeyGenerator.publicKey()
-  bfvRelinKeys = bfvKeyGenerator.relinKeysLocal()
-  bfvGaloisKeys = bfvKeyGenerator.galoisKeysLocal(
+  bfvPublicKey = bfvKeyGenerator.createPublicKey()
+  bfvRelinKeys = bfvKeyGenerator.createRelinKeys()
+  bfvGaloisKeys = bfvKeyGenerator.createGaloisKeys(
     Int32Array.from([1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0])
   )
   bfvEncryptor = seal.Encryptor(bfvContext, bfvPublicKey)
   bfvDecryptor = seal.Decryptor(bfvContext, bfvSecretKey)
 
-  ckksEncParms = seal.EncryptionParameters(seal.SchemeType.CKKS)
+  ckksEncParms = seal.EncryptionParameters(seal.SchemeType.ckks)
   ckksEncParms.setPolyModulusDegree(polyModulusDegree)
   ckksEncParms.setCoeffModulus(ckksCoeffModulus)
   ckksContext = seal.Context(ckksEncParms)
   ckksEncoder = seal.CKKSEncoder(ckksContext)
   ckksKeyGenerator = seal.KeyGenerator(ckksContext)
   ckksSecretKey = ckksKeyGenerator.secretKey()
-  ckksPublicKey = ckksKeyGenerator.publicKey()
-  ckksRelinKeys = ckksKeyGenerator.relinKeysLocal()
-  ckksGaloisKeys = ckksKeyGenerator.galoisKeysLocal()
+  ckksPublicKey = ckksKeyGenerator.createPublicKey()
+  ckksRelinKeys = ckksKeyGenerator.createRelinKeys()
+  ckksGaloisKeys = ckksKeyGenerator.createGaloisKeys()
   ckksEncryptor = seal.Encryptor(ckksContext, ckksPublicKey)
   ckksDecryptor = seal.Decryptor(ckksContext, ckksSecretKey)
 
@@ -105,7 +105,7 @@ describe('Evaluator', () => {
     expect(Constructor).toBeCalledWith(bfvContext)
   })
   test('It should fail to construct an instance', () => {
-    const newParms = seal.EncryptionParameters(seal.SchemeType.BFV)
+    const newParms = seal.EncryptionParameters(seal.SchemeType.bfv)
     newParms.setPolyModulusDegree(4096)
     newParms.setCoeffModulus(
       seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)

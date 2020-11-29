@@ -36,11 +36,12 @@ export type KeyGenerator = {
   readonly unsafeInject: (instance: Instance) => void
   readonly delete: () => void
   readonly secretKey: () => SecretKey
-  readonly publicKey: () => PublicKey
-  readonly relinKeysLocal: () => RelinKeys
-  readonly relinKeys: () => Serializable
-  readonly galoisKeysLocal: (steps?: Int32Array) => GaloisKeys
-  readonly galoisKeys: (steps?: Int32Array) => Serializable
+  readonly createPublicKeySerializable: () => Serializable
+  readonly createPublicKey: () => PublicKey
+  readonly createRelinKeysSerializable: () => Serializable
+  readonly createRelinKeys: () => RelinKeys
+  readonly createGaloisKeysSerializable: (steps?: Int32Array) => Serializable
+  readonly createGaloisKeys: (steps?: Int32Array) => GaloisKeys
 }
 
 const KeyGeneratorConstructor = (
@@ -128,24 +129,49 @@ const KeyGeneratorConstructor = (
      * @returns {SecretKey} The secret key that was generated upon instantiation of this KeyGenerator
      */
     secretKey(): SecretKey {
-      const key = SecretKey()
-      const instance = _instance.secretKey()
-      key.inject(instance)
-      return key
+      try {
+        const key = SecretKey()
+        const instance = _instance.secretKey()
+        key.inject(instance)
+        return key
+      } catch (e) {
+        throw Exception.safe(e)
+      }
     },
 
     /**
-     * Return the generated PublicKey
+     * Create a new PublicKey instance
      *
      * @function
-     * @name KeyGenerator#publicKey
-     * @returns {PublicKey} The public key that was generated upon instantiation of this KeyGenerator
+     * @name KeyGenerator#createPublicKey
+     * @returns {PublicKey} A new PublicKey instance
      */
-    publicKey(): PublicKey {
-      const key = PublicKey()
-      const instance = _instance.publicKey()
-      key.inject(instance)
-      return key
+    createPublicKey(): PublicKey {
+      try {
+        const key = PublicKey()
+        _instance.createPublicKey(key.instance)
+        return key
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     * Create a new, Serializable PublicKey instance
+     *
+     * @function
+     * @name KeyGenerator#createPublicKeySerializable
+     * @returns {Serializable<PublicKey>} A new, serializable, PublicKey instance
+     */
+    createPublicKeySerializable(): Serializable {
+      try {
+        const serialized = Serializable()
+        const instance = _instance.createPublicKeySerializable()
+        serialized.unsafeInject(instance)
+        return serialized
+      } catch (e) {
+        throw Exception.safe(e)
+      }
     },
 
     /**
@@ -154,15 +180,14 @@ const KeyGeneratorConstructor = (
      * primarily for demo, testing, and debugging purposes.
      *
      * @function
-     * @name KeyGenerator#relinKeysLocal
+     * @name KeyGenerator#createRelinKeys
      * @returns {RelinKeys} New RelinKeys from the KeyGenerator's internal secret key
      */
-    relinKeysLocal(): RelinKeys {
+    createRelinKeys(): RelinKeys {
       try {
-        const key = RelinKeys()
-        const instance = _instance.relinKeysLocal()
-        key.inject(instance)
-        return key
+        const keys = RelinKeys()
+        _instance.createRelinKeys(keys.instance)
+        return keys
       } catch (e) {
         throw Exception.safe(e)
       }
@@ -176,14 +201,15 @@ const KeyGeneratorConstructor = (
      * directly and is meant to be serialized for the size reduction to have an
      * impact.
      *
+     *
      * @function
-     * @name KeyGenerator#relinKeys
-     * @returns {Serializable} New RelinKeys from the KeyGenerator's internal secret key
+     * @name KeyGenerator#createRelinKeysSerializable
+     * @returns {Serializable<RelinKeys>} New, serializable RelinKeys from the KeyGenerator's internal secret key
      */
-    relinKeys(): Serializable {
+    createRelinKeysSerializable(): Serializable {
       try {
         const serialized = Serializable()
-        const instance = _instance.relinKeys()
+        const instance = _instance.createRelinKeysSerializable()
         serialized.unsafeInject(instance)
         return serialized
       } catch (e) {
@@ -205,12 +231,11 @@ const KeyGeneratorConstructor = (
      * @param {Int32Array} [steps=Int32Array.from([])] Specific Galois Elements to generate
      * @returns {GaloisKeys} New GaloisKeys from the KeyGenerator's internal secret key
      */
-    galoisKeysLocal(steps: Int32Array = Int32Array.from([])): GaloisKeys {
+    createGaloisKeys(steps: Int32Array = Int32Array.from([])): GaloisKeys {
       try {
-        const key = GaloisKeys()
-        const instance = _instance.galoisKeysLocal(steps)
-        key.inject(instance)
-        return key
+        const keys = GaloisKeys()
+        _instance.createGaloisKeys(steps, keys.instance)
+        return keys
       } catch (e) {
         throw Exception.safe(e)
       }
@@ -232,12 +257,14 @@ const KeyGeneratorConstructor = (
      * @function
      * @name KeyGenerator#galoisKeys
      * @param {Int32Array} [steps=Int32Array.from([])] Specific Galois Elements to generate
-     * @returns {Serializable} Base64 encoded string
+     * @returns {Serializable<GaloisKeys>} Base64 encoded string
      */
-    galoisKeys(steps: Int32Array = Int32Array.from([])): Serializable {
+    createGaloisKeysSerializable(
+      steps: Int32Array = Int32Array.from([])
+    ): Serializable {
       try {
         const serialized = Serializable()
-        const instance = _instance.galoisKeys(steps)
+        const instance = _instance.createGaloisKeysSerializable(steps)
         serialized.unsafeInject(instance)
         return serialized
       } catch (e) {

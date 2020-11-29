@@ -34,10 +34,6 @@ import {
   GaloisKeysDependencies
 } from './galois-keys'
 import {
-  IntegerEncoderConstructorOptions,
-  IntegerEncoderDependencies
-} from './integer-encoder'
-import {
   MemoryPoolHandle,
   MemoryPoolHandleDependencies
 } from './memory-pool-handle'
@@ -99,7 +95,6 @@ export type SEALLibrary = {
   readonly Exception: Exception
   readonly GaloisKeys: GaloisKeysConstructorOptions
   readonly KeyGenerator: KeyGeneratorConstructorOptions
-  readonly IntegerEncoder: IntegerEncoderConstructorOptions
   readonly MemoryPoolHandle: MemoryPoolHandle
   readonly Modulus: ModulusConstructorOptions
   readonly ParmsIdType: ParmsIdTypeConstructorOptions
@@ -129,7 +124,6 @@ type SEALConstructorOptions = {
   readonly Exception: ExceptionDependencies
   readonly GaloisKeys: GaloisKeysDependencies
   readonly KeyGenerator: KeyGeneratorDependencies
-  readonly IntegerEncoder: IntegerEncoderDependencies
   readonly MemoryPoolHandle: MemoryPoolHandleDependencies
   readonly Modulus: ModulusDependencies
   readonly ParmsIdType: ParmsIdTypeDependencies
@@ -163,7 +157,6 @@ export const SEALConstructor = ({
   Exception,
   GaloisKeys,
   KeyGenerator,
-  IntegerEncoder,
   MemoryPoolHandle,
   Modulus,
   ParmsIdType,
@@ -291,10 +284,6 @@ export const SEALConstructor = ({
     ComprModeType: comprModeType,
     Vector: vector
   })
-  const integerEncoder = IntegerEncoder({
-    Exception: exception,
-    PlainText: plainText
-  })
   const keyGenerator = KeyGenerator({
     Exception: exception,
     PublicKey: publicKey,
@@ -323,7 +312,6 @@ export const SEALConstructor = ({
     Exception: exception, // Singleton
     GaloisKeys: galoisKeys,
     KeyGenerator: keyGenerator,
-    IntegerEncoder: integerEncoder,
     MemoryPoolHandle: memoryPoolHandle, // Singleton
     Modulus: modulus,
     ParmsIdType: parmsIdType,

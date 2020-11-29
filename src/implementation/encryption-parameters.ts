@@ -176,7 +176,7 @@ const EncryptionParametersConstructor = (
      *
      * @readonly
      * @name EncryptionParameters#scheme
-     * @type {SchemeType.none|SchemeType.BFV|SchemeType.CKKS}
+     * @type {SchemeType.none|SchemeType.bfv|SchemeType.ckks}
      */
     get scheme() {
       return _instance.scheme()
@@ -229,10 +229,10 @@ const EncryptionParametersConstructor = (
      *
      * @function
      * @name EncryptionParameters#save
-     * @param {ComprModeType} [compression={@link ComprModeType.deflate}] The compression mode to use
+     * @param {ComprModeType} [compression={@link ComprModeType.zstd}] The compression mode to use
      * @returns {string} base64 encoded string
      */
-    save(compression: ComprModeType = ComprModeType.deflate): string {
+    save(compression: ComprModeType = ComprModeType.zstd): string {
       return _instance.saveToString(compression)
     },
 
@@ -241,10 +241,10 @@ const EncryptionParametersConstructor = (
      *
      * @function
      * @name EncryptionParameters#saveArray
-     * @param {ComprModeType} [compression={@link ComprModeType.deflate}] The compression mode to use
+     * @param {ComprModeType} [compression={@link ComprModeType.zstd}] The compression mode to use
      * @returns {Uint8Array} A byte array containing the CipherText in binary form
      */
-    saveArray(compression: ComprModeType = ComprModeType.deflate): Uint8Array {
+    saveArray(compression: ComprModeType = ComprModeType.zstd): Uint8Array {
       const tempVect = Vector()
       const instance = _instance.saveToArray(compression)
       tempVect.unsafeInject(instance)

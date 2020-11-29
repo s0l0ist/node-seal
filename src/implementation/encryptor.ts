@@ -37,6 +37,10 @@ export type Encryptor = {
     cipherText?: CipherText,
     pool?: MemoryPoolHandle
   ) => CipherText | void
+  readonly encryptSerializable: (
+    plainText: PlainText,
+    pool?: MemoryPoolHandle
+  ) => Serializable
   readonly encryptSymmetric: (
     plainText: PlainText,
     cipherText?: CipherText,
@@ -46,6 +50,11 @@ export type Encryptor = {
     plainText: PlainText,
     pool?: MemoryPoolHandle
   ) => Serializable
+  readonly encryptZero: (
+    cipherText?: CipherText,
+    pool?: MemoryPoolHandle
+  ) => CipherText | void
+  readonly encryptZeroSerializable: (pool?: MemoryPoolHandle) => Serializable
 }
 
 const EncryptorConstructor = (library: Library): EncryptorDependencies => ({
@@ -162,6 +171,31 @@ const EncryptorConstructor = (library: Library): EncryptorDependencies => ({
     },
 
     /**
+     * Encrypts a PlainText and returns a CipherText as a Serializable object.
+     * Dynamic memory allocations in the process are allocated from the memory
+     * pool pointed to by the given MemoryPoolHandle.
+     *
+     * @function
+     * @name Encryptor#encryptSerializable
+     * @param {PlainText} plainText PlainText to encrypt
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {Serializable<CipherText>} A Serializable containing the encrypted result
+     */
+    encryptSerializable(
+      plainText: PlainText,
+      pool: MemoryPoolHandle = MemoryPoolHandle.global
+    ): Serializable {
+      try {
+        const temp = Serializable()
+        const instance = _instance.encryptSerializable(plainText.instance, pool)
+        temp.unsafeInject(instance)
+        return temp
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
      * Encrypts a PlainText with the secret key and stores the result in
      * destination.
      *
@@ -222,7 +256,7 @@ const EncryptorConstructor = (library: Library): EncryptorDependencies => ({
      * @name Encryptor#encryptSymmetricSerializable
      * @param {PlainText} plainText PlainText to encrypt
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
-     * @returns {Serializable} Returns a Serializable containing the encrypted result
+     * @returns {Serializable<CipherText>} Returns a Serializable containing the encrypted result
      */
     encryptSymmetricSerializable(
       plainText: PlainText,
@@ -234,6 +268,68 @@ const EncryptorConstructor = (library: Library): EncryptorDependencies => ({
           plainText.instance,
           pool
         )
+        serialized.unsafeInject(instance)
+        return serialized
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     *
+     * Encrypts a zero plaintext with the public key and returns the ciphertext
+     * as a serializable object.
+     *
+     * The encryption parameters for the resulting ciphertext correspond to the
+     * highest (data) level in the modulus switching chain. Dynamic memory
+     * allocations in the process are allocated from the memory pool pointed to
+     * by the given MemoryPoolHandle.
+     *
+     * @function
+     * @name Encryptor#encryptZero
+     * @param {CipherText} [cipherText] A CipherText to overwrite.
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {CipherText|void} Returns undefined if a CipherText was specified. Otherwise returns a
+     * CipherText containing the encrypted result
+     */
+    encryptZero(
+      cipherText?: CipherText,
+      pool: MemoryPoolHandle = MemoryPoolHandle.global
+    ): CipherText | void {
+      try {
+        if (cipherText) {
+          _instance.encryptZero(cipherText.instance, pool)
+          return
+        }
+        const cipher = CipherText()
+        _instance.encryptZero(cipher.instance, pool)
+        return cipher
+      } catch (e) {
+        throw Exception.safe(e)
+      }
+    },
+
+    /**
+     *
+     * Encrypts a zero plaintext with the public key and stores the result in
+     * destination.
+     *
+     * The encryption parameters for the resulting ciphertext correspond to the
+     * highest (data) level in the modulus switching chain. Dynamic memory
+     * allocations in the process are allocated from the memory pool pointed to
+     * by the given MemoryPoolHandle.
+     *
+     * @function
+     * @name Encryptor#encryptZeroSerializable
+     * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
+     * @returns {Serializable<CipherText>} A CipherText as a serialized object containing the encrypted result
+     */
+    encryptZeroSerializable(
+      pool: MemoryPoolHandle = MemoryPoolHandle.global
+    ): Serializable {
+      try {
+        const serialized = Serializable()
+        const instance = _instance.encryptZeroSerializable(pool)
         serialized.unsafeInject(instance)
         return serialized
       } catch (e) {

@@ -1,10 +1,10 @@
 import SEAL from '../throws_wasm_node_umd'
-import { SEALLibrary } from 'implementation/seal'
-import { Context } from 'implementation/context'
-import { Modulus } from 'implementation/modulus'
-import { Vector } from 'implementation/vector'
-import { EncryptionParameters } from 'implementation/encryption-parameters'
-import { BatchEncoderTypes } from 'implementation/batch-encoder'
+import { SEALLibrary } from '../implementation/seal'
+import { Context } from '../implementation/context'
+import { Modulus } from '../implementation/modulus'
+import { Vector } from '../implementation/vector'
+import { EncryptionParameters } from '../implementation/encryption-parameters'
+import { BatchEncoderTypes } from '../implementation/batch-encoder'
 
 let seal: SEALLibrary
 let context: Context
@@ -13,7 +13,7 @@ let plainModulus: Modulus
 let encParms: EncryptionParameters
 beforeAll(async () => {
   seal = await SEAL()
-  const schemeType = seal.SchemeType.BFV
+  const schemeType = seal.SchemeType.bfv
   const securityLevel = seal.SecurityLevel.tc128
   const polyModulusDegree = 1024
   const bitSizes = Int32Array.from([27])

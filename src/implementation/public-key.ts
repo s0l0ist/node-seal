@@ -100,10 +100,10 @@ const PublicKeyConstructor = (library: Library): PublicKeyDependencies => ({
      *
      * @function
      * @name PublicKey#save
-     * @param {ComprModeType} [compression={@link ComprModeType.deflate}] The compression mode to use
+     * @param {ComprModeType} [compression={@link ComprModeType.zstd}] The compression mode to use
      * @returns {string} Base64 encoded string
      */
-    save(compression: ComprModeType = ComprModeType.deflate): string {
+    save(compression: ComprModeType = ComprModeType.zstd): string {
       try {
         return _instance.saveToString(compression)
       } catch (e) {
@@ -116,10 +116,10 @@ const PublicKeyConstructor = (library: Library): PublicKeyDependencies => ({
      *
      * @function
      * @name PublicKey#saveArray
-     * @param {ComprModeType} [compression={@link ComprModeType.deflate}] The compression mode to use
+     * @param {ComprModeType} [compression={@link ComprModeType.zstd}] The compression mode to use
      * @returns {Uint8Array} A byte array containing the PublicKey in binary form
      */
-    saveArray(compression: ComprModeType = ComprModeType.deflate): Uint8Array {
+    saveArray(compression: ComprModeType = ComprModeType.zstd): Uint8Array {
       const tempVect = Vector()
       const instance = _instance.saveToArray(compression)
       tempVect.unsafeInject(instance)
@@ -168,7 +168,7 @@ const PublicKeyConstructor = (library: Library): PublicKeyDependencies => ({
      * @name PublicKey#copy
      * @param {PublicKey} key PublicKey to copy
      * @example
-     * const keyA = keyGenerator.publicKey()
+     * const keyA = keyGenerator.createPublicKey()
      * const keyB = seal.PublicKey()
      * keyB.copy(keyA)
      * // keyB holds a copy of keyA
@@ -188,7 +188,7 @@ const PublicKeyConstructor = (library: Library): PublicKeyDependencies => ({
      * @name PublicKey#clone
      * @returns {PublicKey}
      * @example
-     * const keyA = keyGenerator.publicKey()
+     * const keyA = keyGenerator.createPublicKey()
      * const keyB = keyA.clone()
      * // keyB holds a copy of keyA
      */
@@ -214,7 +214,7 @@ const PublicKeyConstructor = (library: Library): PublicKeyDependencies => ({
      * @name PublicKey#move
      * @param {PublicKey} key PublicKey to move
      * @example
-     * const keyA = keyGenerator.publicKey()
+     * const keyA = keyGenerator.createPublicKey()
      * const keyB = seal.PublicKey()
      * keyB.move(keyA)
      * // keyB holds a the instance of keyA.

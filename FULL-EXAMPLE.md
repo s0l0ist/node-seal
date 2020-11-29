@@ -11,7 +11,7 @@ CommonJS (but also works with `import`)
   // Using CommonJS for RunKit
   const SEAL = require('node-seal')
   const seal = await SEAL()
-  const schemeType = seal.SchemeType.BFV
+  const schemeType = seal.SchemeType.bfv
   const securityLevel = seal.SecurityLevel.tc128
   const polyModulusDegree = 4096
   const bitSizes = [36, 36, 37]

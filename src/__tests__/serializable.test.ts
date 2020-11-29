@@ -1,11 +1,11 @@
 import SEAL from '../throws_wasm_node_umd'
-import { SEALLibrary } from 'implementation/seal'
-import { EncryptionParameters } from 'implementation/encryption-parameters'
-import { Context } from 'implementation/context'
-import { KeyGenerator } from 'implementation/key-generator'
-import { BatchEncoder } from 'implementation/batch-encoder'
-import { Encryptor } from 'implementation/encryptor'
-import { PlainText } from 'implementation/plain-text'
+import { SEALLibrary } from '../implementation/seal'
+import { EncryptionParameters } from '../implementation/encryption-parameters'
+import { Context } from '../implementation/context'
+import { KeyGenerator } from '../implementation/key-generator'
+import { BatchEncoder } from '../implementation/batch-encoder'
+import { Encryptor } from '../implementation/encryptor'
+import { PlainText } from '../implementation/plain-text'
 let seal: SEALLibrary
 let parms: EncryptionParameters
 let context: Context
@@ -14,7 +14,7 @@ let keyGenerator: KeyGenerator
 let encryptor: Encryptor
 beforeAll(async () => {
   seal = await SEAL()
-  parms = seal.EncryptionParameters(seal.SchemeType.BFV)
+  parms = seal.EncryptionParameters(seal.SchemeType.bfv)
   parms.setPolyModulusDegree(4096)
   parms.setCoeffModulus(
     seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
@@ -24,7 +24,7 @@ beforeAll(async () => {
   encoder = seal.BatchEncoder(context)
   keyGenerator = seal.KeyGenerator(context)
   const secretKey = keyGenerator.secretKey()
-  const publicKey = keyGenerator.publicKey()
+  const publicKey = keyGenerator.createPublicKey()
   encryptor = seal.Encryptor(context, publicKey, secretKey)
 })
 
