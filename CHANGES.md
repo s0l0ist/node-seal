@@ -7,7 +7,7 @@ for more details on each SEAL version change.
 
 Feat:
 
-- Increase maximum memory for WASM to be 4gb instead of the default 2gb. This will be beneficial to applications where the VM can handle memory size larger than 2gb such as NodeJS and Chrome.
+- Increase maximum memory for WASM to be 4gb instead of the default 2gb. This will be beneficial to applications where the VM can handle WASM memory size larger than 2gb such as NodeJS and Chrome.
 - Docs have been updated and reflect the proper functions for the KeyGenerator type.
 
 ## Version 4.5.0
