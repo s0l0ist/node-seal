@@ -3,6 +3,13 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 4.5.1
+
+Feat:
+
+- Increase maximum memory for WASM to be 4gb instead of the default 2gb. This will be beneficial to applications where the VM can handle WASM memory size larger than 2gb such as NodeJS and Chrome.
+- Docs have been updated and reflect the proper functions for the KeyGenerator type.
+
 ## Version 4.5.0
 
 ### Highlights

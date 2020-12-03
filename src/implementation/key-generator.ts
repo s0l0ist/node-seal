@@ -227,7 +227,7 @@ const KeyGeneratorConstructor = (
      * in the BFV scheme complex conjugation in the CKKS scheme.
      *
      * @function
-     * @name KeyGenerator#galoisKeysLocal
+     * @name KeyGenerator#createGaloisKeys
      * @param {Int32Array} [steps=Int32Array.from([])] Specific Galois Elements to generate
      * @returns {GaloisKeys} New GaloisKeys from the KeyGenerator's internal secret key
      */
@@ -255,7 +255,7 @@ const KeyGeneratorConstructor = (
      * impact.
      *
      * @function
-     * @name KeyGenerator#galoisKeys
+     * @name KeyGenerator#createGaloisKeysSerializable
      * @param {Int32Array} [steps=Int32Array.from([])] Specific Galois Elements to generate
      * @returns {Serializable<GaloisKeys>} Base64 encoded string
      */
