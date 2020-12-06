@@ -169,8 +169,9 @@ Conversion from C++ to Web Assembly has some limitations:
   Saving keys is very memory intensive especially for `polyModulusDegrees`s above `16384`.
   This is because there's currently no way (that we have found) to use io streams
   across JS and Web Assembly code, so the strings have to be buffered completely in RAM and
-  they can be very, very large. This holds especially true for `GaloisKeys` where you may hit
-  JS max string limits (256MB).
+  they can be very, very large when using the default `zstd` compression. User's who are 
+  experiencing OOM exceptions when saving `GaloisKeys` should try specifying a compression
+  override such as `none` or the less performant `zlib`. Ex: `galoisKeys.save(seal.ComprModeType.zlib)`
 
 - **Garbage Collection:** Unfortunately, the typical way of cleaning up dereferenced JS objects will
   leave behind a the Web Assembly (C++) object in memory. There is no way to automatically call the destructors
