@@ -3,6 +3,12 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 4.5.2
+
+Feat:
+
+- Upgrade to seal v3.6.1 to address zstd memory bug.
+
 ## Version 4.5.1
 
 Feat:
