@@ -6,7 +6,7 @@ node-seal is a homomorphic encryption library for TypeScript or JavaScript.
 - **Zero dependencies:** Very lean, only contains a low level API which is very close to the C++ calls from Microsoft SEAL.
 - **Node.js, Browser, React Native:** Install once, work in any server/client configuration.
 
-**Now supporting Microsoft SEAL 3.6.1**
+**Now supporting Microsoft SEAL 3.6.2**
 
 ## Installation
 
@@ -169,7 +169,7 @@ Conversion from C++ to Web Assembly has some limitations:
   Saving keys is very memory intensive especially for `polyModulusDegrees`s above `16384`.
   This is because there's currently no way (that we have found) to use io streams
   across JS and Web Assembly code, so the strings have to be buffered completely in RAM and
-  they can be very, very large when using the default `zstd` compression. User's who are 
+  they can be very, very large when using the default `zstd` compression. User's who are
   experiencing OOM exceptions when saving `GaloisKeys` should try specifying a compression
   override such as `none` or the less performant `zlib`. Ex: `galoisKeys.save(seal.ComprModeType.zlib)`
 
