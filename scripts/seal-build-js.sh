@@ -5,10 +5,10 @@ source ./emsdk_env.sh > /dev/null
 
 cd ../SEAL/lib/
 
-if [[ "$THROW_ON_TRANSPARENT" == "ON" ]]; then
-  TYPE="throws"
-elif [[ "$THROW_ON_TRANSPARENT" == "OFF" ]]; then
+if [[ "$THROW_ON_TRANSPARENT" == "OFF" ]]; then
   TYPE="allows"
+else
+  TYPE="throws"
 fi
 
 if [[ "$ENVIRONMENT" == "node" ]]; then
