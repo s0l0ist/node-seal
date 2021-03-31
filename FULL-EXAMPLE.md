@@ -46,7 +46,7 @@ CommonJS (but also works with `import`)
 
   const encoder = seal.BatchEncoder(context)
   const keyGenerator = seal.KeyGenerator(context)
-  const publicKey = keyGenerator.publicKey()
+  const publicKey = keyGenerator.createPublicKey()
   const secretKey = keyGenerator.secretKey()
   const encryptor = seal.Encryptor(context, publicKey)
   const decryptor = seal.Decryptor(context, secretKey)
