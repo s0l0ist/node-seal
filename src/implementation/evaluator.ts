@@ -455,7 +455,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
-     * const relinKeys = keyGenerator.relinKeys()
+     * const relinKeys = keyGenerator.createRelinKeys()
      * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.relinearize(cipherTextA, relinKeys)
@@ -780,7 +780,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
-     * const relinKeys = keyGenerator.relinKeys()
+     * const relinKeys = keyGenerator.createRelinKeys()
      * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.exponentiate(cipherTextA, 3, relinKeys)
@@ -1175,7 +1175,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
-     * const galoisKeys = keyGenerator.galoisKeys()
+     * const galoisKeys = keyGenerator.createGaloisKeys()
      * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.rotateRows(cipherTextA, 3, galoisKeys)
@@ -1232,7 +1232,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
-     * const galoisKeys = keyGenerator.galoisKeys()
+     * const galoisKeys = keyGenerator.createGaloisKeys()
      * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.rotateColumns(cipherTextA, galoisKeys)
@@ -1287,7 +1287,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
-     * const galoisKeys = keyGenerator.galoisKeys()
+     * const galoisKeys = keyGenerator.createGaloisKeys()
      * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.rotateVector(cipherTextA, 3, galoisKeys)
@@ -1342,7 +1342,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
-     * const galoisKeys = keyGenerator.galoisKeys()
+     * const galoisKeys = keyGenerator.createGaloisKeys()
      * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.complexConjugate(cipherTextA, galoisKeys)
@@ -1391,7 +1391,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
-     * const galoisKeys = keyGenerator.galoisKeys()
+     * const galoisKeys = keyGenerator.createGaloisKeys()
      * const cipherTextA = seal.CipherText()
      * // ... after encrypting some data ...
      * const resultCipher = evaluator.sumElements(cipherTextA, galoisKeys, seal.SchemeTypes.BFV)
@@ -1447,8 +1447,8 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
-     * const relinKeys = keyGenerator.relinKeys()
-     * const galoisKeys = keyGenerator.galoisKeys()
+     * const relinKeys = keyGenerator.createRelinKeys()
+     * const galoisKeys = keyGenerator.createGaloisKeys()
      * const cipherTextA = seal.CipherText()
      * const cipherTextB = seal.CipherText()
      * // ... after encrypting some data ...
@@ -1520,7 +1520,7 @@ const EvaluatorConstructor = (library: Library): EvaluatorDependencies => ({
      * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
      * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
      * @example
-     * const galoisKeys = keyGenerator.galoisKeys()
+     * const galoisKeys = keyGenerator.createGaloisKeys()
      * const cipherTextA = seal.CipherText()
      * const plainTextB = seal.PlainText()
      * // ... after encoding / encrypting some data ...

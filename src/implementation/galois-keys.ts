@@ -216,7 +216,7 @@ const GaloisKeysConstructor = (library: Library): GaloisKeysDependencies => ({
      * @name GaloisKeys#copy
      * @param {GaloisKeys} key GaloisKeys to copy
      * @example
-     * const keyA = keyGenerator.galoisKeys()
+     * const keyA = keyGenerator.createGaloisKeys()
      * const keyB = seal.GaloisKeys()
      * keyB.copy(keyA)
      * // keyB holds a copy of keyA
@@ -236,7 +236,7 @@ const GaloisKeysConstructor = (library: Library): GaloisKeysDependencies => ({
      * @name GaloisKeys#clone
      * @returns {GaloisKeys}
      * @example
-     * const keyA = keyGenerator.galoisKeys()
+     * const keyA = keyGenerator.createGaloisKeys()
      * const keyB = keyA.clone()
      * // keyB holds a copy of keyA
      */
@@ -262,7 +262,7 @@ const GaloisKeysConstructor = (library: Library): GaloisKeysDependencies => ({
      * @name GaloisKeys#move
      * @param {GaloisKeys} key GaloisKeys to move
      * @example
-     * const keyA = keyGenerator.galoisKeys()
+     * const keyA = keyGenerator.createGaloisKeys()
      * const keyB = seal.GaloisKeys()
      * keyB.move(keyA)
      * // keyB holds a the instance of keyA.

@@ -135,10 +135,10 @@ You may generate a new Public Key (or even Relin/Galois Keys) from an existing S
 const keyGenerator = seal.KeyGenerator(context)
 
 const secretKey = keyGenerator.secretKey()
-const publicKey = keyGenerator.publicKey()
-const relinKey = keyGenerator.relinKeys()
+const publicKey = keyGenerator.createPublicKey()
+const relinKey = keyGenerator.createRelinKeys()
 // Generating Galois keys takes a while compared to the others
-const galoisKey = keyGenerator.galoisKeys()
+const galoisKey = keyGenerator.createGalisKeys()
 
 // Saving a key to a string is the same for each type of key
 const secretBase64Key = secretKey.save()
