@@ -218,7 +218,7 @@ const RelinKeysConstructor = (library: Library): RelinKeysDependencies => ({
      * @name RelinKeys#copy
      * @param {RelinKeys} key RelinKeys to copy
      * @example
-     * const keyA = keyGenerator.relinKeys()
+     * const keyA = keyGenerator.createRelinKeys()
      * const keyB = seal.RelinKeys()
      * keyB.copy(keyA)
      * // keyB holds a copy of keyA
@@ -238,7 +238,7 @@ const RelinKeysConstructor = (library: Library): RelinKeysDependencies => ({
      * @name RelinKeys#clone
      * @returns {RelinKeys}
      * @example
-     * const keyA = keyGenerator.relinKeys()
+     * const keyA = keyGenerator.createRelinKeys()
      * const keyB = keyA.clone()
      * // keyB holds a copy of keyA
      */
@@ -264,7 +264,7 @@ const RelinKeysConstructor = (library: Library): RelinKeysDependencies => ({
      * @name RelinKeys#move
      * @param {RelinKeys} key RelinKeys to move
      * @example
-     * const keyA = keyGenerator.relinKeys()
+     * const keyA = keyGenerator.createRelinKeys()
      * const keyB = seal.RelinKeys()
      * keyB.move(keyA)
      * // keyB holds a the instance of keyA.
