@@ -3,7 +3,7 @@
 cd ./submodules/emsdk/
 source ./emsdk_env.sh > /dev/null
 cd ../SEAL/
-emcmake cmake \
+emcmake cmake -S . -B build \
   -DSEAL_USE_CXX17=ON \
   -DCMAKE_CXX_FLAGS_RELEASE="-DNDEBUG -flto -O3" \
   -DCMAKE_C_FLAGS_RELEASE="-DNDEBUG -flto -O3" \

@@ -37,7 +37,6 @@
     "benchmark:ckks": "node --experimental-wasm-simd ./benchmark/exampleCkksPerformanceDefault.js",
     "submodule:update": "bash scripts/submodule-update.sh",
     "em:update": "bash scripts/em-update.sh",
-    "em:init": "bash scripts/em-init.sh",
     "seal:clean": "bash scripts/seal-clean.sh",
     "seal:cmake": "bash scripts/seal-cmake.sh",
     "seal:make": "bash scripts/seal-make.sh",
