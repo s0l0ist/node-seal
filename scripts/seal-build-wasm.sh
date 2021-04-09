@@ -3,7 +3,7 @@
 cd ./submodules/emsdk/
 source ./emsdk_env.sh > /dev/null
 
-cd ../SEAL/lib/
+cd ../SEAL/build/lib/
 
 if [[ "$THROW_ON_TRANSPARENT" == "OFF" ]]; then
   TYPE="allows"
@@ -37,6 +37,6 @@ emcc \
   -s MAXIMUM_MEMORY=4GB \
   -s ENVIRONMENT="${ENVIRONMENT}" \
   --closure 1
-cp "${FILE_NAME}" ../../../src/bin/"${FILE_NAME}"
+cp "${FILE_NAME}" ../../../../src/bin/"${FILE_NAME}"
 printf "done\n"
-cd ../../
+cd ../../../

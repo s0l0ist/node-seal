@@ -3,5 +3,5 @@
 cd ./submodules/emsdk/
 source ./emsdk_env.sh > /dev/null
 cd ../SEAL/
-emmake make -j
+emmake make -C build -j
 cd ../../
