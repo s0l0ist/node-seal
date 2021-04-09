@@ -131,7 +131,7 @@ Versions:
 
 Note: NodeJS and Chrome have the ability to increase WASM memory past 2GB; however, Safari and FireFox's does not allow WASM memory be increased beyond 2GB and therefore crashes at the point in the benchmark where the memory allocations exceed that capacity. It is worth to mention the benchmark was not originally designed to be run under the 2GB constraint.
 
-|         |            |        |                          |               | Native (No HEXL) | Node | Chrome Version  | Safari  | FireFox  |
+|         |            |        |                          |               | Native (No HEXL) | Node | Chrome | Safari | FireFox |
 |---------|------------|--------|--------------------------|---------------|------------------|-----------------|--------------------------------------------------------|---------------------------------------|-------------------------------|
 | n=1024  | log(q)=27  | KeyGen | Secret                   | iterations:10 | 125              | 203             | 501                                                    | 200                                   | 100.0                         |
 | n=1024  | log(q)=27  | KeyGen | Public                   | iterations:10 | 137              | 251             | 878                                                    | 200                                   | 200                           |
