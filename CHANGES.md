@@ -3,6 +3,18 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 4.5.4
+
+Feat:
+
+- Upgrade to seal v3.6.3
+
+## Version 4.5.3
+
+Feat:
+
+- Upgrade to seal v3.6.2
+
 ## Version 4.5.2
 
 Feat:
