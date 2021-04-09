@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
-cd ./submodules/emsdk/
-./emsdk update-tags
+# Sets up llvm.
+cd submodules/emsdk/
+git checkout master
+git fetch upstream
+git merge upstream/master --no-edit
+./emsdk install latest
+./emsdk activate latest
 cd ../../
