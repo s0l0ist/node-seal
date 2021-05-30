@@ -4,7 +4,7 @@ node-seal is a homomorphic encryption library for TypeScript or JavaScript.
 
 - **Web Assembly:** Fastest web implementation of the C++ [Microsoft SEAL](https://github.com/microsoft/SEAL) library
 - **Zero dependencies:** Very lean, only contains a low level API which is very close to the C++ calls from Microsoft SEAL.
-- **Node.js, Browser, React Native:** Install once, work in any server/client configuration.
+- **Node.js, Browser:** Install once, work in any server/client configuration.
 
 **Now supporting Microsoft SEAL 3.6.4**
 
@@ -54,20 +54,7 @@ import SEAL from 'node-seal/allows_wasm_node_umd'
 
 #### React-Native
 
-The bundle needs a bit of extra work. Specifically, it expects the browser `crypto.getRandomValues` which it will not find by default as react-native doesn't support the crypto builtin. It can be fixed by `npm install react-native-get-random-values` which provides access to this global while supporting a CSPRNG. The library also needs to have the browser `document` which is an artifact from the build system. Simply provide `global.document = {}`. Finally, it requires the following deep import structure:
-
-```javascript
-// Provide a CSPRNG mapping to crypto.getRandomValues()
-import 'react-native-get-random-values'
-import SEAL from 'node-seal/throws_wasm_web_umd'
-;(async () => {
-  // Spoof the browser document
-  global.document = {}
-  // Wait for the library to initialize
-  const seal = await SEAL()
-  //...
-})()
-```
+React-native does not support WASM libraries; however, it is possible to run a WASM library, including `node-seal` by using a [WebView](https://github.com/react-native-webview/react-native-webview#readme) to load both the library and a simple interface to communicate with on top of the built-in `postMessage` API. Instead of publicly hosting the web application to be rendered by the WebView, it is possible to bundle the mini web application into a single HTML file (with JS inlined) and load the HTML file directly to the WebView.
 
 ## Demo
 
