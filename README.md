@@ -6,7 +6,7 @@ node-seal is a homomorphic encryption library for TypeScript or JavaScript.
 - **Zero dependencies:** Very lean, only contains a low level API which is very close to the C++ calls from Microsoft SEAL.
 - **Node.js, Browser:** Install once, work in any server/client configuration.
 
-**Now supporting Microsoft SEAL 3.6.4**
+**Now supporting Microsoft SEAL 3.6.6**
 
 ## Installation
 
@@ -95,9 +95,8 @@ take a look at their [list of changes](https://github.com/microsoft/SEAL/blob/ma
 
 Microsoft SEAL has a native benchmark tool that we compile directly to WASM.
 
-1. `npm run seal:cmake`
-2. `npm run seal:make`
-3. `npm run benchmark`
+1. `npm run seal:build:bench`
+2. `npm run benchmark`
 
 ## Performance
 
