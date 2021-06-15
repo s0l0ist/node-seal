@@ -3,6 +3,14 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 4.5.7
+
+Feat:
+
+- Upgrade to seal v3.6.6
+- Upgrade emsdk
+- Upgrade JS dev deps
+
 ## Version 4.5.6
 
 Feat:
@@ -453,11 +461,22 @@ with `pipe` much more clearly.
 ```javascript
 import { Utils } from 'node-seal'
 const { pipe } = Utils
-const curriedEncode = (dest = null) => array => encoder.encode(array, dest)
-const curriedEncrypt = (dest = null) => plain => encryptor.encrypt(plain, dest)
-const curriedDecrypt = (dest = null) => cipher =>
-  decryptor.decrypt(cipher, dest)
-const curriedDecode = (sign = true) => plain => encoder.decode(plain, sign)
+const curriedEncode =
+  (dest = null) =>
+  array =>
+    encoder.encode(array, dest)
+const curriedEncrypt =
+  (dest = null) =>
+  plain =>
+    encryptor.encrypt(plain, dest)
+const curriedDecrypt =
+  (dest = null) =>
+  cipher =>
+    decryptor.decrypt(cipher, dest)
+const curriedDecode =
+  (sign = true) =>
+  plain =>
+    encoder.decode(plain, sign)
 ```
 
 Create partial applications. Curried functions allow us to construct specific

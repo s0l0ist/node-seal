@@ -95,9 +95,8 @@ take a look at their [list of changes](https://github.com/microsoft/SEAL/blob/ma
 
 Microsoft SEAL has a native benchmark tool that we compile directly to WASM.
 
-1. `npm run seal:cmake`
-2. `npm run seal:make`
-3. `npm run benchmark`
+1. `npm run seal:build:bench`
+2. `npm run benchmark`
 
 ## Performance
 
