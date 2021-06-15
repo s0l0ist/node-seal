@@ -14,7 +14,7 @@ Install:
 ```shell
 cd ./cmake-3.15.4
 ./bootstrap
-make -j4
+make -j
 sudo make install
 ```
 
