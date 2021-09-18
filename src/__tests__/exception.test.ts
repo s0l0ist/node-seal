@@ -1,5 +1,7 @@
 import SEAL from '../throws_wasm_node_umd'
 import { SEALLibrary } from '../implementation/seal'
+import { SealError } from '../implementation/exception'
+
 let seal: SEALLibrary
 beforeAll(async () => {
   seal = await SEAL()
@@ -19,7 +21,7 @@ describe('Exception', () => {
   test('It should attempt to get a safe error from an error instance', () => {
     const spyOn = jest.spyOn(seal.Exception, 'safe')
     const err = new Error('test error')
-    seal.Exception.safe(err)
+    seal.Exception.safe(err as SealError)
     expect(spyOn).toHaveBeenCalledWith(err)
   })
   test('It should attempt to get a safe error from a string', () => {
