@@ -205,7 +205,7 @@ const ModulusConstructor =
        * Load a Modulus from a base64 string
        *
        * @function
-       * @name SecretKey#load
+       * @name Modulus#load
        * @param {string} encoded Base64 encoded string
        */
       load(encoded: string) {
@@ -220,7 +220,7 @@ const ModulusConstructor =
        * Load a Modulus from an Uint8Array holding binary data
        *
        * @function
-       * @name SecretKey#loadArray
+       * @name Modulus#loadArray
        * @param {Uint8Array} array TypedArray containing binary data
        */
       loadArray(array: Uint8Array) {
