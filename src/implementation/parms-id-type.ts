@@ -1,5 +1,5 @@
 import { LoaderOptions, Instance, Library } from './seal'
-import { Exception } from './exception'
+import { Exception, SealError } from './exception'
 
 export type ParmsIdTypeDependencyOptions = {
   readonly Exception: Exception
@@ -20,82 +20,85 @@ export type ParmsIdType = {
   readonly values: BigUint64Array
 }
 
-const ParmsIdTypeConstructor = (library: Library): ParmsIdTypeDependencies => ({
-  Exception
-}: ParmsIdTypeDependencyOptions): ParmsIdTypeConstructorOptions => (): ParmsIdType => {
-  const Constructor = library.ParmsIdType
+const ParmsIdTypeConstructor =
+  (library: Library): ParmsIdTypeDependencies =>
+  ({
+    Exception
+  }: ParmsIdTypeDependencyOptions): ParmsIdTypeConstructorOptions =>
+  (): ParmsIdType => {
+    const Constructor = library.ParmsIdType
 
-  let _instance: Instance
-
-  /**
-   * @implements ParmsIdType
-   */
-
-  /**
-   * @interface ParmsIdType
-   */
-  return {
-    /**
-     * Get the underlying WASM instance
-     *
-     * @private
-     * @readonly
-     * @name ParmsIdType#instance
-     * @type {Instance}
-     */
-    get instance() {
-      return _instance
-    },
+    let _instance: Instance
 
     /**
-     * Inject this object with a raw WASM instance
-     *
-     * @private
-     * @function
-     * @name ParmsIdType#inject
-     * @param {Instance} instance WASM instance
+     * @implements ParmsIdType
      */
-    inject(instance: Instance) {
-      if (_instance) {
-        _instance.delete()
-        _instance = undefined
-      }
-      _instance = new Constructor(instance)
-      instance.delete()
-    },
 
     /**
-     * Delete the underlying WASM instance.
-     *
-     * Should be called before dereferencing this object to prevent the
-     * WASM heap from growing indefinitely.
-     * @function
-     * @name ParmsIdType#delete
+     * @interface ParmsIdType
      */
-    delete() {
-      if (_instance) {
-        _instance.delete()
-        _instance = undefined
-      }
-    },
+    return {
+      /**
+       * Get the underlying WASM instance
+       *
+       * @private
+       * @readonly
+       * @name ParmsIdType#instance
+       * @type {Instance}
+       */
+      get instance() {
+        return _instance
+      },
 
-    /**
-     * The values of the current ParmsIdType as an Array of BigInts.
-     *
-     * @readonly
-     * @name ParmsIdType#values
-     * @type {BigUint64Array}
-     */
-    get values() {
-      try {
-        const instance = _instance.values()
-        return BigUint64Array.from(instance)
-      } catch (e) {
-        throw Exception.safe(e)
+      /**
+       * Inject this object with a raw WASM instance
+       *
+       * @private
+       * @function
+       * @name ParmsIdType#inject
+       * @param {Instance} instance WASM instance
+       */
+      inject(instance: Instance) {
+        if (_instance) {
+          _instance.delete()
+          _instance = undefined
+        }
+        _instance = new Constructor(instance)
+        instance.delete()
+      },
+
+      /**
+       * Delete the underlying WASM instance.
+       *
+       * Should be called before dereferencing this object to prevent the
+       * WASM heap from growing indefinitely.
+       * @function
+       * @name ParmsIdType#delete
+       */
+      delete() {
+        if (_instance) {
+          _instance.delete()
+          _instance = undefined
+        }
+      },
+
+      /**
+       * The values of the current ParmsIdType as an Array of BigInts.
+       *
+       * @readonly
+       * @name ParmsIdType#values
+       * @type {BigUint64Array}
+       */
+      get values() {
+        try {
+          const instance = _instance.values()
+          return BigUint64Array.from(instance)
+        } catch (e) {
+          throw Exception.safe(e as SealError)
+        }
       }
     }
   }
-}
 
 export const ParmsIdTypeInit = ({
   loader

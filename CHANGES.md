@@ -3,6 +3,16 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 4.6.0
+
+Feat:
+
+- Upgrade to seal v3.7.0
+- Upgrade emsdk
+- Upgrade JS dev deps
+- eslint/prettier reformat
+- Added TS SealError type
+
 ## Version 4.5.7
 
 Feat:

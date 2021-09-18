@@ -19,7 +19,7 @@ describe('Exception', () => {
   test('It should attempt to get a safe error from an error instance', () => {
     const spyOn = jest.spyOn(seal.Exception, 'safe')
     const err = new Error('test error')
-    seal.Exception.safe(err)
+    seal.Exception.safe(e as SealErrorrr)
     expect(spyOn).toHaveBeenCalledWith(err)
   })
   test('It should attempt to get a safe error from a string', () => {

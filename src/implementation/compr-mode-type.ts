@@ -14,65 +14,66 @@ export type ComprModeType = {
   readonly zstd: any
 }
 
-const ComprModeTypeConstructor = (
-  library: Library
-): ComprModeTypeDependencies => (): ComprModeTypeConstructorOptions => (): ComprModeType => {
-  // Static methods
-  const _none = library.ComprModeType.none
-  const _zlib = library.ComprModeType.zlib
-  const _zstd = library.ComprModeType.zstd
-
-  /**
-   * @implements ComprModeType
-   */
-
-  /**
-   * @interface ComprModeType
-   */
-  return {
-    /**
-     * The `none` Compression Mode Type
-     *
-     * @readonly
-     * @name ComprModeType.none
-     * @type {ComprModeType.none}
-     */
-    get none() {
-      /**
-       * @typedef {ComprModeType.none} ComprModeType.none
-       */
-      return _none
-    },
+const ComprModeTypeConstructor =
+  (library: Library): ComprModeTypeDependencies =>
+  (): ComprModeTypeConstructorOptions =>
+  (): ComprModeType => {
+    // Static methods
+    const _none = library.ComprModeType.none
+    const _zlib = library.ComprModeType.zlib
+    const _zstd = library.ComprModeType.zstd
 
     /**
-     * The `zlib` Compression Mode Type
-     *
-     * @readonly
-     * @name ComprModeType.zlib
-     * @type {ComprModeType.zlib}
+     * @implements ComprModeType
      */
-    get zlib() {
-      /**
-       * @typedef {ComprModeType.zlib} ComprModeType.zlib
-       */
-      return _zlib
-    },
 
     /**
-     * The `zstd` Compression Mode Type
-     *
-     * @readonly
-     * @name ComprModeType.zstd
-     * @type {ComprModeType.zstd}
+     * @interface ComprModeType
      */
-    get zstd() {
+    return {
       /**
-       * @typedef {ComprModeType.zstd} ComprModeType.zstd
+       * The `none` Compression Mode Type
+       *
+       * @readonly
+       * @name ComprModeType.none
+       * @type {ComprModeType.none}
        */
-      return _zstd
+      get none() {
+        /**
+         * @typedef {ComprModeType.none} ComprModeType.none
+         */
+        return _none
+      },
+
+      /**
+       * The `zlib` Compression Mode Type
+       *
+       * @readonly
+       * @name ComprModeType.zlib
+       * @type {ComprModeType.zlib}
+       */
+      get zlib() {
+        /**
+         * @typedef {ComprModeType.zlib} ComprModeType.zlib
+         */
+        return _zlib
+      },
+
+      /**
+       * The `zstd` Compression Mode Type
+       *
+       * @readonly
+       * @name ComprModeType.zstd
+       * @type {ComprModeType.zstd}
+       */
+      get zstd() {
+        /**
+         * @typedef {ComprModeType.zstd} ComprModeType.zstd
+         */
+        return _zstd
+      }
     }
   }
-}
 
 export const ComprModeTypeInit = ({
   loader
