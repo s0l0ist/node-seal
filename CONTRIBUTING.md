@@ -43,7 +43,6 @@ of the SDK to build the project:
 
 ```shell
 npm run em:update      # Updates the tag information
-npm run em:init        # Sets up the working toolchain
 ```
 
 Finally, configure the Microsoft SEAL build settings:
