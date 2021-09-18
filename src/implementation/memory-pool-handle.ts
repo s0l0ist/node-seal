@@ -13,50 +13,51 @@ export type MemoryPoolHandle = {
   readonly threadLocal: any
 }
 
-const MemoryPoolHandleConstructor = (
-  library: Library
-): MemoryPoolHandleDependencies => (): MemoryPoolHandleConstructorOptions => (): MemoryPoolHandle => {
-  // Static methods
-  const _global = library.MemoryPoolHandle.MemoryPoolHandleGlobal
-  const _threadLocal = library.MemoryPoolHandle.MemoryPoolHandleThreadLocal
-
-  /**
-   * @implements MemoryPoolHandle
-   */
-
-  /**
-   * @interface MemoryPoolHandle
-   */
-  return {
-    /**
-     * The MemoryPoolHandle pointing to the global memory pool.
-     *
-     * @readonly
-     * @name MemoryPoolHandle.global
-     * @type {MemoryPoolHandle.global}
-     */
-    get global() {
-      /**
-       * @typedef {MemoryPoolHandle.global} MemoryPoolHandle.global
-       */
-      return _global()
-    },
+const MemoryPoolHandleConstructor =
+  (library: Library): MemoryPoolHandleDependencies =>
+  (): MemoryPoolHandleConstructorOptions =>
+  (): MemoryPoolHandle => {
+    // Static methods
+    const _global = library.MemoryPoolHandle.MemoryPoolHandleGlobal
+    const _threadLocal = library.MemoryPoolHandle.MemoryPoolHandleThreadLocal
 
     /**
-     * The MemoryPoolHandle pointing to the thread-local memory pool.
-     *
-     * @readonly
-     * @name MemoryPoolHandle.threadLocal
-     * @type {MemoryPoolHandle.threadLocal}
+     * @implements MemoryPoolHandle
      */
-    get threadLocal() {
+
+    /**
+     * @interface MemoryPoolHandle
+     */
+    return {
       /**
-       * @typedef {MemoryPoolHandle.threadLocal} MemoryPoolHandle.threadLocal
+       * The MemoryPoolHandle pointing to the global memory pool.
+       *
+       * @readonly
+       * @name MemoryPoolHandle.global
+       * @type {MemoryPoolHandle.global}
        */
-      return _threadLocal()
+      get global() {
+        /**
+         * @typedef {MemoryPoolHandle.global} MemoryPoolHandle.global
+         */
+        return _global()
+      },
+
+      /**
+       * The MemoryPoolHandle pointing to the thread-local memory pool.
+       *
+       * @readonly
+       * @name MemoryPoolHandle.threadLocal
+       * @type {MemoryPoolHandle.threadLocal}
+       */
+      get threadLocal() {
+        /**
+         * @typedef {MemoryPoolHandle.threadLocal} MemoryPoolHandle.threadLocal
+         */
+        return _threadLocal()
+      }
     }
   }
-}
 
 export const MemoryPoolHandleInit = ({
   loader
