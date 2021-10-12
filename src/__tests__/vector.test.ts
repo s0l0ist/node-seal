@@ -71,7 +71,7 @@ describe('Vector', () => {
     const vector = seal.Vector()
     const spyOn = jest.spyOn(vector, 'from')
     expect(() =>
-      vector.from((Float32Array.from([]) as unknown) as Int32Array)
+      vector.from(Float32Array.from([]) as unknown as Int32Array)
     ).toThrow(Error)
     expect(spyOn).toHaveBeenCalledWith(Float32Array.from([]))
   })

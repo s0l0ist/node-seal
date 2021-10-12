@@ -42,7 +42,7 @@ describe('BatchEncoder', () => {
   })
   test('It should fail to construct an instance', () => {
     const Constructor = jest.fn(seal.BatchEncoder)
-    expect(() => Constructor((null as unknown) as Context)).toThrow()
+    expect(() => Constructor(null as unknown as Context)).toThrow()
     expect(Constructor).toBeCalledWith(null)
   })
   test('It should have properties', () => {
@@ -165,7 +165,7 @@ describe('BatchEncoder', () => {
     const item = seal.BatchEncoder(context)
     const arr = Float64Array.from({ length: item.slotCount }, (_, i) => i)
     const spyOn = jest.spyOn(item, 'encode')
-    expect(() => item.encode((arr as unknown) as BatchEncoderTypes)).toThrow()
+    expect(() => item.encode(arr as unknown as BatchEncoderTypes)).toThrow()
     expect(spyOn).toHaveBeenCalledWith(arr)
   })
   test('It should fail on encoding bad data', () => {

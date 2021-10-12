@@ -3,6 +3,14 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 4.6.1
+
+Feat:
+
+- Upgrade to seal v3.7.1
+- Upgrade emsdk
+- Upgrade JS dev deps
+
 ## Version 4.6.0
 
 Feat:
