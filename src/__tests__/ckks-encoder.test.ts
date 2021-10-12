@@ -128,7 +128,7 @@ describe('CKKSEncoder', () => {
     )
     const spyOn = jest.spyOn(ckksEncoder, 'encode')
     expect(() =>
-      ckksEncoder.encode((arr as unknown) as Float64Array, Math.pow(2, 20))
+      ckksEncoder.encode(arr as unknown as Float64Array, Math.pow(2, 20))
     ).toThrow()
     expect(spyOn).toHaveBeenCalledWith(arr, Math.pow(2, 20))
   })

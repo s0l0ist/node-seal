@@ -1858,7 +1858,7 @@ describe('Evaluator', () => {
     const plain = ckksEncoder.encode(arr, Math.pow(2, 20)) as PlainText
     const spyOn = jest.spyOn(item, 'plainTransformToNtt')
     expect(() =>
-      item.plainTransformToNtt(plain, (null as unknown) as ParmsIdType)
+      item.plainTransformToNtt(plain, null as unknown as ParmsIdType)
     ).toThrow()
     expect(spyOn).toHaveBeenCalledWith(plain, null)
   })
