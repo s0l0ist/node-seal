@@ -8,6 +8,7 @@ for more details on each SEAL version change.
 Feat:
 
 - Upgrade to seal v3.7.2
+- Upgrade emsdk
 
 ## Version 4.6.1
 
