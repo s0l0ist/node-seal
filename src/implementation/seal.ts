@@ -70,6 +70,7 @@ import {
   KeyGeneratorConstructorOptions,
   KeyGeneratorDependencies
 } from './key-generator'
+import { version } from '../../package.json'
 
 export type Instance = any
 export type Loader = any
@@ -107,6 +108,7 @@ export type SEALLibrary = {
   readonly SecurityLevel: SecurityLevel
   readonly Serializable: SerializableConstructorOptions
   readonly Vector: VectorConstructorOptions
+  readonly Version: string
 }
 type SEALConstructorOptions = {
   readonly BatchEncoder: BatchEncoderDependencies
@@ -323,6 +325,7 @@ export const SEALConstructor = ({
     SecretKey: secretKey,
     SecurityLevel: securityLevel, // Singleton
     Serializable: serializable,
-    Vector: vector
+    Vector: vector,
+    Version: version
   }
 }

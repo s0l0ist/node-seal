@@ -1,31 +1,11 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
-    "declaration": true,
-    "declarationDir": "./tsc-out",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "newLine": "LF",
-    "noEmitOnError": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "outDir": "./tsc-out",
-    "paths": {
-      "seal_*": ["./src/bin/seal_*"]
-    },
-    "pretty": true,
-    "removeComments": true,
+    "rootDir": ".",
+    "outDir": "./tsc-out",  // if out path for a file is same as its src path, nothing will be emitted
     "resolveJsonModule": true,
-    "rootDir": "./src",
-    "sourceMap": true,
-    "strict": true,
-    "target": "ES2019",
-    "typeRoots": ["./src/custom_types", "./node_modules/@types"]
+    "composite": true  // required on the dependency project for references to work
   },
-  "include": ["./src/**/*"],
-  "exclude": ["./node_modules/**/*", "./tsc-out/**/*", "./src/__tests__/**/*"]
+  "files": [         // by whitelisting the files to include, TS won't automatically
+    "package.json"   // include all source below root, which is the default.
+  ]
 }
