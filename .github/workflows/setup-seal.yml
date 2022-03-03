@@ -1,0 +1,48 @@
+name: Setup SEAL
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Pull & update submodules
+        run: |
+          git submodule update --init
+          git submodule update --remote --merge
+
+      # Cache EMSDK's system libs if they haven't been changed
+      - name: Cache EMSDK
+        id: cache-emsdk
+        uses: actions/cache@v2.1.7
+        with:
+          path: submodules/emsdk/upstream/emscripten/cache
+          key: ${{ runner.os }}-emsdk-${{ hashFiles('submodules/emsdk/upstream/emscripten/cache/**/*') }}
+          restore-keys: |
+             ${{ runner.os }}-emsdk-
+     
+      # Cache SEAL's build artifacts if nothing has changed in the source
+      - name: Cache SEAL
+        id: cache-seal
+        uses: actions/cache@v2.1.7
+        with:
+          path: submodules/SEAL/build/lib
+          key: ${{ runner.os }}-seal-${{ hashFiles('submodules/seal/native/src/**/*') }}
+          restore-keys: |
+             ${{ runner.os }}-seal-
+
+      - name: Update EMSDK
+        if: steps.cache-emsdk.outputs.cache-hit != 'true'
+        run: |
+          npm run em:update
+          
+      - name: Compile SEAL
+        if: steps.cache-seal.outputs.cache-hit != 'true'
+        run: |
+          npm run build
