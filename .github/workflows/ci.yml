@@ -36,7 +36,7 @@ jobs:
              ${{ runner.os }}-b-seal-
 
       - name: Update EMSDK
-        if: steps.cache-emsdk-sys.outputs.cache-hit != 'true'
+        if: steps.cache-emsdk.outputs.cache-hit != 'true'
         run: |
           npm run em:update
           
