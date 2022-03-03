@@ -15,25 +15,32 @@ jobs:
         run: |
           git submodule update --init
 
+      - name: EMSDK Version
+        id: emsdk-version
+        run: |
+          echo "::set-output name=SHA::$(emsdk list | grep recommended | awk -F'[()]' '{print $2}')"     
       # Cache EMSDK if there's no new version
       - name: Cache EMSDK
         id: cache-emsdk
         uses: actions/cache@v2.1.7
         with:
           path: submodules/emsdk
-          key: ${{ runner.os }}-b-emsdk-${{ $(emsdk list | grep recommended | awk -F'[()]' '{print $2}') }}
+          key: ${{ runner.os }}-b-emsdk-${{ steps.emsdk-version.outputs.SHA }}
           restore-keys: |
-             ${{ runner.os }}-b-emsdk-
-     
+            ${{ runner.os }}-b-emsdk-
+      - name: SEAL Version
+        id: seal-version
+        run: |
+          echo "::set-output name=SHA::$(git rev-parse HEAD:submodules/SEAL)" 
       # Cache SEAL artifacts if the commit sha didn't change
       - name: Cache SEAL
         id: cache-seal
         uses: actions/cache@v2.1.7
         with:
           path: submodules/SEAL/build
-          key: ${{ runner.os }}-b-seal-${{ $(git rev-parse HEAD:submodules/SEAL) }}
+          key: ${{ runner.os }}-b-seal-${{ steps.seal-version.outputs.SHA }}
           restore-keys: |
-             ${{ runner.os }}-b-seal-
+            ${{ runner.os }}-b-seal-
 
       - name: Update EMSDK
         if: steps.cache-emsdk.outputs.cache-hit != 'true'
