@@ -1,6 +1,6 @@
 {
   "name": "node-seal",
-  "version": "4.6.2",
+  "version": "4.6.3",
   "description": "Homomorphic Encryption for TypeScript or JavaScript using Microsoft SEAL",
   "repository": {
     "type": "git",
@@ -55,7 +55,7 @@
     "build:clean": "rm -rf ./dist/* && rm -rf ./tsc-out/* && rm -rf ./src/bin/*",
     "build": "npm run build:allows && npm run build:throws",
     "clean": "npm run seal:clean && npm run build:clean",
-    "compile": "tsc --build src",
+    "compile": "tsc",
     "format": "prettier --write src",
     "lint": "eslint --fix 'src/**/*.ts'",
     "test": "jest src/**/*.ts",

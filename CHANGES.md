@@ -3,6 +3,14 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 4.6.3
+
+Feat:
+
+- Updated dev deps
+- Changed the emsdk submodule to use the upstream repository
+- Add `.Version` to `node-seal` to get the npm package version at runtime
+
 ## Version 4.6.2
 
 Feat:
