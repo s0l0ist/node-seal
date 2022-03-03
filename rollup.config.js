@@ -1,5 +1,6 @@
 import { terser } from 'rollup-plugin-terser'
 import alias from '@rollup/plugin-alias'
+import json from '@rollup/plugin-json'
 import typescript from 'rollup-plugin-typescript2'
 const formats = ['umd', 'es']
 const targets = ['allows', 'throws']
@@ -34,9 +35,14 @@ const outputs = formats.reduce(
                         {
                           find: /^seal_(.*)$/,
                           replacement: './src/bin/seal_$1.js'
+                        },
+                        {
+                          find: /^(.*)\.json$/,
+                          replacement: './$1.json'
                         }
                       ]
                     }),
+                    json({ compact: true }),
                     typescript({
                       verbosity: 2
                     })
