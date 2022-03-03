@@ -1,4 +1,4 @@
-name: Setup SEAL
+name: CI
 
 on:
   push:
@@ -9,7 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: Pull & update submodules
@@ -32,7 +31,7 @@ jobs:
         id: cache-seal
         uses: actions/cache@v2.1.7
         with:
-          path: submodules/SEAL/build/lib
+          path: submodules/SEAL/build
           key: ${{ runner.os }}-seal-${{ hashFiles('submodules/seal/native/src/**/*') }}
           restore-keys: |
              ${{ runner.os }}-seal-
@@ -45,4 +44,46 @@ jobs:
       - name: Compile SEAL
         if: steps.cache-seal.outputs.cache-hit != 'true'
         run: |
+          npm run clean
           npm run build
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: seal-artifacts
+          path: src/bin/
+          if-no-files-found: error
+          retention-days: 5
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+      
+      - name: Cache NPM Dependencies
+        id: cache-npm
+        uses: actions/cache@v2.1.7
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+        
+      - name: Install NPM Dependencies
+        if: steps.cache-npm.outputs.cache-hit != 'true'
+        run: |
+          npm install
+     - uses: actions/download-artifact@v3
+        with:
+          name: seal-artifacts
+          path: src/bin/
+        
+      - name: Transpile
+        run: |
+          npm run compile
+      - name: Test
+        run: |
+          npm run test
