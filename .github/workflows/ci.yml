@@ -21,7 +21,7 @@ jobs:
         uses: actions/cache@v2.1.7
         with:
           path: submodules/emsdk
-          key: ${{ runner.os }}-b-emsdk-${{ emsdk list | grep recommended | awk -F'[()]' '{print $2}' }}
+          key: ${{ runner.os }}-b-emsdk-${{ $(emsdk list | grep recommended | awk -F'[()]' '{print $2}') }}
           restore-keys: |
              ${{ runner.os }}-b-emsdk-
      
@@ -31,7 +31,7 @@ jobs:
         uses: actions/cache@v2.1.7
         with:
           path: submodules/SEAL/build
-          key: ${{ runner.os }}-b-seal-${{ git rev-parse HEAD:submodules/SEAL }}
+          key: ${{ runner.os }}-b-seal-${{ $(git rev-parse HEAD:submodules/SEAL) }}
           restore-keys: |
              ${{ runner.os }}-b-seal-
 
