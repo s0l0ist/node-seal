@@ -18,7 +18,7 @@ jobs:
       - name: EMSDK Version
         id: emsdk-version
         run: |
-          echo "::set-output name=SHA::$(emsdk list | grep recommended | awk -F'[()]' '{print $2}')"     
+          echo "::set-output name=SHA::$(./submodules/emsdk/emsdk list | grep recommended | awk -F'[()]' '{print $2}')"     
       # Cache EMSDK if there's no new version
       - name: Cache EMSDK
         id: cache-emsdk
