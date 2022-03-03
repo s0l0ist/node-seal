@@ -27,8 +27,8 @@ jobs:
         npm install
     - name: Pull & update submodules recursively
       run: |
-        git submodule update --init --recursive
-        git submodule update --recursive --remote
+        git submodule update --init
+        git submodule update --remote
         npm run em:update
     - name: Compile SEAL
       run: |
