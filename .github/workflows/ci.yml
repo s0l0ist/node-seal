@@ -22,9 +22,9 @@ jobs:
         uses: actions/cache@v2.1.7
         with:
           path: submodules/emsdk/upstream/emscripten/cache
-          key: ${{ runner.os }}-emsdk-${{ hashFiles('submodules/emsdk/upstream/emscripten/cache/**/*') }}
+          key: ${{ runner.os }}-a-emsdk-${{ hashFiles('submodules/emsdk/upstream/emscripten/cache/**/*') }}
           restore-keys: |
-             ${{ runner.os }}-emsdk-
+             ${{ runner.os }}-a-emsdk-
      
       # Cache SEAL's build artifacts if nothing has changed in the source
       - name: Cache SEAL
@@ -32,9 +32,9 @@ jobs:
         uses: actions/cache@v2.1.7
         with:
           path: submodules/SEAL/build
-          key: ${{ runner.os }}-seal-${{ hashFiles('submodules/seal/native/src/**/*') }}
+          key: ${{ runner.os }}-a-seal-${{ hashFiles('submodules/seal/native/src/**/*') }}
           restore-keys: |
-             ${{ runner.os }}-seal-
+             ${{ runner.os }}-a-seal-
 
       - name: Update EMSDK
         if: steps.cache-emsdk.outputs.cache-hit != 'true'
@@ -44,7 +44,6 @@ jobs:
       - name: Compile SEAL
         if: steps.cache-seal.outputs.cache-hit != 'true'
         run: |
-          npm run clean
           npm run build
 
       - name: Save artifacts
@@ -70,9 +69,9 @@ jobs:
         uses: actions/cache@v2.1.7
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-a-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ runner.os }}-a-node-
         
       - name: Install NPM Dependencies
         if: steps.cache-npm.outputs.cache-hit != 'true'
