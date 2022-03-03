@@ -25,7 +25,10 @@ jobs:
     - name: Setup
       run: |
         npm install
-        npm run submodule:update
+    - name: Pull & update submodules recursively
+      run: |
+        git submodule update --init --recursive
+        git submodule update --recursive --remote
         npm run em:update
     - name: Compile SEAL
       run: |
