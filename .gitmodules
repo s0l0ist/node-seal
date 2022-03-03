@@ -3,5 +3,4 @@
 	url = https://github.com/morfix-io/SEAL.git
 [submodule "submodules/emsdk"]
 	path = submodules/emsdk
-	url = https://github.com/morfix-io/emsdk.git
-	ignore = dirty
+	url = https://github.com/emscripten-core/emsdk.git
