@@ -15,11 +15,12 @@
     "noUnusedParameters": false,
     "outDir": "./tsc-out",
     "paths": {
-      "seal_*": ["./src/bin/seal_*"]
+      "seal_*": ["./src/bin/seal_*"],
+      "*.json": ["*.json"]
     },
     "pretty": true,
     "removeComments": true,
-    "resolveJsonModule": true,
+    "resolveJsonModule": false,
     "rootDir": "./src",
     "sourceMap": true,
     "strict": true,
@@ -27,5 +28,5 @@
     "typeRoots": ["./src/custom_types", "./node_modules/@types"]
   },
   "include": ["./src/**/*"],
-  "exclude": ["node_modules", "**/tsc-out"]
+  "exclude": ["./node_modules/**/*", "./tsc-out/**/*"],
 }
