@@ -60,7 +60,6 @@
     "lint": "eslint --fix 'src/**/*.ts'",
     "test": "jest src/**/*.ts",
     "coverage": "jest src --coverage",
-    "coverage:upload": "env-cmd -f .env codecov",
     "rollup": "NODE_OPTIONS=--max_old_space_size=16384 rollup -c",
     "postrollup": "bash scripts/postrollup.sh",
     "prepublishOnly": "echo 'Please run \"npm run publish\" instead' && exit 1",
