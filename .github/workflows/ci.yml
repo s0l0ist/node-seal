@@ -25,9 +25,9 @@ jobs:
         uses: actions/cache@v2.1.7
         with:
           path: submodules/emsdk
-          key: ${{ runner.os }}-b-emsdk-${{ steps.emsdk-version.outputs.SHA }}
+          key: ${{ runner.os }}-c-emsdk-${{ steps.emsdk-version.outputs.SHA }}
           restore-keys: |
-            ${{ runner.os }}-b-emsdk-
+            ${{ runner.os }}-c-emsdk-
       - name: SEAL Version
         id: seal-version
         run: |
@@ -38,9 +38,9 @@ jobs:
         uses: actions/cache@v2.1.7
         with:
           path: submodules/SEAL/build
-          key: ${{ runner.os }}-b-seal-${{ steps.seal-version.outputs.SHA }}
+          key: ${{ runner.os }}-c-seal-${{ steps.seal-version.outputs.SHA }}
           restore-keys: |
-            ${{ runner.os }}-b-seal-
+            ${{ runner.os }}-c-seal-
 
       - name: Update EMSDK
         if: steps.cache-emsdk.outputs.cache-hit != 'true'
@@ -51,8 +51,8 @@ jobs:
         if: steps.cache-seal.outputs.cache-hit != 'true'
         run: |
           npm run build
-
       - name: Save artifacts
+        if: steps.cache-seal.outputs.cache-hit != 'true'
         uses: actions/upload-artifact@v3
         with:
           name: seal-artifacts
@@ -74,9 +74,9 @@ jobs:
         uses: actions/cache@v2.1.7
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-b-node-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-c-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-b-node-
+            ${{ runner.os }}-c-node-
         
       - name: Install NPM Dependencies
         run: |
