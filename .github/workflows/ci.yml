@@ -89,9 +89,16 @@ jobs:
           name: seal-artifacts
           path: src/bin/
         
-      - name: Transpile
+      - name: Transpile to JavaScript
         run: |
           npm run compile
-      - name: Test
+      - name: Run tests
         run: |
           npm run test
+      - name: Generate coverage report
+        run: |
+          npm run coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2.1.0
+        
+
