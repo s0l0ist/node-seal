@@ -10,6 +10,7 @@ Feat:
 - Updated dev deps
 - Changed the emsdk submodule to use the upstream repository
 - Add `.Version` to `node-seal` to get the npm package version at runtime
+- Updated to include latest MS Seal commits
 
 ## Version 4.6.2
 
