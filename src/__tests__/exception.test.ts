@@ -29,4 +29,9 @@ describe('Exception', () => {
     seal.Exception.safe('unknown error')
     expect(spyOn).toHaveBeenCalledWith('unknown error')
   })
+  test('It should attempt to get a safe error from a "falsy" value', () => {
+    const spyOn = jest.spyOn(seal.Exception, 'safe')
+    seal.Exception.safe('')
+    expect(spyOn).toHaveBeenCalledWith('')
+  })
 })
