@@ -19,7 +19,6 @@ jobs:
         id: emsdk-version
         run: |
           echo "::set-output name=SHA::$(./submodules/emsdk/emsdk list | grep recommended | awk -F'[()]' '{print $2}')"     
-      # Cache EMSDK if there's no new version
       - name: Cache EMSDK
         id: cache-emsdk
         uses: actions/cache@v2.1.7
@@ -28,20 +27,6 @@ jobs:
           key: ${{ runner.os }}-c-emsdk-${{ steps.emsdk-version.outputs.SHA }}
           restore-keys: |
             ${{ runner.os }}-c-emsdk-
-      - name: SEAL Version
-        id: seal-version
-        run: |
-          echo "::set-output name=SHA::$(git rev-parse HEAD:submodules/SEAL)" 
-      # Cache SEAL artifacts if the commit sha didn't change
-      - name: Cache SEAL
-        id: cache-seal
-        uses: actions/cache@v2.1.7
-        with:
-          path: submodules/SEAL/build
-          key: ${{ runner.os }}-c-seal-${{ steps.seal-version.outputs.SHA }}
-          restore-keys: |
-            ${{ runner.os }}-c-seal-
-
       - name: Update EMSDK
         if: steps.cache-emsdk.outputs.cache-hit != 'true'
         run: |
@@ -51,6 +36,7 @@ jobs:
         if: steps.cache-seal.outputs.cache-hit != 'true'
         run: |
           npm run build
+
       - name: Save artifacts
         if: steps.cache-seal.outputs.cache-hit != 'true'
         uses: actions/upload-artifact@v3
