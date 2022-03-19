@@ -16,39 +16,39 @@ export type Exception = {
 
 const ExceptionConstructor =
   (library: Library): ExceptionDependencies =>
-  (): ExceptionConstructorOptions =>
-  (): Exception => {
-    // Static methods
-    const _getException = library.getException
+    (): ExceptionConstructorOptions =>
+      (): Exception => {
+        // Static methods
+        const _getException = library.getException
 
-    /**
-     * @implements Exception
-     */
+        /**
+         * @implements Exception
+         */
 
-    /**
-     * @interface Exception
-     */
-    return {
-      /**
-       * Takes a caught exception in SEAL library and gets a safe error string
-       *
-       * @function
-       * @name Exception.safe
-       * @param {(number|Error|string)} error Unsafe error to normalize
-       * @returns {Error}
-       */
-      safe(error: number | Error | string): Error {
-        if (typeof error === 'number') {
-          return new Error(_getException(error))
+        /**
+         * @interface Exception
+         */
+        return {
+          /**
+           * Takes a caught exception in SEAL library and gets a safe error string
+           *
+           * @function
+           * @name Exception.safe
+           * @param {(number|Error|string)} error Unsafe error to normalize
+           * @returns {Error}
+           */
+          safe(error: number | Error | string): Error {
+            if (typeof error === 'number') {
+              return new Error(_getException(error))
+            }
+
+            if (error instanceof Error) {
+              return error
+            }
+            return new Error(error || 'Unknown Error!')
+          }
         }
-
-        if (error instanceof Error) {
-          return error
-        }
-        return new Error(error || 'Unknown Error!')
       }
-    }
-  }
 
 export const ExceptionInit = ({
   loader

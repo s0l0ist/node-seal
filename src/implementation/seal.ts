@@ -237,6 +237,7 @@ export const SEALConstructor = ({
     ComprModeType: comprModeType,
     Modulus: modulus,
     SchemeType: schemeType,
+    ParmsIdType: parmsIdType,
     Vector: vector
   })
   const contextData = ContextData({

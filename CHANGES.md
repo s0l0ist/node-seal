@@ -3,6 +3,14 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 5.0.0
+
+Feat:
+
+- Updated to SEAL 4.0.0
+- Added tests for the new `BGV` scheme type
+- Added missing public getter `EncryptionParameters.paramsId`
+
 ## Version 4.6.4
 
 Feat:

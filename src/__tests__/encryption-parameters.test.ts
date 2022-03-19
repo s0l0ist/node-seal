@@ -31,6 +31,7 @@ describe('EncryptionParameters', () => {
     expect(encParms).toHaveProperty('polyModulusDegree')
     expect(encParms).toHaveProperty('coeffModulus')
     expect(encParms).toHaveProperty('plainModulus')
+    expect(encParms).toHaveProperty('parmsId')
     expect(encParms).toHaveProperty('save')
     expect(encParms).toHaveProperty('saveArray')
     expect(encParms).toHaveProperty('load')
@@ -81,7 +82,13 @@ describe('EncryptionParameters', () => {
     expect(spyOn).toHaveBeenCalledWith(4096)
     expect(encParms.polyModulusDegree).toEqual(4096)
   })
-
+  test('It should set the poly modulus degree (bgv)', () => {
+    const encParms = seal.EncryptionParameters(seal.SchemeType.bgv)
+    const spyOn = jest.spyOn(encParms, 'setPolyModulusDegree')
+    encParms.setPolyModulusDegree(4096)
+    expect(spyOn).toHaveBeenCalledWith(4096)
+    expect(encParms.polyModulusDegree).toEqual(4096)
+  })
   test('It should fail to set the coeff modulus (none)', () => {
     const encParms = seal.EncryptionParameters()
     const coeffModulus = seal.CoeffModulus.BFVDefault(
@@ -94,6 +101,25 @@ describe('EncryptionParameters', () => {
   })
   test('It should set the coeff modulus (bfv)', () => {
     const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
+    const coeffModulus = seal.CoeffModulus.BFVDefault(
+      4096,
+      seal.SecurityLevel.tc128
+    )
+    const spyOn = jest.spyOn(encParms, 'setCoeffModulus')
+    encParms.setCoeffModulus(coeffModulus)
+    expect(spyOn).toHaveBeenCalledWith(coeffModulus)
+    const coeffModArray = encParms.coeffModulus
+    expect(coeffModArray.constructor).toBe(BigUint64Array)
+    expect(coeffModArray).toEqual(
+      BigUint64Array.from([
+        BigInt('68719403009'),
+        BigInt('68719230977'),
+        BigInt('137438822401')
+      ])
+    )
+  })
+  test('It should set the coeff modulus (bgv)', () => {
+    const encParms = seal.EncryptionParameters(seal.SchemeType.bgv)
     const coeffModulus = seal.CoeffModulus.BFVDefault(
       4096,
       seal.SecurityLevel.tc128
@@ -146,6 +172,15 @@ describe('EncryptionParameters', () => {
     expect(typeof encParms.plainModulus.value).toBe('bigint')
     expect(encParms.plainModulus.value).toBe(BigInt('786433'))
   })
+  test('It should set the plain modulus (bgv)', () => {
+    const encParms = seal.EncryptionParameters(seal.SchemeType.bgv)
+    const plainModulus = seal.Modulus(BigInt('786433'))
+    const spyOn = jest.spyOn(encParms, 'setPlainModulus')
+    encParms.setPlainModulus(plainModulus)
+    expect(spyOn).toHaveBeenCalledWith(plainModulus)
+    expect(typeof encParms.plainModulus.value).toBe('bigint')
+    expect(encParms.plainModulus.value).toBe(BigInt('786433'))
+  })
   test('It should return the scheme (none)', () => {
     const encParms = seal.EncryptionParameters()
     expect(encParms.scheme).toEqual(seal.SchemeType.none)
@@ -157,6 +192,11 @@ describe('EncryptionParameters', () => {
   })
   test('It should return the poly modulus degree (bfv)', () => {
     const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
+    encParms.setPolyModulusDegree(4096)
+    expect(encParms.polyModulusDegree).toEqual(4096)
+  })
+  test('It should return the poly modulus degree (bgv)', () => {
+    const encParms = seal.EncryptionParameters(seal.SchemeType.bgv)
     encParms.setPolyModulusDegree(4096)
     expect(encParms.polyModulusDegree).toEqual(4096)
   })
@@ -176,6 +216,21 @@ describe('EncryptionParameters', () => {
   })
   test('It should return the coeff modulus (bfv)', () => {
     const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
+    encParms.setCoeffModulus(
+      seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
+    )
+    const coeffModArray = encParms.coeffModulus
+    expect(coeffModArray.constructor).toBe(BigUint64Array)
+    expect(coeffModArray).toEqual(
+      BigUint64Array.from([
+        BigInt('68719403009'),
+        BigInt('68719230977'),
+        BigInt('137438822401')
+      ])
+    )
+  })
+  test('It should return the coeff modulus (bgv)', () => {
+    const encParms = seal.EncryptionParameters(seal.SchemeType.bgv)
     encParms.setCoeffModulus(
       seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
     )
@@ -215,6 +270,11 @@ describe('EncryptionParameters', () => {
     encParms.setPlainModulus(seal.Modulus(BigInt('786433')))
     expect(encParms.plainModulus.value).toBe(BigInt(786433))
   })
+  test('It should return the plain modulus (bgv)', () => {
+    const encParms = seal.EncryptionParameters(seal.SchemeType.bgv)
+    encParms.setPlainModulus(seal.Modulus(BigInt('786433')))
+    expect(encParms.plainModulus.value).toBe(BigInt(786433))
+  })
   test('It should fail to return the plain modulus (ckks)', () => {
     const encParms = seal.EncryptionParameters(seal.SchemeType.ckks)
     expect(() =>
@@ -251,6 +311,15 @@ describe('EncryptionParameters', () => {
     const array = encParms.saveArray()
     expect(spyOn).toHaveBeenCalled()
     expect(array.constructor).toBe(Uint8Array)
+  })
+  test('It should return a parms id type', () => {
+    const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
+    const parms = encParms.parmsId
+    const values = parms.values
+    expect(values.constructor).toBe(BigUint64Array)
+    values.forEach(x => {
+      expect(typeof x).toBe('bigint')
+    })
   })
   test('It should load from a string', () => {
     const encParms = seal.EncryptionParameters()
