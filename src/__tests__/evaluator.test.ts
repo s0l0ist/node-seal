@@ -20,9 +20,9 @@ import { ParmsIdType } from '../implementation/parms-id-type'
 let seal: SEALLibrary
 let bfvContext: Context
 let bfvCoeffModulus: Vector
-let plainModulus: Modulus
+let bfvPlainModulus: Modulus
 let bfvEncParms: EncryptionParameters
-let batchEncoder: BatchEncoder
+let bfvBatchEncoder: BatchEncoder
 let bfvKeyGenerator: KeyGenerator
 let bfvSecretKey: SecretKey
 let bfvPublicKey: PublicKey
@@ -43,6 +43,18 @@ let ckksGaloisKeys: GaloisKeys
 let ckksEncryptor: Encryptor
 let ckksDecryptor: Decryptor
 
+let bgvContext: Context
+let bgvCoeffModulus: Vector
+let bgvEncParms: EncryptionParameters
+let bgvEncoder: BatchEncoder
+let bgvKeyGenerator: KeyGenerator
+let bgvSecretKey: SecretKey
+let bgvPublicKey: PublicKey
+let bgvRelinKeys: RelinKeys
+let bgvGaloisKeys: GaloisKeys
+let bgvEncryptor: Encryptor
+let bgvDecryptor: Decryptor
+
 let invalidCkksPlain: PlainText
 let invalidCkksCipher: CipherText
 beforeAll(async () => {
@@ -54,13 +66,13 @@ beforeAll(async () => {
     polyModulusDegree,
     Int32Array.from([46, 16, 46])
   )
-  plainModulus = seal.PlainModulus.Batching(polyModulusDegree, bitSize)
+  bfvPlainModulus = seal.PlainModulus.Batching(polyModulusDegree, bitSize)
   bfvEncParms = seal.EncryptionParameters(seal.SchemeType.bfv)
   bfvEncParms.setPolyModulusDegree(polyModulusDegree)
   bfvEncParms.setCoeffModulus(bfvCoeffModulus)
-  bfvEncParms.setPlainModulus(plainModulus)
+  bfvEncParms.setPlainModulus(bfvPlainModulus)
   bfvContext = seal.Context(bfvEncParms)
-  batchEncoder = seal.BatchEncoder(bfvContext)
+  bfvBatchEncoder = seal.BatchEncoder(bfvContext)
   bfvKeyGenerator = seal.KeyGenerator(bfvContext)
   bfvSecretKey = bfvKeyGenerator.secretKey()
   bfvPublicKey = bfvKeyGenerator.createPublicKey()
@@ -196,116 +208,132 @@ describe('Evaluator', () => {
   test('It should negate a cipher to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Int32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => -i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'negate')
     item.negate(cipher, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => -x))
   })
+  // test('It should negate a cipher to a destination cipher (bgv) (int32)', () => {
+  //   const item = seal.Evaluator(bgvContext)
+  //   const arr = Int32Array.from(
+  //     { length: bfvBatchEncoder.slotCount },
+  //     (_, i) => -i
+  //   )
+  //   const plain = bgvEncoder.encode(arr) as PlainText
+  //   const cipher = bgvEncryptor.encrypt(plain) as CipherText
+  //   const cipherDest = seal.CipherText()
+  //   const spyOn = jest.spyOn(item, 'negate')
+  //   item.negate(cipher, cipherDest)
+  //   expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
+  //   const result = bgvDecryptor.decrypt(cipherDest) as PlainText
+  //   const decoded = bfvBatchEncoder.decode(result, true)
+  //   expect(decoded).toEqual(arr.map(x => -x))
+  // })
   test('It should negate a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Int32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => -i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'negate')
     const cipherDest = item.negate(cipher) as CipherText
     expect(spyOn).toHaveBeenCalledWith(cipher)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => -x))
   })
   test('It should negate a cipher to a destination cipher (bfv) (int64)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = BigInt64Array.from({ length: batchEncoder.slotCount }, (_, i) =>
+    const arr = BigInt64Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) =>
       BigInt(-i)
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'negate')
     item.negate(cipher, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decodeBigInt(result, true)
+    const decoded = bfvBatchEncoder.decodeBigInt(result, true)
     expect(decoded).toEqual(arr.map(x => BigInt(-x)))
   })
   test('It should negate a cipher and return a cipher result (bfv) (int64)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = BigInt64Array.from({ length: batchEncoder.slotCount }, (_, i) =>
+    const arr = BigInt64Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) =>
       BigInt(-i)
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'negate')
     const cipherDest = item.negate(cipher) as CipherText
     expect(spyOn).toHaveBeenCalledWith(cipher)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decodeBigInt(result, true)
+    const decoded = bfvBatchEncoder.decodeBigInt(result, true)
     expect(decoded).toEqual(arr.map(x => BigInt(-x)))
   })
   test('It should negate a cipher to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'negate')
     item.negate(cipher, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => 1032188))
   })
   test('It should negate a cipher and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'negate')
     const cipherDest = item.negate(cipher) as CipherText
     expect(spyOn).toHaveBeenCalledWith(cipher)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => 1032188))
   })
   test('It should negate a cipher to a destination cipher (bfv) (uint64)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = BigUint64Array.from({ length: batchEncoder.slotCount }, _ =>
+    const arr = BigUint64Array.from({ length: bfvBatchEncoder.slotCount }, _ =>
       BigInt('5')
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'negate')
     item.negate(cipher, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decodeBigInt(result, false)
+    const decoded = bfvBatchEncoder.decodeBigInt(result, false)
     const expected = BigUint64Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       _ => BigInt('1032188')
     )
     expect(decoded).toEqual(expected)
   })
   test('It should negate a cipher and return a cipher result (bfv) (uint64)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = BigUint64Array.from({ length: batchEncoder.slotCount }, _ =>
+    const arr = BigUint64Array.from({ length: bfvBatchEncoder.slotCount }, _ =>
       BigInt('5')
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'negate')
     const cipherDest = item.negate(cipher) as CipherText
@@ -313,9 +341,9 @@ describe('Evaluator', () => {
     expect(cipherDest.instance).toBeDefined()
 
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decodeBigInt(result, false)
+    const decoded = bfvBatchEncoder.decodeBigInt(result, false)
     const expected = BigUint64Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       _ => BigInt('1032188')
     )
     expect(decoded).toEqual(expected)
@@ -367,64 +395,64 @@ describe('Evaluator', () => {
   test('It should add a cipher to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Int32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => -i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'add')
     item.add(cipher, cipher, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => 2 * x))
   })
   test('It should add a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Int32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => -i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'add')
     const cipherDest = item.add(cipher, cipher) as CipherText
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => 2 * x))
   })
   test('It should add a cipher to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'add')
     item.add(cipher, cipher, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => 2 * x))
   })
   test('It should add a cipher and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }).map(
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }).map(
       (x, i) => i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'add')
     const cipherDest = item.add(cipher, cipher) as CipherText
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => 2 * x))
   })
   test('It should add a cipher to a destination cipher (ckks)', () => {
@@ -473,15 +501,15 @@ describe('Evaluator', () => {
   test('It should sub a cipher to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Int32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => -i
     )
     const arr2 = Int32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => -2 * i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
-    const plain2 = batchEncoder.encode(arr2) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
+    const plain2 = bfvBatchEncoder.encode(arr2) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipher2 = bfvEncryptor.encrypt(plain2) as CipherText
     const cipherDest = seal.CipherText()
@@ -489,21 +517,21 @@ describe('Evaluator', () => {
     item.sub(cipher, cipher2, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher2, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => -x))
   })
   test('It should sub a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Int32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => -i
     )
     const arr2 = Int32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => -2 * i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
-    const plain2 = batchEncoder.encode(arr2) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
+    const plain2 = bfvBatchEncoder.encode(arr2) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipher2 = bfvEncryptor.encrypt(plain2) as CipherText
     const spyOn = jest.spyOn(item, 'sub')
@@ -511,21 +539,21 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher2)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => -x))
   })
   test('It should sub a cipher to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => 2 * i
     )
     const arr2 = Uint32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
-    const plain2 = batchEncoder.encode(arr2) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
+    const plain2 = bfvBatchEncoder.encode(arr2) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipher2 = bfvEncryptor.encrypt(plain2) as CipherText
     const cipherDest = seal.CipherText()
@@ -533,21 +561,21 @@ describe('Evaluator', () => {
     item.sub(cipher, cipher2, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher2, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr2.map(x => x))
   })
   test('It should sub a cipher and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => 2 * i
     )
     const arr2 = Uint32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
-    const plain2 = batchEncoder.encode(arr2) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
+    const plain2 = bfvBatchEncoder.encode(arr2) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipher2 = bfvEncryptor.encrypt(plain2) as CipherText
     const spyOn = jest.spyOn(item, 'sub')
@@ -555,7 +583,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher2)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr2.map(x => x))
   })
   test('It should sub a cipher to a destination cipher (ckks)', () => {
@@ -622,55 +650,55 @@ describe('Evaluator', () => {
   })
   test('It should multiply a cipher to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'multiply')
     item.multiply(cipher, cipher, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
 
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should multiply a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'multiply')
     const cipherDest = item.multiply(cipher, cipher) as CipherText
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should multiply a cipher to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'multiply')
     item.multiply(cipher, cipher, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should multiply a cipher and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'multiply')
     const cipherDest = item.multiply(cipher, cipher) as CipherText
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should multiply a cipher to a destination cipher (ckks)', () => {
@@ -713,54 +741,54 @@ describe('Evaluator', () => {
   })
   test('It should square a cipher to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'square')
     item.square(cipher, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should square a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'square')
     const cipherDest = item.square(cipher) as CipherText
     expect(spyOn).toHaveBeenCalledWith(cipher)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should square a cipher to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'square')
     item.square(cipher, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should square a cipher and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'square')
     const cipherDest = item.square(cipher) as CipherText
     expect(spyOn).toHaveBeenCalledWith(cipher)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should square a cipher to a destination cipher (ckks)', () => {
@@ -809,8 +837,8 @@ describe('Evaluator', () => {
   })
   test('It should relinearize a cipher to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'relinearize')
@@ -818,15 +846,15 @@ describe('Evaluator', () => {
     item.relinearize(cipherDest, bfvRelinKeys, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipherDest, bfvRelinKeys, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should relinearize a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }).map(
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }).map(
       (x, i) => -5
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherResult = item.square(cipher) as CipherText
     const spyOn = jest.spyOn(item, 'relinearize')
@@ -837,13 +865,13 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipherResult, bfvRelinKeys)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should relinearize a cipher to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     item.square(cipher, cipherDest)
@@ -851,13 +879,13 @@ describe('Evaluator', () => {
     item.relinearize(cipherDest, bfvRelinKeys, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipherDest, bfvRelinKeys, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should relinearize a cipher and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherResult = item.square(cipher) as CipherText
     const spyOn = jest.spyOn(item, 'relinearize')
@@ -868,7 +896,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipherResult, bfvRelinKeys)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should relinearize a cipher to a destination cipher (ckks)', () => {
@@ -920,54 +948,54 @@ describe('Evaluator', () => {
   })
   test('It should cipherModSwitchToNext a cipher to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'cipherModSwitchToNext')
     item.cipherModSwitchToNext(cipher, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => x))
   })
   test('It should cipherModSwitchToNext a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'cipherModSwitchToNext')
     const cipherDest = item.cipherModSwitchToNext(cipher) as CipherText
     expect(spyOn).toHaveBeenCalledWith(cipher)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => x))
   })
   test('It should cipherModSwitchToNext a cipher to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'cipherModSwitchToNext')
     item.cipherModSwitchToNext(cipher, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => x))
   })
   test('It should cipherModSwitchToNext a cipher and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'cipherModSwitchToNext')
     const cipherDest = item.cipherModSwitchToNext(cipher) as CipherText
     expect(spyOn).toHaveBeenCalledWith(cipher)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => x))
   })
   test('It should cipherModSwitchToNext a cipher to a destination cipher (ckks)', () => {
@@ -1014,8 +1042,8 @@ describe('Evaluator', () => {
   })
   test('It should cipherModSwitchTo a cipher to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const parmsId = bfvContext.lastParmsId
@@ -1023,13 +1051,13 @@ describe('Evaluator', () => {
     item.cipherModSwitchTo(cipher, parmsId, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, parmsId, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => x))
   })
   test('It should cipherModSwitchTo a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const parmsId = bfvContext.lastParmsId
     const spyOn = jest.spyOn(item, 'cipherModSwitchTo')
@@ -1037,13 +1065,13 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, parmsId)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => x))
   })
   test('It should cipherModSwitchTo a cipher to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const parmsId = bfvContext.lastParmsId
@@ -1051,13 +1079,13 @@ describe('Evaluator', () => {
     item.cipherModSwitchTo(cipher, parmsId, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, parmsId, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => x))
   })
   test('It should cipherModSwitchTo a cipher and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const parmsId = bfvContext.lastParmsId
     const spyOn = jest.spyOn(item, 'cipherModSwitchTo')
@@ -1065,7 +1093,7 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher, parmsId)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => x))
   })
   test('It should cipherModSwitchTo a cipher to a destination cipher (ckks)', () => {
@@ -1103,8 +1131,8 @@ describe('Evaluator', () => {
   // plainModSwitchToNext
   test('It should fail to plainModSwitchToNext a plain', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const plainDest = seal.PlainText()
     const parmsId = bfvContext.firstParmsId
     item.plainTransformToNtt(plain, parmsId, plain)
@@ -1116,8 +1144,8 @@ describe('Evaluator', () => {
   })
   test('It should plainModSwitchToNext a plain to a destination plain (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const plainDest = seal.PlainText()
     const parmsId = bfvContext.firstParmsId
     item.plainTransformToNtt(plain, parmsId, plain)
@@ -1127,8 +1155,8 @@ describe('Evaluator', () => {
   })
   test('It should plainModSwitchToNext a plain and return a plain result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const parmsId = bfvContext.firstParmsId
     item.plainTransformToNtt(plain, parmsId, plain)
     const spyOn = jest.spyOn(item, 'plainModSwitchToNext')
@@ -1138,8 +1166,8 @@ describe('Evaluator', () => {
   })
   test('It should plainModSwitchToNext a plain to a destination plain (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const plainDest = seal.PlainText()
     const parmsId = bfvContext.firstParmsId
     item.plainTransformToNtt(plain, parmsId, plain)
@@ -1149,8 +1177,8 @@ describe('Evaluator', () => {
   })
   test('It should plainModSwitchToNext a plain and return a plain result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const parmsId = bfvContext.firstParmsId
     item.plainTransformToNtt(plain, parmsId, plain)
     const spyOn = jest.spyOn(item, 'plainModSwitchToNext')
@@ -1187,8 +1215,8 @@ describe('Evaluator', () => {
   // plainModSwitchTo
   test('It should fail to plainModSwitchTo a plain', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const plainDest = seal.PlainText()
     const parmsId = bfvContext.firstParmsId
     item.plainTransformToNtt(plain, parmsId, plain)
@@ -1200,8 +1228,8 @@ describe('Evaluator', () => {
   })
   test('It should plainModSwitchTo a plain to a destination plain (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const parmsId = bfvContext.firstParmsId
     item.plainTransformToNtt(plain, parmsId, plain)
     const spyOn = jest.spyOn(item, 'plainModSwitchTo')
@@ -1210,8 +1238,8 @@ describe('Evaluator', () => {
   })
   test('It should plainModSwitchTo a plain and return a plain result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const parmsId = bfvContext.firstParmsId
     item.plainTransformToNtt(plain, parmsId, plain)
     const spyOn = jest.spyOn(item, 'plainModSwitchTo')
@@ -1221,8 +1249,8 @@ describe('Evaluator', () => {
   })
   test('It should plainModSwitchTo a plain to a destination plain (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const plainDest = seal.PlainText()
     const parmsId = bfvContext.firstParmsId
     item.plainTransformToNtt(plain, parmsId, plain)
@@ -1232,8 +1260,8 @@ describe('Evaluator', () => {
   })
   test('It should plainModSwitchTo a plain and return a plain result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const parmsId = bfvContext.firstParmsId
     item.plainTransformToNtt(plain, parmsId, plain)
     const spyOn = jest.spyOn(item, 'plainModSwitchTo')
@@ -1279,8 +1307,8 @@ describe('Evaluator', () => {
   })
   test('It should fail to rescaleToNext for bfv scheme', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'rescaleToNext')
@@ -1320,8 +1348,8 @@ describe('Evaluator', () => {
   // rescaleTo
   test('It should fail to rescaleTo for bfv scheme', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const parmsId = bfvContext.firstParmsId
@@ -1379,21 +1407,21 @@ describe('Evaluator', () => {
   })
   test('It should exponentiate a cipher to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'exponentiate')
     item.exponentiate(cipher, 2, bfvRelinKeys, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, 2, bfvRelinKeys, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should exponentiate a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'exponentiate')
     const cipherDest = item.exponentiate(cipher, 2, bfvRelinKeys) as CipherText
@@ -1401,33 +1429,33 @@ describe('Evaluator', () => {
     expect(cipherDest.instance).toBeDefined()
 
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should exponentiate a cipher to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'exponentiate')
     item.exponentiate(cipher, 2, bfvRelinKeys, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, 2, bfvRelinKeys, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should exponentiate a cipher and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'exponentiate')
     const cipherDest = item.exponentiate(cipher, 2, bfvRelinKeys) as CipherText
     expect(spyOn).toHaveBeenCalledWith(cipher, 2, bfvRelinKeys)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should fail to exponentiate for ckks scheme', () => {
@@ -1446,10 +1474,10 @@ describe('Evaluator', () => {
   test('It should fail to add a plain to a cipher', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Int32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => -i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'addPlain')
@@ -1459,26 +1487,26 @@ describe('Evaluator', () => {
   test('It should add a plain to a cipher and store in a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Int32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => -i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'addPlain')
     item.addPlain(cipher, plain, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, plain, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => 2 * x))
   })
   test('It should add a plain to a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Int32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => -i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'addPlain')
     const cipherDest = item.addPlain(cipher, plain) as CipherText
@@ -1486,39 +1514,39 @@ describe('Evaluator', () => {
     expect(cipherDest.instance).toBeDefined()
 
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => 2 * x))
   })
   test('It should add a plain to a cipher to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'addPlain')
     item.addPlain(cipher, plain, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, plain, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => 2 * x))
   })
   test('It should add a plain to a cipher and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'addPlain')
     const cipherDest = item.addPlain(cipher, plain) as CipherText
     expect(spyOn).toHaveBeenCalledWith(cipher, plain)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => 2 * x))
   })
   test('It should add a plain to a cipher to a destination cipher (ckks)', () => {
@@ -1561,10 +1589,10 @@ describe('Evaluator', () => {
   test('It should fail to sub a plain from a cipher', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Int32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => -i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'subPlain')
@@ -1574,36 +1602,36 @@ describe('Evaluator', () => {
   test('It should sub a plain from a cipher to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Int32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => -i
     )
     const arr2 = Int32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => -2 * i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
-    const plain2 = batchEncoder.encode(arr2) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
+    const plain2 = bfvBatchEncoder.encode(arr2) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'subPlain')
     item.subPlain(cipher, plain2, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, plain2, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => -x))
   })
   test('It should sub a plain from a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Int32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => -i
     )
     const arr2 = Int32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => -2 * i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
-    const plain2 = batchEncoder.encode(arr2) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
+    const plain2 = bfvBatchEncoder.encode(arr2) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'subPlain')
     const cipherDest = item.subPlain(cipher, plain2) as CipherText
@@ -1611,49 +1639,49 @@ describe('Evaluator', () => {
     expect(cipherDest.instance).toBeDefined()
 
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => -x))
   })
   test('It should sub a plain from a cipher to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => 2 * i
     )
     const arr2 = Uint32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
-    const plain2 = batchEncoder.encode(arr2) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
+    const plain2 = bfvBatchEncoder.encode(arr2) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'subPlain')
     item.subPlain(cipher, plain2, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, plain2, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr2.map(x => x))
   })
   test('It should sub a plain from a cipher and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => 2 * i
     )
     const arr2 = Uint32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
-    const plain2 = batchEncoder.encode(arr2) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
+    const plain2 = bfvBatchEncoder.encode(arr2) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'subPlain')
     const cipherDest = item.subPlain(cipher, plain2) as CipherText
     expect(spyOn).toHaveBeenCalledWith(cipher, plain2)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr2.map(x => x))
   })
   test('It should sub a plain from a cipher to a destination cipher (ckks)', () => {
@@ -1706,10 +1734,10 @@ describe('Evaluator', () => {
   test('It should fail to multiply a cipher by a plain', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Int32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => -i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'multiplyPlain')
@@ -1720,54 +1748,54 @@ describe('Evaluator', () => {
   })
   test('It should multiply a cipher by a plain and store it to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'multiplyPlain')
     item.multiplyPlain(cipher, plain, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, plain, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should multiply a cipher by a plain and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'multiplyPlain')
     const cipherDest = item.multiplyPlain(cipher, plain) as CipherText
     expect(spyOn).toHaveBeenCalledWith(cipher, plain)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, true)
+    const decoded = bfvBatchEncoder.decode(result, true)
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should multiply a cipher by a plain and store it to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'multiplyPlain')
     item.multiplyPlain(cipher, plain, cipherDest)
     expect(spyOn).toHaveBeenCalledWith(cipher, plain, cipherDest)
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should multiply a cipher by a plain and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'multiplyPlain')
     const cipherDest = item.multiplyPlain(cipher, plain) as CipherText
     expect(spyOn).toHaveBeenCalledWith(cipher, plain)
     expect(cipherDest.instance).toBeDefined()
     const result = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(result, false)
+    const decoded = bfvBatchEncoder.decode(result, false)
     expect(decoded).toEqual(arr.map(x => x * x))
   })
   test('It should multiply a cipher by a plain and store it to a destination cipher (ckks)', () => {
@@ -1803,8 +1831,8 @@ describe('Evaluator', () => {
   // plainTransformToNtt
   test('It should fail to plainTransformToNtt a plain', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const plainDest = seal.PlainText()
     const parmsId = bfvContext.firstParmsId
     item.plainTransformToNtt(plain, parmsId, plain)
@@ -1816,8 +1844,8 @@ describe('Evaluator', () => {
   })
   test('It should plainTransformToNtt a plain to a destination plain (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const parmsId = bfvContext.firstParmsId
     const spyOn = jest.spyOn(item, 'plainTransformToNtt')
     item.plainTransformToNtt(plain, parmsId, plain)
@@ -1825,8 +1853,8 @@ describe('Evaluator', () => {
   })
   test('It should plainTransformToNtt a plain and return a plain result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const parmsId = bfvContext.firstParmsId
     const spyOn = jest.spyOn(item, 'plainTransformToNtt')
     const plainDest = item.plainTransformToNtt(plain, parmsId) as PlainText
@@ -1835,8 +1863,8 @@ describe('Evaluator', () => {
   })
   test('It should plainTransformToNtt a plain to a destination plain (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const parmsId = bfvContext.firstParmsId
     const spyOn = jest.spyOn(item, 'plainTransformToNtt')
     item.plainTransformToNtt(plain, parmsId, plain)
@@ -1844,8 +1872,8 @@ describe('Evaluator', () => {
   })
   test('It should plainTransformToNtt a plain and return a plain result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const parmsId = bfvContext.firstParmsId
     const spyOn = jest.spyOn(item, 'plainTransformToNtt')
     const plainDest = item.plainTransformToNtt(plain, parmsId) as PlainText
@@ -1865,8 +1893,8 @@ describe('Evaluator', () => {
   // cipherTransformToNtt
   test('It should fail to cipherTransformToNtt a plain', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'cipherTransformToNtt')
     expect(() => item.cipherTransformToNtt(invalidCkksCipher, cipher)).toThrow()
@@ -1874,8 +1902,8 @@ describe('Evaluator', () => {
   })
   test('It should cipherTransformToNtt a cipher to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'cipherTransformToNtt')
     item.cipherTransformToNtt(cipher, cipher)
@@ -1883,8 +1911,8 @@ describe('Evaluator', () => {
   })
   test('It should cipherTransformToNtt a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'cipherTransformToNtt')
     const cipherDest = item.cipherTransformToNtt(cipher) as CipherText
@@ -1893,8 +1921,8 @@ describe('Evaluator', () => {
   })
   test('It should cipherTransformToNtt a cipher to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'cipherTransformToNtt')
     item.cipherTransformToNtt(cipher, cipher)
@@ -1902,8 +1930,8 @@ describe('Evaluator', () => {
   })
   test('It should cipherTransformToNtt a cipher and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'cipherTransformToNtt')
     const cipherDest = item.cipherTransformToNtt(cipher) as CipherText
@@ -1922,8 +1950,8 @@ describe('Evaluator', () => {
   // cipherTransformFromNtt
   test('It should cipherTransformFromNtt a cipher to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     item.cipherTransformToNtt(cipher, cipher)
     const spyOn = jest.spyOn(item, 'cipherTransformFromNtt')
@@ -1932,8 +1960,8 @@ describe('Evaluator', () => {
   })
   test('It should cipherTransformFromNtt a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => -5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     item.cipherTransformToNtt(cipher, cipher)
     const spyOn = jest.spyOn(item, 'cipherTransformFromNtt')
@@ -1943,8 +1971,8 @@ describe('Evaluator', () => {
   })
   test('It should cipherTransformFromNtt a cipher to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     item.cipherTransformToNtt(cipher, cipher)
     const spyOn = jest.spyOn(item, 'cipherTransformFromNtt')
@@ -1953,8 +1981,8 @@ describe('Evaluator', () => {
   })
   test('It should cipherTransformFromNtt a cipher and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 10)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     item.cipherTransformToNtt(cipher, cipher)
     const spyOn = jest.spyOn(item, 'cipherTransformFromNtt')
@@ -1990,8 +2018,8 @@ describe('Evaluator', () => {
   })
   test('It should applyGalois on a cipher to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, (_, i) => i)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) => i)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const galElt = 2 * bfvEncParms.polyModulusDegree - 1
@@ -2006,8 +2034,8 @@ describe('Evaluator', () => {
   })
   test('It should applyGalois on a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, (_, i) => i)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) => i)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const galElt = 2 * bfvEncParms.polyModulusDegree - 1
     const spyOn = jest.spyOn(item, 'applyGalois')
@@ -2022,10 +2050,10 @@ describe('Evaluator', () => {
   test('It should applyGalois on a cipher to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const galElt = 2 * bfvEncParms.polyModulusDegree - 1
@@ -2041,10 +2069,10 @@ describe('Evaluator', () => {
   test('It should applyGalois on a cipher and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const galElt = 2 * bfvEncParms.polyModulusDegree - 1
     const spyOn = jest.spyOn(item, 'applyGalois')
@@ -2096,8 +2124,8 @@ describe('Evaluator', () => {
   // rotateRows
   test('It should rotateRows on a cipher to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, (_, i) => i)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) => i)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'rotateRows')
@@ -2106,8 +2134,8 @@ describe('Evaluator', () => {
   })
   test('It should rotateRows on a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, (_, i) => i)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) => i)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'rotateRows')
     const cipherDest = item.rotateRows(cipher, 5, bfvGaloisKeys) as CipherText
@@ -2117,10 +2145,10 @@ describe('Evaluator', () => {
   test('It should rotateRows on a cipher to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'rotateRows')
@@ -2130,10 +2158,10 @@ describe('Evaluator', () => {
   test('It should rotateRows on a cipher and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'rotateRows')
     const cipherDest = item.rotateRows(cipher, 5, bfvGaloisKeys) as CipherText
@@ -2158,8 +2186,8 @@ describe('Evaluator', () => {
   // rotateColumns
   test('It should rotateColumns on a cipher to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, (_, i) => i)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) => i)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'rotateColumns')
@@ -2168,8 +2196,8 @@ describe('Evaluator', () => {
   })
   test('It should rotateColumns on a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, (_, i) => i)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) => i)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'rotateColumns')
     const cipherDest = item.rotateColumns(cipher, bfvGaloisKeys) as CipherText
@@ -2179,10 +2207,10 @@ describe('Evaluator', () => {
   test('It should rotateColumns on a cipher to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'rotateColumns')
@@ -2192,10 +2220,10 @@ describe('Evaluator', () => {
   test('It should rotateColumns on a cipher and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from(
-      { length: batchEncoder.slotCount },
+      { length: bfvBatchEncoder.slotCount },
       (_, i) => i
     )
-    const plain = batchEncoder.encode(arr) as PlainText
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'rotateColumns')
     const cipherDest = item.rotateColumns(cipher, bfvGaloisKeys) as CipherText
@@ -2220,8 +2248,8 @@ describe('Evaluator', () => {
   // rotateVector
   test('It should fail to rotateVector when using bfv', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, (_, i) => i)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) => i)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'rotateVector')
@@ -2263,8 +2291,8 @@ describe('Evaluator', () => {
   // complexConjugate
   test('It should fail to complexConjugate when using bfv', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, (_, i) => i)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) => i)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'complexConjugate')
@@ -2324,8 +2352,8 @@ describe('Evaluator', () => {
   })
   test('It should sumElements on a cipher to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => 5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'sumElements')
@@ -2337,14 +2365,14 @@ describe('Evaluator', () => {
       cipherDest
     )
     const decrypted = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(decrypted)
+    const decoded = bfvBatchEncoder.decode(decrypted)
     const sum = arr.reduce((acc, x) => acc + x, 0)
     expect(decoded).toEqual(arr.fill(sum))
   })
   test('It should sumElements on a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => 5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'sumElements')
     const cipherDest = item.sumElements(
@@ -2359,14 +2387,14 @@ describe('Evaluator', () => {
     )
     expect(cipherDest.instance).toBeDefined()
     const decrypted = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(decrypted)
+    const decoded = bfvBatchEncoder.decode(decrypted)
     const sum = arr.reduce((acc, x) => acc + x, 0)
     expect(decoded).toEqual(arr.fill(sum))
   })
   test('It should sumElements on a cipher to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'sumElements')
@@ -2378,14 +2406,14 @@ describe('Evaluator', () => {
       cipherDest
     )
     const decrypted = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(decrypted, false)
+    const decoded = bfvBatchEncoder.decode(decrypted, false)
     const sum = arr.reduce((acc, x) => acc + x, 0)
     expect(decoded).toEqual(arr.fill(sum))
   })
   test('It should sumElements on a cipher and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'sumElements')
     const cipherDest = item.sumElements(
@@ -2401,7 +2429,7 @@ describe('Evaluator', () => {
     expect(cipherDest.instance).toBeDefined()
 
     const decrypted = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(decrypted, false)
+    const decoded = bfvBatchEncoder.decode(decrypted, false)
     const sum = arr.reduce((acc, x) => acc + x, 0)
     expect(decoded).toEqual(arr.fill(sum))
   })
@@ -2464,8 +2492,8 @@ describe('Evaluator', () => {
   })
   test('It should calculate the dotProduct of two ciphers to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => 5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipher2 = cipher.clone()
     const cipherDest = seal.CipherText()
@@ -2487,14 +2515,14 @@ describe('Evaluator', () => {
       cipherDest
     )
     const decrypted = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(decrypted)
+    const decoded = bfvBatchEncoder.decode(decrypted)
     const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
     expect(decoded).toEqual(arr.fill(dot))
   })
   test('It should calculate the dotProduct of two ciphers and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => 5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipher2 = cipher.clone()
     const spyOn = jest.spyOn(item, 'dotProduct')
@@ -2514,14 +2542,14 @@ describe('Evaluator', () => {
     )
     expect(cipherDest.instance).toBeDefined()
     const decrypted = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(decrypted)
+    const decoded = bfvBatchEncoder.decode(decrypted)
     const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
     expect(decoded).toEqual(arr.fill(dot))
   })
   test('It should calculate the dotProduct of two ciphers to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipher2 = cipher.clone()
     const cipherDest = seal.CipherText()
@@ -2543,14 +2571,14 @@ describe('Evaluator', () => {
       cipherDest
     )
     const decrypted = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(decrypted, false)
+    const decoded = bfvBatchEncoder.decode(decrypted, false)
     const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
     expect(decoded).toEqual(arr.fill(dot))
   })
   test('It should calculate the dotProduct of two ciphers and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipher2 = cipher.clone()
     const spyOn = jest.spyOn(item, 'dotProduct')
@@ -2570,7 +2598,7 @@ describe('Evaluator', () => {
     )
     expect(cipherDest.instance).toBeDefined()
     const decrypted = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(decrypted, false)
+    const decoded = bfvBatchEncoder.decode(decrypted, false)
     const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
     expect(decoded).toEqual(arr.fill(dot))
   })
@@ -2648,8 +2676,8 @@ describe('Evaluator', () => {
   })
   test('It should calculate the dotProduct of a cipher and a plain to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => 5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'dotProductPlain')
@@ -2668,14 +2696,14 @@ describe('Evaluator', () => {
       cipherDest
     )
     const decrypted = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(decrypted)
+    const decoded = bfvBatchEncoder.decode(decrypted)
     const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
     expect(decoded).toEqual(arr.fill(dot))
   })
   test('It should calculate the dotProduct of a cipher and a plain and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => 5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'dotProductPlain')
     const cipherDest = item.dotProductPlain(
@@ -2692,14 +2720,14 @@ describe('Evaluator', () => {
     )
     expect(cipherDest.instance).toBeDefined()
     const decrypted = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(decrypted)
+    const decoded = bfvBatchEncoder.decode(decrypted)
     const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
     expect(decoded).toEqual(arr.fill(dot))
   })
   test('It should calculate the dotProduct of a cipher and a plain to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
     const spyOn = jest.spyOn(item, 'dotProductPlain')
@@ -2718,14 +2746,14 @@ describe('Evaluator', () => {
       cipherDest
     )
     const decrypted = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(decrypted, false)
+    const decoded = bfvBatchEncoder.decode(decrypted, false)
     const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
     expect(decoded).toEqual(arr.fill(dot))
   })
   test('It should calculate the dotProduct of a cipher and a plain and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Uint32Array.from({ length: batchEncoder.slotCount }, _ => 5)
-    const plain = batchEncoder.encode(arr) as PlainText
+    const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
+    const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'dotProductPlain')
     const cipherDest = item.dotProductPlain(
@@ -2743,7 +2771,7 @@ describe('Evaluator', () => {
     expect(cipherDest.instance).toBeDefined()
 
     const decrypted = bfvDecryptor.decrypt(cipherDest) as PlainText
-    const decoded = batchEncoder.decode(decrypted, false)
+    const decoded = bfvBatchEncoder.decode(decrypted, false)
     const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
     expect(decoded).toEqual(arr.fill(dot))
   })
