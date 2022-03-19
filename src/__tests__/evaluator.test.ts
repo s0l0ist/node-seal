@@ -3825,35 +3825,53 @@ describe('Evaluator', () => {
     const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
     expect(decoded).toEqual(arr.fill(dot))
   })
-  // test('It should calculate the dotProduct of two ciphers to a destination cipher (bgv) (int32)', () => {
-  //   const item = seal.Evaluator(bgvContext)
-  //   const arr = Int32Array.from({ length: bgvBatchEncoder.slotCount }, _ => 5)
-  //   const plain = bgvBatchEncoder.encode(arr) as PlainText
-  //   const cipher = bgvEncryptor.encrypt(plain) as CipherText
-  //   const cipher2 = cipher.clone()
-  //   const cipherDest = seal.CipherText()
-  //   const spyOn = jest.spyOn(item, 'dotProduct')
-  //   item.dotProduct(
-  //     cipher,
-  //     cipher2,
-  //     bgvRelinKeys,
-  //     bgvGaloisKeys,
-  //     bgvEncParms.scheme,
-  //     cipherDest
-  //   )
-  //   expect(spyOn).toHaveBeenCalledWith(
-  //     cipher,
-  //     cipher2,
-  //     bgvRelinKeys,
-  //     bgvGaloisKeys,
-  //     bgvEncParms.scheme,
-  //     cipherDest
-  //   )
-  //   const decrypted = bgvDecryptor.decrypt(cipherDest) as PlainText
-  //   const decoded = bgvBatchEncoder.decode(decrypted)
-  //   const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
-  //   expect(decoded).toEqual(arr.fill(dot))
-  // })
+  test('It should calculate the dotProduct of two ciphers to a destination cipher (bgv) (int32)', () => {
+    const coeffMod = seal.CoeffModulus.BFVDefault(8192)
+    const plainMod = seal.PlainModulus.Batching(8192, 20)
+    const encParms = seal.EncryptionParameters(seal.SchemeType.bgv)
+    encParms.setPolyModulusDegree(8192)
+    encParms.setCoeffModulus(coeffMod)
+    encParms.setPlainModulus(plainMod)
+    const ctx = seal.Context(encParms)
+    const encoder = seal.BatchEncoder(ctx)
+    const keyGenerator = seal.KeyGenerator(ctx)
+    const relinKeys = keyGenerator.createRelinKeys()
+    const galoisKeys = keyGenerator.createGaloisKeys(
+      Int32Array.from([2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0])
+    )
+    const secretKey = keyGenerator.secretKey()
+    const publicKey = keyGenerator.createPublicKey()
+    const encryptor = seal.Encryptor(ctx, publicKey)
+    const decryptor = seal.Decryptor(ctx, secretKey)
+
+    const item = seal.Evaluator(ctx)
+    const arr = Int32Array.from({ length: encoder.slotCount }, _ => 5)
+    const plain = encoder.encode(arr) as PlainText
+    const cipher = encryptor.encrypt(plain) as CipherText
+    const cipher2 = cipher.clone()
+    const cipherDest = seal.CipherText()
+    const spyOn = jest.spyOn(item, 'dotProduct')
+    item.dotProduct(
+      cipher,
+      cipher2,
+      relinKeys,
+      galoisKeys,
+      encParms.scheme,
+      cipherDest
+    )
+    expect(spyOn).toHaveBeenCalledWith(
+      cipher,
+      cipher2,
+      relinKeys,
+      galoisKeys,
+      encParms.scheme,
+      cipherDest
+    )
+    const decrypted = decryptor.decrypt(cipherDest) as PlainText
+    const decoded = encoder.decode(decrypted)
+    const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
+    expect(decoded).toEqual(arr.fill(dot))
+  })
   test('It should calculate the dotProduct of two ciphers and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
@@ -3881,33 +3899,51 @@ describe('Evaluator', () => {
     const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
     expect(decoded).toEqual(arr.fill(dot))
   })
-  // test('It should calculate the dotProduct of two ciphers and return a cipher result (bgv) (int32)', () => {
-  //   const item = seal.Evaluator(bgvContext)
-  //   const arr = Int32Array.from({ length: bgvBatchEncoder.slotCount }, _ => 5)
-  //   const plain = bgvBatchEncoder.encode(arr) as PlainText
-  //   const cipher = bgvEncryptor.encrypt(plain) as CipherText
-  //   const cipher2 = cipher.clone()
-  //   const spyOn = jest.spyOn(item, 'dotProduct')
-  //   const cipherDest = item.dotProduct(
-  //     cipher,
-  //     cipher2,
-  //     bgvRelinKeys,
-  //     bgvGaloisKeys,
-  //     bgvEncParms.scheme
-  //   ) as CipherText
-  //   expect(spyOn).toHaveBeenCalledWith(
-  //     cipher,
-  //     cipher2,
-  //     bgvRelinKeys,
-  //     bgvGaloisKeys,
-  //     bgvEncParms.scheme
-  //   )
-  //   expect(cipherDest.instance).toBeDefined()
-  //   const decrypted = bgvDecryptor.decrypt(cipherDest) as PlainText
-  //   const decoded = bgvBatchEncoder.decode(decrypted)
-  //   const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
-  //   expect(decoded).toEqual(arr.fill(dot))
-  // })
+  test('It should calculate the dotProduct of two ciphers and return a cipher result (bgv) (int32)', () => {
+    const coeffMod = seal.CoeffModulus.BFVDefault(8192)
+    const plainMod = seal.PlainModulus.Batching(8192, 20)
+    const encParms = seal.EncryptionParameters(seal.SchemeType.bgv)
+    encParms.setPolyModulusDegree(8192)
+    encParms.setCoeffModulus(coeffMod)
+    encParms.setPlainModulus(plainMod)
+    const ctx = seal.Context(encParms)
+    const encoder = seal.BatchEncoder(ctx)
+    const keyGenerator = seal.KeyGenerator(ctx)
+    const relinKeys = keyGenerator.createRelinKeys()
+    const galoisKeys = keyGenerator.createGaloisKeys(
+      Int32Array.from([2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0])
+    )
+    const secretKey = keyGenerator.secretKey()
+    const publicKey = keyGenerator.createPublicKey()
+    const encryptor = seal.Encryptor(ctx, publicKey)
+    const decryptor = seal.Decryptor(ctx, secretKey)
+
+    const item = seal.Evaluator(ctx)
+    const arr = Int32Array.from({ length: encoder.slotCount }, _ => 5)
+    const plain = encoder.encode(arr) as PlainText
+    const cipher = encryptor.encrypt(plain) as CipherText
+    const cipher2 = cipher.clone()
+    const spyOn = jest.spyOn(item, 'dotProduct')
+    const cipherDest = item.dotProduct(
+      cipher,
+      cipher2,
+      relinKeys,
+      galoisKeys,
+      encParms.scheme
+    ) as CipherText
+    expect(spyOn).toHaveBeenCalledWith(
+      cipher,
+      cipher2,
+      relinKeys,
+      galoisKeys,
+      encParms.scheme
+    )
+    expect(cipherDest.instance).toBeDefined()
+    const decrypted = decryptor.decrypt(cipherDest) as PlainText
+    const decoded = encoder.decode(decrypted)
+    const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
+    expect(decoded).toEqual(arr.fill(dot))
+  })
   test('It should calculate the dotProduct of two ciphers to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
@@ -3937,35 +3973,53 @@ describe('Evaluator', () => {
     const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
     expect(decoded).toEqual(arr.fill(dot))
   })
-  // test('It should calculate the dotProduct of two ciphers to a destination cipher (bgv) (uint32)', () => {
-  //   const item = seal.Evaluator(bgvContext)
-  //   const arr = Uint32Array.from({ length: bgvBatchEncoder.slotCount }, _ => 5)
-  //   const plain = bgvBatchEncoder.encode(arr) as PlainText
-  //   const cipher = bgvEncryptor.encrypt(plain) as CipherText
-  //   const cipher2 = cipher.clone()
-  //   const cipherDest = seal.CipherText()
-  //   const spyOn = jest.spyOn(item, 'dotProduct')
-  //   item.dotProduct(
-  //     cipher,
-  //     cipher2,
-  //     bgvRelinKeys,
-  //     bgvGaloisKeys,
-  //     bgvEncParms.scheme,
-  //     cipherDest
-  //   )
-  //   expect(spyOn).toHaveBeenCalledWith(
-  //     cipher,
-  //     cipher2,
-  //     bgvRelinKeys,
-  //     bgvGaloisKeys,
-  //     bgvEncParms.scheme,
-  //     cipherDest
-  //   )
-  //   const decrypted = bgvDecryptor.decrypt(cipherDest) as PlainText
-  //   const decoded = bgvBatchEncoder.decode(decrypted, false)
-  //   const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
-  //   expect(decoded).toEqual(arr.fill(dot))
-  // })
+  test('It should calculate the dotProduct of two ciphers to a destination cipher (bgv) (uint32)', () => {
+    const coeffMod = seal.CoeffModulus.BFVDefault(8192)
+    const plainMod = seal.PlainModulus.Batching(8192, 20)
+    const encParms = seal.EncryptionParameters(seal.SchemeType.bgv)
+    encParms.setPolyModulusDegree(8192)
+    encParms.setCoeffModulus(coeffMod)
+    encParms.setPlainModulus(plainMod)
+    const ctx = seal.Context(encParms)
+    const encoder = seal.BatchEncoder(ctx)
+    const keyGenerator = seal.KeyGenerator(ctx)
+    const relinKeys = keyGenerator.createRelinKeys()
+    const galoisKeys = keyGenerator.createGaloisKeys(
+      Int32Array.from([2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0])
+    )
+    const secretKey = keyGenerator.secretKey()
+    const publicKey = keyGenerator.createPublicKey()
+    const encryptor = seal.Encryptor(ctx, publicKey)
+    const decryptor = seal.Decryptor(ctx, secretKey)
+
+    const item = seal.Evaluator(ctx)
+    const arr = Uint32Array.from({ length: encoder.slotCount }, _ => 5)
+    const plain = encoder.encode(arr) as PlainText
+    const cipher = encryptor.encrypt(plain) as CipherText
+    const cipher2 = cipher.clone()
+    const cipherDest = seal.CipherText()
+    const spyOn = jest.spyOn(item, 'dotProduct')
+    item.dotProduct(
+      cipher,
+      cipher2,
+      relinKeys,
+      galoisKeys,
+      encParms.scheme,
+      cipherDest
+    )
+    expect(spyOn).toHaveBeenCalledWith(
+      cipher,
+      cipher2,
+      relinKeys,
+      galoisKeys,
+      encParms.scheme,
+      cipherDest
+    )
+    const decrypted = decryptor.decrypt(cipherDest) as PlainText
+    const decoded = encoder.decode(decrypted, false)
+    const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
+    expect(decoded).toEqual(arr.fill(dot))
+  })
   test('It should calculate the dotProduct of two ciphers and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
@@ -3993,33 +4047,51 @@ describe('Evaluator', () => {
     const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
     expect(decoded).toEqual(arr.fill(dot))
   })
-  // test('It should calculate the dotProduct of two ciphers and return a cipher result (bgv) (uint32)', () => {
-  //   const item = seal.Evaluator(bgvContext)
-  //   const arr = Uint32Array.from({ length: bgvBatchEncoder.slotCount }, _ => 5)
-  //   const plain = bgvBatchEncoder.encode(arr) as PlainText
-  //   const cipher = bgvEncryptor.encrypt(plain) as CipherText
-  //   const cipher2 = cipher.clone()
-  //   const spyOn = jest.spyOn(item, 'dotProduct')
-  //   const cipherDest = item.dotProduct(
-  //     cipher,
-  //     cipher2,
-  //     bgvRelinKeys,
-  //     bgvGaloisKeys,
-  //     bgvEncParms.scheme
-  //   ) as CipherText
-  //   expect(spyOn).toHaveBeenCalledWith(
-  //     cipher,
-  //     cipher2,
-  //     bgvRelinKeys,
-  //     bgvGaloisKeys,
-  //     bgvEncParms.scheme
-  //   )
-  //   expect(cipherDest.instance).toBeDefined()
-  //   const decrypted = bgvDecryptor.decrypt(cipherDest) as PlainText
-  //   const decoded = bgvBatchEncoder.decode(decrypted, false)
-  //   const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
-  //   expect(decoded).toEqual(arr.fill(dot))
-  // })
+  test('It should calculate the dotProduct of two ciphers and return a cipher result (bgv) (uint32)', () => {
+    const coeffMod = seal.CoeffModulus.BFVDefault(8192)
+    const plainMod = seal.PlainModulus.Batching(8192, 20)
+    const encParms = seal.EncryptionParameters(seal.SchemeType.bgv)
+    encParms.setPolyModulusDegree(8192)
+    encParms.setCoeffModulus(coeffMod)
+    encParms.setPlainModulus(plainMod)
+    const ctx = seal.Context(encParms)
+    const encoder = seal.BatchEncoder(ctx)
+    const keyGenerator = seal.KeyGenerator(ctx)
+    const relinKeys = keyGenerator.createRelinKeys()
+    const galoisKeys = keyGenerator.createGaloisKeys(
+      Int32Array.from([2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0])
+    )
+    const secretKey = keyGenerator.secretKey()
+    const publicKey = keyGenerator.createPublicKey()
+    const encryptor = seal.Encryptor(ctx, publicKey)
+    const decryptor = seal.Decryptor(ctx, secretKey)
+
+    const item = seal.Evaluator(ctx)
+    const arr = Uint32Array.from({ length: encoder.slotCount }, _ => 5)
+    const plain = encoder.encode(arr) as PlainText
+    const cipher = encryptor.encrypt(plain) as CipherText
+    const cipher2 = cipher.clone()
+    const spyOn = jest.spyOn(item, 'dotProduct')
+    const cipherDest = item.dotProduct(
+      cipher,
+      cipher2,
+      relinKeys,
+      galoisKeys,
+      encParms.scheme
+    ) as CipherText
+    expect(spyOn).toHaveBeenCalledWith(
+      cipher,
+      cipher2,
+      relinKeys,
+      galoisKeys,
+      encParms.scheme
+    )
+    expect(cipherDest.instance).toBeDefined()
+    const decrypted = decryptor.decrypt(cipherDest) as PlainText
+    const decoded = encoder.decode(decrypted, false)
+    const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
+    expect(decoded).toEqual(arr.fill(dot))
+  })
   test('It should calculate the dotProduct of two ciphers to a destination cipher (ckks)', () => {
     const item = seal.Evaluator(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }, _ => 5)
@@ -4118,32 +4190,32 @@ describe('Evaluator', () => {
     const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
     expect(decoded).toEqual(arr.fill(dot))
   })
-  // test('It should calculate the dotProduct of a cipher and a plain to a destination cipher (bgv) (int32)', () => {
-  //   const item = seal.Evaluator(bgvContext)
-  //   const arr = Int32Array.from({ length: bgvBatchEncoder.slotCount }, _ => 5)
-  //   const plain = bgvBatchEncoder.encode(arr) as PlainText
-  //   const cipher = bgvEncryptor.encrypt(plain) as CipherText
-  //   const cipherDest = seal.CipherText()
-  //   const spyOn = jest.spyOn(item, 'dotProductPlain')
-  //   item.dotProductPlain(
-  //     cipher,
-  //     plain,
-  //     bgvGaloisKeys,
-  //     bgvEncParms.scheme,
-  //     cipherDest
-  //   )
-  //   expect(spyOn).toHaveBeenCalledWith(
-  //     cipher,
-  //     plain,
-  //     bgvGaloisKeys,
-  //     bgvEncParms.scheme,
-  //     cipherDest
-  //   )
-  //   const decrypted = bgvDecryptor.decrypt(cipherDest) as PlainText
-  //   const decoded = bgvBatchEncoder.decode(decrypted)
-  //   const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
-  //   expect(decoded).toEqual(arr.fill(dot))
-  // })
+  test('It should calculate the dotProduct of a cipher and a plain to a destination cipher (bgv) (int32)', () => {
+    const item = seal.Evaluator(bgvContext)
+    const arr = Int32Array.from({ length: bgvBatchEncoder.slotCount }, _ => 5)
+    const plain = bgvBatchEncoder.encode(arr) as PlainText
+    const cipher = bgvEncryptor.encrypt(plain) as CipherText
+    const cipherDest = seal.CipherText()
+    const spyOn = jest.spyOn(item, 'dotProductPlain')
+    item.dotProductPlain(
+      cipher,
+      plain,
+      bgvGaloisKeys,
+      bgvEncParms.scheme,
+      cipherDest
+    )
+    expect(spyOn).toHaveBeenCalledWith(
+      cipher,
+      plain,
+      bgvGaloisKeys,
+      bgvEncParms.scheme,
+      cipherDest
+    )
+    const decrypted = bgvDecryptor.decrypt(cipherDest) as PlainText
+    const decoded = bgvBatchEncoder.decode(decrypted)
+    const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
+    expect(decoded).toEqual(arr.fill(dot))
+  })
   test('It should calculate the dotProduct of a cipher and a plain and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
@@ -4168,30 +4240,30 @@ describe('Evaluator', () => {
     const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
     expect(decoded).toEqual(arr.fill(dot))
   })
-  // test('It should calculate the dotProduct of a cipher and a plain and return a cipher result (bgv) (int32)', () => {
-  //   const item = seal.Evaluator(bgvContext)
-  //   const arr = Int32Array.from({ length: bgvBatchEncoder.slotCount }, _ => 5)
-  //   const plain = bgvBatchEncoder.encode(arr) as PlainText
-  //   const cipher = bgvEncryptor.encrypt(plain) as CipherText
-  //   const spyOn = jest.spyOn(item, 'dotProductPlain')
-  //   const cipherDest = item.dotProductPlain(
-  //     cipher,
-  //     plain,
-  //     bgvGaloisKeys,
-  //     bgvEncParms.scheme
-  //   ) as CipherText
-  //   expect(spyOn).toHaveBeenCalledWith(
-  //     cipher,
-  //     plain,
-  //     bgvGaloisKeys,
-  //     bgvEncParms.scheme
-  //   )
-  //   expect(cipherDest.instance).toBeDefined()
-  //   const decrypted = bgvDecryptor.decrypt(cipherDest) as PlainText
-  //   const decoded = bgvBatchEncoder.decode(decrypted)
-  //   const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
-  //   expect(decoded).toEqual(arr.fill(dot))
-  // })
+  test('It should calculate the dotProduct of a cipher and a plain and return a cipher result (bgv) (int32)', () => {
+    const item = seal.Evaluator(bgvContext)
+    const arr = Int32Array.from({ length: bgvBatchEncoder.slotCount }, _ => 5)
+    const plain = bgvBatchEncoder.encode(arr) as PlainText
+    const cipher = bgvEncryptor.encrypt(plain) as CipherText
+    const spyOn = jest.spyOn(item, 'dotProductPlain')
+    const cipherDest = item.dotProductPlain(
+      cipher,
+      plain,
+      bgvGaloisKeys,
+      bgvEncParms.scheme
+    ) as CipherText
+    expect(spyOn).toHaveBeenCalledWith(
+      cipher,
+      plain,
+      bgvGaloisKeys,
+      bgvEncParms.scheme
+    )
+    expect(cipherDest.instance).toBeDefined()
+    const decrypted = bgvDecryptor.decrypt(cipherDest) as PlainText
+    const decoded = bgvBatchEncoder.decode(decrypted)
+    const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
+    expect(decoded).toEqual(arr.fill(dot))
+  })
   test('It should calculate the dotProduct of a cipher and a plain to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
@@ -4218,32 +4290,32 @@ describe('Evaluator', () => {
     const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
     expect(decoded).toEqual(arr.fill(dot))
   })
-  // test('It should calculate the dotProduct of a cipher and a plain to a destination cipher (bgv) (uint32)', () => {
-  //   const item = seal.Evaluator(bgvContext)
-  //   const arr = Uint32Array.from({ length: bgvBatchEncoder.slotCount }, _ => 5)
-  //   const plain = bgvBatchEncoder.encode(arr) as PlainText
-  //   const cipher = bgvEncryptor.encrypt(plain) as CipherText
-  //   const cipherDest = seal.CipherText()
-  //   const spyOn = jest.spyOn(item, 'dotProductPlain')
-  //   item.dotProductPlain(
-  //     cipher,
-  //     plain,
-  //     bgvGaloisKeys,
-  //     bgvEncParms.scheme,
-  //     cipherDest
-  //   )
-  //   expect(spyOn).toHaveBeenCalledWith(
-  //     cipher,
-  //     plain,
-  //     bgvGaloisKeys,
-  //     bgvEncParms.scheme,
-  //     cipherDest
-  //   )
-  //   const decrypted = bgvDecryptor.decrypt(cipherDest) as PlainText
-  //   const decoded = bgvBatchEncoder.decode(decrypted, false)
-  //   const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
-  //   expect(decoded).toEqual(arr.fill(dot))
-  // })
+  test('It should calculate the dotProduct of a cipher and a plain to a destination cipher (bgv) (uint32)', () => {
+    const item = seal.Evaluator(bgvContext)
+    const arr = Uint32Array.from({ length: bgvBatchEncoder.slotCount }, _ => 5)
+    const plain = bgvBatchEncoder.encode(arr) as PlainText
+    const cipher = bgvEncryptor.encrypt(plain) as CipherText
+    const cipherDest = seal.CipherText()
+    const spyOn = jest.spyOn(item, 'dotProductPlain')
+    item.dotProductPlain(
+      cipher,
+      plain,
+      bgvGaloisKeys,
+      bgvEncParms.scheme,
+      cipherDest
+    )
+    expect(spyOn).toHaveBeenCalledWith(
+      cipher,
+      plain,
+      bgvGaloisKeys,
+      bgvEncParms.scheme,
+      cipherDest
+    )
+    const decrypted = bgvDecryptor.decrypt(cipherDest) as PlainText
+    const decoded = bgvBatchEncoder.decode(decrypted, false)
+    const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
+    expect(decoded).toEqual(arr.fill(dot))
+  })
   test('It should calculate the dotProduct of a cipher and a plain and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 5)
@@ -4269,31 +4341,31 @@ describe('Evaluator', () => {
     const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
     expect(decoded).toEqual(arr.fill(dot))
   })
-  // test('It should calculate the dotProduct of a cipher and a plain and return a cipher result (bgv) (uint32)', () => {
-  //   const item = seal.Evaluator(bgvContext)
-  //   const arr = Uint32Array.from({ length: bgvBatchEncoder.slotCount }, _ => 5)
-  //   const plain = bgvBatchEncoder.encode(arr) as PlainText
-  //   const cipher = bgvEncryptor.encrypt(plain) as CipherText
-  //   const spyOn = jest.spyOn(item, 'dotProductPlain')
-  //   const cipherDest = item.dotProductPlain(
-  //     cipher,
-  //     plain,
-  //     bgvGaloisKeys,
-  //     bgvEncParms.scheme
-  //   ) as CipherText
-  //   expect(spyOn).toHaveBeenCalledWith(
-  //     cipher,
-  //     plain,
-  //     bgvGaloisKeys,
-  //     bgvEncParms.scheme
-  //   )
-  //   expect(cipherDest.instance).toBeDefined()
+  test('It should calculate the dotProduct of a cipher and a plain and return a cipher result (bgv) (uint32)', () => {
+    const item = seal.Evaluator(bgvContext)
+    const arr = Uint32Array.from({ length: bgvBatchEncoder.slotCount }, _ => 5)
+    const plain = bgvBatchEncoder.encode(arr) as PlainText
+    const cipher = bgvEncryptor.encrypt(plain) as CipherText
+    const spyOn = jest.spyOn(item, 'dotProductPlain')
+    const cipherDest = item.dotProductPlain(
+      cipher,
+      plain,
+      bgvGaloisKeys,
+      bgvEncParms.scheme
+    ) as CipherText
+    expect(spyOn).toHaveBeenCalledWith(
+      cipher,
+      plain,
+      bgvGaloisKeys,
+      bgvEncParms.scheme
+    )
+    expect(cipherDest.instance).toBeDefined()
 
-  //   const decrypted = bgvDecryptor.decrypt(cipherDest) as PlainText
-  //   const decoded = bgvBatchEncoder.decode(decrypted, false)
-  //   const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
-  //   expect(decoded).toEqual(arr.fill(dot))
-  // })
+    const decrypted = bgvDecryptor.decrypt(cipherDest) as PlainText
+    const decoded = bgvBatchEncoder.decode(decrypted, false)
+    const dot = arr.reduce((r, a, i) => r + a * arr[i], 0)
+    expect(decoded).toEqual(arr.fill(dot))
+  })
   test('It should calculate the dotProduct of a cipher and a plain to a destination cipher (ckks)', () => {
     const item = seal.Evaluator(ckksContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }, _ => 5)
