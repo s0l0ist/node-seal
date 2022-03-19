@@ -17,6 +17,7 @@ describe('SchemeType', () => {
     expect(seal.SchemeType).toHaveProperty('none')
     expect(seal.SchemeType).toHaveProperty('bfv')
     expect(seal.SchemeType).toHaveProperty('ckks')
+    expect(seal.SchemeType).toHaveProperty('bgv')
   })
   test('It should return type none', () => {
     const schemeType = seal.SchemeType.none
@@ -41,5 +42,13 @@ describe('SchemeType', () => {
     expect(schemeType).toBeInstanceOf(Object)
     expect(schemeType.constructor).toBe(seal.SchemeType.ckks.constructor)
     expect(seal.SchemeType.ckks.constructor.name).toBe('SchemeType_ckks')
+  })
+  test('It should return type bgv', () => {
+    const schemeType = seal.SchemeType.bgv
+    expect(schemeType).toBeDefined()
+    expect(typeof schemeType.constructor).toBe('function')
+    expect(schemeType).toBeInstanceOf(Object)
+    expect(schemeType.constructor).toBe(seal.SchemeType.bgv.constructor)
+    expect(seal.SchemeType.bgv.constructor.name).toBe('SchemeType_bgv')
   })
 })

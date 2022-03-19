@@ -27,7 +27,7 @@ emcc \
   -Wall \
   -flto \
   -O3 \
-  libseal-3.7.a \
+  libseal-4.0.a \
   --bind \
   -o "${FILE_NAME}" \
   -s WASM=1 \
