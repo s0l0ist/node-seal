@@ -82,7 +82,7 @@ Check out the [Sandbox](https://morfix.io/sandbox) to run HE functions and even 
 
 If you'd rather read an example, take a look [here](FULL-EXAMPLE.md).
 
-For more exhaustive examples, view the [tests](src/test) or the [benchmarks](benchmark/).
+For more exhaustive examples, view the [tests](src/__tests__).
 
 ## Changes
 
