@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use node-seal in your research, please cite it as below."
+authors:
+- family-names: "Angelou"
+  given-names: "Nick"
+  orcid: "https://orcid.org/0000-0001-7423-158X"
+title: "node-seal, a Homomorphic Encryption library for TypeScript or JavaScript using Microsoft SEAL"
+version: 5.0.0
+doi: 10.5281/zenodo.1234
+date-released: 2022-03-19
+url: "https://github.com/morfix-io/node-seal"
