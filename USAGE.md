@@ -29,15 +29,20 @@ of parameters for an application, but there is a methodology behind optimization
 - Choose a mid-level for `polyModulusDegree` such as `4096` and increase
   if you cannot successfully execute desired functions.
 - Modify the bit-sizes for each prime in the `coeffModulus` for fine tuning.
-- If using `BFV` scheme (not applicable to `CKKS`), set the `plainModulus` to a reasonable value (`20`) and tweak
+- If using `BFV` or `BGV` scheme (not applicable to `CKKS`), set the `plainModulus` to a reasonable value (`20`) and tweak
   when you encounter correct decoding of some values up to a certain 'ceiling'.
 
-There are two `SchemeTypes`:
+There are three `SchemeTypes`:
 
 ```javascript
 seal.SchemeType.bfv
+seal.SchemeType.bgv
 seal.SchemeType.ckks
 ```
+
+Taken from Microsoft SEAL's docs: 
+
+> The BFV and BGV schemes allow modular arithmetic to be performed on encrypted integers. The CKKS scheme allows additions and multiplications on encrypted real or complex numbers, but yields only approximate results. In applications such as summing up encrypted real numbers, evaluating machine learning models on encrypted data, or computing distances of encrypted locations CKKS is going to be by far the best choice. For applications where exact values are necessary, the BFV and BGV schemes are more suitable.
 
 A security level determines the bit level security of the encrypted data.
 There are 3 modes you should be primarily concerned with:
