@@ -76,7 +76,7 @@ const SchemeTypeConstructor =
           },
 
           /**
-           * Return the 'ckks' scheme type
+           * Return the 'bgv' scheme type
            *
            * @readonly
            * @name SchemeType.bgv
