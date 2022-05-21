@@ -228,7 +228,7 @@ const BatchEncoderConstructor =
            */
           decode(
             plainText: PlainText,
-            signed = true,
+            signed: boolean = true,
             pool: MemoryPoolHandle = MemoryPoolHandle.global
           ): Int32Array | Uint32Array {
             try {
@@ -283,7 +283,7 @@ const BatchEncoderConstructor =
            */
           decodeBigInt(
             plainText: PlainText,
-            signed = true,
+            signed: boolean = true,
             pool: MemoryPoolHandle = MemoryPoolHandle.global
           ): BigInt64Array | BigUint64Array {
             try {
