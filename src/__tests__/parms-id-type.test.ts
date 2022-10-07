@@ -27,12 +27,12 @@ describe('ParmsIdType', () => {
   test('It should construct an instance', () => {
     const Constructor = jest.fn(seal.ParmsIdType)
     Constructor()
-    expect(Constructor).toBeCalledWith()
+    expect(Constructor).toHaveBeenCalledWith()
   })
   test('It should construct from an existing an instance', () => {
     const Constructor = jest.fn(seal.ParmsIdType)
     Constructor()
-    expect(Constructor).toBeCalledWith()
+    expect(Constructor).toHaveBeenCalledWith()
   })
   test('It should have properties', () => {
     const parmsId = context.firstParmsId

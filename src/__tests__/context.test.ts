@@ -30,7 +30,7 @@ describe('Context', () => {
   test('It should construct an instance', () => {
     const Constructor = jest.fn(seal.Context)
     Constructor(bfvEncParms)
-    expect(Constructor).toBeCalledWith(bfvEncParms)
+    expect(Constructor).toHaveBeenCalledWith(bfvEncParms)
   })
   test('It should have properties', () => {
     const item = seal.Context(bfvEncParms)

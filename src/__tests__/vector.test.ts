@@ -16,7 +16,7 @@ describe('Vector', () => {
   test('It should construct an instance', () => {
     const Constructor = jest.fn(seal.Vector)
     Constructor()
-    expect(Constructor).toBeCalledWith()
+    expect(Constructor).toHaveBeenCalledWith()
   })
   test('It should construct an instance with of uint8', () => {
     const vector = seal.Vector()

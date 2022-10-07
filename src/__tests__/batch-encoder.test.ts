@@ -38,12 +38,12 @@ describe('BatchEncoder', () => {
   test('It should construct an instance', () => {
     const Constructor = jest.fn(seal.BatchEncoder)
     Constructor(context)
-    expect(Constructor).toBeCalledWith(context)
+    expect(Constructor).toHaveBeenCalledWith(context)
   })
   test('It should fail to construct an instance', () => {
     const Constructor = jest.fn(seal.BatchEncoder)
     expect(() => Constructor(null as unknown as Context)).toThrow()
-    expect(Constructor).toBeCalledWith(null)
+    expect(Constructor).toHaveBeenCalledWith(null)
   })
   test('It should have properties', () => {
     const item = seal.BatchEncoder(context)

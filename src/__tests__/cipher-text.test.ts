@@ -66,18 +66,18 @@ describe('CipherText', () => {
   test('It should construct an instance', () => {
     const Constructor = jest.fn(seal.CipherText)
     Constructor()
-    expect(Constructor).toBeCalledWith()
+    expect(Constructor).toHaveBeenCalledWith()
   })
   test('It should construct an instance with a bfvContext', () => {
     const Constructor = jest.fn(seal.CipherText)
     Constructor({ context: bfvContext })
-    expect(Constructor).toBeCalledWith({ context: bfvContext })
+    expect(Constructor).toHaveBeenCalledWith({ context: bfvContext })
   })
   test('It should construct an instance with a bfvContext, parmsId', () => {
     const Constructor = jest.fn(seal.CipherText)
     const parmsId = bfvContext.firstParmsId
     Constructor({ context: bfvContext, parmsId })
-    expect(Constructor).toBeCalledWith({
+    expect(Constructor).toHaveBeenCalledWith({
       context: bfvContext,
       parmsId
     })
@@ -86,7 +86,7 @@ describe('CipherText', () => {
     const Constructor = jest.fn(seal.CipherText)
     const parmsId = bfvContext.firstParmsId
     Constructor({ context: bfvContext, parmsId, sizeCapacity: 2 })
-    expect(Constructor).toBeCalledWith({
+    expect(Constructor).toHaveBeenCalledWith({
       context: bfvContext,
       parmsId,
       sizeCapacity: 2
@@ -97,7 +97,7 @@ describe('CipherText', () => {
     expect(() =>
       Constructor({ context: bfvContext, sizeCapacity: 2 })
     ).toThrow()
-    expect(Constructor).toBeCalledWith({
+    expect(Constructor).toHaveBeenCalledWith({
       context: bfvContext,
       sizeCapacity: 2
     })
@@ -108,7 +108,7 @@ describe('CipherText', () => {
     expect(() =>
       Constructor({ context: bfvContext, parmsId, sizeCapacity: -2 })
     ).toThrow()
-    expect(Constructor).toBeCalledWith({
+    expect(Constructor).toHaveBeenCalledWith({
       context: bfvContext,
       parmsId,
       sizeCapacity: -2

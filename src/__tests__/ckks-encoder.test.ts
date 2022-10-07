@@ -51,7 +51,7 @@ describe('CKKSEncoder', () => {
   test('It should construct an instance', () => {
     const Constructor = jest.fn(seal.CKKSEncoder)
     Constructor(ckksContext)
-    expect(Constructor).toBeCalledWith(ckksContext)
+    expect(Constructor).toHaveBeenCalledWith(ckksContext)
   })
   test('It should have properties', () => {
     const item = seal.CKKSEncoder(ckksContext)
