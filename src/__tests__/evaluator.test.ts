@@ -290,8 +290,9 @@ describe('Evaluator', () => {
   })
   test('It should negate a cipher to a destination cipher (bfv) (int64)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = BigInt64Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) =>
-      BigInt(-i)
+    const arr = BigInt64Array.from(
+      { length: bfvBatchEncoder.slotCount },
+      (_, i) => BigInt(-i)
     )
     const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
@@ -305,8 +306,9 @@ describe('Evaluator', () => {
   })
   test('It should negate a cipher to a destination cipher (bgv) (int64)', () => {
     const item = seal.Evaluator(bgvContext)
-    const arr = BigInt64Array.from({ length: bgvBatchEncoder.slotCount }, (_, i) =>
-      BigInt(-i)
+    const arr = BigInt64Array.from(
+      { length: bgvBatchEncoder.slotCount },
+      (_, i) => BigInt(-i)
     )
     const plain = bgvBatchEncoder.encode(arr) as PlainText
     const cipher = bgvEncryptor.encrypt(plain) as CipherText
@@ -320,8 +322,9 @@ describe('Evaluator', () => {
   })
   test('It should negate a cipher and return a cipher result (bfv) (int64)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = BigInt64Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) =>
-      BigInt(-i)
+    const arr = BigInt64Array.from(
+      { length: bfvBatchEncoder.slotCount },
+      (_, i) => BigInt(-i)
     )
     const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
@@ -335,8 +338,9 @@ describe('Evaluator', () => {
   })
   test('It should negate a cipher and return a cipher result (bgv) (int64)', () => {
     const item = seal.Evaluator(bgvContext)
-    const arr = BigInt64Array.from({ length: bgvBatchEncoder.slotCount }, (_, i) =>
-      BigInt(-i)
+    const arr = BigInt64Array.from(
+      { length: bgvBatchEncoder.slotCount },
+      (_, i) => BigInt(-i)
     )
     const plain = bgvBatchEncoder.encode(arr) as PlainText
     const cipher = bgvEncryptor.encrypt(plain) as CipherText
@@ -3057,7 +3061,10 @@ describe('Evaluator', () => {
   })
   test('It should applyGalois on a cipher to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) => i)
+    const arr = Int32Array.from(
+      { length: bfvBatchEncoder.slotCount },
+      (_, i) => i
+    )
     const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
@@ -3073,7 +3080,10 @@ describe('Evaluator', () => {
   })
   test('It should applyGalois on a cipher to a destination cipher (bgv) (int32)', () => {
     const item = seal.Evaluator(bgvContext)
-    const arr = Int32Array.from({ length: bgvBatchEncoder.slotCount }, (_, i) => i)
+    const arr = Int32Array.from(
+      { length: bgvBatchEncoder.slotCount },
+      (_, i) => i
+    )
     const plain = bgvBatchEncoder.encode(arr) as PlainText
     const cipher = bgvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
@@ -3089,7 +3099,10 @@ describe('Evaluator', () => {
   })
   test('It should applyGalois on a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) => i)
+    const arr = Int32Array.from(
+      { length: bfvBatchEncoder.slotCount },
+      (_, i) => i
+    )
     const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const galElt = 2 * bfvEncParms.polyModulusDegree - 1
@@ -3104,7 +3117,10 @@ describe('Evaluator', () => {
   })
   test('It should applyGalois on a cipher and return a cipher result (bgv) (int32)', () => {
     const item = seal.Evaluator(bgvContext)
-    const arr = Int32Array.from({ length: bgvBatchEncoder.slotCount }, (_, i) => i)
+    const arr = Int32Array.from(
+      { length: bgvBatchEncoder.slotCount },
+      (_, i) => i
+    )
     const plain = bgvBatchEncoder.encode(arr) as PlainText
     const cipher = bgvEncryptor.encrypt(plain) as CipherText
     const galElt = 2 * bgvEncParms.polyModulusDegree - 1
@@ -3231,7 +3247,10 @@ describe('Evaluator', () => {
   // rotateRows
   test('It should rotateRows on a cipher to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) => i)
+    const arr = Int32Array.from(
+      { length: bfvBatchEncoder.slotCount },
+      (_, i) => i
+    )
     const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
@@ -3241,7 +3260,10 @@ describe('Evaluator', () => {
   })
   test('It should rotateRows on a cipher to a destination cipher (bgv) (int32)', () => {
     const item = seal.Evaluator(bgvContext)
-    const arr = Int32Array.from({ length: bgvBatchEncoder.slotCount }, (_, i) => i)
+    const arr = Int32Array.from(
+      { length: bgvBatchEncoder.slotCount },
+      (_, i) => i
+    )
     const plain = bgvBatchEncoder.encode(arr) as PlainText
     const cipher = bgvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
@@ -3251,7 +3273,10 @@ describe('Evaluator', () => {
   })
   test('It should rotateRows on a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) => i)
+    const arr = Int32Array.from(
+      { length: bfvBatchEncoder.slotCount },
+      (_, i) => i
+    )
     const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'rotateRows')
@@ -3261,7 +3286,10 @@ describe('Evaluator', () => {
   })
   test('It should rotateRows on a cipher and return a cipher result (bgv) (int32)', () => {
     const item = seal.Evaluator(bgvContext)
-    const arr = Int32Array.from({ length: bgvBatchEncoder.slotCount }, (_, i) => i)
+    const arr = Int32Array.from(
+      { length: bgvBatchEncoder.slotCount },
+      (_, i) => i
+    )
     const plain = bgvBatchEncoder.encode(arr) as PlainText
     const cipher = bgvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'rotateRows')
@@ -3339,7 +3367,10 @@ describe('Evaluator', () => {
   // rotateColumns
   test('It should rotateColumns on a cipher to a destination cipher (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) => i)
+    const arr = Int32Array.from(
+      { length: bfvBatchEncoder.slotCount },
+      (_, i) => i
+    )
     const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
@@ -3349,7 +3380,10 @@ describe('Evaluator', () => {
   })
   test('It should rotateColumns on a cipher to a destination cipher (bgv) (int32)', () => {
     const item = seal.Evaluator(bgvContext)
-    const arr = Int32Array.from({ length: bgvBatchEncoder.slotCount }, (_, i) => i)
+    const arr = Int32Array.from(
+      { length: bgvBatchEncoder.slotCount },
+      (_, i) => i
+    )
     const plain = bgvBatchEncoder.encode(arr) as PlainText
     const cipher = bgvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
@@ -3359,7 +3393,10 @@ describe('Evaluator', () => {
   })
   test('It should rotateColumns on a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) => i)
+    const arr = Int32Array.from(
+      { length: bfvBatchEncoder.slotCount },
+      (_, i) => i
+    )
     const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'rotateColumns')
@@ -3369,7 +3406,10 @@ describe('Evaluator', () => {
   })
   test('It should rotateColumns on a cipher and return a cipher result (bgv) (int32)', () => {
     const item = seal.Evaluator(bgvContext)
-    const arr = Int32Array.from({ length: bgvBatchEncoder.slotCount }, (_, i) => i)
+    const arr = Int32Array.from(
+      { length: bgvBatchEncoder.slotCount },
+      (_, i) => i
+    )
     const plain = bgvBatchEncoder.encode(arr) as PlainText
     const cipher = bgvEncryptor.encrypt(plain) as CipherText
     const spyOn = jest.spyOn(item, 'rotateColumns')
@@ -3447,7 +3487,10 @@ describe('Evaluator', () => {
   // rotateVector
   test('It should fail to rotateVector when using bfv', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) => i)
+    const arr = Int32Array.from(
+      { length: bfvBatchEncoder.slotCount },
+      (_, i) => i
+    )
     const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
@@ -3459,7 +3502,10 @@ describe('Evaluator', () => {
   })
   test('It should fail to rotateVector when using bgv', () => {
     const item = seal.Evaluator(bgvContext)
-    const arr = Int32Array.from({ length: bgvBatchEncoder.slotCount }, (_, i) => i)
+    const arr = Int32Array.from(
+      { length: bgvBatchEncoder.slotCount },
+      (_, i) => i
+    )
     const plain = bgvBatchEncoder.encode(arr) as PlainText
     const cipher = bgvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
@@ -3502,7 +3548,10 @@ describe('Evaluator', () => {
   // complexConjugate
   test('It should fail to complexConjugate when using bfv', () => {
     const item = seal.Evaluator(bfvContext)
-    const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, (_, i) => i)
+    const arr = Int32Array.from(
+      { length: bfvBatchEncoder.slotCount },
+      (_, i) => i
+    )
     const plain = bfvBatchEncoder.encode(arr) as PlainText
     const cipher = bfvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
@@ -3514,7 +3563,10 @@ describe('Evaluator', () => {
   })
   test('It should fail to complexConjugate when using bgv', () => {
     const item = seal.Evaluator(bgvContext)
-    const arr = Int32Array.from({ length: bgvBatchEncoder.slotCount }, (_, i) => i)
+    const arr = Int32Array.from(
+      { length: bgvBatchEncoder.slotCount },
+      (_, i) => i
+    )
     const plain = bgvBatchEncoder.encode(arr) as PlainText
     const cipher = bgvEncryptor.encrypt(plain) as CipherText
     const cipherDest = seal.CipherText()
