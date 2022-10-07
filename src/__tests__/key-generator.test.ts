@@ -52,17 +52,17 @@ describe('KeyGenerator', () => {
   test('It should construct an instance', () => {
     const Constructor = jest.fn(seal.KeyGenerator)
     Constructor(context)
-    expect(Constructor).toBeCalledWith(context)
+    expect(Constructor).toHaveBeenCalledWith(context)
   })
   test('It should construct an instance with a secretkey', () => {
     const Constructor = jest.fn(seal.KeyGenerator)
     Constructor(context, secretKey)
-    expect(Constructor).toBeCalledWith(context, secretKey)
+    expect(Constructor).toHaveBeenCalledWith(context, secretKey)
   })
   test('It should fail to construct an instance', () => {
     const Constructor = jest.fn(seal.KeyGenerator)
     expect(() => Constructor(null as unknown as Context)).toThrow()
-    expect(Constructor).toBeCalledWith(null)
+    expect(Constructor).toHaveBeenCalledWith(null)
   })
   test('It should have properties', () => {
     const item = seal.KeyGenerator(context)

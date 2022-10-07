@@ -133,7 +133,7 @@ describe('Evaluator', () => {
   test('It should construct an instance', () => {
     const Constructor = jest.fn(seal.Evaluator)
     Constructor(bfvContext)
-    expect(Constructor).toBeCalledWith(bfvContext)
+    expect(Constructor).toHaveBeenCalledWith(bfvContext)
   })
   test('It should fail to construct an instance', () => {
     const newParms = seal.EncryptionParameters(seal.SchemeType.bfv)
@@ -144,7 +144,7 @@ describe('Evaluator', () => {
     const newContext = seal.Context(newParms, true, seal.SecurityLevel.tc128)
     const Constructor = jest.fn(seal.Evaluator)
     expect(() => Constructor(newContext)).toThrow()
-    expect(Constructor).toBeCalledWith(newContext)
+    expect(Constructor).toHaveBeenCalledWith(newContext)
   })
   test('It should have properties', () => {
     const item = seal.Evaluator(bfvContext)

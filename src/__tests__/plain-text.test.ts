@@ -54,22 +54,22 @@ describe('PlainText', () => {
   test('It should construct an instance', () => {
     const Constructor = jest.fn(seal.PlainText)
     Constructor()
-    expect(Constructor).toBeCalledWith()
+    expect(Constructor).toHaveBeenCalledWith()
   })
   test('It should construct an instance with a coeffCount', () => {
     const Constructor = jest.fn(seal.PlainText)
     Constructor({ coeffCount: 2 })
-    expect(Constructor).toBeCalledWith({ coeffCount: 2 })
+    expect(Constructor).toHaveBeenCalledWith({ coeffCount: 2 })
   })
   test('It should construct an instance with a coeffCount, capacity', () => {
     const Constructor = jest.fn(seal.PlainText)
     Constructor({ capacity: 2, coeffCount: 2 })
-    expect(Constructor).toBeCalledWith({ capacity: 2, coeffCount: 2 })
+    expect(Constructor).toHaveBeenCalledWith({ capacity: 2, coeffCount: 2 })
   })
   test('It should fail to construct an instance from invalid parameters', () => {
     const Constructor = jest.fn(seal.PlainText)
     expect(() => Constructor({ coeffCount: -1, capacity: 2 })).toThrow()
-    expect(Constructor).toBeCalledWith({
+    expect(Constructor).toHaveBeenCalledWith({
       coeffCount: -1,
       capacity: 2
     })
@@ -77,7 +77,7 @@ describe('PlainText', () => {
   test('It should fail to construct an instance from bad parameters', () => {
     const Constructor = jest.fn(seal.PlainText)
     expect(() => Constructor({ capacity: 2 })).toThrow()
-    expect(Constructor).toBeCalledWith({ capacity: 2 })
+    expect(Constructor).toHaveBeenCalledWith({ capacity: 2 })
   })
   test('It should have properties', () => {
     const plainText = seal.PlainText()

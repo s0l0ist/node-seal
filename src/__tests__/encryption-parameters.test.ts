@@ -16,7 +16,7 @@ describe('EncryptionParameters', () => {
   test('It should construct an instance', () => {
     const Constructor = jest.fn(seal.EncryptionParameters)
     Constructor()
-    expect(Constructor).toBeCalledWith()
+    expect(Constructor).toHaveBeenCalledWith()
   })
   test('It should have properties', () => {
     const encParms = seal.EncryptionParameters()

@@ -16,17 +16,17 @@ describe('Modulus', () => {
   test('It should construct an instance', () => {
     const Constructor = jest.fn(seal.Modulus)
     Constructor(BigInt('0'))
-    expect(Constructor).toBeCalledWith(BigInt('0'))
+    expect(Constructor).toHaveBeenCalledWith(BigInt('0'))
   })
   test('It should construct an instance from a string', () => {
     const Constructor = jest.fn(seal.Modulus)
     Constructor(BigInt('2'))
-    expect(Constructor).toBeCalledWith(BigInt('2'))
+    expect(Constructor).toHaveBeenCalledWith(BigInt('2'))
   })
   test('It should fail to construct an instance', () => {
     const Constructor = jest.fn(seal.Modulus)
     expect(() => Constructor(BigInt('1'))).toThrow()
-    expect(Constructor).toBeCalledWith(BigInt('1'))
+    expect(Constructor).toHaveBeenCalledWith(BigInt('1'))
   })
   test('It should have properties', () => {
     const modulus = seal.Modulus(BigInt('5'))

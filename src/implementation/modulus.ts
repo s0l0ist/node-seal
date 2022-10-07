@@ -18,15 +18,15 @@ export type ModulusDependencies = {
 }
 
 export type ModulusConstructorOptions = {
-  (value: BigInt): Modulus
+  (value: bigint): Modulus
 }
 
 export type Modulus = {
   readonly instance: Instance
   readonly inject: (instance: Instance) => void
   readonly delete: () => void
-  readonly setValue: (value: BigInt) => void
-  readonly value: BigInt
+  readonly setValue: (value: bigint) => void
+  readonly value: bigint
   readonly bitCount: number
   readonly isZero: boolean
   readonly isPrime: boolean
@@ -43,13 +43,13 @@ const ModulusConstructor =
     ComprModeType,
     Vector
   }: ModulusDependencyOptions): ModulusConstructorOptions =>
-  (value: BigInt): Modulus => {
+  (value: bigint): Modulus => {
     // Static methods
     const Constructor = library.Modulus
 
     let _instance = createModulus(value)
 
-    function createModulus(value: BigInt) {
+    function createModulus(value: bigint) {
       try {
         const inst = new Constructor()
         inst.setValue(value.toString())
@@ -118,7 +118,7 @@ const ModulusConstructor =
        * @name Modulus#setValue
        * @param {BigInt} value BigInt value to set
        */
-      setValue(value: BigInt) {
+      setValue(value: bigint) {
         try {
           _instance.setValue(value.toString())
         } catch (e) {

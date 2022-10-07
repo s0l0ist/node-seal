@@ -61,7 +61,7 @@ describe('Decryptor', () => {
   test('It should construct an instance', () => {
     const Constructor = jest.fn(seal.Decryptor)
     Constructor(bfvContext, bfvSecretKey)
-    expect(Constructor).toBeCalledWith(bfvContext, bfvSecretKey)
+    expect(Constructor).toHaveBeenCalledWith(bfvContext, bfvSecretKey)
   })
   test('It should fail to construct an instance', () => {
     const newParms = seal.EncryptionParameters(seal.SchemeType.bfv)
@@ -76,7 +76,7 @@ describe('Decryptor', () => {
 
     const Constructor = jest.fn(seal.Decryptor)
     expect(() => Constructor(bfvContext, newSecretKey)).toThrow()
-    expect(Constructor).toBeCalledWith(bfvContext, newSecretKey)
+    expect(Constructor).toHaveBeenCalledWith(bfvContext, newSecretKey)
   })
   test('It should have properties', () => {
     const item = seal.Decryptor(bfvContext, bfvSecretKey)
