@@ -1,5 +1,6 @@
-import { terser } from 'rollup-plugin-terser'
+import terser from '@rollup/plugin-terser'
 import alias from '@rollup/plugin-alias'
+import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import typescript from 'rollup-plugin-typescript2'
 const formats = ['umd', 'es']
@@ -29,6 +30,7 @@ const outputs = formats.reduce(
                     plugins: [terser()]
                   },
                   plugins: [
+                    commonjs(), // needed to convert commonjs to es6 for emscripten 'node' builds
                     alias({
                       entries: [
                         // Used to replace the paths that use `import sealLibrary from './seal_*'` statement to point to their respective JS files
