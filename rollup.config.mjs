@@ -30,7 +30,7 @@ const outputs = formats.reduce(
                     plugins: [terser()]
                   },
                   plugins: [
-                    commonjs(), // needed to convert commonjs to es6 for emscripten 'node' builds
+                    environment === 'node' && commonjs(), // needed to convert commonjs to es6 for emscripten 'node' builds
                     alias({
                       entries: [
                         // Used to replace the paths that use `import sealLibrary from './seal_*'` statement to point to their respective JS files
