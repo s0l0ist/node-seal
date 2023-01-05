@@ -95,6 +95,17 @@ export type Evaluator = {
     destination?: CipherText,
     pool?: MemoryPoolHandle
   ) => CipherText | void
+  readonly modReduceToNext: (
+    encrypted: CipherText,
+    destination?: CipherText,
+    pool?: MemoryPoolHandle
+  ) => CipherText | void
+  readonly modReduceTo: (
+    encrypted: CipherText,
+    parmsId: ParmsIdType,
+    destination?: CipherText,
+    pool?: MemoryPoolHandle
+  ) => CipherText | void
   readonly exponentiate: (
     encrypted: CipherText,
     exponent: number,
@@ -105,12 +116,14 @@ export type Evaluator = {
   readonly addPlain: (
     encrypted: CipherText,
     plain: PlainText,
-    destination?: CipherText
+    destination?: CipherText,
+    pool?: MemoryPoolHandle
   ) => CipherText | void
   readonly subPlain: (
     encrypted: CipherText,
     plain: PlainText,
-    destination?: CipherText
+    destination?: CipherText,
+    pool?: MemoryPoolHandle
   ) => CipherText | void
   readonly multiplyPlain: (
     encrypted: CipherText,
@@ -777,6 +790,108 @@ const EvaluatorConstructor =
       },
 
       /**
+       * Given a ciphertext encrypted modulo q_1...q_k, this function switches
+       * the modulus down to q_1...q_{k-1}, scales the message down accordingly,
+       * and stores the result in the destination parameter. Dynamic memory
+       * allocations in the process are allocated from the memory pool pointed
+       * to by the given MemoryPoolHandle.
+       *
+       * @function
+       * @name Evaluator#modReduceToNext
+       * @param {CipherText} encrypted CipherText to reduce
+       * @param {CipherText} [destination] CipherText destination to store the
+       * reduced result
+       * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}]
+       * MemoryPool to use
+       * @returns {CipherText|void} CipherText containing the result or void if
+       * a destination was supplied
+       * @example
+       * const cipherTextA = seal.CipherText()
+       * // ... after encrypting some data ...
+       * const resultCipher = evaluator.modReduceToNext(cipherTextA)
+       * // or
+       * const cipherDest = seal.CipherText()
+       * evaluator.modReduceToNext(cipherTextA, cipherDest)
+       */
+      modReduceToNext(
+        encrypted: CipherText,
+        destination?: CipherText,
+        pool: MemoryPoolHandle = MemoryPoolHandle.global
+      ): CipherText | void {
+        try {
+          if (destination) {
+            _instance.modReduceToNext(
+              encrypted.instance,
+              destination.instance,
+              pool
+            )
+            return
+          }
+          const temp = CipherText()
+          _instance.modReduceToNext(encrypted.instance, temp.instance, pool)
+          return temp
+        } catch (e) {
+          throw Exception.safe(e as SealError)
+        }
+      },
+
+      /**
+       * Given a ciphertext encrypted modulo q_1...q_k, this function reduces
+       * the modulus down until the parameters reach the given parms_id and
+       * stores the result in the destination parameter. Dynamic memory
+       * allocations in the process are allocated from the memory pool pointed
+       * to by the given MemoryPoolHandle.
+       *
+       * @function
+       * @name Evaluator#modReduceTo
+       * @param {CipherText} encrypted CipherText to reduce
+       * @param {ParmsIdType} parmsId Target parmsId to reduce to
+       * @param {CipherText} [destination] CipherText destination to store the
+       * reduced result
+       * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}]
+       * MemoryPool to use
+       * @returns {CipherText|void} CipherText containing the result or void if
+       * a destination was supplied
+       * @example
+       * const context = seal.Context(encParms, true)
+       * const cipherTextA = seal.CipherText()
+       * // ... after encrypting some data ...
+       * const parmsId = context.lastParmsId
+       * const resultCipher = evaluator.modReduceTo(cipherTextA, parmsId)
+       * // or
+       * const cipherDest = seal.CipherText()
+       * evaluator.modReduceTo(cipherTextA, parmsId, cipherDest)
+       */
+      modReduceTo(
+        encrypted: CipherText,
+        parmsId: ParmsIdType,
+        destination?: CipherText,
+        pool: MemoryPoolHandle = MemoryPoolHandle.global
+      ): CipherText | void {
+        try {
+          if (destination) {
+            _instance.modReduceTo(
+              encrypted.instance,
+              parmsId.instance,
+              destination.instance,
+              pool
+            )
+            return
+          }
+          const temp = CipherText()
+          _instance.modReduceTo(
+            encrypted.instance,
+            parmsId.instance,
+            temp.instance,
+            pool
+          )
+          return temp
+        } catch (e) {
+          throw Exception.safe(e as SealError)
+        }
+      },
+
+      /**
        * Exponentiates a CipherText. This functions raises encrypted to a power and
        * stores the result in the destination parameter. Dynamic memory allocations
        * in the process are allocated from the memory pool pointed to by the given
@@ -843,6 +958,7 @@ const EvaluatorConstructor =
        * @param {CipherText} encrypted CipherText operand A
        * @param {PlainText} plain PlainText operand B
        * @param {CipherText} [destination] CipherText destination to store the sum
+       * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
        * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
        * @example
        * const cipherTextA = seal.CipherText()
@@ -856,19 +972,26 @@ const EvaluatorConstructor =
       addPlain(
         encrypted: CipherText,
         plain: PlainText,
-        destination?: CipherText
+        destination?: CipherText,
+        pool: MemoryPoolHandle = MemoryPoolHandle.global
       ): CipherText | void {
         try {
           if (destination) {
             _instance.addPlain(
               encrypted.instance,
               plain.instance,
-              destination.instance
+              destination.instance,
+              pool
             )
             return
           }
           const temp = CipherText()
-          _instance.addPlain(encrypted.instance, plain.instance, temp.instance)
+          _instance.addPlain(
+            encrypted.instance,
+            plain.instance,
+            temp.instance,
+            pool
+          )
           return temp
         } catch (e) {
           throw Exception.safe(e as SealError)
@@ -885,6 +1008,7 @@ const EvaluatorConstructor =
        * @param {CipherText} encrypted CipherText operand A
        * @param {PlainText} plain PlainText operand B
        * @param {CipherText} [destination] CipherText destination to store the difference
+       * @param {MemoryPoolHandle} [pool={@link MemoryPoolHandle.global}] MemoryPool to use
        * @returns {CipherText|void} CipherText containing the result or void if a destination was supplied
        * @example
        * const cipherTextA = seal.CipherText()
@@ -898,19 +1022,26 @@ const EvaluatorConstructor =
       subPlain(
         encrypted: CipherText,
         plain: PlainText,
-        destination?: CipherText
+        destination?: CipherText,
+        pool: MemoryPoolHandle = MemoryPoolHandle.global
       ): CipherText | void {
         try {
           if (destination) {
             _instance.subPlain(
               encrypted.instance,
               plain.instance,
-              destination.instance
+              destination.instance,
+              pool
             )
             return
           }
           const temp = CipherText()
-          _instance.subPlain(encrypted.instance, plain.instance, temp.instance)
+          _instance.subPlain(
+            encrypted.instance,
+            plain.instance,
+            temp.instance,
+            pool
+          )
           return temp
         } catch (e) {
           throw Exception.safe(e as SealError)

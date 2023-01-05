@@ -15,10 +15,13 @@ fi
 
 if [[ "$ENVIRONMENT" == "node" ]]; then
   TARGET="node"
+  EXPORT_ES6=0
 elif [[ "$ENVIRONMENT" == "web,webview" ]]; then
   TARGET="web"
+  EXPORT_ES6=1
 elif [[ "$ENVIRONMENT" == "worker" ]]; then
   TARGET="worker"
+  EXPORT_ES6=1
 fi
 
 FILE_NAME="seal_${TYPE}_js_${TARGET}.js"
@@ -27,12 +30,12 @@ emcc \
   -Wall \
   -flto \
   -O2 \
-  libseal-4.0.a \
+  libseal-4.1.a \
   --bind \
   -o "${FILE_NAME}" \
   -s WASM=0 \
   -s ALLOW_MEMORY_GROWTH=1 \
-  -s EXPORT_ES6=1 \
+  -s EXPORT_ES6=${EXPORT_ES6} \
   -s MODULARIZE=1 \
   -s USE_ES6_IMPORT_META=0 \
   -s SINGLE_FILE=1 \

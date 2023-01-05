@@ -2,15 +2,15 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Pull & update submodules
         run: |
           git submodule update --init
@@ -18,10 +18,10 @@ jobs:
       - name: EMSDK Version
         id: emsdk-version
         run: |
-          echo "::set-output name=SHA::$(./submodules/emsdk/emsdk list | grep recommended | awk -F'[()]' '{print $2}')"     
+          echo "::set-output name=SHA::$(./submodules/emsdk/emsdk list | grep recommended | awk -F'[()]' '{print $2}')"
       - name: Cache EMSDK
         id: cache-emsdk
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: submodules/emsdk
           key: ${{ runner.os }}-c-emsdk-${{ steps.emsdk-version.outputs.SHA }}
@@ -31,7 +31,7 @@ jobs:
         if: steps.cache-emsdk.outputs.cache-hit != 'true'
         run: |
           npm run em:update
-          
+
       - name: Compile SEAL
         if: steps.cache-seal.outputs.cache-hit != 'true'
         run: |
@@ -49,21 +49,21 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '16'
-      
+          node-version: '18'
+
       - name: Cache NPM Dependencies
         id: cache-npm
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-c-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-c-node-
-        
+
       - name: Install NPM Dependencies
         run: |
           npm install
@@ -73,7 +73,7 @@ jobs:
         with:
           name: seal-artifacts
           path: src/bin/
-        
+
       - name: Transpile to JavaScript
         run: |
           npm run compile
@@ -84,6 +84,4 @@ jobs:
         run: |
           npm run coverage
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2.1.0
-        
-
+        uses: codecov/codecov-action@v3

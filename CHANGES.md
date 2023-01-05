@@ -3,6 +3,15 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 5.1.0
+
+Feat:
+
+- Updated to SEAL 4.1.0
+- Added new bindings for `modReduceTo` and `modReduceToNext`.
+- `addPlain` and `subPlain` now take an optional memory pool parameter (defaults
+  to global). This is a non-breaking change.
+
 ## Version 5.0.0
 
 Feat:
