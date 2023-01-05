@@ -2909,15 +2909,6 @@ describe('Evaluator', () => {
     item.cipherTransformToNtt(cipher, cipher)
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher)
   })
-  // test('It should cipherTransformToNtt a cipher to a destination cipher (bgv) (int32)', () => {
-  //   const item = seal.Evaluator(bgvContext)
-  //   const arr = Int32Array.from({ length: bgvBatchEncoder.slotCount }, _ => -5)
-  //   const plain = bgvBatchEncoder.encode(arr) as PlainText
-  //   const cipher = bgvEncryptor.encrypt(plain) as CipherText
-  //   const spyOn = jest.spyOn(item, 'cipherTransformToNtt')
-  //   item.cipherTransformToNtt(cipher, cipher)
-  //   expect(spyOn).toHaveBeenCalledWith(cipher, cipher)
-  // })
   test('It should cipherTransformToNtt a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
@@ -2928,16 +2919,6 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher)
     expect(cipherDest.instance).toBeDefined()
   })
-  // test('It should cipherTransformToNtt a cipher and return a cipher result (bgv) (int32)', () => {
-  //   const item = seal.Evaluator(bgvContext)
-  //   const arr = Int32Array.from({ length: bgvBatchEncoder.slotCount }, _ => -5)
-  //   const plain = bgvBatchEncoder.encode(arr) as PlainText
-  //   const cipher = bgvEncryptor.encrypt(plain) as CipherText
-  //   const spyOn = jest.spyOn(item, 'cipherTransformToNtt')
-  //   const cipherDest = item.cipherTransformToNtt(cipher) as CipherText
-  //   expect(spyOn).toHaveBeenCalledWith(cipher)
-  //   expect(cipherDest.instance).toBeDefined()
-  // })
   test('It should cipherTransformToNtt a cipher to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
@@ -2947,15 +2928,6 @@ describe('Evaluator', () => {
     item.cipherTransformToNtt(cipher, cipher)
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher)
   })
-  // test('It should cipherTransformToNtt a cipher to a destination cipher (bgv) (uint32)', () => {
-  //   const item = seal.Evaluator(bgvContext)
-  //   const arr = Uint32Array.from({ length: bgvBatchEncoder.slotCount }, _ => 10)
-  //   const plain = bgvBatchEncoder.encode(arr) as PlainText
-  //   const cipher = bgvEncryptor.encrypt(plain) as CipherText
-  //   const spyOn = jest.spyOn(item, 'cipherTransformToNtt')
-  //   item.cipherTransformToNtt(cipher, cipher)
-  //   expect(spyOn).toHaveBeenCalledWith(cipher, cipher)
-  // })
   test('It should cipherTransformToNtt a cipher and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
@@ -2966,16 +2938,6 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher)
     expect(cipherDest.instance).toBeDefined()
   })
-  // test('It should cipherTransformToNtt a cipher and return a cipher result (bgv) (uint32)', () => {
-  //   const item = seal.Evaluator(bgvContext)
-  //   const arr = Uint32Array.from({ length: bgvBatchEncoder.slotCount }, _ => 10)
-  //   const plain = bgvBatchEncoder.encode(arr) as PlainText
-  //   const cipher = bgvEncryptor.encrypt(plain) as CipherText
-  //   const spyOn = jest.spyOn(item, 'cipherTransformToNtt')
-  //   const cipherDest = item.cipherTransformToNtt(cipher) as CipherText
-  //   expect(spyOn).toHaveBeenCalledWith(cipher)
-  //   expect(cipherDest.instance).toBeDefined()
-  // })
   test('It should fail to cipherTransformToNtt on ckks scheme', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }, _ => 10)
@@ -2996,16 +2958,6 @@ describe('Evaluator', () => {
     item.cipherTransformFromNtt(cipher, cipher)
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher)
   })
-  // test('It should cipherTransformFromNtt a cipher to a destination cipher (bgv) (int32)', () => {
-  //   const item = seal.Evaluator(bgvContext)
-  //   const arr = Int32Array.from({ length: bgvBatchEncoder.slotCount }, _ => -5)
-  //   const plain = bgvBatchEncoder.encode(arr) as PlainText
-  //   const cipher = bgvEncryptor.encrypt(plain) as CipherText
-  //   item.cipherTransformToNtt(cipher, cipher)
-  //   const spyOn = jest.spyOn(item, 'cipherTransformFromNtt')
-  //   item.cipherTransformFromNtt(cipher, cipher)
-  //   expect(spyOn).toHaveBeenCalledWith(cipher, cipher)
-  // })
   test('It should cipherTransformFromNtt a cipher and return a cipher result (bfv) (int32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Int32Array.from({ length: bfvBatchEncoder.slotCount }, _ => -5)
@@ -3017,17 +2969,6 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher)
     expect(cipherDest.instance).toBeDefined()
   })
-  // test('It should cipherTransformFromNtt a cipher and return a cipher result (bgv) (int32)', () => {
-  //   const item = seal.Evaluator(bgvContext)
-  //   const arr = Int32Array.from({ length: bgvBatchEncoder.slotCount }, _ => -5)
-  //   const plain = bgvBatchEncoder.encode(arr) as PlainText
-  //   const cipher = bgvEncryptor.encrypt(plain) as CipherText
-  //   item.cipherTransformToNtt(cipher, cipher)
-  //   const spyOn = jest.spyOn(item, 'cipherTransformFromNtt')
-  //   const cipherDest = item.cipherTransformFromNtt(cipher) as CipherText
-  //   expect(spyOn).toHaveBeenCalledWith(cipher)
-  //   expect(cipherDest.instance).toBeDefined()
-  // })
   test('It should cipherTransformFromNtt a cipher to a destination cipher (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
@@ -3038,16 +2979,6 @@ describe('Evaluator', () => {
     item.cipherTransformFromNtt(cipher, cipher)
     expect(spyOn).toHaveBeenCalledWith(cipher, cipher)
   })
-  // test('It should cipherTransformFromNtt a cipher to a destination cipher (bgv) (uint32)', () => {
-  //   const item = seal.Evaluator(bgvContext)
-  //   const arr = Uint32Array.from({ length: bgvBatchEncoder.slotCount }, _ => 10)
-  //   const plain = bgvBatchEncoder.encode(arr) as PlainText
-  //   const cipher = bgvEncryptor.encrypt(plain) as CipherText
-  //   item.cipherTransformToNtt(cipher, cipher)
-  //   const spyOn = jest.spyOn(item, 'cipherTransformFromNtt')
-  //   item.cipherTransformFromNtt(cipher, cipher)
-  //   expect(spyOn).toHaveBeenCalledWith(cipher, cipher)
-  // })
   test('It should cipherTransformFromNtt a cipher and return a cipher result (bfv) (uint32)', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Uint32Array.from({ length: bfvBatchEncoder.slotCount }, _ => 10)
@@ -3059,17 +2990,6 @@ describe('Evaluator', () => {
     expect(spyOn).toHaveBeenCalledWith(cipher)
     expect(cipherDest.instance).toBeDefined()
   })
-  // test('It should cipherTransformFromNtt a cipher and return a cipher result (bgv) (uint32)', () => {
-  //   const item = seal.Evaluator(bgvContext)
-  //   const arr = Uint32Array.from({ length: bgvBatchEncoder.slotCount }, _ => 10)
-  //   const plain = bgvBatchEncoder.encode(arr) as PlainText
-  //   const cipher = bgvEncryptor.encrypt(plain) as CipherText
-  //   item.cipherTransformToNtt(cipher, cipher)
-  //   const spyOn = jest.spyOn(item, 'cipherTransformFromNtt')
-  //   const cipherDest = item.cipherTransformFromNtt(cipher) as CipherText
-  //   expect(spyOn).toHaveBeenCalledWith(cipher)
-  //   expect(cipherDest.instance).toBeDefined()
-  // })
   test('It should fail to cipherTransformFromNtt on ckks scheme', () => {
     const item = seal.Evaluator(bfvContext)
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }, _ => 10)
