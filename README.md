@@ -1,4 +1,4 @@
-# [node-seal](https://morfix.io/sandbox) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/morfix-io/node-seal/blob/master/LICENSE) [![codecov](https://codecov.io/gh/morfix-io/node-seal/branch/master/graph/badge.svg)](https://codecov.io/gh/morfix-io/node-seal) [![npm version](https://badge.fury.io/js/node-seal.svg)](https://www.npmjs.com/package/node-seal) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmorfix-io%2Fnode-seal.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmorfix-io%2Fnode-seal?ref=badge_shield)
+# [node-seal](https://morfix.io) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/morfix-io/node-seal/blob/master/LICENSE) [![codecov](https://codecov.io/gh/morfix-io/node-seal/branch/master/graph/badge.svg)](https://codecov.io/gh/morfix-io/node-seal) [![npm version](https://badge.fury.io/js/node-seal.svg)](https://www.npmjs.com/package/node-seal) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmorfix-io%2Fnode-seal.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmorfix-io%2Fnode-seal?ref=badge_shield)
 
 node-seal is a homomorphic encryption library for TypeScript or JavaScript.
 
@@ -66,7 +66,7 @@ WebView.
 
 ## Demo
 
-Go to [morfix.io/sandbox](https://morfix.io/sandbox)
+Go to [morfix.io](https://morfix.io)
 
 This sandbox was built for users to experiment and learn how to use Microsoft
 SEAL featuring node-seal.
@@ -90,7 +90,7 @@ View the latest docs [here](https://docs.morfix.io)
 
 ## Examples
 
-Check out the [Sandbox](https://morfix.io/sandbox) to run HE functions and even
+Check out the [Sandbox](https://morfix.io) to run HE functions and even
 generate working code!
 
 If you'd rather read an example, take a look [here](FULL-EXAMPLE.md).

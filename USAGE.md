@@ -40,7 +40,7 @@ seal.SchemeType.bgv
 seal.SchemeType.ckks
 ```
 
-Taken from Microsoft SEAL's docs: 
+Taken from Microsoft SEAL's docs:
 
 > The BFV and BGV schemes allow modular arithmetic to be performed on encrypted integers. The CKKS scheme allows additions and multiplications on encrypted real or complex numbers, but yields only approximate results. In applications such as summing up encrypted real numbers, evaluating machine learning models on encrypted data, or computing distances of encrypted locations CKKS is going to be by far the best choice. For applications where exact values are necessary, the BFV and BGV schemes are more suitable.
 
@@ -256,7 +256,7 @@ const decryptor = seal.Decryptor(context, secretKey)
 ### Functions
 
 We show homomorphic addition, but more functions are available and the code can
-be generated from the [demo](https://morfix.io/sandbox).
+be generated from the [demo](https://morfix.io).
 
 ```javascript
 ////////////////////////
