@@ -37,7 +37,7 @@ jobs:
           elif [ -f "${{ github.workspace }}/package.json" ]; then
             echo "manager=npm" >> $GITHUB_OUTPUT
             echo "command=ci" >> $GITHUB_OUTPUT
-            echo "runner=npx --no-install" >> $GITHUB_OUTPUT
+            echo "runner=npm" >> $GITHUB_OUTPUT
             exit 0
           else
             echo "Unable to determine packager manager"
@@ -64,7 +64,7 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Custom Build with Node
-        run: ${{ steps.detect-package-manager.outputs.runner }} docs
+        run: ${{ steps.detect-package-manager.outputs.runner }} run docs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
