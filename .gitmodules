@@ -1,6 +1,6 @@
 [submodule "submodules/SEAL"]
 	path = submodules/SEAL
-	url = https://github.com/morfix-io/SEAL.git
+	url = https://github.com/s0l0ist/SEAL.git
 [submodule "submodules/emsdk"]
 	path = submodules/emsdk
 	url = https://github.com/emscripten-core/emsdk.git
