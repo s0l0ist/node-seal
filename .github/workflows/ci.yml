@@ -54,15 +54,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Cache NPM Dependencies
-        id: cache-npm
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-d-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-d-node-
+          cache: 'npm'
 
       - name: Install NPM Dependencies
         run: |
