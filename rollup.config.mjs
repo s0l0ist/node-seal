@@ -5,7 +5,7 @@ import json from '@rollup/plugin-json'
 import typescript from 'rollup-plugin-typescript2'
 const formats = ['umd', 'es']
 const targets = ['allows', 'throws']
-const variants = ['wasm', 'js']
+const variants = ['wasm']
 const environments = ['node', 'web', 'worker']
 const outputs = formats.reduce(
   (acc, format) => [

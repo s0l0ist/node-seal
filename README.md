@@ -42,7 +42,7 @@ ciphertexts. This is also the default import that is used.
 
 The deep import link is structured like the following:
 
-`node-seal / <throws|allows>_<wasm|js>_<node|web|worker>_<umd|es>`
+`node-seal / <throws|allows>_wasm_<node|web|worker>_<umd|es>`
 
 ```javascript
 // Always Pick a variant which throws on transparent ciphertexts unless you

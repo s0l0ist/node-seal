@@ -53,7 +53,7 @@ describe('PlainModulus', () => {
     expect(vectModulus).toBeDefined()
     expect(typeof vectModulus.constructor).toBe('function')
     expect(vectModulus).toBeInstanceOf(Object)
-    expect(vectModulus.constructor.name).toBe('std$$vector$Modulus$')
+    expect(vectModulus.constructor.name).toBe('std::vector<Modulus>')
   })
   test('It should fail to create a Vector of Modulus', () => {
     const spyOn = jest.spyOn(seal.PlainModulus, 'BatchingVector')

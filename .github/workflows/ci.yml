@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Pull & update submodules
         run: |
           git submodule update --init
@@ -18,15 +18,15 @@ jobs:
       - name: EMSDK Version
         id: emsdk-version
         run: |
-          echo "::set-output name=SHA::$(./submodules/emsdk/emsdk list | grep recommended | awk -F'[()]' '{print $2}')"
+          echo "EMSDK_SHA=$(./submodules/emsdk/emsdk list | grep recommended | awk -F'[()]' '{print $2}')" >> $GITHUB_ENV
       - name: Cache EMSDK
         id: cache-emsdk
         uses: actions/cache@v3
         with:
           path: submodules/emsdk
-          key: ${{ runner.os }}-c-emsdk-${{ steps.emsdk-version.outputs.SHA }}
+          key: ${{ runner.os }}-d-emsdk-${{ env.EMSDK_SHA }}
           restore-keys: |
-            ${{ runner.os }}-c-emsdk-
+            ${{ runner.os }}-d-emsdk-
       - name: Update EMSDK
         if: steps.cache-emsdk.outputs.cache-hit != 'true'
         run: |
@@ -49,20 +49,12 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
-
-      - name: Cache NPM Dependencies
-        id: cache-npm
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-c-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-c-node-
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install NPM Dependencies
         run: |

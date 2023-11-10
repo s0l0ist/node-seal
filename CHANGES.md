@@ -3,6 +3,22 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 5.1.2
+
+Chore:
+
+- Updated all dev dependencies
+- Updated GHA runners to use Node v20 LTS (Iron)
+
+Fix:
+
+- Updated a test's return value that changed when using the latest emscripten SDK.
+
+Breaking:
+
+- Removed support for the pure JS build. Most modern JS environments use the
+  WASM variant and this particular build was incredibly slow and did not support memory over 2GB when invoking wasm2js
+
 ## Version 5.1.1
 
 Feat:

@@ -48,7 +48,7 @@ npm run em:update      # Updates the tag information
 Finally, configure the Microsoft SEAL build settings:
 
 ```shell
-npm run build          # Will build the two MS-SEAL variants (allows, throws), supporting `node`, `web`, and `worker` emscripten environments
+npm run build          # Will build the two MS-SEAL variants (allows, throws), supporting `node`, `web`, and `worker` emscripten environments. Mac M1+ machines will need to install rosetta (`softwareupdate --install-rosetta`) for the closure compiler.
 npm run test           # Will run jest tests on the *.ts files
 npm run coverage       # Check coverage
 npm run compile        # Test compile before bundling, useful for debugging
