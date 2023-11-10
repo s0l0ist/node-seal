@@ -17,7 +17,7 @@ Fix:
 Breaking:
 
 - Removed support for the pure JS build. Most modern JS environments use the
-  WASM variant and this particular build was incredibly slow and did not support memory over 2GB when invoking wasm2wat
+  WASM variant and this particular build was incredibly slow and did not support memory over 2GB when invoking wasm2js
 
 ## Version 5.1.1
 
