@@ -24,9 +24,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: submodules/emsdk
-          key: ${{ runner.os }}-c-emsdk-${{ steps.emsdk-version.outputs.SHA }}
+          key: ${{ runner.os }}-d-emsdk-${{ steps.emsdk-version.outputs.SHA }}
           restore-keys: |
-            ${{ runner.os }}-c-emsdk-
+            ${{ runner.os }}-d-emsdk-
       - name: Update EMSDK
         if: steps.cache-emsdk.outputs.cache-hit != 'true'
         run: |
@@ -60,9 +60,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-c-node-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-d-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-c-node-
+            ${{ runner.os }}-d-node-
 
       - name: Install NPM Dependencies
         run: |
