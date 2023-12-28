@@ -86,7 +86,7 @@ Checkout the [basics](USAGE.md)
 
 ## Documentation
 
-View the latest docs [here](https://docs.morfix.io)
+View the latest docs [here](https://s0l0ist.github.io/node-seal)
 
 ## Examples
 

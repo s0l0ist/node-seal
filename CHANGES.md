@@ -435,7 +435,7 @@ Feat:
 - Added `copy`, `clone` and `move` instance methods to `CipherTexts`, `PlainTexts`, and all variants of `Keys`.
 
   - Instead of assignment by reference in JS, use the new methods (this goes for all variables and key types)
-  - Examples can be found in the docs. For example, the [CipherText Docs](https://docs.morfix.io/CipherText.html)
+  - Examples can be found in the docs. For example, the [CipherText Docs](https://s0l0ist.github.io/node-seal/CipherText.html)
 
   ```javascript
   const cipherText = Morfix.CipherText()
