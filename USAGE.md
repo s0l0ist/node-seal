@@ -256,7 +256,7 @@ const decryptor = seal.Decryptor(context, secretKey)
 ### Functions
 
 We show homomorphic addition, but more functions are available and the code can
-be generated from the [demo](https://morfix.io).
+be generated from the [demo](https://s0l0ist.github.io/seal-sandbox/).
 
 ```javascript
 ////////////////////////

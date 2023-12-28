@@ -3,6 +3,12 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 5.1.3
+
+Chore:
+
+- Updated new links to Github pages and republish for npm to also have the updated links. No functional changes.
+
 ## Version 5.1.2
 
 Chore:
