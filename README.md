@@ -1,4 +1,4 @@
-# [node-seal](https://github.com/s0l0ist/node-seal) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/s0l0ist/node-seal/blob/main/LICENSE) [![codecov](https://codecov.io/gh/s0l0ist/node-seal/branch/main/graph/badge.svg)](https://codecov.io/gh/s0l0ist/node-seal) [![npm version](https://badge.fury.io/js/node-seal.svg)](https://www.npmjs.com/package/node-seal) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmorfix-io%2Fnode-seal.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmorfix-io%2Fnode-seal?ref=badge_shield)
+# [node-seal](https://github.com/s0l0ist/node-seal) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/s0l0ist/node-seal/blob/main/LICENSE) [![codecov](https://codecov.io/gh/s0l0ist/node-seal/branch/main/graph/badge.svg)](https://codecov.io/gh/s0l0ist/node-seal) [![npm version](https://badge.fury.io/js/node-seal.svg)](https://www.npmjs.com/package/node-seal) [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fs0l0ist%2Fnode-seal.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fs0l0ist%2Fnode-seal?ref=badge_shield&issueType=license)
 
 node-seal is a homomorphic encryption library for TypeScript or JavaScript.
 
@@ -66,7 +66,7 @@ WebView.
 
 ## Demo
 
-Go to [morfix.io](https://s0l0ist.github.io/seal-sandbox/)
+Go to the [sandbox](https://s0l0ist.github.io/seal-sandbox/)
 
 This sandbox was built for users to experiment and learn how to use Microsoft
 SEAL featuring node-seal.
@@ -560,5 +560,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 node-seal is [MIT licensed](LICENSE).
 
-[![FOSSA
-Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmorfix-io%2Fnode-seal.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmorfix-io%2Fnode-seal?ref=badge_large)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fs0l0ist%2Fnode-seal.svg?type=large&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fs0l0ist%2Fnode-seal?ref=badge_large&issueType=license)
