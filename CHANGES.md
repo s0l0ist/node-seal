@@ -9,6 +9,9 @@ Feat:
 
 - Updated to SEAL 4.1.2
 
+Chore:
+
+- Updated all dev dependencies
 
 ## Version 5.1.3
 
