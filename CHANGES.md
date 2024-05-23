@@ -3,6 +3,20 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 5.1.4
+
+Feat:
+
+- Updated to SEAL 4.1.2
+
+Chore:
+
+- Updated all dev dependencies
+- Removed mentions of morfix-io in URL links as it doesn't exist anymore
+- Updated import ordering in all source files (no functional changes)
+- Moved .eslintrc.js to .eslint.config.js
+- Updated github workflow deps
+
 ## Version 5.1.3
 
 Chore:

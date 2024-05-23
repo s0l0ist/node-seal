@@ -1,7 +1,7 @@
-import { LoaderOptions, Library, Instance } from './seal'
-import { Exception, SealError } from './exception'
-import { VectorConstructorOptions } from './vector'
 import { ComprModeType } from './compr-mode-type'
+import { Exception, SealError } from './exception'
+import { Instance, Library, LoaderOptions } from './seal'
+import { VectorConstructorOptions } from './vector'
 
 export type ModulusDependencyOptions = {
   readonly Exception: Exception

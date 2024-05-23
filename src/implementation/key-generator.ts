@@ -1,11 +1,11 @@
-import { LoaderOptions, Library, Instance } from './seal'
-import { Exception, SealError } from './exception'
 import { Context } from './context'
-import { SecretKey, SecretKeyConstructorOptions } from './secret-key'
-import { RelinKeys, RelinKeysConstructorOptions } from './relin-keys'
-import { Serializable, SerializableConstructorOptions } from './serializable'
-import { PublicKey, PublicKeyConstructorOptions } from './public-key'
+import { Exception, SealError } from './exception'
 import { GaloisKeys, GaloisKeysConstructorOptions } from './galois-keys'
+import { PublicKey, PublicKeyConstructorOptions } from './public-key'
+import { RelinKeys, RelinKeysConstructorOptions } from './relin-keys'
+import { Instance, Library, LoaderOptions } from './seal'
+import { SecretKey, SecretKeyConstructorOptions } from './secret-key'
+import { Serializable, SerializableConstructorOptions } from './serializable'
 
 export type KeyGeneratorDependencyOptions = {
   readonly Exception: Exception

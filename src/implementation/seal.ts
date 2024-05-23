@@ -1,3 +1,4 @@
+import { version } from '../../package.json'
 import {
   BatchEncoderConstructorOptions,
   BatchEncoderDependencies
@@ -12,11 +13,11 @@ import {
 } from './ckks-encoder'
 import { CoeffModulus, CoeffModulusDependencies } from './coeff-modulus'
 import { ComprModeType, ComprModeTypeDependencies } from './compr-mode-type'
+import { ContextConstructorOptions, ContextDependencies } from './context'
 import {
   ContextDataConstructorOptions,
   ContextDataDependencies
 } from './context-data'
-import { ContextConstructorOptions, ContextDependencies } from './context'
 import { DecryptorConstructorOptions, DecryptorDependencies } from './decryptor'
 import {
   EncryptionParameterQualifiersConstructorOptions,
@@ -34,6 +35,10 @@ import {
   GaloisKeysDependencies
 } from './galois-keys'
 import {
+  KeyGeneratorConstructorOptions,
+  KeyGeneratorDependencies
+} from './key-generator'
+import {
   MemoryPoolHandle,
   MemoryPoolHandleDependencies
 } from './memory-pool-handle'
@@ -42,11 +47,11 @@ import {
   ParmsIdTypeConstructorOptions,
   ParmsIdTypeDependencies
 } from './parms-id-type'
+import { PlainModulus, PlainModulusDependencies } from './plain-modulus'
 import {
   PlainTextConstructorOptions,
   PlainTextDependencies
 } from './plain-text'
-import { PlainModulus, PlainModulusDependencies } from './plain-modulus'
 import {
   PublicKeyConstructorOptions,
   PublicKeyDependencies
@@ -66,11 +71,6 @@ import {
   SerializableDependencies
 } from './serializable'
 import { VectorConstructorOptions, VectorDependencies } from './vector'
-import {
-  KeyGeneratorConstructorOptions,
-  KeyGeneratorDependencies
-} from './key-generator'
-import { version } from '../../package.json'
 
 export type Instance = any
 export type Loader = any

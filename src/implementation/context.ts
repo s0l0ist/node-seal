@@ -1,7 +1,7 @@
-import { LoaderOptions, Library, Instance } from './seal'
-import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
 import { ContextData, ContextDataConstructorOptions } from './context-data'
 import { EncryptionParameters } from './encryption-parameters'
+import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
+import { Instance, Library, LoaderOptions } from './seal'
 import { SecurityLevel } from './security-level'
 
 export type ContextDependencyOptions = {

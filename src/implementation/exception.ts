@@ -1,4 +1,4 @@
-import { LoaderOptions, Library } from './seal'
+import { Library, LoaderOptions } from './seal'
 
 export type ExceptionDependencies = {
   (): ExceptionConstructorOptions

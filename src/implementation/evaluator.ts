@@ -1,13 +1,13 @@
-import { LoaderOptions, Library, Instance } from './seal'
-import { Exception, SealError } from './exception'
 import { CipherText, CipherTextConstructorOptions } from './cipher-text'
 import { Context } from './context'
-import { PlainText, PlainTextConstructorOptions } from './plain-text'
-import { MemoryPoolHandle } from './memory-pool-handle'
-import { RelinKeys } from './relin-keys'
-import { ParmsIdType } from './parms-id-type'
+import { Exception, SealError } from './exception'
 import { GaloisKeys } from './galois-keys'
+import { MemoryPoolHandle } from './memory-pool-handle'
+import { ParmsIdType } from './parms-id-type'
+import { PlainText, PlainTextConstructorOptions } from './plain-text'
+import { RelinKeys } from './relin-keys'
 import { SchemeType } from './scheme-type'
+import { Instance, Library, LoaderOptions } from './seal'
 
 export type EvaluatorDependencyOptions = {
   readonly Exception: Exception

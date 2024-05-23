@@ -1,6 +1,6 @@
-import { LoaderOptions, Instance, Library } from './seal'
-import { Exception, SealError } from './exception'
 import { INSTANCE_DELETED, UNSUPPORTED_VECTOR_TYPE } from './constants'
+import { Exception, SealError } from './exception'
+import { Instance, Library, LoaderOptions } from './seal'
 
 export type VectorDependencyOptions = {
   readonly Exception: Exception

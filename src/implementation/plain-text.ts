@@ -1,11 +1,11 @@
 import { ComprModeType } from './compr-mode-type'
+import { INVALID_PLAIN_CONSRUCTOR_OPTIONS } from './constants'
 import { Context } from './context'
-import { LoaderOptions, Library, Instance } from './seal'
 import { Exception, SealError } from './exception'
 import { MemoryPoolHandle } from './memory-pool-handle'
 import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
+import { Instance, Library, LoaderOptions } from './seal'
 import { VectorConstructorOptions } from './vector'
-import { INVALID_PLAIN_CONSRUCTOR_OPTIONS } from './constants'
 export type PlainTextDependencyOptions = {
   readonly Exception: Exception
   readonly ComprModeType: ComprModeType
