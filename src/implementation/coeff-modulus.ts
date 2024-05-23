@@ -1,8 +1,8 @@
-import { LoaderOptions, Library } from './seal'
+import { UNSUPPORTED_BITSIZES_TYPE } from './constants'
 import { Exception, SealError } from './exception'
+import { Library, LoaderOptions } from './seal'
 import { SecurityLevel } from './security-level'
 import { Vector, VectorConstructorOptions } from './vector'
-import { UNSUPPORTED_BITSIZES_TYPE } from './constants'
 
 export type CoeffModulusDependencyOptions = {
   readonly Exception: Exception

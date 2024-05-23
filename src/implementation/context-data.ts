@@ -1,14 +1,14 @@
-import { LoaderOptions, Library, Instance } from './seal'
-import { Exception } from './exception'
-import {
-  EncryptionParameters,
-  EncryptionParametersConstructorOptions
-} from './encryption-parameters'
-import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
 import {
   EncryptionParameterQualifiers,
   EncryptionParameterQualifiersConstructorOptions
 } from './encryption-parameter-qualifiers'
+import {
+  EncryptionParameters,
+  EncryptionParametersConstructorOptions
+} from './encryption-parameters'
+import { Exception } from './exception'
+import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
+import { Instance, Library, LoaderOptions } from './seal'
 
 export type ContextDataDependencyOptions = {
   readonly Exception: Exception

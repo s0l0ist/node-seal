@@ -1,10 +1,10 @@
-import { LoaderOptions, Library, Instance } from './seal'
+import { UNSUPPORTED_BATCH_ENCODE_ARRAY_TYPE } from './constants'
+import { Context } from './context'
 import { Exception, SealError } from './exception'
-import { VectorConstructorOptions } from './vector'
 import { MemoryPoolHandle } from './memory-pool-handle'
 import { PlainText, PlainTextConstructorOptions } from './plain-text'
-import { Context } from './context'
-import { UNSUPPORTED_BATCH_ENCODE_ARRAY_TYPE } from './constants'
+import { Instance, Library, LoaderOptions } from './seal'
+import { VectorConstructorOptions } from './vector'
 
 export type BatchEncoderDependencyOptions = {
   readonly Exception: Exception

@@ -1,9 +1,9 @@
-import { LoaderOptions, Library, Instance } from './seal'
-import { Exception, SealError } from './exception'
 import { CipherText } from './cipher-text'
 import { Context } from './context'
-import { SecretKey } from './secret-key'
+import { Exception, SealError } from './exception'
 import { PlainText, PlainTextConstructorOptions } from './plain-text'
+import { Instance, Library, LoaderOptions } from './seal'
+import { SecretKey } from './secret-key'
 
 export type DecryptorDependencyOptions = {
   readonly Exception: Exception

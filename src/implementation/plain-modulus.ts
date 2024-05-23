@@ -1,6 +1,6 @@
-import { LoaderOptions, Library } from './seal'
 import { Exception, SealError } from './exception'
 import { Modulus, ModulusConstructorOptions } from './modulus'
+import { Library, LoaderOptions } from './seal'
 import { Vector, VectorConstructorOptions } from './vector'
 
 export type PlainModulusDependencyOptions = {

@@ -1,10 +1,10 @@
-import { LoaderOptions, Library, Instance } from './seal'
-import { Vector, VectorConstructorOptions } from './vector'
 import { ComprModeType } from './compr-mode-type'
-import { SchemeType } from './scheme-type'
 import { Exception, SealError } from './exception'
 import { Modulus, ModulusConstructorOptions } from './modulus'
 import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
+import { SchemeType } from './scheme-type'
+import { Instance, Library, LoaderOptions } from './seal'
+import { Vector, VectorConstructorOptions } from './vector'
 
 export type EncryptionParametersDependencyOptions = {
   readonly Exception: Exception

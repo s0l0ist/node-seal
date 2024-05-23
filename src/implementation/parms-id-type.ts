@@ -1,5 +1,5 @@
-import { LoaderOptions, Instance, Library } from './seal'
 import { Exception, SealError } from './exception'
+import { Instance, Library, LoaderOptions } from './seal'
 
 export type ParmsIdTypeDependencyOptions = {
   readonly Exception: Exception

@@ -1,5 +1,5 @@
-import { SEALLibrary } from './implementation/seal'
 import sealLibrary from 'seal_throws_wasm_web'
+import { SEALLibrary } from './implementation/seal'
 import { Loader, createLoader } from './main/loader'
 import { SEAL } from './main/seal'
 /**
