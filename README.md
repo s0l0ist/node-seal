@@ -8,7 +8,7 @@ node-seal is a homomorphic encryption library for TypeScript or JavaScript.
   close to the C++ calls from Microsoft SEAL.
 - **Node.js, Browser:** Install once, work in any server/client configuration.
 
-**Now supporting Microsoft SEAL 4.1.1**
+**Now supporting Microsoft SEAL 4.1.2**
 
 ## Installation
 
