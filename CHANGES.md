@@ -3,6 +3,13 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 5.1.5
+
+Chore:
+
+- Updated build dependencies
+- Emsdk 4.0.4
+
 ## Version 5.1.4
 
 Feat:

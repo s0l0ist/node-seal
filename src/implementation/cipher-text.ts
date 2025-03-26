@@ -99,7 +99,7 @@ const CipherTextConstructor =
       parmsId?: ParmsIdType
       sizeCapacity?: number
       pool?: MemoryPoolHandle
-    }) {
+    } = {}) {
       try {
         if (!context && !parmsId && sizeCapacity === undefined) {
           return new Constructor(pool)

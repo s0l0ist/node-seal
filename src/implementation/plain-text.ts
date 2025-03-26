@@ -96,7 +96,7 @@ const PlainTextConstructor =
       capacity?: number
       coeffCount?: number
       pool?: MemoryPoolHandle
-    }) {
+    } = {}) {
       try {
         if (capacity === undefined && coeffCount === undefined) {
           return new Constructor(pool)
