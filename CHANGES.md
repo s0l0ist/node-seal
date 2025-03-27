@@ -9,6 +9,7 @@ Chore:
 
 - Updated build dependencies
 - Emsdk 4.0.4
+- Updated benchmark
 
 ## Version 5.1.4
 
