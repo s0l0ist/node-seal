@@ -7,9 +7,9 @@ for more details on each SEAL version change.
 
 Chore:
 
-- Updated build dependencies
-- Latest EMSDK compilation results in a noticable speedup.
-- Updated benchmarks
+- Updated all build dependencies
+- Compiling with EMSDK (v4.0.6) results in a noticable speedup from the previous build.
+- Updated benchmarks and added the `Bun` runtime.
 
 ## Version 5.1.4
 
