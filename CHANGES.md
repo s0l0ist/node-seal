@@ -3,6 +3,14 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 5.1.5
+
+Chore:
+
+- Updated all build dependencies
+- Compiling with EMSDK (v4.0.6) results in a noticable speedup from the previous build.
+- Updated benchmarks and added the `Bun` runtime.
+
 ## Version 5.1.4
 
 Feat:

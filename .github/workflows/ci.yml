@@ -39,7 +39,7 @@ jobs:
 
       - name: Save artifacts
         if: steps.cache-seal.outputs.cache-hit != 'true'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: seal-artifacts
           path: src/bin/
@@ -53,7 +53,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install NPM Dependencies
@@ -61,7 +61,7 @@ jobs:
           npm install
 
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: seal-artifacts
           path: src/bin/
@@ -76,4 +76,4 @@ jobs:
         run: |
           npm run coverage
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
