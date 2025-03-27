@@ -8,8 +8,8 @@ for more details on each SEAL version change.
 Chore:
 
 - Updated build dependencies
-- Emsdk 4.0.4
-- Updated benchmark
+- Latest EMSDK compilation results in a noticable speedup.
+- Updated benchmarks
 
 ## Version 5.1.4
 
