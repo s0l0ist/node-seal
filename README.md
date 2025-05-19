@@ -55,14 +55,31 @@ import SEAL from 'node-seal/allows_wasm_node_umd'
 
 #### React-Native
 
-React-native does not support WASM libraries; however, it is possible to run a
-WASM library, including `node-seal` by using a
+React-native does not support Wasm libraries; however, it is possible to run a
+Wasm library, including `node-seal` by using a
 [WebView](https://github.com/react-native-webview/react-native-webview#readme)
 to load both the library and a simple interface to communicate with on top of
 the built-in `postMessage` API. Instead of publicly hosting the web application
 to be rendered by the WebView, it is possible to bundle the mini web application
 into a single HTML file (with JS inlined) and load the HTML file directly to the
 WebView.
+
+#### Cloudflare Workers
+
+The Wasm library needs to be explicitly imported, it will be compiled and
+provided by the Cloudflare Workers runtime. Example:
+
+```javascript
+import SEAL from 'node-seal/throws_wasm_cf_worker_es'
+import wasm from 'node-seal/seal_throws_wasm_cf_worker.wasm';
+
+export default {
+    async fetch(request) {
+        const seal = await SEAL(wasm);
+        return new Response(seal.Version);
+    },
+};
+```
 
 ## Demo
 

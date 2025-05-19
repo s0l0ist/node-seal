@@ -1,3 +1,4 @@
+import copy from 'rollup-plugin-copy'
 import terser from '@rollup/plugin-terser'
 import alias from '@rollup/plugin-alias'
 import commonjs from '@rollup/plugin-commonjs'
@@ -6,7 +7,7 @@ import typescript from 'rollup-plugin-typescript2'
 const formats = ['umd', 'es']
 const targets = ['allows', 'throws']
 const variants = ['wasm']
-const environments = ['node', 'web', 'worker']
+const environments = ['node', 'web', 'worker', "cf_worker"]
 const outputs = formats.reduce(
   (acc, format) => [
     ...acc,
@@ -47,7 +48,12 @@ const outputs = formats.reduce(
                     json({ compact: true }),
                     typescript({
                       verbosity: 2
-                    })
+                    }),
+                    environment === 'cf_worker' && copy({
+                        targets: [
+                          { src: 'submodules/SEAL/build/lib/seal_throws_wasm_cf_worker.wasm', dest: 'dist/' },
+                        ]
+                      })
                   ].filter(Boolean)
                 }
               ],
