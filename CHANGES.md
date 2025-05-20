@@ -7,7 +7,7 @@ for more details on each SEAL version change.
 
 Feat:
 
-- Support CloudFlare workers, thanks @xtuc!
+- Support Cloudflare Workers, thanks @xtuc!
 
 Chore:
 
