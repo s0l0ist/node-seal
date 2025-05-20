@@ -3,6 +3,17 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 5.1.6
+
+Feat:
+
+- Support CloudFlare workers, thanks @xtuc!
+
+Chore:
+
+- Updated all build dependencies
+- Compiling with EMSDK (v4.0.9)
+
 ## Version 5.1.5
 
 Chore:
