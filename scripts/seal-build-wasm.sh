@@ -13,24 +13,27 @@ else
   TYPE="throws"
 fi
 
-SINGLE_FILE=1
-DYNAMIC_EXECUTION=1
-
 if [[ "$ENVIRONMENT" == "node" ]]; then
   TARGET="node"
   EXPORT_ES6=0
+  SINGLE_FILE=1
+  DYNAMIC_EXECUTION=1
 elif [[ "$ENVIRONMENT" == "web,webview" ]]; then
   TARGET="web"
   EXPORT_ES6=1
-elif [[ "$ENVIRONMENT" == "worker" ]]; then
-  TARGET="worker"
-  EXPORT_ES6=1
-elif [[ "$ENVIRONMENT" == "cf_worker" ]]; then
+  SINGLE_FILE=1
+  DYNAMIC_EXECUTION=1
+  elif [[ "$ENVIRONMENT" == "cf_worker" ]]; then
   ENVIRONMENT="worker"
   TARGET="cf_worker"
   EXPORT_ES6=1
   SINGLE_FILE=0 # disabled since we cannot eval the base64 wasm
   DYNAMIC_EXECUTION=0 # do not emit eval() and new Function()
+elif [[ "$ENVIRONMENT" == "worker" ]]; then
+  TARGET="worker"
+  EXPORT_ES6=1
+  SINGLE_FILE=1
+  DYNAMIC_EXECUTION=1
 fi
 
 FILE_NAME="seal_${TYPE}_wasm_${TARGET}.js"
