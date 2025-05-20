@@ -13,6 +13,9 @@ else
   TYPE="throws"
 fi
 
+SINGLE_FILE=1
+DYNAMIC_EXECUTION=1
+
 if [[ "$ENVIRONMENT" == "node" ]]; then
   TARGET="node"
   EXPORT_ES6=0
@@ -22,6 +25,12 @@ elif [[ "$ENVIRONMENT" == "web,webview" ]]; then
 elif [[ "$ENVIRONMENT" == "worker" ]]; then
   TARGET="worker"
   EXPORT_ES6=1
+elif [[ "$ENVIRONMENT" == "cf_worker" ]]; then
+  ENVIRONMENT="worker"
+  TARGET="cf_worker"
+  EXPORT_ES6=1
+  SINGLE_FILE=0 # disabled since we cannot eval the base64 wasm
+  DYNAMIC_EXECUTION=0 # do not emit eval() and new Function()
 fi
 
 FILE_NAME="seal_${TYPE}_wasm_${TARGET}.js"
@@ -35,9 +44,10 @@ emcc \
   -o "${FILE_NAME}" \
   -s WASM=1 \
   -s ALLOW_MEMORY_GROWTH=1 \
+  -s DYNAMIC_EXECUTION=${DYNAMIC_EXECUTION} \
   -s EXPORT_ES6=${EXPORT_ES6} \
   -s MODULARIZE=1 \
-  -s SINGLE_FILE=1 \
+  -s SINGLE_FILE=${SINGLE_FILE} \
   -s MAXIMUM_MEMORY=4GB \
   -s ENVIRONMENT="${ENVIRONMENT}" \
   --closure 1
