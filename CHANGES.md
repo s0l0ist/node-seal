@@ -3,6 +3,14 @@
 See [Microsoft's Change log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md)
 for more details on each SEAL version change.
 
+## Version 5.1.7
+
+Chore:
+
+- Updated all build dependencies
+- Automate publishing from GHA
+- Update `types` to proper `interface`s
+
 ## Version 5.1.6
 
 Feat:
@@ -472,7 +480,6 @@ Feat:
 Feat:
 
 - Added `copy`, `clone` and `move` instance methods to `CipherTexts`, `PlainTexts`, and all variants of `Keys`.
-
   - Instead of assignment by reference in JS, use the new methods (this goes for all variables and key types)
   - Examples can be found in the docs. For example, the [CipherText Docs](https://s0l0ist.github.io/node-seal/CipherText.html)
 
