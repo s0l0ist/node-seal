@@ -25,9 +25,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: submodules/emsdk
-          key: ${{ runner.os }}-d-emsdk-${{ env.EMSDK_SHA }}
+          key: ${{ runner.os }}-e-emsdk-${{ env.EMSDK_SHA }}
           restore-keys: |
-            ${{ runner.os }}-d-emsdk-
+            ${{ runner.os }}-e-emsdk-
       - name: Update EMSDK
         if: steps.cache-emsdk.outputs.cache-hit != 'true'
         run: |
