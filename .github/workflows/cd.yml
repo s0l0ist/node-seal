@@ -57,9 +57,6 @@ jobs:
       - name: Bundle
         run: npm run rollup
 
-      - name: Publish Test
-        run: npm run publish:test
-
       - name: Publish
         run: npm publish --provenance --access public
         env:
