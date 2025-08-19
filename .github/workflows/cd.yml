@@ -58,6 +58,6 @@ jobs:
         run: npm run rollup
 
       - name: Publish
-        run: npm publish --provenance --access public
+        run: npm run publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_GITHUB }}
