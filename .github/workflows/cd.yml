@@ -37,6 +37,9 @@ jobs:
           cache: 'npm'
 
       - name: Compile SEAL
+        run: npm run clean
+
+      - name: Compile SEAL
         run: npm run build
 
       - name: Compile SEAL
