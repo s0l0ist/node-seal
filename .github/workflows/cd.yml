@@ -30,6 +30,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-e-emsdk-
 
+      - name: Update EMSDK
+        if: steps.cache-emsdk.outputs.cache-hit != 'true'
+        run: |
+          npm run em:update
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
