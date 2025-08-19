@@ -1,6 +1,6 @@
 import { Library } from '../implementation/seal'
 
-export type Loader = {
+export interface Loader {
   readonly library: Library
 }
 

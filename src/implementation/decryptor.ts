@@ -5,23 +5,23 @@ import { PlainText, PlainTextConstructorOptions } from './plain-text'
 import { Instance, Library, LoaderOptions } from './seal'
 import { SecretKey } from './secret-key'
 
-export type DecryptorDependencyOptions = {
+export interface DecryptorDependencyOptions {
   readonly Exception: Exception
   readonly PlainText: PlainTextConstructorOptions
 }
 
-export type DecryptorDependencies = {
+export interface DecryptorDependencies {
   ({
     Exception,
     PlainText
   }: DecryptorDependencyOptions): DecryptorConstructorOptions
 }
 
-export type DecryptorConstructorOptions = {
+export interface DecryptorConstructorOptions {
   (context: Context, secretKey: SecretKey): Decryptor
 }
 
-export type Decryptor = {
+export interface Decryptor {
   readonly instance: Instance
   readonly unsafeInject: (instance: Instance) => void
   readonly delete: () => void

@@ -4,13 +4,13 @@ import { Exception, SealError } from './exception'
 import { Instance, Library, LoaderOptions } from './seal'
 import { VectorConstructorOptions } from './vector'
 
-export type GaloisKeysDependencyOptions = {
+export interface GaloisKeysDependencyOptions {
   readonly Exception: Exception
   readonly ComprModeType: ComprModeType
   readonly Vector: VectorConstructorOptions
 }
 
-export type GaloisKeysDependencies = {
+export interface GaloisKeysDependencies {
   ({
     Exception,
     ComprModeType,
@@ -18,11 +18,11 @@ export type GaloisKeysDependencies = {
   }: GaloisKeysDependencyOptions): GaloisKeysConstructorOptions
 }
 
-export type GaloisKeysConstructorOptions = {
+export interface GaloisKeysConstructorOptions {
   (): GaloisKeys
 }
 
-export type GaloisKeys = {
+export interface GaloisKeys {
   readonly instance: Instance
   readonly inject: (instance: Instance) => void
   readonly delete: () => void

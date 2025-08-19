@@ -1,0 +1,54 @@
+name: CD
+
+on:
+  # push:
+  #   branches:
+  #     - main
+  # allow manual triggers
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pull & update submodules
+        run: |
+          git submodule update --init
+
+      - name: EMSDK Version
+        id: emsdk-version
+        run: |
+          echo "EMSDK_SHA=$(./submodules/emsdk/emsdk list | grep recommended | awk -F'[()]' '{print $2}')" >> $GITHUB_ENV
+      - name: Cache EMSDK
+        id: cache-emsdk
+        uses: actions/cache@v3
+        with:
+          path: submodules/emsdk
+          key: ${{ runner.os }}-d-emsdk-${{ env.EMSDK_SHA }}
+          restore-keys: |
+            ${{ runner.os }}-d-emsdk-
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Compile SEAL
+        run: npm run build
+
+      - name: Compile SEAL
+        run: npm run compile
+
+      - name: Bundle
+        run: npm run rollup
+
+      - name: Publish Test
+        run: npm run publish:test
+
+      - name: Publish Test
+        run: npm run publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_GITHUB }}

@@ -2,19 +2,19 @@ import { INSTANCE_DELETED, UNSUPPORTED_VECTOR_TYPE } from './constants'
 import { Exception, SealError } from './exception'
 import { Instance, Library, LoaderOptions } from './seal'
 
-export type VectorDependencyOptions = {
+export interface VectorDependencyOptions {
   readonly Exception: Exception
 }
 
-export type VectorDependencies = {
+export interface VectorDependencies {
   ({ Exception }: VectorDependencyOptions): VectorConstructorOptions
 }
 
-export type VectorConstructorOptions = {
+export interface VectorConstructorOptions {
   (): Vector
 }
 
-export type Vector = {
+export interface Vector {
   readonly instance: Instance
   readonly unsafeInject: (instance: Instance) => void
   readonly delete: () => void

@@ -8,14 +8,14 @@ import { Instance, Library, LoaderOptions } from './seal'
 import { SecretKey } from './secret-key'
 import { Serializable, SerializableConstructorOptions } from './serializable'
 
-export type EncryptorDependencyOptions = {
+export interface EncryptorDependencyOptions {
   readonly Exception: Exception
   readonly MemoryPoolHandle: MemoryPoolHandle
   readonly CipherText: CipherTextConstructorOptions
   readonly Serializable: SerializableConstructorOptions
 }
 
-export type EncryptorDependencies = {
+export interface EncryptorDependencies {
   ({
     Exception,
     MemoryPoolHandle,
@@ -24,11 +24,11 @@ export type EncryptorDependencies = {
   }: EncryptorDependencyOptions): EncryptorConstructorOptions
 }
 
-export type EncryptorConstructorOptions = {
+export interface EncryptorConstructorOptions {
   (context: Context, publicKey: PublicKey, secretKey?: SecretKey): Encryptor
 }
 
-export type Encryptor = {
+export interface Encryptor {
   readonly instance: Instance
   readonly unsafeInject: (instance: Instance) => void
   readonly delete: () => void

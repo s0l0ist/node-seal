@@ -1,19 +1,19 @@
 import { Exception, SealError } from './exception'
 import { Instance, Library, LoaderOptions } from './seal'
 
-export type ParmsIdTypeDependencyOptions = {
+export interface ParmsIdTypeDependencyOptions {
   readonly Exception: Exception
 }
 
-export type ParmsIdTypeDependencies = {
+export interface ParmsIdTypeDependencies {
   ({ Exception }: ParmsIdTypeDependencyOptions): ParmsIdTypeConstructorOptions
 }
 
-export type ParmsIdTypeConstructorOptions = {
+export interface ParmsIdTypeConstructorOptions {
   (): ParmsIdType
 }
 
-export type ParmsIdType = {
+export interface ParmsIdType {
   readonly instance: Instance
   readonly inject: (instance: Instance) => void
   readonly delete: () => void

@@ -3,13 +3,13 @@ import { Exception, SealError } from './exception'
 import { Instance, Library, LoaderOptions } from './seal'
 import { VectorConstructorOptions } from './vector'
 
-export type ModulusDependencyOptions = {
+export interface ModulusDependencyOptions {
   readonly Exception: Exception
   readonly ComprModeType: ComprModeType
   readonly Vector: VectorConstructorOptions
 }
 
-export type ModulusDependencies = {
+export interface ModulusDependencies {
   ({
     Exception,
     ComprModeType,
@@ -17,11 +17,11 @@ export type ModulusDependencies = {
   }: ModulusDependencyOptions): ModulusConstructorOptions
 }
 
-export type ModulusConstructorOptions = {
+export interface ModulusConstructorOptions {
   (value: bigint): Modulus
 }
 
-export type Modulus = {
+export interface Modulus {
   readonly instance: Instance
   readonly inject: (instance: Instance) => void
   readonly delete: () => void

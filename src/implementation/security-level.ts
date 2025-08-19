@@ -1,14 +1,14 @@
 import { Library, LoaderOptions } from './seal'
 
-export type SecurityLevelDependencies = {
+export interface SecurityLevelDependencies {
   (): SecurityLevelConstructorOptions
 }
 
-export type SecurityLevelConstructorOptions = {
+export interface SecurityLevelConstructorOptions {
   (): SecurityLevel
 }
 
-export type SecurityLevel = {
+export interface SecurityLevel {
   readonly none: any
   readonly tc128: any
   readonly tc192: any

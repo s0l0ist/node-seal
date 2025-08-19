@@ -1,16 +1,16 @@
 import { Library, LoaderOptions } from './seal'
 
-export type ExceptionDependencies = {
+export interface ExceptionDependencies {
   (): ExceptionConstructorOptions
 }
 
-export type ExceptionConstructorOptions = {
+export interface ExceptionConstructorOptions {
   (): Exception
 }
 
 export type SealError = number | Error | string
 
-export type Exception = {
+export interface Exception {
   readonly safe: (e: SealError) => Error
 }
 

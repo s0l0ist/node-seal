@@ -9,14 +9,14 @@ import { RelinKeys } from './relin-keys'
 import { SchemeType } from './scheme-type'
 import { Instance, Library, LoaderOptions } from './seal'
 
-export type EvaluatorDependencyOptions = {
+export interface EvaluatorDependencyOptions {
   readonly Exception: Exception
   readonly MemoryPoolHandle: MemoryPoolHandle
   readonly CipherText: CipherTextConstructorOptions
   readonly PlainText: PlainTextConstructorOptions
 }
 
-export type EvaluatorDependencies = {
+export interface EvaluatorDependencies {
   ({
     Exception,
     MemoryPoolHandle,
@@ -25,11 +25,11 @@ export type EvaluatorDependencies = {
   }: EvaluatorDependencyOptions): EvaluatorConstructorOptions
 }
 
-export type EvaluatorConstructorOptions = {
+export interface EvaluatorConstructorOptions {
   (context: Context): Evaluator
 }
 
-export type Evaluator = {
+export interface Evaluator {
   readonly instance: Instance
   readonly unsafeInject: (instance: Instance) => void
   readonly delete: () => void

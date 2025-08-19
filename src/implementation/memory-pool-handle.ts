@@ -1,14 +1,14 @@
 import { Library, LoaderOptions } from './seal'
 
-export type MemoryPoolHandleDependencies = {
+export interface MemoryPoolHandleDependencies {
   (): MemoryPoolHandleConstructorOptions
 }
 
-export type MemoryPoolHandleConstructorOptions = {
+export interface MemoryPoolHandleConstructorOptions {
   (): MemoryPoolHandle
 }
 
-export type MemoryPoolHandle = {
+export interface MemoryPoolHandle {
   readonly global: any
   readonly threadLocal: any
 }

@@ -3,13 +3,13 @@ import { Exception, SealError } from './exception'
 import { Instance } from './seal'
 import { VectorConstructorOptions } from './vector'
 
-export type SerializableDependencyOptions = {
+export interface SerializableDependencyOptions {
   readonly Exception: Exception
   readonly Vector: VectorConstructorOptions
   readonly ComprModeType: ComprModeType
 }
 
-export type SerializableDependencies = {
+export interface SerializableDependencies {
   ({
     Exception,
     Vector,
@@ -17,11 +17,11 @@ export type SerializableDependencies = {
   }: SerializableDependencyOptions): SerializableConstructorOptions
 }
 
-export type SerializableConstructorOptions = {
+export interface SerializableConstructorOptions {
   (): Serializable
 }
 
-export type Serializable = {
+export interface Serializable {
   readonly instance: Instance
   readonly unsafeInject: (instance: Instance) => void
   readonly delete: () => void

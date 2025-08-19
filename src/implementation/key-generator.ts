@@ -7,7 +7,7 @@ import { Instance, Library, LoaderOptions } from './seal'
 import { SecretKey, SecretKeyConstructorOptions } from './secret-key'
 import { Serializable, SerializableConstructorOptions } from './serializable'
 
-export type KeyGeneratorDependencyOptions = {
+export interface KeyGeneratorDependencyOptions {
   readonly Exception: Exception
   readonly PublicKey: PublicKeyConstructorOptions
   readonly SecretKey: SecretKeyConstructorOptions
@@ -16,7 +16,7 @@ export type KeyGeneratorDependencyOptions = {
   readonly Serializable: SerializableConstructorOptions
 }
 
-export type KeyGeneratorDependencies = {
+export interface KeyGeneratorDependencies {
   ({
     Exception,
     PublicKey,
@@ -27,11 +27,11 @@ export type KeyGeneratorDependencies = {
   }: KeyGeneratorDependencyOptions): KeyGeneratorConstructorOptions
 }
 
-export type KeyGeneratorConstructorOptions = {
+export interface KeyGeneratorConstructorOptions {
   (context: Context, secretKey?: SecretKey): KeyGenerator
 }
 
-export type KeyGenerator = {
+export interface KeyGenerator {
   readonly instance: Instance
   readonly unsafeInject: (instance: Instance) => void
   readonly delete: () => void

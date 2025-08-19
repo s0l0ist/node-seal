@@ -76,11 +76,11 @@ export type Instance = any
 export type Loader = any
 export type Library = any
 export type Dependencies = any
-export type LoaderOptions = {
+export interface LoaderOptions {
   readonly loader: Loader
 }
 
-export type SEALLibrary = {
+export interface SEALLibrary {
   readonly BatchEncoder: BatchEncoderConstructorOptions
   readonly CipherText: CipherTextConstructorOptions
   readonly CKKSEncoder: CKKSEncoderConstructorOptions
@@ -110,7 +110,7 @@ export type SEALLibrary = {
   readonly Vector: VectorConstructorOptions
   readonly Version: string
 }
-type SEALConstructorOptions = {
+interface SEALConstructorOptions {
   readonly BatchEncoder: BatchEncoderDependencies
   readonly CipherText: CipherTextDependencies
   readonly CKKSEncoder: CKKSEncoderDependencies
