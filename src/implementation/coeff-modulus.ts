@@ -4,13 +4,13 @@ import { Library, LoaderOptions } from './seal'
 import { SecurityLevel } from './security-level'
 import { Vector, VectorConstructorOptions } from './vector'
 
-export type CoeffModulusDependencyOptions = {
+export interface CoeffModulusDependencyOptions {
   readonly Exception: Exception
   readonly SecurityLevel: SecurityLevel
   readonly Vector: VectorConstructorOptions
 }
 
-export type CoeffModulusDependencies = {
+export interface CoeffModulusDependencies {
   ({
     Exception,
     SecurityLevel,
@@ -18,11 +18,11 @@ export type CoeffModulusDependencies = {
   }: CoeffModulusDependencyOptions): CoeffModulusConstructorOptions
 }
 
-export type CoeffModulusConstructorOptions = {
+export interface CoeffModulusConstructorOptions {
   (): CoeffModulus
 }
 
-export type CoeffModulus = {
+export interface CoeffModulus {
   readonly MaxBitCount: (
     polyModulusDegree: number,
     securityLevel?: SecurityLevel

@@ -6,7 +6,7 @@ import { MemoryPoolHandle } from './memory-pool-handle'
 import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
 import { Instance, Library, LoaderOptions } from './seal'
 import { VectorConstructorOptions } from './vector'
-export type CipherTextDependencyOptions = {
+export interface CipherTextDependencyOptions {
   readonly Exception: Exception
   readonly ComprModeType: ComprModeType
   readonly ParmsIdType: ParmsIdTypeConstructorOptions
@@ -14,7 +14,7 @@ export type CipherTextDependencyOptions = {
   readonly Vector: VectorConstructorOptions
 }
 
-export type CipherTextDependencies = {
+export interface CipherTextDependencies {
   ({
     Exception,
     ComprModeType,
@@ -24,7 +24,7 @@ export type CipherTextDependencies = {
   }: CipherTextDependencyOptions): CipherTextConstructorOptions
 }
 
-export type CipherTextConstructorOptions = {
+export interface CipherTextConstructorOptions {
   ({
     context,
     parmsId,
@@ -38,7 +38,7 @@ export type CipherTextConstructorOptions = {
   }): CipherText
 }
 
-export type CipherText = {
+export interface CipherText {
   readonly instance: Instance
   readonly unsafeInject: (instance: Instance) => void
   readonly delete: () => void

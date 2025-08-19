@@ -3,13 +3,13 @@ import { Modulus, ModulusConstructorOptions } from './modulus'
 import { Library, LoaderOptions } from './seal'
 import { Vector, VectorConstructorOptions } from './vector'
 
-export type PlainModulusDependencyOptions = {
+export interface PlainModulusDependencyOptions {
   readonly Exception: Exception
   readonly Modulus: ModulusConstructorOptions
   readonly Vector: VectorConstructorOptions
 }
 
-export type PlainModulusDependencies = {
+export interface PlainModulusDependencies {
   ({
     Exception,
     Modulus,
@@ -17,11 +17,11 @@ export type PlainModulusDependencies = {
   }: PlainModulusDependencyOptions): PlainModulusConstructorOptions
 }
 
-export type PlainModulusConstructorOptions = {
+export interface PlainModulusConstructorOptions {
   (): PlainModulus
 }
 
-export type PlainModulus = {
+export interface PlainModulus {
   readonly Batching: (polyModulusDegree: number, bitSize: number) => Modulus
   readonly BatchingVector: (
     polyModulusDegree: number,

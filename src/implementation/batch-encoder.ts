@@ -6,14 +6,14 @@ import { PlainText, PlainTextConstructorOptions } from './plain-text'
 import { Instance, Library, LoaderOptions } from './seal'
 import { VectorConstructorOptions } from './vector'
 
-export type BatchEncoderDependencyOptions = {
+export interface BatchEncoderDependencyOptions {
   readonly Exception: Exception
   readonly MemoryPoolHandle: MemoryPoolHandle
   readonly PlainText: PlainTextConstructorOptions
   readonly Vector: VectorConstructorOptions
 }
 
-export type BatchEncoderDependencies = {
+export interface BatchEncoderDependencies {
   ({
     Exception,
     MemoryPoolHandle,
@@ -22,7 +22,7 @@ export type BatchEncoderDependencies = {
   }: BatchEncoderDependencyOptions): BatchEncoderConstructorOptions
 }
 
-export type BatchEncoderConstructorOptions = {
+export interface BatchEncoderConstructorOptions {
   (context: Context): BatchEncoder
 }
 
@@ -32,7 +32,7 @@ export type BatchEncoderTypes =
   | BigInt64Array
   | BigUint64Array
 
-export type BatchEncoder = {
+export interface BatchEncoder {
   readonly instance: Instance
   readonly unsafeInject: (instance: Instance) => void
   readonly delete: () => void

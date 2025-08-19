@@ -1,15 +1,15 @@
 import { Instance } from './seal'
 import { SecurityLevel } from './security-level'
 
-export type EncryptionParameterQualifiersDependencies = {
+export interface EncryptionParameterQualifiersDependencies {
   (): EncryptionParameterQualifiersConstructorOptions
 }
 
-export type EncryptionParameterQualifiersConstructorOptions = {
+export interface EncryptionParameterQualifiersConstructorOptions {
   (): EncryptionParameterQualifiers
 }
 
-export type EncryptionParameterQualifiers = {
+export interface EncryptionParameterQualifiers {
   readonly instance: Instance
   readonly unsafeInject: (instance: Instance) => void
   readonly delete: () => void

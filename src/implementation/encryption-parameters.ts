@@ -6,7 +6,7 @@ import { SchemeType } from './scheme-type'
 import { Instance, Library, LoaderOptions } from './seal'
 import { Vector, VectorConstructorOptions } from './vector'
 
-export type EncryptionParametersDependencyOptions = {
+export interface EncryptionParametersDependencyOptions {
   readonly Exception: Exception
   readonly ComprModeType: ComprModeType
   readonly Modulus: ModulusConstructorOptions
@@ -15,7 +15,7 @@ export type EncryptionParametersDependencyOptions = {
   readonly Vector: VectorConstructorOptions
 }
 
-export type EncryptionParametersDependencies = {
+export interface EncryptionParametersDependencies {
   ({
     Exception,
     ComprModeType,
@@ -25,11 +25,11 @@ export type EncryptionParametersDependencies = {
   }: EncryptionParametersDependencyOptions): EncryptionParametersConstructorOptions
 }
 
-export type EncryptionParametersConstructorOptions = {
+export interface EncryptionParametersConstructorOptions {
   (schemeType?: SchemeType): EncryptionParameters
 }
 
-export type EncryptionParameters = {
+export interface EncryptionParameters {
   readonly instance: Instance
   readonly unsafeInject: (instance: Instance) => void
   readonly delete: () => void

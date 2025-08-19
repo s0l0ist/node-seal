@@ -6,7 +6,8 @@ import { MemoryPoolHandle } from './memory-pool-handle'
 import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
 import { Instance, Library, LoaderOptions } from './seal'
 import { VectorConstructorOptions } from './vector'
-export type PlainTextDependencyOptions = {
+
+export interface PlainTextDependencyOptions {
   readonly Exception: Exception
   readonly ComprModeType: ComprModeType
   readonly ParmsIdType: ParmsIdTypeConstructorOptions
@@ -14,7 +15,7 @@ export type PlainTextDependencyOptions = {
   readonly Vector: VectorConstructorOptions
 }
 
-export type PlainTextDependencies = {
+export interface PlainTextDependencies {
   ({
     Exception,
     ComprModeType,
@@ -24,7 +25,7 @@ export type PlainTextDependencies = {
   }: PlainTextDependencyOptions): PlainTextConstructorOptions
 }
 
-export type PlainTextConstructorOptions = {
+export interface PlainTextConstructorOptions {
   ({
     capacity,
     coeffCount,
@@ -36,7 +37,7 @@ export type PlainTextConstructorOptions = {
   }): PlainText
 }
 
-export type PlainText = {
+export interface PlainText {
   readonly instance: Instance
   readonly unsafeInject: (instance: Instance) => void
   readonly delete: () => void

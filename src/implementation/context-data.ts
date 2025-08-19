@@ -10,14 +10,14 @@ import { Exception } from './exception'
 import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
 import { Instance, Library, LoaderOptions } from './seal'
 
-export type ContextDataDependencyOptions = {
+export interface ContextDataDependencyOptions {
   readonly Exception: Exception
   readonly EncryptionParameters: EncryptionParametersConstructorOptions
   readonly ParmsIdType: ParmsIdTypeConstructorOptions
   readonly EncryptionParameterQualifiers: EncryptionParameterQualifiersConstructorOptions
 }
 
-export type ContextDataDependencies = {
+export interface ContextDataDependencies {
   ({
     Exception,
     EncryptionParameters,
@@ -26,11 +26,11 @@ export type ContextDataDependencies = {
   }: ContextDataDependencyOptions): ContextDataConstructorOptions
 }
 
-export type ContextDataConstructorOptions = {
+export interface ContextDataConstructorOptions {
   (): ContextData
 }
 
-export type ContextData = {
+export interface ContextData {
   readonly instance: Instance
   readonly unsafeInject: (instance: Instance) => void
   readonly delete: () => void

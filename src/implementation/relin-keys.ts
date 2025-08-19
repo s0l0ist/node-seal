@@ -4,13 +4,13 @@ import { Exception, SealError } from './exception'
 import { Instance, Library, LoaderOptions } from './seal'
 import { VectorConstructorOptions } from './vector'
 
-export type RelinKeysDependencyOptions = {
+export interface RelinKeysDependencyOptions {
   readonly Exception: Exception
   readonly ComprModeType: ComprModeType
   readonly Vector: VectorConstructorOptions
 }
 
-export type RelinKeysDependencies = {
+export interface RelinKeysDependencies {
   ({
     Exception,
     ComprModeType,
@@ -18,11 +18,11 @@ export type RelinKeysDependencies = {
   }: RelinKeysDependencyOptions): RelinKeysConstructorOptions
 }
 
-export type RelinKeysConstructorOptions = {
+export interface RelinKeysConstructorOptions {
   (): RelinKeys
 }
 
-export type RelinKeys = {
+export interface RelinKeys {
   readonly instance: Instance
   readonly inject: (instance: Instance) => void
   readonly delete: () => void

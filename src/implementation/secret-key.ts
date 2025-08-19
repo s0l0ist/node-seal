@@ -4,13 +4,13 @@ import { Exception, SealError } from './exception'
 import { Instance, Library, LoaderOptions } from './seal'
 import { VectorConstructorOptions } from './vector'
 
-export type SecretKeyDependencyOptions = {
+export interface SecretKeyDependencyOptions {
   readonly Exception: Exception
   readonly ComprModeType: ComprModeType
   readonly Vector: VectorConstructorOptions
 }
 
-export type SecretKeyDependencies = {
+export interface SecretKeyDependencies {
   ({
     Exception,
     ComprModeType,
@@ -18,11 +18,11 @@ export type SecretKeyDependencies = {
   }: SecretKeyDependencyOptions): SecretKeyConstructorOptions
 }
 
-export type SecretKeyConstructorOptions = {
+export interface SecretKeyConstructorOptions {
   (): SecretKey
 }
 
-export type SecretKey = {
+export interface SecretKey {
   readonly instance: Instance
   readonly inject: (instance: Instance) => void
   readonly delete: () => void

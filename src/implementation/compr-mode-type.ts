@@ -1,14 +1,14 @@
 import { Library, LoaderOptions } from './seal'
 
-export type ComprModeTypeDependencies = {
+export interface ComprModeTypeDependencies {
   (): ComprModeTypeConstructorOptions
 }
 
-export type ComprModeTypeConstructorOptions = {
+export interface ComprModeTypeConstructorOptions {
   (): ComprModeType
 }
 
-export type ComprModeType = {
+export interface ComprModeType {
   readonly none: any
   readonly zlib: any
   readonly zstd: any

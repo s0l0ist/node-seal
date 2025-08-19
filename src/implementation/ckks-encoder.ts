@@ -6,14 +6,14 @@ import { PlainText, PlainTextConstructorOptions } from './plain-text'
 import { Instance, Library, LoaderOptions } from './seal'
 import { VectorConstructorOptions } from './vector'
 
-export type CKKSEncoderDependencyOptions = {
+export interface CKKSEncoderDependencyOptions {
   readonly Exception: Exception
   readonly MemoryPoolHandle: MemoryPoolHandle
   readonly PlainText: PlainTextConstructorOptions
   readonly Vector: VectorConstructorOptions
 }
 
-export type CKKSEncoderDependencies = {
+export interface CKKSEncoderDependencies {
   ({
     Exception,
     MemoryPoolHandle,
@@ -22,13 +22,13 @@ export type CKKSEncoderDependencies = {
   }: CKKSEncoderDependencyOptions): CKKSEncoderConstructorOptions
 }
 
-export type CKKSEncoderConstructorOptions = {
+export interface CKKSEncoderConstructorOptions {
   (context: Context): CKKSEncoder
 }
 
 export type CKKSEncoderTypes = Float64Array
 
-export type CKKSEncoder = {
+export interface CKKSEncoder {
   readonly instance: Instance
   readonly unsafeInject: (instance: Instance) => void
   readonly delete: () => void

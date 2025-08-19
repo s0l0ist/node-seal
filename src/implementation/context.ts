@@ -4,13 +4,13 @@ import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
 import { Instance, Library, LoaderOptions } from './seal'
 import { SecurityLevel } from './security-level'
 
-export type ContextDependencyOptions = {
+export interface ContextDependencyOptions {
   readonly ParmsIdType: ParmsIdTypeConstructorOptions
   readonly ContextData: ContextDataConstructorOptions
   readonly SecurityLevel: SecurityLevel
 }
 
-export type ContextDependencies = {
+export interface ContextDependencies {
   ({
     ParmsIdType,
     ContextData,
@@ -18,7 +18,7 @@ export type ContextDependencies = {
   }: ContextDependencyOptions): ContextConstructorOptions
 }
 
-export type ContextConstructorOptions = {
+export interface ContextConstructorOptions {
   (
     encryptionParams: EncryptionParameters,
     expandModChain?: boolean,
@@ -26,7 +26,7 @@ export type ContextConstructorOptions = {
   ): Context
 }
 
-export type Context = {
+export interface Context {
   readonly instance: Instance
   readonly unsafeInject: (instance: Instance) => void
   readonly delete: () => void

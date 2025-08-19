@@ -1,14 +1,14 @@
 import { Library, LoaderOptions } from './seal'
 
-export type SchemeTypeDependencies = {
+export interface SchemeTypeDependencies {
   (): SchemeTypeConstructorOptions
 }
 
-export type SchemeTypeConstructorOptions = {
+export interface SchemeTypeConstructorOptions {
   (): SchemeType
 }
 
-export type SchemeType = {
+export interface SchemeType {
   readonly none: any
   readonly bfv: any
   readonly ckks: any
