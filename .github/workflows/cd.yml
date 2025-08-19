@@ -35,9 +35,10 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install deps
-        run: npm i
+        run: npm ci
 
       - name: Update EMSDK
         if: steps.cache-emsdk.outputs.cache-hit != 'true'
@@ -60,6 +61,6 @@ jobs:
         run: npm run publish:test
 
       - name: Publish
-        run: npm run publish
+        run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_GITHUB }}
