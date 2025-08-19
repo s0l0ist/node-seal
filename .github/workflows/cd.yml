@@ -36,11 +36,6 @@ jobs:
           node-version: '22'
           cache: 'npm'
 
-      - name: Install cmake
-        uses: lukka/get-cmake@latest
-        with:
-          cmakeVersion: '~3.31.0'
-
       - name: Compile SEAL
         run: |
           npm run build
