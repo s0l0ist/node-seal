@@ -30,24 +30,27 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-e-emsdk-
 
-      - name: Update EMSDK
-        if: steps.cache-emsdk.outputs.cache-hit != 'true'
-        run: |
-          npm run em:update
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
 
-      - name: Compile SEAL
+      - name: Install deps
+        run: npm i
+
+      - name: Update EMSDK
+        if: steps.cache-emsdk.outputs.cache-hit != 'true'
+        run: |
+          npm run em:update
+
+      - name: Clean
         run: npm run clean
 
-      - name: Compile SEAL
+      - name: Build SEAL
         run: npm run build
 
-      - name: Compile SEAL
+      - name: Compile TS
         run: npm run compile
 
       - name: Bundle
@@ -56,7 +59,7 @@ jobs:
       - name: Publish Test
         run: npm run publish:test
 
-      - name: Publish Test
+      - name: Publish
         run: npm run publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_GITHUB }}
