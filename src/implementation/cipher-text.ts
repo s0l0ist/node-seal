@@ -2,10 +2,12 @@ import { ComprModeType } from './compr-mode-type'
 import { INVALID_CIPHER_CONSTRUCTOR_OPTIONS } from './constants'
 import { Context } from './context'
 import { Exception, SealError } from './exception'
+import { autoFinalize } from './finalizer'
 import { MemoryPoolHandle } from './memory-pool-handle'
 import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
 import { Instance, Library, LoaderOptions } from './seal'
 import { VectorConstructorOptions } from './vector'
+
 export interface CipherTextDependencyOptions {
   readonly Exception: Exception
   readonly ComprModeType: ComprModeType
@@ -14,29 +16,20 @@ export interface CipherTextDependencyOptions {
   readonly Vector: VectorConstructorOptions
 }
 
-export interface CipherTextDependencies {
-  ({
-    Exception,
-    ComprModeType,
-    ParmsIdType,
-    MemoryPoolHandle,
-    Vector
-  }: CipherTextDependencyOptions): CipherTextConstructorOptions
+export interface CipherTextConstructorParams {
+  context?: Context
+  parmsId?: ParmsIdType
+  sizeCapacity?: number
+  pool?: MemoryPoolHandle
 }
 
-export interface CipherTextConstructorOptions {
-  ({
-    context,
-    parmsId,
-    sizeCapacity,
-    pool
-  }?: {
-    context?: Context
-    parmsId?: ParmsIdType
-    sizeCapacity?: number
-    pool?: MemoryPoolHandle
-  }): CipherText
-}
+export type CipherTextDependencies = (
+  deps: CipherTextDependencyOptions
+) => CipherTextConstructorOptions
+
+export type CipherTextConstructorOptions = (
+  params?: CipherTextConstructorParams
+) => CipherText
 
 export interface CipherText {
   readonly instance: Instance
@@ -73,33 +66,19 @@ const CipherTextConstructor =
     MemoryPoolHandle,
     Vector
   }: CipherTextDependencyOptions): CipherTextConstructorOptions =>
-  ({
-    context,
-    parmsId,
-    sizeCapacity,
-    pool = MemoryPoolHandle.global
-  } = {}): CipherText => {
+  (params: CipherTextConstructorParams = {}): CipherText => {
     // Static methods
     const Constructor = library.Ciphertext
+    let _instance = construct(params)
 
-    let _instance = construct({
-      context,
-      parmsId,
-      sizeCapacity,
-      pool
-    })
+    function construct(constructParams: CipherTextConstructorParams = {}) {
+      const {
+        context,
+        parmsId,
+        sizeCapacity,
+        pool = MemoryPoolHandle.global
+      } = constructParams
 
-    function construct({
-      context,
-      parmsId,
-      sizeCapacity,
-      pool = MemoryPoolHandle.global
-    }: {
-      context?: Context
-      parmsId?: ParmsIdType
-      sizeCapacity?: number
-      pool?: MemoryPoolHandle
-    } = {}) {
       try {
         if (!context && !parmsId && sizeCapacity === undefined) {
           return new Constructor(pool)
@@ -128,7 +107,7 @@ const CipherTextConstructor =
     /**
      * @interface CipherText
      */
-    return {
+    const self: CipherText = {
       /**
        * Get the underlying WASM instance
        *
@@ -150,11 +129,9 @@ const CipherTextConstructor =
        * @param {Instance} instance WASM instance
        */
       unsafeInject(instance: Instance) {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
-        }
+        self.delete()
         _instance = instance
+        fin.reregister(_instance)
       },
 
       /**
@@ -166,10 +143,12 @@ const CipherTextConstructor =
        * @name CipherText#delete
        */
       delete() {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
+        if (!_instance) {
+          return
         }
+        fin.unregister()
+        _instance.delete()
+        _instance = undefined
       },
 
       /**
@@ -488,6 +467,10 @@ const CipherTextConstructor =
         }
       }
     }
+
+    const fin = autoFinalize(self, _instance)
+
+    return self
   }
 
 export const CipherTextInit = ({

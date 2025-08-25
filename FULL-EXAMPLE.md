@@ -28,9 +28,7 @@ CommonJS (but also works with `import`)
   )
 
   // Set the PlainModulus to a prime of bitSize 20.
-  parms.setPlainModulus(
-    seal.PlainModulus.Batching(polyModulusDegree, bitSize)
-  )
+  parms.setPlainModulus(seal.PlainModulus.Batching(polyModulusDegree, bitSize))
 
   const context = seal.Context(
     parms, // Encryption Parameters

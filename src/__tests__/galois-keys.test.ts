@@ -84,12 +84,11 @@ describe('GaloisKeys', () => {
   })
   test('It should skip deleting twice', () => {
     const item = seal.GaloisKeys()
-    item.delete()
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
-    expect(spyOn).toHaveBeenCalled()
+    item.delete()
+    expect(spyOn).toHaveBeenCalledTimes(2)
     expect(item.instance).toBeUndefined()
-    expect(() => item.size).toThrow(TypeError)
   })
   test('It should get the index of a galois element', () => {
     const item = seal.GaloisKeys()

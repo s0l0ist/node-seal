@@ -1,6 +1,7 @@
 import { ComprModeType } from './compr-mode-type'
 import { Context } from './context'
 import { Exception, SealError } from './exception'
+import { autoFinalize } from './finalizer'
 import { Instance, Library, LoaderOptions } from './seal'
 import { VectorConstructorOptions } from './vector'
 
@@ -56,7 +57,7 @@ const RelinKeysConstructor =
     /**
      * @interface RelinKeys
      */
-    return {
+    const self: RelinKeys = {
       /**
        * Get the underlying WASM instance
        *
@@ -78,12 +79,9 @@ const RelinKeysConstructor =
        * @param {Instance} instance WASM instance
        */
       inject(instance: Instance) {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
-        }
+        self.delete()
         _instance = new Constructor(instance)
-        instance.delete()
+        fin.reregister(_instance)
       },
 
       /**
@@ -95,10 +93,12 @@ const RelinKeysConstructor =
        * @name RelinKeys#delete
        */
       delete() {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
+        if (!_instance) {
+          return
         }
+        fin.unregister()
+        _instance.delete()
+        _instance = undefined
       },
 
       /**
@@ -285,6 +285,10 @@ const RelinKeysConstructor =
         }
       }
     }
+
+    const fin = autoFinalize(self, _instance)
+
+    return self
   }
 
 export const RelinKeysInit = ({

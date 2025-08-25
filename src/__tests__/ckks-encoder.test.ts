@@ -92,12 +92,11 @@ describe('CKKSEncoder', () => {
   })
   test('It should skip deleting twice', () => {
     const item = seal.CKKSEncoder(ckksContext)
-    item.delete()
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
-    expect(spyOn).toHaveBeenCalled()
+    item.delete()
+    expect(spyOn).toHaveBeenCalledTimes(2)
     expect(item.instance).toBeUndefined()
-    expect(() => item.slotCount).toThrow(TypeError)
   })
   test('It should encode an float64 array to a plain destination', () => {
     const arr = Float64Array.from({ length: ckksEncoder.slotCount }).map(

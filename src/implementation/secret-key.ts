@@ -1,6 +1,7 @@
 import { ComprModeType } from './compr-mode-type'
 import { Context } from './context'
 import { Exception, SealError } from './exception'
+import { autoFinalize } from './finalizer'
 import { Instance, Library, LoaderOptions } from './seal'
 import { VectorConstructorOptions } from './vector'
 
@@ -53,7 +54,7 @@ const SecretKeyConstructor =
     /**
      * @interface SecretKey
      */
-    return {
+    const self: SecretKey = {
       /**
        * Get the underlying WASM instance
        *
@@ -75,12 +76,9 @@ const SecretKeyConstructor =
        * @param {Instance} instance WASM instance
        */
       inject(instance: Instance) {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
-        }
+        self.delete()
         _instance = new Constructor(instance)
-        instance.delete()
+        fin.reregister(_instance)
       },
 
       /**
@@ -92,10 +90,12 @@ const SecretKeyConstructor =
        * @name SecretKey#delete
        */
       delete() {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
+        if (!_instance) {
+          return
         }
+        fin.unregister()
+        _instance.delete()
+        _instance = undefined
       },
 
       /**
@@ -235,6 +235,10 @@ const SecretKeyConstructor =
         }
       }
     }
+
+    const fin = autoFinalize(self, _instance)
+
+    return self
   }
 
 export const SecretKeyInit = ({

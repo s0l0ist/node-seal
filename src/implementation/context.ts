@@ -1,5 +1,6 @@
 import { ContextData, ContextDataConstructorOptions } from './context-data'
 import { EncryptionParameters } from './encryption-parameters'
+import { autoFinalize } from './finalizer'
 import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
 import { Instance, Library, LoaderOptions } from './seal'
 import { SecurityLevel } from './security-level'
@@ -70,7 +71,7 @@ const ContextConstructor =
     /**
      * @interface Context
      */
-    return {
+    const self: Context = {
       /**
        * Get the underlying WASM instance
        *
@@ -92,11 +93,9 @@ const ContextConstructor =
        * @param {Instance} instance WASM instance
        */
       unsafeInject(instance: Instance) {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
-        }
+        self.delete()
         _instance = instance
+        fin.reregister(_instance)
       },
 
       /**
@@ -108,10 +107,12 @@ const ContextConstructor =
        * @name Context#delete
        */
       delete() {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
+        if (!_instance) {
+          return
         }
+        fin.unregister()
+        _instance.delete()
+        _instance = undefined
       },
 
       /**
@@ -254,6 +255,10 @@ const ContextConstructor =
         return _instance.usingKeyswitching()
       }
     }
+
+    const fin = autoFinalize(self, _instance)
+
+    return self
   }
 
 export const ContextInit = ({ loader }: LoaderOptions): ContextDependencies => {

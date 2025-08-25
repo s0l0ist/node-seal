@@ -1,5 +1,6 @@
 import { ComprModeType } from './compr-mode-type'
 import { Exception, SealError } from './exception'
+import { autoFinalize } from './finalizer'
 import { Modulus, ModulusConstructorOptions } from './modulus'
 import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
 import { SchemeType } from './scheme-type'
@@ -68,7 +69,7 @@ const EncryptionParametersConstructor =
     /**
      * @interface EncryptionParameters
      */
-    return {
+    const self: EncryptionParameters = {
       /**
        * Get the underlying WASM instance
        *
@@ -90,11 +91,9 @@ const EncryptionParametersConstructor =
        * @param {Instance} instance WASM instance
        */
       unsafeInject(instance: Instance) {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
-        }
+        self.delete()
         _instance = instance
+        fin.reregister(_instance)
       },
 
       /**
@@ -106,10 +105,12 @@ const EncryptionParametersConstructor =
        * @name EncryptionParameters#delete
        */
       delete() {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
+        if (!_instance) {
+          return
         }
+        fin.unregister()
+        _instance.delete()
+        _instance = undefined
       },
 
       /**
@@ -300,6 +301,9 @@ const EncryptionParametersConstructor =
         }
       }
     }
+    const fin = autoFinalize(self, _instance)
+
+    return self
   }
 
 export const EncryptionParametersInit = ({

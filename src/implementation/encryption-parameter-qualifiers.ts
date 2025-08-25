@@ -1,3 +1,4 @@
+import { autoFinalize } from './finalizer'
 import { Instance } from './seal'
 import { SecurityLevel } from './security-level'
 
@@ -34,7 +35,7 @@ const EncryptionParameterQualifiersConstructor =
     /**
      * @interface EncryptionParameterQualifiers
      */
-    return {
+    const self: EncryptionParameterQualifiers = {
       /**
        * Get the underlying WASM instance
        *
@@ -56,11 +57,9 @@ const EncryptionParameterQualifiersConstructor =
        * @param {Instance} instance WASM instance
        */
       unsafeInject(instance: Instance) {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
-        }
+        self.delete()
         _instance = instance
+        fin.reregister(_instance)
       },
 
       /**
@@ -72,10 +71,12 @@ const EncryptionParameterQualifiersConstructor =
        * @name EncryptionParameterQualifiers#delete
        */
       delete() {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
+        if (!_instance) {
+          return
         }
+        fin.unregister()
+        _instance.delete()
+        _instance = undefined
       },
 
       /**
@@ -185,6 +186,10 @@ const EncryptionParameterQualifiersConstructor =
         return _instance.securityLevel
       }
     }
+
+    const fin = autoFinalize(self, _instance)
+
+    return self
   }
 
 export const EncryptionParameterQualifiersInit =

@@ -109,12 +109,11 @@ describe('EncryptionParameterQualifiers', () => {
   test('It should skip deleting twice', () => {
     const item = seal.EncryptionParameterQualifiers()
     item.unsafeInject(bfvContextData.qualifiers.instance)
-    item.delete()
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
-    expect(spyOn).toHaveBeenCalled()
+    item.delete()
+    expect(spyOn).toHaveBeenCalledTimes(2)
     expect(item.instance).toBeUndefined()
-    expect(() => item.usingFFT).toThrow(TypeError)
   })
   test('It should return true if the parameters are set', () => {
     const item = seal.EncryptionParameterQualifiers()

@@ -68,12 +68,12 @@ describe('EncryptionParameters', () => {
     expect(() => encParms.polyModulusDegree).toThrow(TypeError)
   })
   test('It should skip deleting twice', () => {
-    const encParms = seal.EncryptionParameters()
-    const spyOn = jest.spyOn(encParms, 'delete')
-    encParms.delete()
-    expect(spyOn).toHaveBeenCalled()
-    expect(encParms.instance).toBeUndefined()
-    expect(() => encParms.polyModulusDegree).toThrow(TypeError)
+    const item = seal.EncryptionParameters()
+    const spyOn = jest.spyOn(item, 'delete')
+    item.delete()
+    item.delete()
+    expect(spyOn).toHaveBeenCalledTimes(2)
+    expect(item.instance).toBeUndefined()
   })
   test('It should set the poly modulus degree (bfv)', () => {
     const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)

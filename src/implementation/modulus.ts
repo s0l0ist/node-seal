@@ -1,5 +1,6 @@
 import { ComprModeType } from './compr-mode-type'
 import { Exception, SealError } from './exception'
+import { autoFinalize } from './finalizer'
 import { Instance, Library, LoaderOptions } from './seal'
 import { VectorConstructorOptions } from './vector'
 
@@ -66,7 +67,7 @@ const ModulusConstructor =
     /**
      * @interface Modulus
      */
-    return {
+    const self: Modulus = {
       /**
        * Get the underlying WASM instance
        *
@@ -88,12 +89,9 @@ const ModulusConstructor =
        * @param {Instance} instance WASM instance
        */
       inject(instance: Instance) {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
-        }
+        self.delete()
         _instance = new Constructor(instance)
-        instance.delete()
+        fin.reregister(_instance)
       },
 
       /**
@@ -105,10 +103,12 @@ const ModulusConstructor =
        * @name Modulus#delete
        */
       delete() {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
+        if (!_instance) {
+          return
         }
+        fin.unregister()
+        _instance.delete()
+        _instance = undefined
       },
 
       /**
@@ -231,6 +231,10 @@ const ModulusConstructor =
         }
       }
     }
+
+    const fin = autoFinalize(self, _instance)
+
+    return self
   }
 
 export const ModulusInit = ({ loader }: LoaderOptions): ModulusDependencies => {

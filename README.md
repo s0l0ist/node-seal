@@ -71,14 +71,14 @@ provided by the Cloudflare Workers runtime. Example:
 
 ```javascript
 import SEAL from 'node-seal/throws_wasm_cf_worker_es'
-import wasm from 'node-seal/seal_throws_wasm_cf_worker.wasm';
+import wasm from 'node-seal/seal_throws_wasm_cf_worker.wasm'
 
 export default {
-    async fetch(request) {
-        const seal = await SEAL(wasm);
-        return new Response(seal.Version);
-    },
-};
+  async fetch(request) {
+    const seal = await SEAL(wasm)
+    return new Response(seal.Version)
+  }
+}
 ```
 
 ## Demo
@@ -107,8 +107,8 @@ View the latest docs [here](https://s0l0ist.github.io/node-seal)
 
 ## Examples
 
-Check out the [Sandbox](https://s0l0ist.github.io/seal-sandbox/) to run HE functions and even
-generate working code!
+Check out the [Sandbox](https://s0l0ist.github.io/seal-sandbox/) to run HE
+functions and even generate working code!
 
 If you'd rather read an example, take a look [here](FULL-EXAMPLE.md).
 
@@ -157,15 +157,15 @@ Conversion from C++ to Web Assembly has some limitations:
   `none` or the less performant `zlib`. Ex:
   `galoisKeys.save(seal.ComprModeType.zlib)`
 
-- **Garbage Collection:** Unfortunately, the typical way of cleaning up
-  dereferenced JS objects will leave behind a the Web Assembly (C++) object in
-  memory. There is no way to automatically call the destructors on C++ objects.
-  JavaScript code must explicitly delete any C++ object handles it has received,
-  or the heap will grow indefinitely.
+- **Garbage Collection**: By default, when a JavaScript object is dereferenced,
+  the underlying WebAssembly (C++) object remains in memory.
 
-  ```javascript
-  <instance>.delete()
-  ```
+You have two options for cleanup:
+
+- In performance-sensitive code (e.g. tight loops), explicitly call
+  `<instance>.delete()` to release memory immediately.
+- If the environment supports `FinalizationRegistry`, the C++ resources will be
+  released automatically once the object is garbage collected.
 
 ## Contributing
 
@@ -180,4 +180,5 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 node-seal is [MIT licensed](LICENSE).
 
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fs0l0ist%2Fnode-seal.svg?type=large&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fs0l0ist%2Fnode-seal?ref=badge_large&issueType=license)
+[![FOSSA
+Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fs0l0ist%2Fnode-seal.svg?type=large&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fs0l0ist%2Fnode-seal?ref=badge_large&issueType=license)

@@ -2,6 +2,7 @@ import { ComprModeType } from './compr-mode-type'
 import { INVALID_PLAIN_CONSRUCTOR_OPTIONS } from './constants'
 import { Context } from './context'
 import { Exception, SealError } from './exception'
+import { autoFinalize } from './finalizer'
 import { MemoryPoolHandle } from './memory-pool-handle'
 import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
 import { Instance, Library, LoaderOptions } from './seal'
@@ -15,27 +16,19 @@ export interface PlainTextDependencyOptions {
   readonly Vector: VectorConstructorOptions
 }
 
-export interface PlainTextDependencies {
-  ({
-    Exception,
-    ComprModeType,
-    ParmsIdType,
-    MemoryPoolHandle,
-    Vector
-  }: PlainTextDependencyOptions): PlainTextConstructorOptions
+export interface PlainTextConstructorParams {
+  capacity?: number
+  coeffCount?: number
+  pool?: MemoryPoolHandle
 }
 
-export interface PlainTextConstructorOptions {
-  ({
-    capacity,
-    coeffCount,
-    pool
-  }?: {
-    capacity?: number
-    coeffCount?: number
-    pool?: MemoryPoolHandle
-  }): PlainText
-}
+export type PlainTextDependencies = (
+  deps: PlainTextDependencyOptions
+) => PlainTextConstructorOptions
+
+export type PlainTextConstructorOptions = (
+  params?: PlainTextConstructorParams
+) => PlainText
 
 export interface PlainText {
   readonly instance: Instance
@@ -75,29 +68,19 @@ const PlainTextConstructor =
     MemoryPoolHandle,
     Vector
   }: PlainTextDependencyOptions): PlainTextConstructorOptions =>
-  ({
-    capacity,
-    coeffCount,
-    pool = MemoryPoolHandle.global
-  } = {}): PlainText => {
+  (params: PlainTextConstructorParams = {}): PlainText => {
     // Static methods
     const Constructor = library.Plaintext
 
-    let _instance = construct({
-      capacity,
-      coeffCount,
-      pool
-    })
+    let _instance = construct(params)
 
-    function construct({
-      capacity,
-      coeffCount,
-      pool = MemoryPoolHandle.global
-    }: {
-      capacity?: number
-      coeffCount?: number
-      pool?: MemoryPoolHandle
-    } = {}) {
+    function construct(constructParams: PlainTextConstructorParams = {}) {
+      const {
+        capacity,
+        coeffCount,
+        pool = MemoryPoolHandle.global
+      } = constructParams
+
       try {
         if (capacity === undefined && coeffCount === undefined) {
           return new Constructor(pool)
@@ -119,7 +102,7 @@ const PlainTextConstructor =
     /**
      * @interface PlainText
      */
-    return {
+    const self: PlainText = {
       /**
        * Get the underlying WASM instance
        *
@@ -141,11 +124,9 @@ const PlainTextConstructor =
        * @param {Instance} instance WASM instance
        */
       unsafeInject(instance: Instance) {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
-        }
+        self.delete()
         _instance = instance
+        fin.reregister(_instance)
       },
 
       /**
@@ -157,10 +138,12 @@ const PlainTextConstructor =
        * @name PlainText#delete
        */
       delete() {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
+        if (!_instance) {
+          return
         }
+        fin.unregister()
+        _instance.delete()
+        _instance = undefined
       },
 
       /**
@@ -518,6 +501,10 @@ const PlainTextConstructor =
         }
       }
     }
+
+    const fin = autoFinalize(self, _instance)
+
+    return self
   }
 
 export const PlainTextInit = ({
