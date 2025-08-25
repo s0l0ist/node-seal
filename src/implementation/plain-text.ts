@@ -16,27 +16,19 @@ export interface PlainTextDependencyOptions {
   readonly Vector: VectorConstructorOptions
 }
 
-export interface PlainTextDependencies {
-  ({
-    Exception,
-    ComprModeType,
-    ParmsIdType,
-    MemoryPoolHandle,
-    Vector
-  }: PlainTextDependencyOptions): PlainTextConstructorOptions
+export interface PlainTextConstructorParams {
+  capacity?: number
+  coeffCount?: number
+  pool?: MemoryPoolHandle
 }
 
-export interface PlainTextConstructorOptions {
-  ({
-    capacity,
-    coeffCount,
-    pool
-  }?: {
-    capacity?: number
-    coeffCount?: number
-    pool?: MemoryPoolHandle
-  }): PlainText
-}
+export type PlainTextDependencies = (
+  deps: PlainTextDependencyOptions
+) => PlainTextConstructorOptions
+
+export type PlainTextConstructorOptions = (
+  params?: PlainTextConstructorParams
+) => PlainText
 
 export interface PlainText {
   readonly instance: Instance
@@ -76,33 +68,19 @@ const PlainTextConstructor =
     MemoryPoolHandle,
     Vector
   }: PlainTextDependencyOptions): PlainTextConstructorOptions =>
-  ({
-    capacity,
-    coeffCount,
-    pool = MemoryPoolHandle.global
-  }: {
-    capacity?: number
-    coeffCount?: number
-    pool?: MemoryPoolHandle
-  } = {}): PlainText => {
+  (params: PlainTextConstructorParams = {}): PlainText => {
     // Static methods
     const Constructor = library.Plaintext
 
-    let _instance = construct({
-      capacity,
-      coeffCount,
-      pool
-    })
+    let _instance = construct(params)
 
-    function construct({
-      capacity,
-      coeffCount,
-      pool = MemoryPoolHandle.global
-    }: {
-      capacity?: number
-      coeffCount?: number
-      pool?: MemoryPoolHandle
-    } = {}) {
+    function construct(constructParams: PlainTextConstructorParams = {}) {
+      const {
+        capacity,
+        coeffCount,
+        pool = MemoryPoolHandle.global
+      } = constructParams
+
       try {
         if (capacity === undefined && coeffCount === undefined) {
           return new Constructor(pool)

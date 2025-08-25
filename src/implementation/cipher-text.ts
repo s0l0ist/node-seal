@@ -16,29 +16,20 @@ export interface CipherTextDependencyOptions {
   readonly Vector: VectorConstructorOptions
 }
 
-export interface CipherTextDependencies {
-  ({
-    Exception,
-    ComprModeType,
-    ParmsIdType,
-    MemoryPoolHandle,
-    Vector
-  }: CipherTextDependencyOptions): CipherTextConstructorOptions
+export interface CipherTextConstructorParams {
+  context?: Context
+  parmsId?: ParmsIdType
+  sizeCapacity?: number
+  pool?: MemoryPoolHandle
 }
 
-export interface CipherTextConstructorOptions {
-  ({
-    context,
-    parmsId,
-    sizeCapacity,
-    pool
-  }?: {
-    context?: Context
-    parmsId?: ParmsIdType
-    sizeCapacity?: number
-    pool?: MemoryPoolHandle
-  }): CipherText
-}
+export type CipherTextDependencies = (
+  deps: CipherTextDependencyOptions
+) => CipherTextConstructorOptions
+
+export type CipherTextConstructorOptions = (
+  params?: CipherTextConstructorParams
+) => CipherText
 
 export interface CipherText {
   readonly instance: Instance
@@ -75,38 +66,19 @@ const CipherTextConstructor =
     MemoryPoolHandle,
     Vector
   }: CipherTextDependencyOptions): CipherTextConstructorOptions =>
-  ({
-    context,
-    parmsId,
-    sizeCapacity,
-    pool = MemoryPoolHandle.global
-  }: {
-    context?: Context
-    parmsId?: ParmsIdType
-    sizeCapacity?: number
-    pool?: MemoryPoolHandle
-  } = {}): CipherText => {
+  (params: CipherTextConstructorParams = {}): CipherText => {
     // Static methods
     const Constructor = library.Ciphertext
+    let _instance = construct(params)
 
-    let _instance = construct({
-      context,
-      parmsId,
-      sizeCapacity,
-      pool
-    })
+    function construct(constructParams: CipherTextConstructorParams = {}) {
+      const {
+        context,
+        parmsId,
+        sizeCapacity,
+        pool = MemoryPoolHandle.global
+      } = constructParams
 
-    function construct({
-      context,
-      parmsId,
-      sizeCapacity,
-      pool = MemoryPoolHandle.global
-    }: {
-      context?: Context
-      parmsId?: ParmsIdType
-      sizeCapacity?: number
-      pool?: MemoryPoolHandle
-    } = {}) {
       try {
         if (!context && !parmsId && sizeCapacity === undefined) {
           return new Constructor(pool)
