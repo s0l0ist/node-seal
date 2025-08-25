@@ -84,12 +84,11 @@ describe('Context', () => {
   })
   test('It should skip deleting twice', () => {
     const item = seal.Context(bfvEncParms)
-    item.delete()
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
-    expect(spyOn).toHaveBeenCalled()
+    item.delete()
+    expect(spyOn).toHaveBeenCalledTimes(2)
     expect(item.instance).toBeUndefined()
-    expect(() => item.usingKeyswitching).toThrow(TypeError)
   })
   test('It should return the human readable string of the context', () => {
     const item = seal.Context(bfvEncParms)

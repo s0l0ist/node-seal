@@ -135,12 +135,12 @@ describe('PlainText', () => {
     expect(plainText.instance).toBeUndefined()
   })
   test('It should skip deleting twice', () => {
-    const plainText = seal.PlainText()
-    plainText.delete()
-    const spyOn = jest.spyOn(plainText, 'delete')
-    plainText.delete()
-    expect(spyOn).toHaveBeenCalled()
-    expect(plainText.instance).toBeUndefined()
+    const item = seal.PlainText()
+    const spyOn = jest.spyOn(item, 'delete')
+    item.delete()
+    item.delete()
+    expect(spyOn).toHaveBeenCalledTimes(2)
+    expect(item.instance).toBeUndefined()
   })
   test('It should reserve memory', () => {
     const arr = Int32Array.from({ length: batchEncoder.slotCount }, _ => 5)

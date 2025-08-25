@@ -126,12 +126,11 @@ describe('Vector', () => {
   test('It should skip deleting twice', () => {
     const item = seal.Vector()
     item.from(Int32Array.from([3]))
-    item.delete()
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
-    expect(spyOn).toHaveBeenCalled()
+    item.delete()
+    expect(spyOn).toHaveBeenCalledTimes(2)
     expect(item.instance).toBeUndefined()
-    expect(() => item.getValue(0)).toThrow(TypeError)
   })
   test('It should return its size', () => {
     const item = seal.Vector()

@@ -72,12 +72,12 @@ describe('ParmsIdType', () => {
     expect(() => parmsId.values).toThrow(TypeError)
   })
   test('It should skip deleting twice', () => {
-    const parmsId = context.firstParmsId
-    parmsId.delete()
-    const spyOn = jest.spyOn(parmsId, 'delete')
-    parmsId.delete()
-    expect(spyOn).toHaveBeenCalled()
-    expect(parmsId.instance).toBeUndefined()
+    const item = context.firstParmsId
+    const spyOn = jest.spyOn(item, 'delete')
+    item.delete()
+    item.delete()
+    expect(spyOn).toHaveBeenCalledTimes(2)
+    expect(item.instance).toBeUndefined()
   })
   test('It should return values', () => {
     const parmsId = context.firstParmsId

@@ -59,7 +59,7 @@ jobs:
 
       - name: Install NPM Dependencies
         run: |
-          npm install
+          npm ci
 
       - name: Download artifacts
         uses: actions/download-artifact@v4
@@ -78,3 +78,5 @@ jobs:
           npm run coverage
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

@@ -65,14 +65,14 @@ describe('BatchEncoder', () => {
     newItem.delete()
     const spyOn = jest.spyOn(newItem, 'unsafeInject')
     newItem.unsafeInject(item.instance)
-    expect(spyOn).toHaveBeenCalledWith(newItem.instance)
+    expect(spyOn).toHaveBeenCalledWith(item.instance)
   })
   test('It should delete the old instance and inject', () => {
     const item = seal.BatchEncoder(context)
     const newItem = seal.BatchEncoder(context)
     const spyOn = jest.spyOn(newItem, 'unsafeInject')
     newItem.unsafeInject(item.instance)
-    expect(spyOn).toHaveBeenCalledWith(newItem.instance)
+    expect(spyOn).toHaveBeenCalledWith(item.instance)
   })
   test("It should delete it's instance", () => {
     const item = seal.BatchEncoder(context)
@@ -83,10 +83,10 @@ describe('BatchEncoder', () => {
   })
   test('It should skip deleting twice', () => {
     const item = seal.BatchEncoder(context)
-    item.delete()
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
-    expect(spyOn).toHaveBeenCalled()
+    item.delete()
+    expect(spyOn).toHaveBeenCalledTimes(2)
     expect(item.instance).toBeUndefined()
   })
   test('It should encode an int32 array to a plaintext destination', () => {

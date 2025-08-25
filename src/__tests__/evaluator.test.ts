@@ -215,7 +215,8 @@ describe('Evaluator', () => {
     const item = seal.Evaluator(bfvContext)
     const spyOn = jest.spyOn(item, 'delete')
     item.delete()
-    expect(spyOn).toHaveBeenCalled()
+    item.delete()
+    expect(spyOn).toHaveBeenCalledTimes(2)
     expect(item.instance).toBeUndefined()
   })
   // Negate
