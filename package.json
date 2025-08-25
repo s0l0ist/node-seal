@@ -1,6 +1,6 @@
 {
   "name": "node-seal",
-  "version": "5.1.7",
+  "version": "6.0.0",
   "description": "Homomorphic Encryption for TypeScript or JavaScript using Microsoft SEAL",
   "repository": {
     "type": "git",
@@ -55,7 +55,7 @@
     "compile": "tsc",
     "format": "prettier --write src",
     "lint": "eslint --fix 'src/**/*.ts'",
-    "test": "jest src/**/*.ts",
+    "test": "jest src/__tests__/*.ts",
     "coverage": "jest src --coverage",
     "rollup": "NODE_OPTIONS=--max_old_space_size=16384 rollup -c",
     "postrollup": "bash scripts/postrollup.sh",

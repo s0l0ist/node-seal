@@ -1,4 +1,5 @@
 import { Exception, SealError } from './exception'
+import { autoFinalize } from './finalizer'
 import { Instance, Library, LoaderOptions } from './seal'
 
 export interface ParmsIdTypeDependencyOptions {
@@ -37,7 +38,7 @@ const ParmsIdTypeConstructor =
     /**
      * @interface ParmsIdType
      */
-    return {
+    const self: ParmsIdType = {
       /**
        * Get the underlying WASM instance
        *
@@ -59,12 +60,9 @@ const ParmsIdTypeConstructor =
        * @param {Instance} instance WASM instance
        */
       inject(instance: Instance) {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
-        }
+        self.delete()
         _instance = new Constructor(instance)
-        instance.delete()
+        fin.reregister(_instance)
       },
 
       /**
@@ -76,10 +74,12 @@ const ParmsIdTypeConstructor =
        * @name ParmsIdType#delete
        */
       delete() {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
+        if (!_instance) {
+          return
         }
+        fin.unregister()
+        _instance.delete()
+        _instance = undefined
       },
 
       /**
@@ -98,6 +98,10 @@ const ParmsIdTypeConstructor =
         }
       }
     }
+
+    const fin = autoFinalize(self, _instance)
+
+    return self
   }
 
 export const ParmsIdTypeInit = ({

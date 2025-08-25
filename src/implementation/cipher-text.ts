@@ -2,10 +2,12 @@ import { ComprModeType } from './compr-mode-type'
 import { INVALID_CIPHER_CONSTRUCTOR_OPTIONS } from './constants'
 import { Context } from './context'
 import { Exception, SealError } from './exception'
+import { autoFinalize } from './finalizer'
 import { MemoryPoolHandle } from './memory-pool-handle'
 import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
 import { Instance, Library, LoaderOptions } from './seal'
 import { VectorConstructorOptions } from './vector'
+
 export interface CipherTextDependencyOptions {
   readonly Exception: Exception
   readonly ComprModeType: ComprModeType
@@ -128,7 +130,7 @@ const CipherTextConstructor =
     /**
      * @interface CipherText
      */
-    return {
+    const self: CipherText = {
       /**
        * Get the underlying WASM instance
        *
@@ -150,11 +152,9 @@ const CipherTextConstructor =
        * @param {Instance} instance WASM instance
        */
       unsafeInject(instance: Instance) {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
-        }
+        self.delete()
         _instance = instance
+        fin.reregister(_instance)
       },
 
       /**
@@ -166,10 +166,12 @@ const CipherTextConstructor =
        * @name CipherText#delete
        */
       delete() {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
+        if (!_instance) {
+          return
         }
+        fin.unregister()
+        _instance.delete()
+        _instance = undefined
       },
 
       /**
@@ -488,6 +490,10 @@ const CipherTextConstructor =
         }
       }
     }
+
+    const fin = autoFinalize(self, _instance)
+
+    return self
   }
 
 export const CipherTextInit = ({

@@ -7,6 +7,7 @@ import {
   EncryptionParametersConstructorOptions
 } from './encryption-parameters'
 import { Exception } from './exception'
+import { autoFinalize } from './finalizer'
 import { ParmsIdType, ParmsIdTypeConstructorOptions } from './parms-id-type'
 import { Instance, Library, LoaderOptions } from './seal'
 
@@ -60,7 +61,7 @@ const ContextDataConstructor =
     /**
      * @interface ContextData
      */
-    return {
+    const self: ContextData = {
       /**
        * Get the underlying WASM instance
        *
@@ -82,11 +83,9 @@ const ContextDataConstructor =
        * @param {Instance} instance WASM instance
        */
       unsafeInject(instance: Instance) {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
-        }
+        self.delete()
         _instance = instance
+        fin.reregister(_instance)
       },
 
       /**
@@ -98,10 +97,12 @@ const ContextDataConstructor =
        * @name ContextData#delete
        */
       delete() {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
+        if (!_instance) {
+          return
         }
+        fin.unregister()
+        _instance.delete()
+        _instance = undefined
       },
 
       /**
@@ -210,6 +211,10 @@ const ContextDataConstructor =
         return _instance.chainIndex()
       }
     }
+
+    const fin = autoFinalize(self, _instance)
+
+    return self
   }
 
 export const ContextDataInit = ({

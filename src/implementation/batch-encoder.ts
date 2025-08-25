@@ -1,6 +1,7 @@
 import { UNSUPPORTED_BATCH_ENCODE_ARRAY_TYPE } from './constants'
 import { Context } from './context'
 import { Exception, SealError } from './exception'
+import { autoFinalize } from './finalizer'
 import { MemoryPoolHandle } from './memory-pool-handle'
 import { PlainText, PlainTextConstructorOptions } from './plain-text'
 import { Instance, Library, LoaderOptions } from './seal'
@@ -76,7 +77,7 @@ const BatchEncoderConstructor =
     /**
      * @interface BatchEncoder
      */
-    return {
+    const self: BatchEncoder = {
       /**
        * Get the underlying WASM instance
        *
@@ -98,11 +99,9 @@ const BatchEncoderConstructor =
        * @param {Instance} instance WASM instance
        */
       unsafeInject(instance: Instance) {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
-        }
+        self.delete()
         _instance = instance
+        fin.reregister(_instance)
       },
 
       /**
@@ -114,10 +113,12 @@ const BatchEncoderConstructor =
        * @name BatchEncoder#delete
        */
       delete() {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
+        if (!_instance) {
+          return
         }
+        fin.unregister()
+        _instance.delete()
+        _instance = undefined
       },
 
       /**
@@ -317,6 +318,10 @@ const BatchEncoderConstructor =
         return _instance.slotCount()
       }
     }
+
+    const fin = autoFinalize(self, _instance)
+
+    return self
   }
 
 export const BatchEncoderInit = ({

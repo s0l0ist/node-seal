@@ -92,10 +92,10 @@ describe('SecretKey', () => {
     const item = encryptor.encryptSymmetricSerializable(plain)
     const newItem = seal.Serializable()
     newItem.unsafeInject(item.instance)
-    newItem.delete()
     const spyOn = jest.spyOn(newItem, 'delete')
     newItem.delete()
-    expect(spyOn).toHaveBeenCalled()
+    newItem.delete()
+    expect(spyOn).toHaveBeenCalledTimes(2)
     expect(newItem.instance).toBeUndefined()
   })
   test('It should save to a string', () => {

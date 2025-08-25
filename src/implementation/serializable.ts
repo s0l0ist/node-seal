@@ -1,5 +1,6 @@
 import { ComprModeType } from './compr-mode-type'
 import { Exception, SealError } from './exception'
+import { autoFinalize } from './finalizer'
 import { Instance } from './seal'
 import { VectorConstructorOptions } from './vector'
 
@@ -46,7 +47,7 @@ const SerializableConstructor =
     /**
      * @interface Serializable
      */
-    return {
+    const self: Serializable = {
       /**
        * Get the underlying WASM instance
        *
@@ -68,11 +69,9 @@ const SerializableConstructor =
        * @param {Instance} instance WASM instance
        */
       unsafeInject(instance: Instance) {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
-        }
+        self.delete()
         _instance = instance
+        fin.reregister(_instance)
       },
 
       /**
@@ -84,10 +83,12 @@ const SerializableConstructor =
        * @name Serializable#delete
        */
       delete() {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
+        if (!_instance) {
+          return
         }
+        fin.unregister()
+        _instance.delete()
+        _instance = undefined
       },
 
       /**
@@ -124,6 +125,10 @@ const SerializableConstructor =
         return tempArr
       }
     }
+
+    const fin = autoFinalize(self, _instance)
+
+    return self
   }
 
 export const SerializableInit = (): SerializableDependencies => {

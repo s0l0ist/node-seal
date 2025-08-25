@@ -169,12 +169,12 @@ describe('CipherText', () => {
     expect(cipher.instance).toBeUndefined()
   })
   test('It should skip deleting twice', () => {
-    const cipher = seal.CipherText()
-    cipher.delete()
-    const spyOn = jest.spyOn(cipher, 'delete')
-    cipher.delete()
-    expect(spyOn).toHaveBeenCalled()
-    expect(cipher.instance).toBeUndefined()
+    const item = seal.CipherText()
+    const spyOn = jest.spyOn(item, 'delete')
+    item.delete()
+    item.delete()
+    expect(spyOn).toHaveBeenCalledTimes(2)
+    expect(item.instance).toBeUndefined()
   })
   test('It should reserve memory', () => {
     const cipher = seal.CipherText()

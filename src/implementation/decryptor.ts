@@ -1,6 +1,7 @@
 import { CipherText } from './cipher-text'
 import { Context } from './context'
 import { Exception, SealError } from './exception'
+import { autoFinalize } from './finalizer'
 import { PlainText, PlainTextConstructorOptions } from './plain-text'
 import { Instance, Library, LoaderOptions } from './seal'
 import { SecretKey } from './secret-key'
@@ -53,7 +54,7 @@ const DecryptorConstructor =
     /**
      * @interface Decryptor
      */
-    return {
+    const self: Decryptor = {
       /**
        * Get the underlying WASM instance
        *
@@ -75,11 +76,9 @@ const DecryptorConstructor =
        * @param {Instance} instance WASM instance
        */
       unsafeInject(instance: Instance) {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
-        }
+        self.delete()
         _instance = instance
+        fin.reregister(_instance)
       },
 
       /**
@@ -91,10 +90,12 @@ const DecryptorConstructor =
        * @name Decryptor#delete
        */
       delete() {
-        if (_instance) {
-          _instance.delete()
-          _instance = undefined
+        if (!_instance) {
+          return
         }
+        fin.unregister()
+        _instance.delete()
+        _instance = undefined
       },
 
       /**
@@ -151,6 +152,9 @@ const DecryptorConstructor =
         }
       }
     }
+    const fin = autoFinalize(self, _instance)
+
+    return self
   }
 
 export const DecryptorInit = ({

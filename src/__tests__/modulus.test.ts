@@ -72,12 +72,12 @@ describe('Modulus', () => {
     expect(() => modulus.value).toThrow(TypeError)
   })
   test('It should skip deleting twice', () => {
-    const modulus = seal.Modulus(BigInt('6'))
-    modulus.delete()
-    const spyOn = jest.spyOn(modulus, 'delete')
-    modulus.delete()
-    expect(spyOn).toHaveBeenCalled()
-    expect(modulus.instance).toBeUndefined()
+    const item = seal.Modulus(BigInt('6'))
+    const spyOn = jest.spyOn(item, 'delete')
+    item.delete()
+    item.delete()
+    expect(spyOn).toHaveBeenCalledTimes(2)
+    expect(item.instance).toBeUndefined()
   })
   test('It should set a value', () => {
     const modulus = seal.Modulus(BigInt('6'))
