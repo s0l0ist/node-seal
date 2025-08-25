@@ -80,6 +80,10 @@ const PlainTextConstructor =
     capacity,
     coeffCount,
     pool = MemoryPoolHandle.global
+  }: {
+    capacity?: number
+    coeffCount?: number
+    pool?: MemoryPoolHandle
   } = {}): PlainText => {
     // Static methods
     const Constructor = library.Plaintext

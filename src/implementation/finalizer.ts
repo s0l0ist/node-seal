@@ -1,5 +1,5 @@
 interface DisposableResource {
-  delete?: () => void
+  delete: () => void
 }
 
 interface RegistryEntry<T> {
@@ -14,12 +14,9 @@ class ResourceRegistry {
     if (typeof FinalizationRegistry !== 'undefined') {
       this.registry = new FinalizationRegistry<RegistryEntry<any>>(entry => {
         try {
-          if (entry.resource?.delete) {
-            entry.resource.delete()
-          }
+          entry.resource.delete()
         } catch (error) {
-          // Safe to ignore: delete() may have already been called manually
-          // before the finalizer is run. This makes disposal idempotent.
+          // Ignore duplicate calls (manual delete + finalizer)
         }
       })
     }

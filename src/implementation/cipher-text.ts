@@ -80,6 +80,11 @@ const CipherTextConstructor =
     parmsId,
     sizeCapacity,
     pool = MemoryPoolHandle.global
+  }: {
+    context?: Context
+    parmsId?: ParmsIdType
+    sizeCapacity?: number
+    pool?: MemoryPoolHandle
   } = {}): CipherText => {
     // Static methods
     const Constructor = library.Ciphertext
