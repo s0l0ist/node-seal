@@ -4,6 +4,14 @@ See [Microsoft's Change
 log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md) for more details
 on each SEAL version change.
 
+## Version 6.0.1
+
+Chore:
+
+- Updated to lastest commits on Microsoft SEAL's repository to include zlib/zstd
+  version bumps. While no functional difference, `zstd` improvement is substantially increased.
+- Bump emsdk to `4.0.18`
+
 ## Version 6.0.0
 
 Feat:
