@@ -24,12 +24,12 @@ elif [[ "$ENVIRONMENT" == "web,webview" ]]; then
   SINGLE_FILE=1
   DYNAMIC_EXECUTION=1
   elif [[ "$ENVIRONMENT" == "cf_worker" ]]; then
-  ENVIRONMENT="worker"
+  ENVIRONMENT="web,worker"
   TARGET="cf_worker"
   EXPORT_ES6=1
   SINGLE_FILE=0 # disabled since we cannot eval the base64 wasm
   DYNAMIC_EXECUTION=0 # do not emit eval() and new Function()
-elif [[ "$ENVIRONMENT" == "worker" ]]; then
+elif [[ "$ENVIRONMENT" == "web,worker" ]]; then
   TARGET="worker"
   EXPORT_ES6=1
   SINGLE_FILE=1
@@ -42,8 +42,8 @@ emcc \
   -Wall \
   -flto \
   -O3 \
-  libseal-4.1.a \
-  --bind \
+  -Wl,--whole-archive libseal-4.1.a -Wl,--no-whole-archive \
+  -lembind \
   -o "${FILE_NAME}" \
   -s WASM=1 \
   -s ALLOW_MEMORY_GROWTH=1 \
