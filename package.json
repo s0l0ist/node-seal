@@ -89,7 +89,7 @@
     "path": "^0.12.7",
     "prettier": "^3.6.2",
     "rollup": "^4.52.5",
-    "rollup-plugin-copy": "^3.5.0",
+    "rollup-copy-smartly": "^2.0.0",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-typescript2": "^0.36.0",
