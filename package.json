@@ -1,6 +1,6 @@
 {
   "name": "node-seal",
-  "version": "6.0.1",
+  "version": "6.0.2",
   "description": "Homomorphic Encryption for TypeScript or JavaScript using Microsoft SEAL",
   "repository": {
     "type": "git",
@@ -44,7 +44,7 @@
     "seal:build:wasm": "npm run seal:build:wasm:node && npm run seal:build:wasm:web && npm run seal:build:wasm:worker && npm run seal:build:wasm:cf_worker",
     "seal:build:wasm:node": "export ENVIRONMENT='node' && bash scripts/seal-build-wasm.sh",
     "seal:build:wasm:web": "export ENVIRONMENT='web,webview' && bash scripts/seal-build-wasm.sh",
-    "seal:build:wasm:worker": "export ENVIRONMENT='worker' && bash scripts/seal-build-wasm.sh",
+    "seal:build:wasm:worker": "export ENVIRONMENT='web,worker' && bash scripts/seal-build-wasm.sh",
     "seal:build:wasm:cf_worker": "export ENVIRONMENT='cf_worker' && bash scripts/seal-build-wasm.sh",
     "seal": "npm run seal:cmake && npm run seal:make && npm run seal:build",
     "build:allows": "export THROW_ON_TRANSPARENT=OFF && npm run seal",

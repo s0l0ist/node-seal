@@ -4,6 +4,17 @@ See [Microsoft's Change
 log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md) for more details
 on each SEAL version change.
 
+## Version 6.0.2
+
+Fix:
+
+- use `web,worker` to account for breaking change in [emsdk](https://github.com/emscripten-core/emscripten/pull/25514).
+- `npm run seal:build:bench` && `npm run benchmark` now works as expected.
+
+Chore:
+
+- Simplify scripts by removing unnecessary flags that were enabled by default.
+
 ## Version 6.0.1
 
 Chore:
