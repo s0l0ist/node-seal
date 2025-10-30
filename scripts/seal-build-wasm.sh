@@ -45,6 +45,7 @@ emcc \
   -Wl,--whole-archive libseal-4.1.a -Wl,--no-whole-archive \
   -lembind \
   -o "${FILE_NAME}" \
+  --emit-tsd ${FILE_NAME}.d.ts \
   -s WASM=1 \
   -s ALLOW_MEMORY_GROWTH=1 \
   -s DYNAMIC_EXECUTION=${DYNAMIC_EXECUTION} \
