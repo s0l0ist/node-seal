@@ -245,7 +245,7 @@ const GaloisKeysConstructor =
        */
       clone(): GaloisKeys {
         try {
-          const clonedInstance = _instance.clone()
+          const clonedInstance = _instance.duplicate()
           const key = GaloisKeysConstructor(library)({
             Exception,
             ComprModeType,

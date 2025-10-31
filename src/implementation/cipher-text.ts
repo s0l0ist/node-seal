@@ -426,7 +426,7 @@ const CipherTextConstructor =
        */
       clone(): CipherText {
         try {
-          const clonedInstance = _instance.clone()
+          const clonedInstance = _instance.duplicate()
           const cipher = CipherTextConstructor(library)({
             Exception,
             ComprModeType,

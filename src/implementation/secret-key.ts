@@ -197,7 +197,7 @@ const SecretKeyConstructor =
        */
       clone(): SecretKey {
         try {
-          const clonedInstance = _instance.clone()
+          const clonedInstance = _instance.duplicate()
           const key = SecretKeyConstructor(library)({
             Exception,
             ComprModeType,

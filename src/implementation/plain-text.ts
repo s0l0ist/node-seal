@@ -460,7 +460,7 @@ const PlainTextConstructor =
        */
       clone(): PlainText {
         try {
-          const clonedInstance = _instance.clone()
+          const clonedInstance = _instance.duplicate()
           const plain = PlainTextConstructor(library)({
             Exception,
             ComprModeType,
