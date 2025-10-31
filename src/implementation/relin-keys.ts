@@ -247,7 +247,7 @@ const RelinKeysConstructor =
        */
       clone(): RelinKeys {
         try {
-          const clonedInstance = _instance.clone()
+          const clonedInstance = _instance.duplicate()
           const key = RelinKeysConstructor(library)({
             Exception,
             ComprModeType,

@@ -45,7 +45,7 @@ emcc \
   -Wl,--whole-archive libseal-4.1.a -Wl,--no-whole-archive \
   -lembind \
   -o "${FILE_NAME}" \
-  --emit-tsd ${FILE_NAME}.d.ts \
+  --emit-tsd seal_interface.d.ts \
   -s WASM=1 \
   -s ALLOW_MEMORY_GROWTH=1 \
   -s DYNAMIC_EXECUTION=${DYNAMIC_EXECUTION} \
@@ -56,5 +56,6 @@ emcc \
   -s ENVIRONMENT="${ENVIRONMENT}" \
   --closure 1
 cp "${FILE_NAME}" ../../../../src/bin/"${FILE_NAME}"
+cp seal_interface.d.ts ../../../../src/custom_types/seal_interface.d.ts 
 printf "done\n"
 cd ../../../
