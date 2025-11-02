@@ -53,7 +53,7 @@ const ModulusConstructor =
     function createModulus(value: bigint) {
       try {
         const inst = new Constructor()
-        inst.setValue(value.toString())
+        inst.setValue(value)
         return inst
       } catch (e) {
         throw Exception.safe(e as SealError)
@@ -120,7 +120,7 @@ const ModulusConstructor =
        */
       setValue(value: bigint) {
         try {
-          _instance.setValue(value.toString())
+          _instance.setValue(value)
         } catch (e) {
           throw Exception.safe(e as SealError)
         }

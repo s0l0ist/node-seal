@@ -172,26 +172,22 @@ const BatchEncoderConstructor =
           }
 
           if (array.constructor === BigInt64Array) {
-            // When embind supports BigInt64Arrays we can remove this hack
-            const stringArray = array.toString().split(',')
             if (plainText) {
-              _instance.encode(stringArray, plainText.instance, 'INT64')
+              _instance.encode(array, plainText.instance, 'INT64')
               return
             }
             const plain = PlainText()
-            _instance.encode(stringArray, plain.instance, 'INT64')
+            _instance.encode(array, plain.instance, 'INT64')
             return plain
           }
 
           if (array.constructor === BigUint64Array) {
-            // When embind supports BigInt64Arrays we can remove this hack
-            const stringArray = array.toString().split(',')
             if (plainText) {
-              _instance.encode(stringArray, plainText.instance, 'UINT64')
+              _instance.encode(array, plainText.instance, 'UINT64')
               return
             }
             const plain = PlainText()
-            _instance.encode(stringArray, plain.instance, 'UINT64')
+            _instance.encode(array, plain.instance, 'UINT64')
             return plain
           }
 

@@ -4,6 +4,13 @@ See [Microsoft's Change
 log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md) for more details
 on each SEAL version change.
 
+## Version 6.0.3
+
+Feat:
+
+- Optimized many of the C++ bindings, reducing the number of duplicate copies of
+  some vectors
+
 ## Version 6.0.2
 
 Fix:
