@@ -8,14 +8,28 @@ on each SEAL version change.
 
 Feat:
 
-- Optimized many of the C++ bindings, reducing the number of duplicate copies of
-  some vectors
+- Many internal enhancements to clean up the C++ bindings focused on reducing
+  memory.
+  - Replaced `ostringstream`/`istringstream` paths with direct buffer `save()`/`load()`
+    overloads.
+  - Removed intermediate `std::string`/`val` conversions; return/register native
+    `std::vector<T>` where appropriate.
+  - Switched JS boundary to use TypedArray + single bulk copy (or
+    `typed_memory_view`when safe).
+  - Avoided constructing registered vectors in JS (no per-element crossings).
+  - `BatchEncoder.decodeBigInt` now handles true 64-bit values via JS BigInt
+- No string round-trips; decodes directly from `BigInt64Array`/`BigUint64Array`.
+  - Preserves full 64-bit precision; eliminates 2^53-1 pitfalls.
+- `Modulus.setValue` accepts native BigInt
+  - Replaces stringified inputs; simpler API, fewer conversions, and better
+    performance.
 
 ## Version 6.0.2
 
 Fix:
 
-- use `web,worker` to account for breaking change in [emsdk](https://github.com/emscripten-core/emscripten/pull/25514).
+- use `web,worker` to account for breaking change in
+  [emsdk](https://github.com/emscripten-core/emscripten/pull/25514).
 - `npm run seal:build:bench` && `npm run benchmark` now works as expected.
 
 Chore:
@@ -27,7 +41,8 @@ Chore:
 Chore:
 
 - Updated to lastest commits on Microsoft SEAL's repository to include zlib/zstd
-  version bumps. While no functional difference, `zstd` improvement is substantially increased.
+  version bumps. While no functional difference, `zstd` improvement is
+  substantially increased.
 - Bump emsdk to `4.0.18`
 
 ## Version 6.0.0
