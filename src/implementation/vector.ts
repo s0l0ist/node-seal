@@ -2,7 +2,6 @@ import { INSTANCE_DELETED, UNSUPPORTED_VECTOR_TYPE } from './constants'
 import { Exception, SealError } from './exception'
 import { autoFinalize } from './finalizer'
 import { Instance, Library, LoaderOptions } from './seal'
-
 export interface VectorDependencyOptions {
   readonly Exception: Exception
 }
@@ -61,9 +60,9 @@ const VectorConstructor =
     const _jsArrayUint32FromVec = library.jsArrayUint32FromVec
     const _jsArrayInt32FromVec = library.jsArrayInt32FromVec
     const _jsArrayFloat64FromVec = library.jsArrayFloat64FromVec
-    const _jsArrayStringFromVecInt64 = library.jsArrayStringFromVecInt64
-    const _jsArrayStringFromVecUint64 = library.jsArrayStringFromVecUint64
-    const _jsArrayStringFromVecModulus = library.jsArrayStringFromVecModulus
+    const _jsArrayBigInt64FromVec = library.jsArrayBigInt64FromVec
+    const _jsArrayBigUint64FromVec = library.jsArrayBigUint64FromVec
+    const _jsArrayModulusFromVec = library.jsArrayModulusFromVec
 
     let _instance: Instance
     let _type: StringTypes
@@ -143,13 +142,13 @@ const VectorConstructor =
               _instance = _vecFromArrayFloat64(array)
               break
             case 'BigInt64Array':
-              _instance = _vecFromArrayBigInt64(array.toString().split(','))
+              _instance = _vecFromArrayBigInt64(array)
               break
             case 'BigUint64Array':
-              _instance = _vecFromArrayBigUint64(array.toString().split(','))
+              _instance = _vecFromArrayBigUint64(array)
               break
             case 'Modulus':
-              _instance = _vecFromArrayModulus(array.toString().split(','))
+              _instance = _vecFromArrayModulus(array)
               break
             default:
               throw new Error(UNSUPPORTED_VECTOR_TYPE)
@@ -248,11 +247,11 @@ const VectorConstructor =
           case 'Float64Array':
             return Float64Array.from(_jsArrayFloat64FromVec(_instance))
           case 'BigInt64Array':
-            return BigInt64Array.from(_jsArrayStringFromVecInt64(_instance))
+            return BigInt64Array.from(_jsArrayBigInt64FromVec(_instance))
           case 'BigUint64Array':
-            return BigUint64Array.from(_jsArrayStringFromVecUint64(_instance))
+            return BigUint64Array.from(_jsArrayBigUint64FromVec(_instance))
           case 'Modulus':
-            return BigUint64Array.from(_jsArrayStringFromVecModulus(_instance))
+            return BigUint64Array.from(_jsArrayModulusFromVec(_instance))
           default:
             throw new Error(UNSUPPORTED_VECTOR_TYPE)
         }

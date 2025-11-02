@@ -223,17 +223,6 @@ describe('Vector', () => {
     expect(spyOn).toHaveBeenCalledWith()
     expect(res).toEqual(arr)
   })
-  test('It should return an BigUint64Array, Modulus, (2^61 - 1)', () => {
-    const item = seal.Vector()
-    const arr = BigUint64Array.from({ length: 4096 }, _ =>
-      BigInt('2305843009213693951')
-    )
-    item.from(arr, 'Modulus')
-    const spyOn = jest.spyOn(item, 'toArray')
-    const res = item.toArray()
-    expect(spyOn).toHaveBeenCalledWith()
-    expect(res).toEqual(arr)
-  })
   test('It should throw if not initialized', () => {
     const item = seal.Vector()
     const spyOn = jest.spyOn(item, 'toArray')

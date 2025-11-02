@@ -112,10 +112,10 @@ export interface Modulus extends ClassHandle {
   isZero(): boolean;
   isPrime(): boolean;
   bitCount(): number;
+  setValue(_0: bigint): void;
+  value(): bigint;
   saveToString(_0: ComprModeType): string;
   loadFromString(_0: EmbindString): void;
-  setValue(_0: EmbindString): void;
-  value(): string;
   loadFromArray(_0: any): void;
 }
 
@@ -294,11 +294,11 @@ export interface Plaintext extends ClassHandle {
   significantCoeffCount(): number;
   nonzeroCoeffCount(): number;
   scale(): number;
+  setScale(_0: number): void;
   saveToString(_0: ComprModeType): string;
   loadFromString(_0: SEALContext, _1: EmbindString): void;
   toPolynomial(): string;
   loadFromArray(_0: SEALContext, _1: any): void;
-  setScale(_0: any): number;
 }
 
 export interface Ciphertext extends ClassHandle {
@@ -319,10 +319,10 @@ export interface Ciphertext extends ClassHandle {
   sizeCapacity(): number;
   scale(): number;
   correctionFactor(): number;
+  setScale(_0: number): void;
   saveToString(_0: ComprModeType): string;
   loadFromString(_0: SEALContext, _1: EmbindString): void;
   loadFromArray(_0: SEALContext, _1: any): void;
-  setScale(_0: any): number;
 }
 
 export interface BatchEncoder extends ClassHandle {
@@ -414,6 +414,7 @@ interface EmbindModule {
     new(): VectorModulus;
   };
   UtilHashFunction: {
+    hash(_0: any): ParmsIdType;
     hashBlockUint64Count: number;
     hashBlockByteCount: number;
   };
@@ -518,9 +519,9 @@ interface EmbindModule {
   jsArrayInt32FromVec(_0: VectorI32): any;
   jsArrayUint32FromVec(_0: VectorU32): any;
   jsArrayFloat64FromVec(_0: VectorF64): any;
-  jsArrayStringFromVecInt64(_0: VectorI64): any;
-  jsArrayStringFromVecUint64(_0: VectorU64): any;
-  jsArrayStringFromVecModulus(_0: VectorModulus): any;
+  jsArrayBigInt64FromVec(_0: VectorI64): any;
+  jsArrayBigUint64FromVec(_0: VectorU64): any;
+  jsArrayModulusFromVec(_0: VectorModulus): any;
   vecFromArrayUint8(_0: any): VectorU8;
   vecFromArrayInt32(_0: any): VectorI32;
   vecFromArrayUint32(_0: any): VectorU32;
