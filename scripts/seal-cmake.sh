@@ -9,7 +9,7 @@ cd ../SEAL/
 
 if [[ "$BUILD_BENCH" == "ON" ]]; then
   BENCH="ON"
-  FLAGS="-DNDEBUG -flto -fwasm-exceptions -O3 -Wno-error -Wno-c2y-extensions"
+  FLAGS="-DNDEBUG -flto -fwasm-exceptions -O3 -Wno-c2y-extensions"
 else
   BENCH="OFF"
   FLAGS="-DNDEBUG -flto -fwasm-exceptions -O3"
