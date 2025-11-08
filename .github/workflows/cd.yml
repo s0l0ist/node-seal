@@ -18,7 +18,7 @@ jobs:
 
       - name: Pull & update submodules
         run: |
-          npm run update:submodule
+          git submodule update --init
 
       - name: EMSDK Version
         id: emsdk-version
