@@ -14,7 +14,7 @@ jobs:
 
       - name: Pull & update submodules
         run: |
-          git submodule update --init
+          npm run update:submodule
 
       - name: EMSDK Version
         id: emsdk-version
@@ -31,7 +31,7 @@ jobs:
       - name: Update EMSDK
         if: steps.cache-emsdk.outputs.cache-hit != 'true'
         run: |
-          npm run em:update
+          npm run update:emsdk
 
       - name: Compile SEAL
         if: steps.cache-seal.outputs.cache-hit != 'true'
@@ -43,7 +43,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: seal-artifacts
-          path: src/bin/
+          path: src/
           if-no-files-found: error
 
   test:
@@ -65,7 +65,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: seal-artifacts
-          path: src/bin/
+          path: src/
 
       - name: Transpile to JavaScript
         run: |
