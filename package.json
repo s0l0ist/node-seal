@@ -60,10 +60,7 @@
     "test:coverage": "vitest run --coverage",
     "benchmark": "node submodules/SEAL/build/bin/sealbench.js",
     "update:submodule": "bash scripts/submodule-update.sh",
-    "update:emsdk": "bash scripts/em-update.sh",
-    "prepublishOnly": "echo 'Please run \"npm run publish\" instead' && exit 1",
-    "publish:test": "npm --dry-run publish",
-    "publish": "npm publish --access=public"
+    "update:emsdk": "bash scripts/em-update.sh"
   },
   "devDependencies": {
     "@types/node": "^24.10.0",
