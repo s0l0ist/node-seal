@@ -51,7 +51,7 @@
     "wasm:build": "bash scripts/seal-build-wasm.sh",
     "wasm:throws": "export THROW_ON_TRANSPARENT=ON && npm run wasm:cmake && npm run wasm:make && npm run wasm:build",
     "wasm:allows": "export THROW_ON_TRANSPARENT=OFF && npm run wasm:cmake && npm run wasm:make && npm run wasm:build",
-    "wasm:bench": "export BUILD_BENCH=ON && export THROW_ON_TRANSPARENT=ON && npm run wasm:cmake && npm run wasm:make",
+    "wasm:bench": "export BUILD_BENCH=ON && export THROW_ON_TRANSPARENT=ON && npm run wasm:cmake && npm run wasm:make && echo '{ \"type\": \"commonjs\" }' > ./submodules/SEAL/build/bin/package.json",
     "wasm": "npm run wasm:throws && npm run wasm:allows",
     "build": "npm run wasm",
     "compile": " tsc && cp src/seal_* dist/",
@@ -61,7 +61,9 @@
     "benchmark": "node submodules/SEAL/build/bin/sealbench.js",
     "update:submodule": "bash scripts/submodule-update.sh",
     "update:emsdk": "bash scripts/em-update.sh",
-    "publish:test": "npm --dry-run publish"
+    "prepublishOnly": "echo 'Please run \"npm run publish\" instead' && exit 1",
+    "publish:test": "npm --dry-run publish",
+    "publish": "npm publish --access=public"
   },
   "devDependencies": {
     "@types/node": "^24.10.0",
