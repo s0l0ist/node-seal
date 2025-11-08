@@ -1,370 +1,143 @@
-import { SEALLibrary } from '../implementation/seal'
-import SEAL from '../throws_wasm_node_umd'
-let seal: SEALLibrary
+import { beforeAll, describe, expect, test } from 'vitest'
+import MainModuleFactory, { type MainModule } from '../index_throws'
+
+let seal: MainModule
+
 beforeAll(async () => {
-  seal = await SEAL()
+  seal = await MainModuleFactory()
 })
 
 describe('EncryptionParameters', () => {
-  test('It should be a factory', () => {
-    expect(seal.EncryptionParameters).toBeDefined()
-    expect(typeof seal.EncryptionParameters.constructor).toBe('function')
-    expect(seal.EncryptionParameters).toBeInstanceOf(Object)
-    expect(seal.EncryptionParameters.constructor).toBe(Function)
-    expect(seal.EncryptionParameters.constructor.name).toBe('Function')
-  })
-  test('It should construct an instance', () => {
-    const Constructor = jest.fn(seal.EncryptionParameters)
-    Constructor()
-    expect(Constructor).toHaveBeenCalledWith()
-  })
-  test('It should have properties', () => {
-    const encParms = seal.EncryptionParameters()
-    // Test properties
-    expect(encParms).toHaveProperty('instance')
-    expect(encParms).toHaveProperty('unsafeInject')
-    expect(encParms).toHaveProperty('delete')
-    expect(encParms).toHaveProperty('setPolyModulusDegree')
-    expect(encParms).toHaveProperty('setCoeffModulus')
-    expect(encParms).toHaveProperty('setPlainModulus')
-    expect(encParms).toHaveProperty('scheme')
-    expect(encParms).toHaveProperty('polyModulusDegree')
-    expect(encParms).toHaveProperty('coeffModulus')
-    expect(encParms).toHaveProperty('plainModulus')
-    expect(encParms).toHaveProperty('parmsId')
-    expect(encParms).toHaveProperty('save')
-    expect(encParms).toHaveProperty('saveArray')
-    expect(encParms).toHaveProperty('load')
-    expect(encParms).toHaveProperty('loadArray')
-  })
-  test('It should have an instance', () => {
-    const encParms = seal.EncryptionParameters()
-    expect(encParms.instance).toBeDefined()
-  })
-  test('It should inject', () => {
-    const encParms = seal.EncryptionParameters()
-    const newEncParms = seal.EncryptionParameters(seal.SchemeType.bfv)
-    newEncParms.delete()
-    const spyOn = jest.spyOn(newEncParms, 'unsafeInject')
-    newEncParms.unsafeInject(encParms.instance)
-    expect(spyOn).toHaveBeenCalledWith(encParms.instance)
-    expect(newEncParms.scheme).toEqual(seal.SchemeType.none)
-  })
-  test('It should delete the old instance and inject', () => {
-    const encParms = seal.EncryptionParameters()
-    const newEncParms = seal.EncryptionParameters(seal.SchemeType.bfv)
-    const spyOn = jest.spyOn(newEncParms, 'unsafeInject')
-    newEncParms.unsafeInject(encParms.instance)
-    expect(spyOn).toHaveBeenCalledWith(encParms.instance)
-    expect(newEncParms.scheme).toEqual(seal.SchemeType.none)
-  })
-  test("It should delete it's instance", () => {
-    const encParms = seal.EncryptionParameters()
-    encParms.delete()
-    const spyOn = jest.spyOn(encParms, 'delete')
-    encParms.delete()
-    expect(spyOn).toHaveBeenCalled()
-    expect(encParms.instance).toBeUndefined()
-    expect(() => encParms.polyModulusDegree).toThrow(TypeError)
-  })
-  test('It should skip deleting twice', () => {
-    const item = seal.EncryptionParameters()
-    const spyOn = jest.spyOn(item, 'delete')
-    item.delete()
-    item.delete()
-    expect(spyOn).toHaveBeenCalledTimes(2)
-    expect(item.instance).toBeUndefined()
-  })
   test('It should set the poly modulus degree (bfv)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
-    const spyOn = jest.spyOn(encParms, 'setPolyModulusDegree')
+    const encParms = new seal.EncryptionParameters(seal.SchemeType.bfv)
+
     encParms.setPolyModulusDegree(4096)
-    expect(spyOn).toHaveBeenCalledWith(4096)
-    expect(encParms.polyModulusDegree).toEqual(4096)
+    expect(encParms.polyModulusDegree()).toBe(4096)
+    expect(encParms.scheme().value).toBe(seal.SchemeType.bfv.value)
+
+    encParms.setCoeffModulus(
+      seal.CoeffModulus.BFVDefault(4096, seal.SecLevelType.tc128)
+    )
+    const coeffModulus = encParms.coeffModulus()
+    expect(coeffModulus.size()).toBe(3)
+    expect(coeffModulus.get(0)!.value()).toBe(68719403009n)
+    expect(coeffModulus.get(1)!.value()).toBe(68719230977n)
+    expect(coeffModulus.get(2)!.value()).toBe(137438822401n)
+
+    encParms.setPlainModulus(new seal.Modulus(786433n))
+    expect(encParms.plainModulus().value()).toBe(786433n)
+
+    const parms = encParms.parmsId().values() as BigUint64Array
+    expect(parms.length).toBe(4)
+    expect(parms[0]).toBe(10807243428128829454n)
+    expect(parms[1]).toBe(8129154358874821315n)
+    expect(parms[2]).toBe(8841943985315564673n)
+    expect(parms[3]).toBe(3700895094742043715n)
   })
   test('It should set the poly modulus degree (bgv)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.bgv)
-    const spyOn = jest.spyOn(encParms, 'setPolyModulusDegree')
+    const encParms = new seal.EncryptionParameters(seal.SchemeType.bgv)
+
     encParms.setPolyModulusDegree(4096)
-    expect(spyOn).toHaveBeenCalledWith(4096)
-    expect(encParms.polyModulusDegree).toEqual(4096)
-  })
-  test('It should fail to set the coeff modulus (none)', () => {
-    const encParms = seal.EncryptionParameters()
-    const coeffModulus = seal.CoeffModulus.BFVDefault(
-      4096,
-      seal.SecurityLevel.tc128
+    expect(encParms.polyModulusDegree()).toEqual(4096)
+    expect(encParms.scheme().value).toEqual(seal.SchemeType.bgv.value)
+
+    encParms.setCoeffModulus(
+      seal.CoeffModulus.BFVDefault(4096, seal.SecLevelType.tc128)
     )
-    const spyOn = jest.spyOn(encParms, 'setCoeffModulus')
-    expect(() => encParms.setCoeffModulus(coeffModulus)).toThrow()
-    expect(spyOn).toHaveBeenCalledWith(coeffModulus)
+    const coeffModulus = encParms.coeffModulus()
+    expect(coeffModulus.size()).toEqual(3)
+    expect(coeffModulus.get(0)!.value()).toEqual(68719403009n)
+    expect(coeffModulus.get(1)!.value()).toEqual(68719230977n)
+    expect(coeffModulus.get(2)!.value()).toEqual(137438822401n)
+
+    encParms.setPlainModulus(new seal.Modulus(786433n))
+    expect(encParms.plainModulus().value()).toEqual(786433n)
+
+    const parms = encParms.parmsId().values() as BigUint64Array
+    expect(parms.length).toBe(4)
+    expect(parms[0]).toBe(18229092140703004947n)
+    expect(parms[1]).toBe(12584449816859468838n)
+    expect(parms[2]).toBe(742207248595666993n)
+    expect(parms[3]).toBe(16393914441491528673n)
   })
-  test('It should set the coeff modulus (bfv)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
-    const coeffModulus = seal.CoeffModulus.BFVDefault(
-      4096,
-      seal.SecurityLevel.tc128
-    )
-    const spyOn = jest.spyOn(encParms, 'setCoeffModulus')
-    encParms.setCoeffModulus(coeffModulus)
-    expect(spyOn).toHaveBeenCalledWith(coeffModulus)
-    const coeffModArray = encParms.coeffModulus
-    expect(coeffModArray.constructor).toBe(BigUint64Array)
-    expect(coeffModArray).toEqual(
-      BigUint64Array.from([
-        BigInt('68719403009'),
-        BigInt('68719230977'),
-        BigInt('137438822401')
-      ])
-    )
-  })
-  test('It should set the coeff modulus (bgv)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.bgv)
-    const coeffModulus = seal.CoeffModulus.BFVDefault(
-      4096,
-      seal.SecurityLevel.tc128
-    )
-    const spyOn = jest.spyOn(encParms, 'setCoeffModulus')
-    encParms.setCoeffModulus(coeffModulus)
-    expect(spyOn).toHaveBeenCalledWith(coeffModulus)
-    const coeffModArray = encParms.coeffModulus
-    expect(coeffModArray.constructor).toBe(BigUint64Array)
-    expect(coeffModArray).toEqual(
-      BigUint64Array.from([
-        BigInt('68719403009'),
-        BigInt('68719230977'),
-        BigInt('137438822401')
-      ])
-    )
-  })
-  test('It should set the coeff modulus (ckks)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.ckks)
-    const coeffModulus = seal.CoeffModulus.Create(
-      4096,
-      Int32Array.from([46, 16, 46])
-    )
-    const spyOn = jest.spyOn(encParms, 'setCoeffModulus')
-    encParms.setCoeffModulus(coeffModulus)
-    expect(spyOn).toHaveBeenCalledWith(coeffModulus)
-    const coeffModArray = encParms.coeffModulus
-    expect(coeffModArray.constructor).toBe(BigUint64Array)
-    expect(coeffModArray).toEqual(
-      BigUint64Array.from([
-        BigInt('70368743587841'),
-        BigInt('40961'),
-        BigInt('70368743669761')
-      ])
-    )
-  })
-  test('It should fail to set the plain modulus (none)', () => {
-    const encParms = seal.EncryptionParameters()
-    const plainModulus = seal.Modulus(BigInt('786433'))
-    const spyOn = jest.spyOn(encParms, 'setPlainModulus')
-    expect(() => encParms.setPlainModulus(plainModulus)).toThrow()
-    expect(spyOn).toHaveBeenCalledWith(plainModulus)
-  })
-  test('It should set the plain modulus (bfv)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
-    const plainModulus = seal.Modulus(BigInt('786433'))
-    const spyOn = jest.spyOn(encParms, 'setPlainModulus')
-    encParms.setPlainModulus(plainModulus)
-    expect(spyOn).toHaveBeenCalledWith(plainModulus)
-    expect(typeof encParms.plainModulus.value).toBe('bigint')
-    expect(encParms.plainModulus.value).toBe(BigInt('786433'))
-  })
-  test('It should set the plain modulus (bgv)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.bgv)
-    const plainModulus = seal.Modulus(BigInt('786433'))
-    const spyOn = jest.spyOn(encParms, 'setPlainModulus')
-    encParms.setPlainModulus(plainModulus)
-    expect(spyOn).toHaveBeenCalledWith(plainModulus)
-    expect(typeof encParms.plainModulus.value).toBe('bigint')
-    expect(encParms.plainModulus.value).toBe(BigInt('786433'))
-  })
-  test('It should return the scheme (none)', () => {
-    const encParms = seal.EncryptionParameters()
-    expect(encParms.scheme).toEqual(seal.SchemeType.none)
-  })
-  test('It should fail to return the poly modulus degree (none)', () => {
-    const encParms = seal.EncryptionParameters()
-    expect(() => encParms.setPolyModulusDegree(4096)).toThrow()
-    expect(encParms.polyModulusDegree).not.toEqual(4096)
-  })
-  test('It should return the poly modulus degree (bfv)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
+  test('It should set the poly modulus degree (ckks)', () => {
+    const encParms = new seal.EncryptionParameters(seal.SchemeType.ckks)
+
     encParms.setPolyModulusDegree(4096)
-    expect(encParms.polyModulusDegree).toEqual(4096)
-  })
-  test('It should return the poly modulus degree (bgv)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.bgv)
-    encParms.setPolyModulusDegree(4096)
-    expect(encParms.polyModulusDegree).toEqual(4096)
-  })
-  test('It should return the poly modulus degree (ckks)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.ckks)
-    encParms.setPolyModulusDegree(4096)
-    expect(encParms.polyModulusDegree).toEqual(4096)
+    expect(encParms.polyModulusDegree()).toEqual(4096)
+    expect(encParms.scheme().value).toEqual(seal.SchemeType.ckks.value)
+
+    encParms.setCoeffModulus(
+      seal.CoeffModulus.BFVDefault(4096, seal.SecLevelType.tc128)
+    )
+    const coeffModulus = encParms.coeffModulus()
+    expect(coeffModulus.size()).toEqual(3)
+    expect(coeffModulus.get(0)!.value()).toEqual(68719403009n)
+    expect(coeffModulus.get(1)!.value()).toEqual(68719230977n)
+    expect(coeffModulus.get(2)!.value()).toEqual(137438822401n)
+
+    // CKKS doesn't use a plain modulus
+    expect(() => encParms.setPlainModulus(new seal.Modulus(786433n))).toThrow()
+
+    const parms = encParms.parmsId().values() as BigUint64Array
+    expect(parms.length).toBe(4)
+    expect(parms[0]).toBe(2448172225414288450n)
+    expect(parms[1]).toBe(15682004596124352107n)
+    expect(parms[2]).toBe(6314803095110952676n)
+    expect(parms[3]).toBe(8761999974012542172n)
   })
 
-  test('It should fail to return the coeff modulus (none)', () => {
-    const encParms = seal.EncryptionParameters()
-    expect(() =>
-      encParms.setCoeffModulus(
-        seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
-      )
-    ).toThrow()
-  })
-  test('It should return the coeff modulus (bfv)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
-    encParms.setCoeffModulus(
-      seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
+  test('It should save/load from a base64 string', () => {
+    const str = new seal.EncryptionParameters(
+      seal.SchemeType.none
+    ).saveToBase64(seal.ComprModeType.none)
+    expect(str).toBe(
+      'XqEQBAEAAAA5AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXqEQBAEAAAAYAAAAAAAAAAAAAAAAAAAA'
     )
-    const coeffModArray = encParms.coeffModulus
-    expect(coeffModArray.constructor).toBe(BigUint64Array)
-    expect(coeffModArray).toEqual(
-      BigUint64Array.from([
-        BigInt('68719403009'),
-        BigInt('68719230977'),
-        BigInt('137438822401')
+
+    const encParms = new seal.EncryptionParameters(seal.SchemeType.bfv)
+    // Load from a SchemeType.none
+    encParms.loadFromBase64(str)
+    expect(encParms.scheme().value).toBe(seal.SchemeType.none.value)
+    expect(encParms.polyModulusDegree()).toBe(0)
+    expect(encParms.coeffModulus().size()).toBe(0)
+    expect((encParms.parmsId().values() as BigUint64Array).length).toBe(4)
+  })
+  test('It should save/load from a typed array', () => {
+    const vec = new seal.EncryptionParameters(seal.SchemeType.none).saveToArray(
+      seal.ComprModeType.none
+    )
+
+    expect(vec).toEqual(
+      Uint8Array.from([
+        94, 161, 16, 4, 1, 0, 0, 0, 57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 94, 161, 16, 4, 1, 0, 0, 0, 24, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
       ])
     )
-  })
-  test('It should return the coeff modulus (bgv)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.bgv)
-    encParms.setCoeffModulus(
-      seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
-    )
-    const coeffModArray = encParms.coeffModulus
-    expect(coeffModArray.constructor).toBe(BigUint64Array)
-    expect(coeffModArray).toEqual(
-      BigUint64Array.from([
-        BigInt('68719403009'),
-        BigInt('68719230977'),
-        BigInt('137438822401')
-      ])
-    )
-  })
-  test('It should return the coeff modulus (ckks)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.ckks)
-    encParms.setCoeffModulus(
-      seal.CoeffModulus.Create(4096, Int32Array.from([46, 16, 46]))
-    )
-    const coeffModArray = encParms.coeffModulus
-    expect(coeffModArray.constructor).toBe(BigUint64Array)
-    expect(coeffModArray).toEqual(
-      BigUint64Array.from([
-        BigInt('70368743587841'),
-        BigInt('40961'),
-        BigInt('70368743669761')
-      ])
-    )
-  })
-  test('It should fail to return the plain modulus (none)', () => {
-    const encParms = seal.EncryptionParameters()
-    expect(() =>
-      encParms.setPlainModulus(seal.Modulus(BigInt('786433')))
-    ).toThrow()
-  })
-  test('It should return the plain modulus (bfv)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
-    encParms.setPlainModulus(seal.Modulus(BigInt('786433')))
-    expect(encParms.plainModulus.value).toBe(BigInt(786433))
-  })
-  test('It should return the plain modulus (bgv)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.bgv)
-    encParms.setPlainModulus(seal.Modulus(BigInt('786433')))
-    expect(encParms.plainModulus.value).toBe(BigInt(786433))
-  })
-  test('It should fail to return the plain modulus (ckks)', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.ckks)
-    expect(() =>
-      encParms.setPlainModulus(seal.Modulus(BigInt('786433')))
-    ).toThrow()
-  })
-  test('It should save to a string (none)', () => {
-    const encParms = seal.EncryptionParameters()
-    const spyOn = jest.spyOn(encParms, 'save')
-    const str = encParms.save()
-    expect(spyOn).toHaveBeenCalled()
-    expect(typeof str).toBe('string')
-  })
-  test('It should save to a string', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
-    encParms.setPolyModulusDegree(4096)
-    encParms.setCoeffModulus(
-      seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
-    )
-    encParms.setPlainModulus(seal.Modulus(BigInt('786433')))
-    const spyOn = jest.spyOn(encParms, 'save')
-    const str = encParms.save()
-    expect(spyOn).toHaveBeenCalled()
-    expect(typeof str).toBe('string')
-  })
-  test('It should save to an array', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
-    encParms.setPolyModulusDegree(4096)
-    encParms.setCoeffModulus(
-      seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
-    )
-    encParms.setPlainModulus(seal.Modulus(BigInt('786433')))
-    const spyOn = jest.spyOn(encParms, 'saveArray')
-    const array = encParms.saveArray()
-    expect(spyOn).toHaveBeenCalled()
-    expect(array.constructor).toBe(Uint8Array)
-  })
-  test('It should return a parms id type', () => {
-    const encParms = seal.EncryptionParameters(seal.SchemeType.bfv)
-    const parms = encParms.parmsId
-    const values = parms.values
-    expect(values.constructor).toBe(BigUint64Array)
-    values.forEach(x => {
-      expect(typeof x).toBe('bigint')
-    })
-  })
-  test('It should load from a string', () => {
-    const encParms = seal.EncryptionParameters()
-    const str = encParms.save()
-    encParms.delete()
-    const newEncParms = seal.EncryptionParameters(seal.SchemeType.bfv)
-    const spyOn = jest.spyOn(newEncParms, 'load')
-    newEncParms.load(str)
-    expect(spyOn).toHaveBeenCalledWith(str)
-  })
-  test('It should load from a typed array', () => {
-    const encParms = seal.EncryptionParameters()
-    const array = encParms.saveArray()
-    encParms.delete()
-    const newEncParms = seal.EncryptionParameters(seal.SchemeType.bfv)
-    const spyOn = jest.spyOn(newEncParms, 'loadArray')
-    newEncParms.loadArray(array)
-    expect(spyOn).toHaveBeenCalledWith(array)
+
+    const encParms = new seal.EncryptionParameters(seal.SchemeType.bfv)
+    encParms.loadFromArray(vec)
+    expect(encParms.scheme().value).toBe(seal.SchemeType.none.value)
+    expect(encParms.polyModulusDegree()).toBe(0)
+    expect(encParms.coeffModulus().size()).toBe(0)
+    expect((encParms.parmsId().values() as BigUint64Array).length).toBe(4)
   })
   test('It should fail to load from a string', () => {
-    const encParms = seal.EncryptionParameters()
-    const spyOn = jest.spyOn(encParms, 'load')
+    const encParms = new seal.EncryptionParameters(seal.SchemeType.none)
     expect(() =>
-      encParms.load('XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw==')
-    ).toThrow()
-    expect(spyOn).toHaveBeenCalledWith(
-      'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
-    )
-  })
-  test('It should fail to load from a typed array', () => {
-    const encParms = seal.EncryptionParameters()
-    const spyOn = jest.spyOn(encParms, 'loadArray')
-    expect(() =>
-      encParms.loadArray(
-        Uint8Array.from([
-          94, 161, 16, 3, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 120, 156, 99, 103,
-          128, 0, 0, 0, 64, 0, 8
-        ])
+      encParms.loadFromBase64(
+        'XqEAASUAAAAAAAAAAAAAAHicY2CgCHywj1vIwCCBRQYAOAcCRw=='
       )
     ).toThrow()
-    expect(spyOn).toHaveBeenCalledWith(
-      Uint8Array.from([
-        94, 161, 16, 3, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 120, 156, 99, 103,
-        128, 0, 0, 0, 64, 0, 8
-      ])
-    )
+  })
+  test('It should fail to load from a typed array', () => {
+    const encParms = new seal.EncryptionParameters(seal.SchemeType.none)
+    const array = Uint8Array.from([
+      94, 161, 16, 3, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 120, 156, 99, 103,
+      128, 0, 0, 0, 64, 0, 8
+    ])
+
+    expect(() => encParms.loadFromArray(array)).toThrow()
   })
 })

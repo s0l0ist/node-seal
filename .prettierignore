@@ -1,6 +1,4 @@
 /dist/*
-/docs/*
-/node_modules/*
-/scripts/*
-/src/bin/**/*.js
+/node_modules
+/src/seal_*
 /submodules/*

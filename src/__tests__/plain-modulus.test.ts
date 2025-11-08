@@ -1,65 +1,37 @@
-import { EncryptionParameters } from '../implementation/encryption-parameters'
-import { SEALLibrary } from '../implementation/seal'
-import SEAL from '../throws_wasm_node_umd'
-let seal: SEALLibrary
-let parms: EncryptionParameters
+import { beforeAll, describe, expect, test } from 'vitest'
+import MainModuleFactory, { type MainModule } from '../index_throws'
+
+let seal: MainModule
+
 beforeAll(async () => {
-  seal = await SEAL()
-  parms = seal.EncryptionParameters(seal.SchemeType.bfv)
-  parms.setPolyModulusDegree(4096)
-  parms.setCoeffModulus(
-    seal.CoeffModulus.BFVDefault(4096, seal.SecurityLevel.tc128)
-  )
-  parms.setPlainModulus(seal.PlainModulus.Batching(4096, 20))
+  seal = await MainModuleFactory()
 })
 
 describe('PlainModulus', () => {
-  test('It should be a static instance', () => {
-    expect(seal.PlainModulus).toBeDefined()
-    expect(typeof seal.PlainModulus.constructor).toBe('function')
-    expect(seal.PlainModulus).toBeInstanceOf(Object)
-    expect(seal.PlainModulus.constructor).toBe(Object)
-    expect(seal.PlainModulus.constructor.name).toBe('Object')
-  })
-  test('It should have properties', () => {
-    // Test properties
-    expect(seal.PlainModulus).toHaveProperty('Batching')
-    expect(seal.PlainModulus).toHaveProperty('BatchingVector')
+  test('It should create a batching modulus', () => {
+    const modulus = seal.PlainModulus.Batching(4096, 20)
+    expect(modulus.isZero()).toBe(false)
+    expect(modulus.isPrime()).toBe(true)
+    expect(modulus.bitCount()).toBe(20)
+    expect(modulus.value()).toBe(1032193n)
   })
 
-  test('It should a return a Modulus', () => {
-    const spyOn = jest.spyOn(seal.PlainModulus, 'Batching')
-    const modulus = seal.PlainModulus.Batching(4096, 20)
-    expect(spyOn).toHaveBeenCalledWith(4096, 20)
-    expect(modulus).toBeDefined()
-    expect(typeof modulus.constructor).toBe('function')
-    expect(modulus).toBeInstanceOf(Object)
-    expect(modulus.constructor).toBe(Object)
-    expect(modulus.constructor.name).toBe('Object')
-    expect(modulus.instance.constructor.name).toBe('Modulus')
-  })
-  test('It should fail to return a Modulus', () => {
-    const spyOn = jest.spyOn(seal.PlainModulus, 'Batching')
-    expect(() => seal.PlainModulus.Batching(4095, 20)).toThrow()
-    expect(spyOn).toHaveBeenCalledWith(4095, 20)
-  })
-  test('It should a create a Vector of Modulus', () => {
-    const spyOn = jest.spyOn(seal.PlainModulus, 'BatchingVector')
-    const vectModulus = seal.PlainModulus.BatchingVector(
+  test('It should create a batching vector of modulus', () => {
+    const vecModulus = seal.PlainModulus.BatchingVector(
       4096,
       Int32Array.from([20, 20, 20])
     )
-    expect(spyOn).toHaveBeenCalledWith(4096, Int32Array.from([20, 20, 20]))
-    expect(vectModulus).toBeDefined()
-    expect(typeof vectModulus.constructor).toBe('function')
-    expect(vectModulus).toBeInstanceOf(Object)
-    expect(vectModulus.constructor.name).toBe('VectorModulus')
+    const arr = seal.jsArrayFromVecModulus(vecModulus)
+    expect(arr).toEqual([925697n, 974849n, 1032193n])
   })
-  test('It should fail to create a Vector of Modulus', () => {
-    const spyOn = jest.spyOn(seal.PlainModulus, 'BatchingVector')
+
+  test('It should fail to create a batching modulus', () => {
+    expect(() => seal.PlainModulus.Batching(4095, 20)).toThrow()
+  })
+
+  test('It should fail to create a batching vector of modulus', () => {
     expect(() =>
       seal.PlainModulus.BatchingVector(4095, Int32Array.from([20, 20, 20]))
     ).toThrow()
-    expect(spyOn).toHaveBeenCalledWith(4095, Int32Array.from([20, 20, 20]))
   })
 })

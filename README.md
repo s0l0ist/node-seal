@@ -1,85 +1,85 @@
-# [node-seal](https://github.com/s0l0ist/node-seal) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/s0l0ist/node-seal/blob/main/LICENSE) [![codecov](https://codecov.io/gh/s0l0ist/node-seal/branch/main/graph/badge.svg)](https://codecov.io/gh/s0l0ist/node-seal) [![npm version](https://badge.fury.io/js/node-seal.svg)](https://www.npmjs.com/package/node-seal) [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fs0l0ist%2Fnode-seal.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fs0l0ist%2Fnode-seal?ref=badge_shield&issueType=license)
+# [node-seal](https://github.com/s0l0ist/node-seal) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/s0l0ist/node-seal/blob/main/LICENSE) [![npm version](https://badge.fury.io/js/node-seal.svg)](https://www.npmjs.com/package/node-seal) [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fs0l0ist%2Fnode-seal.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fs0l0ist%2Fnode-seal?ref=badge_shield&issueType=license)
 
-node-seal is a homomorphic encryption library for TypeScript or JavaScript.
+**node-seal** is an ESM-first, WebAssembly-powered wrapper around the C++
+[Microsoft SEAL](https://github.com/microsoft/SEAL) homomorphic encryption
+library, for TypeScript and JavaScript.
 
-- **Web Assembly:** Fastest web implementation of the C++ [Microsoft
-  SEAL](https://github.com/microsoft/SEAL) library
-- **Zero dependencies:** Very lean, only contains a low level API which is very
-  close to the C++ calls from Microsoft SEAL.
-- **Node.js, Browser:** Install once, work in any server/client configuration.
+> **v7.0.0 is a breaking release.** The custom JS wrapper layer was removed —
+> the package now exposes the Emscripten-generated bindings directly. That makes
+> the package ~96% smaller and faster, but it also means some imports and helper
+> methods changed.
 
-**Now supporting Microsoft SEAL 4.1.2**
+- **WebAssembly:** Fast, direct bindings to Microsoft SEAL
+- **ESM-first:** Modern module layout, no bundling
+- **Node.js + browser + edge (CF Workers):** Load the WASM separately and run
+  wherever WASM is allowed
+- **Low-level, close to C++:** Method names and types now map much more directly
+  to SEAL
+
+**Currently aligned with Microsoft SEAL 4.1.2.**
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [What Changed in v7](#what-changed-in-v7)
+- [Environment Notes](#environment-notes)
+  - [React Native](#react-native)
+- [Demo / Sandbox](#demo--sandbox)
+- [Usage / Docs / Examples](#usage--docs--examples)
+- [Benchmarking](#benchmarking)
+- [Caveats](#caveats)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Installation
 
-node-seal can be installed with your favorite package manager:
+Install from npm:
 
-```shell
+```sh
 npm install node-seal
-```
-
-```shell
+# or
 yarn add node-seal
+# or
+pnpm add node-seal
 ```
 
-Import the library using `import` or `require` syntax:
+Because v7 is ESM-first and ships the `.wasm` separately, most modern bundlers
+will just work.
 
-```javascript
-// Auto-detects browser or nodejs.
-// Defaults to "node-seal/throws_wasm_node_umd" for NodeJS
-// Defaults to "node-seal/throws_wasm_web_umd" for Browsers
-// Defaults to "node-seal/throws_wasm_web_es" for Modules
+## Quick Start
+
+In v7, the default import gives you a factory; call it to get the SEAL runtime:
+
+```ts
 import SEAL from 'node-seal'
-const SEAL = require('node-seal')
+
+const seal = await SEAL()
 ```
 
-You may also specify a deep import to target your environment better. This is
-useful for environments that aren't detected properly or do not support
-WebAssembly. In addition, there are two separate bundles for throwing on
-transparent ciphertexts and another for allowing transparent ciphertexts. If
-you're unsure what you need, start with the build that **throws** on transparent
-ciphertexts. This is also the default import that is used.
+Variants:
 
-The deep import link is structured like the following:
+```ts
+// recommended and default: throws on transparent ciphertexts
+import SEAL from 'node-seal/throws'
+const seal = await SEAL()
 
-`node-seal / <throws|allows>_wasm_<node|web|worker>_<umd|es>`
-
-```javascript
-// Always Pick a variant which throws on transparent ciphertexts unless you
-// have a specific reason to allow the use of transparent ciphertexts.
-import SEAL from 'node-seal/throws_wasm_node_umd'
-
-// Or pick a variant which allows transparent ciphertexts (only use this if you know what you're doing)
-import SEAL from 'node-seal/allows_wasm_node_umd'
+// allow transparent ciphertexts (only if you know you need this)
+import SEAL from 'node-seal/allows'
+const seal = await SEAL()
 ```
 
-#### React-Native
+## What Changed in v7?
 
-React-native does not support Wasm libraries; however, it is possible to run a
-Wasm library, including `node-seal` by using a
-[WebView](https://github.com/react-native-webview/react-native-webview#readme)
-to load both the library and a simple interface to communicate with on top of
-the built-in `postMessage` API. Instead of publicly hosting the web application
-to be rendered by the WebView, it is possible to bundle the mini web application
-into a single HTML file (with JS inlined) and load the HTML file directly to the
-WebView.
+See [here](CHANGES.md).
 
-#### Cloudflare Workers
+## Environment Notes
 
-The Wasm library needs to be explicitly imported, it will be compiled and
-provided by the Cloudflare Workers runtime. Example:
+### React Native
 
-```javascript
-import SEAL from 'node-seal/throws_wasm_cf_worker_es'
-import wasm from 'node-seal/seal_throws_wasm_cf_worker.wasm'
-
-export default {
-  async fetch(request) {
-    const seal = await SEAL(wasm)
-    return new Response(seal.Version)
-  }
-}
-```
+React Native still can't run WASM like a browser. Use a small HTML/JS app inside
+a WebView, load `node-seal` there, and talk over `postMessage`. Because v7 ships
+a plain `.wasm`, bundling that web app is easier.
 
 ## Demo
 
@@ -89,7 +89,7 @@ This sandbox was built for users to experiment and learn how to use Microsoft
 SEAL featuring node-seal.
 
 - **Encryption Parameters:** experiment with many settings to prototype a
-  context.
+  SEALContext.
 - **Keys:** Create, download, upload Secret/Public Keys - even for
   Relinearization and Galois Keys.
 - **Variables:** Create, download, upload PlainTexts or CipherTexts
@@ -123,58 +123,23 @@ changes](https://github.com/microsoft/SEAL/blob/master/CHANGES.md).
 
 ## Benchmarking
 
-Microsoft SEAL has a native benchmark tool that we compile directly to WASM.
+```sh
+npm run seal:build:bench
+npm run benchmark
+```
 
-1. `npm run seal:build:bench`
-2. `npm run benchmark`
-
-## Benchmark
-
-Checkout the [benchmark](BENCHMARK.md)
+See also: `BENCHMARK.md`.
 
 ## Caveats
 
-Conversion from C++ to Web Assembly has some limitations:
-
-- **±2^53 bit numbers:** JavaScript uses 2^53 numbers (not true 64 bit). This
-  means we lose some precision after cryptographic operations are computed in
-  WASM and we want to send the results to JS for consumption (across the WASM <>
-  JS boundary). If you're using the `CKKS` scheme, you need to keep this in
-  mind. `BFV` users will inherently adhere to these limitations due to the
-  Int32Array/Uint32Array TypedArrays. Recently, `BFV` users now have support for
-  BigInt64Array/BigUint64Array TypedArrays but at a significant encode/decode
-  penalty - encyption/evaluation/decryption performance is the same.
-
-- **Memory:** Generating large keys and saving them in the browser could be
-  problematic. We can control NodeJS heap size, but not inside a user's browser.
-
-  Saving keys is very memory intensive especially for `polyModulusDegrees`s
-  above `16384`. This is because there's currently no way (that we have found)
-  to use io streams across JS and Web Assembly code, so the strings have to be
-  buffered completely in RAM and they can be very, very large when using the
-  default `zstd` compression. User's who are experiencing OOM exceptions when
-  saving `GaloisKeys` should try specifying a compression override such as
-  `none` or the less performant `zlib`. Ex:
-  `galoisKeys.save(seal.ComprModeType.zlib)`
-
-- **Garbage Collection**: By default, when a JavaScript object is dereferenced,
-  the underlying WebAssembly (C++) object remains in memory.
-
-You have two options for cleanup:
-
-- In performance-sensitive code (e.g. tight loops), explicitly call
-  `<instance>.delete()` to release memory immediately.
-- If the environment supports `FinalizationRegistry`, the C++ resources will be
-  released automatically once the object is garbage collected.
+- **Memory**: saving large keys in the browser is expensive; try a different
+  compression mode if you get OOMs.
+- **Manual cleanup**: call `.delete()` or `.deleteLater()` on created objects to
+  free C++ resources.
 
 ## Contributing
 
-The main purpose of this library is to continue to evolve and promote the
-adoption of homomorphic encryption (using Microsoft SEAL) in modern web
-applications today. Development of node-seal happens in the open on GitHub, and
-we are grateful to the community for contributing bugfixes and improvements.
-
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+See `CONTRIBUTING.md`.
 
 ## License
 

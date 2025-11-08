@@ -46,7 +46,7 @@ jobs:
       - name: Update EMSDK
         if: steps.cache-emsdk.outputs.cache-hit != 'true'
         run: |
-          npm run em:update
+          npm run update:emsdk
 
       - name: Clean
         run: npm run clean
@@ -58,9 +58,9 @@ jobs:
         run: npm run compile
 
       - name: Bundle
-        run: npm run rollup
+        run: npm run test
 
       - name: Publish
-        run: npm run publish --provenance --access public
+        run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_GITHUB }}

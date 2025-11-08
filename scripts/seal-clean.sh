@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-rm -rf ./src/bin/js/* ./src/bin/wasm/*
+rm -rf ./src/seal_*
+rm -rf ./dist
 cd ./submodules/SEAL/
 rm -rf ./build
-rm -rf ./thirdparty
 cd ../../

@@ -2,9 +2,16 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <script src="../dist/throws_wasm_web_umd.js"></script>
+    <title>WASM debug</title>
   </head>
   <body>
     You're debugging the WASM target
+
+    <script type="module">
+      import createModule from '../dist/index_throws.js';
+      const seal = await createModule();
+      window.seal = seal;
+      console.log('WASM loaded!');
+    </script>
   </body>
 </html>

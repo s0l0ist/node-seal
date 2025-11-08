@@ -1,244 +1,91 @@
-import { BatchEncoderTypes } from '../implementation/batch-encoder'
-import { Context } from '../implementation/context'
-import { EncryptionParameters } from '../implementation/encryption-parameters'
-import { Modulus } from '../implementation/modulus'
-import { SEALLibrary } from '../implementation/seal'
-import { Vector } from '../implementation/vector'
-import SEAL from '../throws_wasm_node_umd'
+import { beforeAll, describe, expect, test } from 'vitest'
+import MainModuleFactory, {
+  type EncryptionParameters,
+  type MainModule,
+  type SEALContext
+} from '../index_throws'
 
-let seal: SEALLibrary
-let context: Context
-let coeffModulus: Vector
-let plainModulus: Modulus
+let seal: MainModule
 let encParms: EncryptionParameters
+let context: SEALContext
 beforeAll(async () => {
-  seal = await SEAL()
+  seal = await MainModuleFactory()
   const schemeType = seal.SchemeType.bfv
-  const securityLevel = seal.SecurityLevel.tc128
+  const securityLevel = seal.SecLevelType.tc128
   const polyModulusDegree = 1024
-  const bitSizes = Int32Array.from([27])
-  const bitSize = 20
-  coeffModulus = seal.CoeffModulus.Create(polyModulusDegree, bitSizes)
-  plainModulus = seal.PlainModulus.Batching(polyModulusDegree, bitSize)
-  encParms = seal.EncryptionParameters(schemeType)
+  const coeffModulus = seal.CoeffModulus.Create(
+    polyModulusDegree,
+    Int32Array.from([27])
+  )
+  const plainModulus = seal.PlainModulus.Batching(polyModulusDegree, 20)
+  encParms = new seal.EncryptionParameters(schemeType)
   encParms.setPolyModulusDegree(polyModulusDegree)
   encParms.setCoeffModulus(coeffModulus)
   encParms.setPlainModulus(plainModulus)
-  context = seal.Context(encParms, true, securityLevel)
+  context = new seal.SEALContext(encParms, true, securityLevel)
 })
 
 describe('BatchEncoder', () => {
-  test('It should be a factory', () => {
-    expect(seal.BatchEncoder).toBeDefined()
-    expect(typeof seal.BatchEncoder.constructor).toBe('function')
-    expect(seal.BatchEncoder).toBeInstanceOf(Object)
-    expect(seal.BatchEncoder.constructor).toBe(Function)
-    expect(seal.BatchEncoder.constructor.name).toBe('Function')
+  test('It should encode BigUint64Array to a plaintext destination', () => {
+    const encoder = new seal.BatchEncoder(context)
+    const arr = BigUint64Array.from({ length: encoder.slotCount() }, (_, i) =>
+      BigInt(i)
+    )
+    const plain = new seal.Plaintext()
+    expect(plain.capacity()).toBe(0)
+    expect(plain.isZero()).toBe(true)
+    encoder.encode(arr, plain)
+    expect(plain.capacity()).toBe(1024)
+    expect(plain.isZero()).toBe(false)
   })
-  test('It should construct an instance', () => {
-    const Constructor = jest.fn(seal.BatchEncoder)
-    Constructor(context)
-    expect(Constructor).toHaveBeenCalledWith(context)
-  })
-  test('It should fail to construct an instance', () => {
-    const Constructor = jest.fn(seal.BatchEncoder)
-    expect(() => Constructor(null as unknown as Context)).toThrow()
-    expect(Constructor).toHaveBeenCalledWith(null)
-  })
-  test('It should have properties', () => {
-    const item = seal.BatchEncoder(context)
-    // Test properties
-    expect(item).toHaveProperty('instance')
-    expect(item).toHaveProperty('unsafeInject')
-    expect(item).toHaveProperty('delete')
-    expect(item).toHaveProperty('encode')
-    expect(item).toHaveProperty('decode')
-    expect(item).toHaveProperty('slotCount')
-  })
-  test('It should have an instance', () => {
-    const item = seal.BatchEncoder(context)
-    expect(item.instance).toBeDefined()
-  })
-  test('It should inject', () => {
-    const item = seal.BatchEncoder(context)
-    const newItem = seal.BatchEncoder(context)
-    newItem.delete()
-    const spyOn = jest.spyOn(newItem, 'unsafeInject')
-    newItem.unsafeInject(item.instance)
-    expect(spyOn).toHaveBeenCalledWith(item.instance)
-  })
-  test('It should delete the old instance and inject', () => {
-    const item = seal.BatchEncoder(context)
-    const newItem = seal.BatchEncoder(context)
-    const spyOn = jest.spyOn(newItem, 'unsafeInject')
-    newItem.unsafeInject(item.instance)
-    expect(spyOn).toHaveBeenCalledWith(item.instance)
-  })
-  test("It should delete it's instance", () => {
-    const item = seal.BatchEncoder(context)
-    const spyOn = jest.spyOn(item, 'delete')
-    item.delete()
-    expect(spyOn).toHaveBeenCalled()
-    expect(item.instance).toBeUndefined()
-  })
-  test('It should skip deleting twice', () => {
-    const item = seal.BatchEncoder(context)
-    const spyOn = jest.spyOn(item, 'delete')
-    item.delete()
-    item.delete()
-    expect(spyOn).toHaveBeenCalledTimes(2)
-    expect(item.instance).toBeUndefined()
-  })
-  test('It should encode an int32 array to a plaintext destination', () => {
-    const item = seal.BatchEncoder(context)
-    const arr = Int32Array.from({ length: item.slotCount }, (_, i) => -i)
-    const plain = seal.PlainText()
-    const spyOn = jest.spyOn(item, 'encode')
-    item.encode(arr, plain)
-    expect(spyOn).toHaveBeenCalledWith(arr, plain)
-  })
-  test('It should encode an int32 array and return a plaintext', () => {
-    const item = seal.BatchEncoder(context)
-    const arr = Int32Array.from({ length: item.slotCount }, (_, i) => -i)
-    const spyOn = jest.spyOn(item, 'encode')
-    const plain = item.encode(arr)
-    expect(spyOn).toHaveBeenCalledWith(arr)
-    expect(plain).toBeDefined()
-  })
-  test('It should encode an int64 array to a plaintext destination', () => {
-    const item = seal.BatchEncoder(context)
-    const arr = BigInt64Array.from({ length: item.slotCount }, (_, i) =>
+  test('It should encode BigInt64Array to a plaintext destination', () => {
+    const encoder = new seal.BatchEncoder(context)
+    const arr = BigInt64Array.from({ length: encoder.slotCount() }, (_, i) =>
       BigInt(-i)
     )
-    const plain = seal.PlainText()
-    const spyOn = jest.spyOn(item, 'encode')
-    item.encode(arr, plain)
-    expect(spyOn).toHaveBeenCalledWith(arr, plain)
+    const plain = new seal.Plaintext()
+    expect(plain.capacity()).toBe(0)
+    expect(plain.isZero()).toBe(true)
+    encoder.encode(arr, plain)
+    expect(plain.capacity()).toBe(1024)
+    expect(plain.isZero()).toBe(false)
   })
-  test('It should encode an int64 array and return a plaintext', () => {
-    const item = seal.BatchEncoder(context)
-    const arr = BigInt64Array.from({ length: item.slotCount }, (_, i) =>
+
+  test('It should fail to encode an untyped array', () => {
+    const encoder = new seal.BatchEncoder(context)
+    const arr = Array.from({ length: encoder.slotCount() }, (_, i) => i)
+    const plain = new seal.Plaintext()
+    expect(plain.capacity()).toBe(0)
+    expect(plain.isZero()).toBe(true)
+    try {
+      encoder.encode(arr, plain)
+      expect(true).toBe(false)
+    } catch (e: any) {
+      expect(e.constructor.name).toBe('Exception')
+      expect(e.message).toEqual([
+        'std::invalid_argument',
+        'expected one of BigInt64Array, BigUint64Array'
+      ])
+    }
+  })
+  test('It should decode BigUint64Array ', () => {
+    const encoder = new seal.BatchEncoder(context)
+    const arr = BigUint64Array.from({ length: encoder.slotCount() }, (_, i) =>
+      BigInt(i)
+    )
+    const plain = new seal.Plaintext()
+    encoder.encode(arr, plain)
+    const arr2 = encoder.decodeBigUint64(plain) as BigUint64Array
+    expect(arr).toEqual(arr2)
+  })
+  test('It should decode BigInt64Array ', () => {
+    const encoder = new seal.BatchEncoder(context)
+    const arr = BigInt64Array.from({ length: encoder.slotCount() }, (_, i) =>
       BigInt(-i)
     )
-    const spyOn = jest.spyOn(item, 'encode')
-    const plain = item.encode(arr)
-    expect(spyOn).toHaveBeenCalledWith(arr)
-    expect(plain).toBeDefined()
-  })
-  test('It should encode an uint32 array to a plaintext destination', () => {
-    const item = seal.BatchEncoder(context)
-    const arr = Uint32Array.from({ length: item.slotCount }, (_, i) => i)
-    const plain = seal.PlainText()
-    const spyOn = jest.spyOn(item, 'encode')
-    item.encode(arr, plain)
-    expect(spyOn).toHaveBeenCalledWith(arr, plain)
-  })
-  test('It should encode an uint32 array and return a plaintext', () => {
-    const item = seal.BatchEncoder(context)
-    const arr = Uint32Array.from({ length: item.slotCount }, (_, i) => i)
-    const spyOn = jest.spyOn(item, 'encode')
-    const plain = item.encode(arr)
-    expect(spyOn).toHaveBeenCalledWith(arr)
-    expect(plain).toBeDefined()
-  })
-  test('It should encode an uint64 array to a plaintext destination', () => {
-    const item = seal.BatchEncoder(context)
-    const arr = BigUint64Array.from({ length: item.slotCount }, (_, i) =>
-      BigInt(i)
-    )
-    const plain = seal.PlainText()
-    const spyOn = jest.spyOn(item, 'encode')
-    item.encode(arr, plain)
-    expect(spyOn).toHaveBeenCalledWith(arr, plain)
-  })
-  test('It should encode an uint64 array and return a plaintext', () => {
-    const item = seal.BatchEncoder(context)
-    const arr = BigUint64Array.from({ length: item.slotCount }, (_, i) =>
-      BigInt(i)
-    )
-    const spyOn = jest.spyOn(item, 'encode')
-    const plain = item.encode(arr)
-    expect(spyOn).toHaveBeenCalledWith(arr)
-    expect(plain).toBeDefined()
-  })
-  test('It should fail on unsupported array type', () => {
-    const item = seal.BatchEncoder(context)
-    const arr = Float64Array.from({ length: item.slotCount }, (_, i) => i)
-    const spyOn = jest.spyOn(item, 'encode')
-    expect(() => item.encode(arr as unknown as BatchEncoderTypes)).toThrow()
-    expect(spyOn).toHaveBeenCalledWith(arr)
-  })
-  test('It should fail on encoding bad data', () => {
-    const item = seal.BatchEncoder(context)
-    const arr = Int32Array.from({ length: item.slotCount * 2 }, (_, i) => i)
-    const spyOn = jest.spyOn(item, 'encode')
-    expect(() => item.encode(arr)).toThrow()
-    expect(spyOn).toHaveBeenCalledWith(arr)
-  })
-  test('It should decode an int32 array', () => {
-    const item = seal.BatchEncoder(context)
-    const arr = Int32Array.from({ length: item.slotCount }, (_, i) => -i)
-    const plain = seal.PlainText()
-    item.encode(arr, plain)
-    const spyOn = jest.spyOn(item, 'decode')
-    const decoded = item.decode(plain, true)
-    expect(spyOn).toHaveBeenCalledWith(plain, true)
-    expect(decoded).toEqual(arr)
-  })
-  test('It should decode an int64 array', () => {
-    const item = seal.BatchEncoder(context)
-    const arr = BigInt64Array.from({ length: item.slotCount }, (_, i) =>
-      BigInt(-i)
-    )
-    const plain = seal.PlainText()
-    item.encode(arr, plain)
-    const spyOn = jest.spyOn(item, 'decodeBigInt')
-    const decoded = item.decodeBigInt(plain, true)
-    expect(spyOn).toHaveBeenCalledWith(plain, true)
-    expect(decoded).toEqual(arr)
-  })
-  test('It should decode an uint32 array', () => {
-    const item = seal.BatchEncoder(context)
-    const arr = Uint32Array.from({ length: item.slotCount }, (_, i) => i)
-    const plain = seal.PlainText()
-    item.encode(arr, plain)
-    const spyOn = jest.spyOn(item, 'decode')
-    const decoded = item.decode(plain, false)
-    expect(spyOn).toHaveBeenCalledWith(plain, false)
-    expect(decoded).toEqual(arr)
-  })
-  test('It should decode a uint64 array', () => {
-    const item = seal.BatchEncoder(context)
-    const arr = BigUint64Array.from({ length: item.slotCount }, (_, i) =>
-      BigInt(i)
-    )
-    const plain = seal.PlainText()
-    item.encode(arr, plain)
-    const spyOn = jest.spyOn(item, 'decodeBigInt')
-    const decoded = item.decodeBigInt(plain, false)
-    expect(spyOn).toHaveBeenCalledWith(plain, false)
-    expect(decoded).toEqual(arr)
-  })
-  test('It should fail to decode an uint32 array', () => {
-    const item = seal.BatchEncoder(context)
-    const arr = Uint32Array.from({ length: item.slotCount }, (_, i) => i)
-    const plain = seal.PlainText()
-    item.encode(arr, plain)
-    const spyOn = jest.spyOn(item, 'decode')
-    plain.delete()
-    expect(() => item.decode(plain, false)).toThrow()
-    expect(spyOn).toHaveBeenCalledWith(plain, false)
-  })
-  test('It should fail to decode an uint64 array', () => {
-    const item = seal.BatchEncoder(context)
-    const arr = BigUint64Array.from({ length: item.slotCount }, (_, i) =>
-      BigInt(i)
-    )
-    const plain = seal.PlainText()
-    item.encode(arr, plain)
-    const spyOn = jest.spyOn(item, 'decodeBigInt')
-    plain.delete()
-    expect(() => item.decodeBigInt(plain, false)).toThrow()
-    expect(spyOn).toHaveBeenCalledWith(plain, false)
+    const plain = new seal.Plaintext()
+    encoder.encode(arr, plain)
+    const arr2 = encoder.decodeBigInt64(plain) as BigUint64Array
+    expect(arr).toEqual(arr2)
   })
 })

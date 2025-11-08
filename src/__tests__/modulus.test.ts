@@ -1,181 +1,76 @@
-import { SEALLibrary } from '../implementation/seal'
-import SEAL from '../throws_wasm_node_umd'
-let seal: SEALLibrary
+import { beforeAll, describe, expect, test } from 'vitest'
+import MainModuleFactory, { type MainModule } from '../index_throws'
+
+let seal: MainModule
+
 beforeAll(async () => {
-  seal = await SEAL()
+  seal = await MainModuleFactory()
 })
 
 describe('Modulus', () => {
-  test('It should be a factory', () => {
-    expect(seal.Modulus).toBeDefined()
-    expect(typeof seal.Modulus.constructor).toBe('function')
-    expect(seal.Modulus).toBeInstanceOf(Object)
-    expect(seal.Modulus.constructor).toBe(Function)
-    expect(seal.Modulus.constructor.name).toBe('Function')
+  test('It construct from a prime value', () => {
+    const modulus = new seal.Modulus(786433n)
+    expect(modulus.isZero()).toBe(false)
+    expect(modulus.isPrime()).toBe(true)
+    expect(modulus.bitCount()).toBe(20)
+    expect(modulus.value()).toBe(786433n)
   })
-  test('It should construct an instance', () => {
-    const Constructor = jest.fn(seal.Modulus)
-    Constructor(BigInt('0'))
-    expect(Constructor).toHaveBeenCalledWith(BigInt('0'))
+
+  test('It construct from a zero value', () => {
+    const modulus = new seal.Modulus(0n)
+    expect(modulus.isZero()).toBe(true)
+    expect(modulus.isPrime()).toBe(false)
+    expect(modulus.bitCount()).toBe(0)
+    expect(modulus.value()).toBe(0n)
   })
-  test('It should construct an instance from a string', () => {
-    const Constructor = jest.fn(seal.Modulus)
-    Constructor(BigInt('2'))
-    expect(Constructor).toHaveBeenCalledWith(BigInt('2'))
+
+  test('It can set a value', () => {
+    const modulus = new seal.Modulus(0n)
+    modulus.setValue(7n)
+    expect(modulus.isZero()).toBe(false)
+    expect(modulus.isPrime()).toBe(true)
+    expect(modulus.bitCount()).toBe(3)
+    expect(modulus.value()).toBe(7n)
   })
-  test('It should fail to construct an instance', () => {
-    const Constructor = jest.fn(seal.Modulus)
-    expect(() => Constructor(BigInt('1'))).toThrow()
-    expect(Constructor).toHaveBeenCalledWith(BigInt('1'))
+
+  test('Modulus(1n) throws', () => {
+    expect(() => new seal.Modulus(1n)).toThrow()
   })
-  test('It should have properties', () => {
-    const modulus = seal.Modulus(BigInt('5'))
-    // Test properties
-    expect(modulus).toHaveProperty('instance')
-    expect(modulus).toHaveProperty('inject')
-    expect(modulus).toHaveProperty('delete')
-    expect(modulus).toHaveProperty('setValue')
-    expect(modulus).toHaveProperty('value')
-    expect(modulus).toHaveProperty('bitCount')
-    expect(modulus).toHaveProperty('isZero')
-    expect(modulus).toHaveProperty('isPrime')
-    expect(modulus).toHaveProperty('save')
-    expect(modulus).toHaveProperty('saveArray')
-    expect(modulus).toHaveProperty('load')
-    expect(modulus).toHaveProperty('loadArray')
+
+  test('Modulus(1<<61) throws exact message', () => {
+    expect(() => new seal.Modulus(1n << 61n)).toThrow()
   })
-  test('It should have an instance', () => {
-    const modulus = seal.Modulus(BigInt('4'))
-    expect(modulus.instance).toBeDefined()
+
+  test('Modulus#setValue(1n) throws exact message', () => {
+    const m = new seal.Modulus(3n)
+    expect(() => m.setValue(1n)).toThrow()
   })
-  test('It should inject', () => {
-    const modulus = seal.Modulus(BigInt('4'))
-    const newModulus = seal.Modulus(BigInt('6'))
-    newModulus.delete()
-    const spyOn = jest.spyOn(newModulus, 'inject')
-    newModulus.inject(modulus.instance)
-    expect(spyOn).toHaveBeenCalledWith(modulus.instance)
+
+  test('Modulus#setValue(>61 bits) throws exact message', () => {
+    const m = new seal.Modulus(3n)
+    expect(() => m.setValue(1n << 61n)).toThrow()
   })
-  test('It should delete the old instance and inject', () => {
-    const modulus = seal.Modulus(BigInt('4'))
-    const newModulus = seal.Modulus(BigInt('6'))
-    const spyOn = jest.spyOn(newModulus, 'inject')
-    newModulus.inject(modulus.instance)
-    expect(spyOn).toHaveBeenCalledWith(modulus.instance)
+
+  test('It can save/load from a string', () => {
+    const m = new seal.Modulus(3n)
+    const str = m.saveToBase64(seal.ComprModeType.none)
+    expect(str).toBe('XqEQBAEAAAAYAAAAAAAAAAMAAAAAAAAA')
+    const m2 = new seal.Modulus(0n)
+    m2.loadFromBase64(str)
+    expect(m2.value()).toBe(3n)
   })
-  test("It should delete it's instance", () => {
-    const modulus = seal.Modulus(BigInt('6'))
-    const spyOn = jest.spyOn(modulus, 'delete')
-    modulus.delete()
-    expect(spyOn).toHaveBeenCalled()
-    expect(modulus.instance).toBeUndefined()
-    expect(() => modulus.value).toThrow(TypeError)
-  })
-  test('It should skip deleting twice', () => {
-    const item = seal.Modulus(BigInt('6'))
-    const spyOn = jest.spyOn(item, 'delete')
-    item.delete()
-    item.delete()
-    expect(spyOn).toHaveBeenCalledTimes(2)
-    expect(item.instance).toBeUndefined()
-  })
-  test('It should set a value', () => {
-    const modulus = seal.Modulus(BigInt('6'))
-    const spyOn = jest.spyOn(modulus, 'setValue')
-    modulus.setValue(BigInt('2'))
-    expect(spyOn).toHaveBeenCalledWith(BigInt('2'))
-    expect(modulus.value).toEqual(BigInt('2'))
-  })
-  test('It should fail to set a value', () => {
-    const modulus = seal.Modulus(BigInt('2'))
-    const spyOn = jest.spyOn(modulus, 'setValue')
-    expect(() => modulus.setValue(BigInt('1'))).toThrow()
-    expect(spyOn).toHaveBeenCalledWith(BigInt('1'))
-  })
-  test('It should have bitCount of 0', () => {
-    const modulus = seal.Modulus(BigInt('0'))
-    expect(modulus.bitCount).toBe(0)
-  })
-  test('It should have bitCount of 20', () => {
-    const modulus = seal.Modulus(BigInt('786433'))
-    expect(modulus.bitCount).toBe(20)
-  })
-  test('It should be zero', () => {
-    const modulus = seal.Modulus(BigInt('0'))
-    expect(modulus.isZero).toBe(true)
-  })
-  test('It should be non zero', () => {
-    const modulus = seal.Modulus(BigInt('88'))
-    expect(modulus.isZero).toBe(false)
-  })
-  test('It should be prime', () => {
-    const modulus = seal.Modulus(BigInt('786433'))
-    expect(modulus.isPrime).toBe(true)
-  })
-  test('It should be not prime', () => {
-    const modulus = seal.Modulus(BigInt('786432'))
-    expect(modulus.isPrime).toBe(false)
-  })
-  test('It should save to a string', () => {
-    const modulus = seal.Modulus(BigInt('7'))
-    expect(modulus.value).toBe(BigInt('7'))
-    const spyOn = jest.spyOn(modulus, 'save')
-    const str = modulus.save()
-    expect(spyOn).toHaveBeenCalled()
-    expect(typeof str).toBe('string')
-  })
-  test('It should save to an array', () => {
-    const modulus = seal.Modulus(BigInt('7'))
-    expect(modulus.value).toBe(BigInt('7'))
-    const spyOn = jest.spyOn(modulus, 'saveArray')
-    const array = modulus.saveArray()
-    expect(spyOn).toHaveBeenCalled()
-    expect(array.constructor).toBe(Uint8Array)
-  })
-  test('It should load from a string', () => {
-    const modulus = seal.Modulus(BigInt('7'))
-    expect(modulus.value).toBe(BigInt('7'))
-    const str = modulus.save()
-    modulus.delete()
-    const newModulus = seal.Modulus(BigInt('9'))
-    const spyOn = jest.spyOn(newModulus, 'load')
-    newModulus.load(str)
-    expect(spyOn).toHaveBeenCalledWith(str)
-    expect(newModulus.value).toEqual(BigInt('7'))
-  })
-  test('It should load from a typed array', () => {
-    const modulus = seal.Modulus(BigInt('7'))
-    expect(modulus.value).toBe(BigInt('7'))
-    const array = modulus.saveArray()
-    modulus.delete()
-    const newModulus = seal.Modulus(BigInt('9'))
-    const spyOn = jest.spyOn(newModulus, 'loadArray')
-    newModulus.loadArray(array)
-    expect(spyOn).toHaveBeenCalledWith(array)
-    expect(newModulus.value).toEqual(BigInt('7'))
-  })
-  test('It should fail to load from a string', () => {
-    const modulus = seal.Modulus(BigInt('0'))
-    const spyOn = jest.spyOn(modulus, 'load')
-    expect(() => modulus.load('XqEQAwUBAAAbAAAAAAAAAHicY2eAAAAAQAAA')).toThrow()
-    expect(spyOn).toHaveBeenCalledWith('XqEQAwUBAAAbAAAAAAAAAHicY2eAAAAAQAAA')
-  })
-  test('It should fail to load from a typed array', () => {
-    const modulus = seal.Modulus(BigInt('0'))
-    const spyOn = jest.spyOn(modulus, 'loadArray')
-    expect(() =>
-      modulus.loadArray(
-        Uint8Array.from([
-          94, 161, 16, 3, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 120, 156, 99, 103,
-          128, 0, 0, 0, 64, 0, 8
-        ])
-      )
-    ).toThrow()
-    expect(spyOn).toHaveBeenCalledWith(
+
+  test('It can save/load from a vec', () => {
+    const m = new seal.Modulus(3n)
+    const vec = m.saveToArray(seal.ComprModeType.none)
+    expect(vec).toEqual(
       Uint8Array.from([
-        94, 161, 16, 3, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 120, 156, 99, 103,
-        128, 0, 0, 0, 64, 0, 8
+        94, 161, 16, 4, 1, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0,
+        0, 0
       ])
     )
+    const m2 = new seal.Modulus(0n)
+    m2.loadFromArray(vec)
+    expect(m2.value()).toBe(3n)
   })
 })
