@@ -31,7 +31,7 @@ A good workflow is:
 4. use helper functions to get coeff/plain modulus
 
 ```ts
-// 1) choose a scheme. BFV = exact ints, CKKS = approximate reals
+// 1) choose a scheme. BFV/BGV = exact ints, CKKS = approximate reals
 const scheme = seal.SchemeType.bfv
 
 // 2) choose a security level (128-bit is a typical baseline)
@@ -40,17 +40,16 @@ const security = seal.SecLevelType.tc128
 // 3) choose the polynomial modulus degree (must be power of 2)
 const polyModulusDegree = 4096
 
-// 4) for BFV, choose a plaintext modulus size (20 bits is a common start)
+// 4) for BFV/BGV, choose a plaintext modulus size (20 bits is a common start)
 const plainBitSize = 20
 
-// create the parameter container
 const parms = new seal.EncryptionParameters(scheme)
 
 // tell SEAL how big the polynomials should be
 parms.setPolyModulusDegree(polyModulusDegree)
 
 // choose coefficient moduli compatible with this degree + security
-// this helper gives you a “standard” set for BFV at that degree
+// this helper gives you a "standard" set for BFV at that degree
 parms.setCoeffModulus(seal.CoeffModulus.BFVDefault(polyModulusDegree, security))
 
 // BFV/BGV need a plaintext modulus to define the plaintext space
@@ -61,7 +60,7 @@ parms.setPlainModulus(
 
 Notes:
 
-- CKKS wouldn't set `PlainModulus` like this.
+- CKKS doesn't use a `PlainModulus` like this.
 - You can fine-tune by giving your own coeff-modulus bit sizes.
 
 ---
@@ -69,7 +68,7 @@ Notes:
 ### SEALContext
 
 A `SEALContext` freezes these parameters and checks they make sense. Everything else
-(keys, encoders, encryptors…) is created off the same SEALContext so they're all
+(keys, encoders, encryptors, etc.) is created off the same SEALContext so they're all
 compatible.
 
 ```ts
@@ -151,15 +150,13 @@ const cipherA = new seal.Ciphertext()
 encryptor.encrypt(plainA, cipherA)
 
 // 4) homomorphic op: add ciphertext to itself
-// result goes into a separate destination ciphertext
-const cipherSum = new seal.Ciphertext()
-evaluator.add(cipherA, cipherA, cipherSum)
+// the first argument gets overwritten with the result
+evaluator.addInplace(cipherA, cipherA)
 
-// 5) decrypt back to plaintext
-const plainSum = new seal.Plaintext()
-decryptor.decrypt(cipherSum, plainSum)
+// 5) decrypt back to plainA, overwriting the original
+decryptor.decrypt(cipherA, plainA)
 
 // 6) decode back to a BigInt64Array
-const decoded = encoder.decodeBigInt64(plainSum) as BigInt64Array
+const decoded = encoder.decodeBigInt64(plainA) as BigInt64Array
 console.log('decoded:', decoded)
 ```
