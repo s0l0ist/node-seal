@@ -1,10 +1,10 @@
 {
   "name": "node-seal",
-  "version": "6.0.3",
+  "version": "7.0.0",
   "description": "Homomorphic Encryption for TypeScript or JavaScript using Microsoft SEAL",
   "repository": {
     "type": "git",
-    "url": "https://github.com/s0l0ist/node-seal"
+    "url": "git+https://github.com/s0l0ist/node-seal.git"
   },
   "homepage": "https://s0l0ist.github.io/seal-sandbox/",
   "author": {
@@ -23,78 +23,51 @@
     "cryptography",
     "cryptosystem"
   ],
-  "main": "throws_wasm_node_umd.js",
-  "browser": "throws_wasm_web_umd.js",
-  "module": "throws_wasm_web_es.js",
-  "types": "throws_wasm_web_es.d.ts",
+  "type": "module",
+  "main": "./dist/index_throws.js",
+  "types": "./dist/index_throws.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index_throws.d.ts",
+      "import": "./dist/index_throws.js"
+    },
+    "./throws": {
+      "types": "./dist/index_throws.d.ts",
+      "import": "./dist/index_throws.js"
+    },
+    "./allows": {
+      "types": "./dist/index_allows.d.ts",
+      "import": "./dist/index_allows.js"
+    }
+  },
   "files": [
-    "**/*"
+    "dist"
   ],
   "license": "MIT",
   "scripts": {
-    "docs": "rm -rf ./docs/* && jsdoc -c jsdoc.json",
-    "benchmark": "node ./submodules/SEAL/build/bin/sealbench.js",
-    "submodule:update": "bash scripts/submodule-update.sh",
-    "em:update": "bash scripts/em-update.sh",
-    "seal:clean": "bash scripts/seal-clean.sh",
-    "seal:cmake": "bash scripts/seal-cmake.sh",
-    "seal:make": "bash scripts/seal-make.sh",
-    "seal:build": "npm run seal:build:wasm",
-    "seal:build:bench": "export BUILD_BENCH=ON && export THROW_ON_TRANSPARENT=ON && npm run seal:cmake && npm run seal:make",
-    "seal:build:wasm": "npm run seal:build:wasm:node && npm run seal:build:wasm:web && npm run seal:build:wasm:worker && npm run seal:build:wasm:cf_worker",
-    "seal:build:wasm:node": "export ENVIRONMENT='node' && bash scripts/seal-build-wasm.sh",
-    "seal:build:wasm:web": "export ENVIRONMENT='web,webview' && bash scripts/seal-build-wasm.sh",
-    "seal:build:wasm:worker": "export ENVIRONMENT='web,worker' && bash scripts/seal-build-wasm.sh",
-    "seal:build:wasm:cf_worker": "export ENVIRONMENT='cf_worker' && bash scripts/seal-build-wasm.sh",
-    "seal": "npm run seal:cmake && npm run seal:make && npm run seal:build",
-    "build:allows": "export THROW_ON_TRANSPARENT=OFF && npm run seal",
-    "build:throws": "export THROW_ON_TRANSPARENT=ON && npm run seal",
-    "build:clean": "rm -rf ./dist/* && rm -rf ./tsc-out/* && rm -rf ./src/bin/*",
-    "build": "npm run build:allows && npm run build:throws",
-    "clean": "npm run seal:clean && npm run build:clean",
-    "compile": "tsc",
-    "format": "prettier --write src",
-    "lint": "eslint --fix 'src/**/*.ts'",
-    "test": "jest src/__tests__/*.ts",
-    "coverage": "jest src --coverage",
-    "rollup": "NODE_OPTIONS=--max_old_space_size=16384 rollup -c",
-    "postrollup": "bash scripts/postrollup.sh",
-    "prepublishOnly": "echo 'Please run \"npm run publish\" instead' && exit 1",
-    "publish:test": "npm --dry-run publish  ./dist/node-seal-*.tgz",
-    "publish": "npm publish --access=public ./dist/node-seal-*.tgz"
+    "clean": "bash scripts/seal-clean.sh",
+    "wasm:cmake": "bash scripts/seal-cmake.sh",
+    "wasm:make": "bash scripts/seal-make.sh",
+    "wasm:build": "bash scripts/seal-build-wasm.sh",
+    "wasm:throws": "export THROW_ON_TRANSPARENT=ON && npm run wasm:cmake && npm run wasm:make && npm run wasm:build",
+    "wasm:allows": "export THROW_ON_TRANSPARENT=OFF && npm run wasm:cmake && npm run wasm:make && npm run wasm:build",
+    "wasm:bench": "export BUILD_BENCH=ON && export THROW_ON_TRANSPARENT=ON && npm run wasm:cmake && npm run wasm:make",
+    "wasm": "npm run wasm:throws && npm run wasm:allows",
+    "build": "npm run wasm",
+    "compile": " tsc && cp src/seal_* dist/",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "benchmark": "node submodules/SEAL/build/bin/sealbench.js",
+    "update:submodule": "bash scripts/submodule-update.sh",
+    "update:emscripten": "bash scripts/em-update.sh",
+    "publish:test": "npm --dry-run publish"
   },
   "devDependencies": {
-    "@babel/core": "^7.28.5",
-    "@babel/preset-env": "^7.28.5",
-    "@rollup/plugin-alias": "^6.0.0",
-    "@rollup/plugin-commonjs": "^28.0.9",
-    "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^12.3.0",
-    "@types/jest": "^30.0.0",
-    "@types/node": "^24.9.2",
-    "@typescript-eslint/eslint-plugin": "^8.46.2",
-    "@typescript-eslint/parser": "^8.46.2",
-    "better-docs": "^2.7.3",
-    "codecov": "^3.8.3",
-    "env-cmd": "^11.0.0",
-    "eslint": "^9.38.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-jest": "^29.0.1",
-    "eslint-plugin-jsdoc": "^61.1.10",
-    "eslint-plugin-prettier": "^5.5.4",
-    "esm": "^3.2.25",
-    "jest": "^30.2.0",
-    "jsdoc": "^4.0.5",
-    "path": "^0.12.7",
-    "prettier": "^3.6.2",
-    "rollup": "^4.52.5",
-    "rollup-copy-smartly": "^2.0.0",
-    "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-globals": "^1.4.0",
-    "rollup-plugin-typescript2": "^0.36.0",
-    "taffydb": "^2.7.3",
-    "ts-jest": "^29.4.5",
-    "typescript": "^5.9.3"
+    "@types/node": "^24.10.0",
+    "@vitest/coverage-v8": "^4.0.8",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.2",
+    "vitest": "^4.0.8"
   }
 }

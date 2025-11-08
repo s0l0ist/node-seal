@@ -9,10 +9,10 @@ cd ../SEAL/
 
 if [[ "$BUILD_BENCH" == "ON" ]]; then
   BENCH="ON"
-  FLAGS="-DNDEBUG -flto -O3 -Wno-unused-but-set-variable"
+  FLAGS="-DNDEBUG -flto -fwasm-exceptions -O3 -Wno-unused-but-set-variable"
 else
   BENCH="OFF"
-  FLAGS="-DNDEBUG -flto -O3"
+  FLAGS="-DNDEBUG -flto -fwasm-exceptions -O3"
 fi
 
 emcmake cmake -S . -B build \
