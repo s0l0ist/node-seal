@@ -1,14 +1,14 @@
 import { beforeAll, describe, expect, test } from 'vitest'
 import MainModuleFactory, {
-  type Context,
   type EncryptionParameters,
   type Encryptor,
   type KeyGenerator,
-  type MainModule
+  type MainModule,
+  type SEALContext
 } from '../index_throws'
 let seal: MainModule
 let encParms: EncryptionParameters
-let context: Context
+let context: SEALContext
 let keygen: KeyGenerator
 let encryptor: Encryptor
 
@@ -30,7 +30,7 @@ beforeAll(async () => {
   encParms.setCoeffModulus(coeffModulus)
   encParms.setPlainModulus(plainModulus)
 
-  context = new seal.Context(encParms, true, sec)
+  context = new seal.SEALContext(encParms, true, sec)
 
   keygen = new seal.KeyGenerator(context)
   const pub = keygen.createPublicKey()
@@ -137,15 +137,15 @@ describe('Ciphertext', () => {
     expect(ct2.size()).toBe(ct1.size())
     expect(ct2.polyModulusDegree()).toBe(ct1.polyModulusDegree())
   })
-  test('saveToVec / loadFromVec roundtrip', () => {
+  test('saveToArray / loadFromArray roundtrip', () => {
     const ct1 = new seal.Ciphertext()
     encryptor.encryptZero(ct1)
 
-    const arr = ct1.saveToVec(seal.ComprModeType.none) as Uint8Array
+    const arr = ct1.saveToArray(seal.ComprModeType.none) as Uint8Array
     expect(arr).toBeInstanceOf(Uint8Array)
 
     const ct2 = new seal.Ciphertext()
-    ct2.loadFromVec(context, arr)
+    ct2.loadFromArray(context, arr)
 
     expect(ct2.size()).toBe(ct1.size())
     expect(ct2.polyModulusDegree()).toBe(ct1.polyModulusDegree())

@@ -1,14 +1,14 @@
 import { beforeAll, describe, expect, test } from 'vitest'
 import MainModuleFactory, {
   type BatchEncoder,
-  type Context,
   type Decryptor,
   type Encryptor,
-  type MainModule
+  type MainModule,
+  type SEALContext
 } from '../index_throws'
 
 let seal: MainModule
-let context: Context
+let context: SEALContext
 let encoder: BatchEncoder
 let encryptor: Encryptor
 let decryptor: Decryptor
@@ -23,7 +23,7 @@ beforeAll(async () => {
     seal.CoeffModulus.BFVDefault(polyModulusDegree, securityLevel)
   )
   parms.setPlainModulus(seal.PlainModulus.Batching(polyModulusDegree, 20))
-  context = new seal.Context(parms, true, securityLevel)
+  context = new seal.SEALContext(parms, true, securityLevel)
   encoder = new seal.BatchEncoder(context)
   const keyGen = new seal.KeyGenerator(context)
   const pubKey = keyGen.createPublicKey()
@@ -69,10 +69,10 @@ describe('Encryptor', () => {
     const plain = new seal.Plaintext()
     encoder.encode(data, plain)
     const cipher = encryptor.encryptSerializable(plain)
-    const vec = cipher.saveToVec(seal.ComprModeType.none) as BigInt64Array
+    const vec = cipher.saveToArray(seal.ComprModeType.none) as BigInt64Array
     cipher.delete()
     const cipher2 = new seal.Ciphertext()
-    cipher2.loadFromVec(context, vec)
+    cipher2.loadFromArray(context, vec)
     // Clear the plaintext
     plain.setZero()
     decryptor.decrypt(cipher2, plain)
@@ -87,10 +87,10 @@ describe('Encryptor', () => {
     encoder.encode(data, plain)
     const pool = seal.MemoryPoolHandle.Global()
     const cipher = encryptor.encryptSerializableWithPool(plain, pool)
-    const vec = cipher.saveToVec(seal.ComprModeType.none) as BigInt64Array
+    const vec = cipher.saveToArray(seal.ComprModeType.none) as BigInt64Array
     cipher.delete()
     const cipher2 = new seal.Ciphertext()
-    cipher2.loadFromVec(context, vec)
+    cipher2.loadFromArray(context, vec)
     // Clear the plaintext
     plain.setZero()
     decryptor.decrypt(cipher2, plain)
@@ -133,10 +133,10 @@ describe('Encryptor', () => {
     const plain = new seal.Plaintext()
     encoder.encode(data, plain)
     const cipher = encryptor.encryptSymmetricSerializable(plain)
-    const vec = cipher.saveToVec(seal.ComprModeType.none) as BigInt64Array
+    const vec = cipher.saveToArray(seal.ComprModeType.none) as BigInt64Array
     cipher.delete()
     const cipher2 = new seal.Ciphertext()
-    cipher2.loadFromVec(context, vec)
+    cipher2.loadFromArray(context, vec)
     // Clear the plaintext
     plain.setZero()
     decryptor.decrypt(cipher2, plain)
@@ -151,10 +151,10 @@ describe('Encryptor', () => {
     encoder.encode(data, plain)
     const pool = seal.MemoryPoolHandle.Global()
     const cipher = encryptor.encryptSymmetricSerializableWithPool(plain, pool)
-    const vec = cipher.saveToVec(seal.ComprModeType.none) as BigInt64Array
+    const vec = cipher.saveToArray(seal.ComprModeType.none) as BigInt64Array
     cipher.delete()
     const cipher2 = new seal.Ciphertext()
-    cipher2.loadFromVec(context, vec)
+    cipher2.loadFromArray(context, vec)
     // Clear the plaintext
     plain.setZero()
     decryptor.decrypt(cipher2, plain)
@@ -185,10 +185,10 @@ describe('Encryptor', () => {
   test('Encrypt a zero, serialized cipher and decrypt (bfv)', () => {
     const data = BigInt64Array.from({ length: encoder.slotCount() }, _ => 0n)
     const cipher = encryptor.encryptZeroSerializable()
-    const vec = cipher.saveToVec(seal.ComprModeType.none) as BigInt64Array
+    const vec = cipher.saveToArray(seal.ComprModeType.none) as BigInt64Array
     cipher.delete()
     const cipher2 = new seal.Ciphertext()
-    cipher2.loadFromVec(context, vec)
+    cipher2.loadFromArray(context, vec)
     const plain = new seal.Plaintext()
     decryptor.decrypt(cipher2, plain)
     const decoded = encoder.decodeBigInt64(plain) as BigInt64Array
@@ -198,10 +198,10 @@ describe('Encryptor', () => {
     const data = BigInt64Array.from({ length: encoder.slotCount() }, _ => 0n)
     const pool = seal.MemoryPoolHandle.Global()
     const cipher = encryptor.encryptZeroSerializableWithPool(pool)
-    const vec = cipher.saveToVec(seal.ComprModeType.none) as BigInt64Array
+    const vec = cipher.saveToArray(seal.ComprModeType.none) as BigInt64Array
     cipher.delete()
     const cipher2 = new seal.Ciphertext()
-    cipher2.loadFromVec(context, vec)
+    cipher2.loadFromArray(context, vec)
     const plain = new seal.Plaintext()
     decryptor.decrypt(cipher2, plain)
     const decoded = encoder.decodeBigInt64(plain) as BigInt64Array

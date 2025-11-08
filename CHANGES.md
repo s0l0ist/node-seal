@@ -65,7 +65,7 @@ const array: Uint8Array = ciphertext.saveArray(seal.ComprModeType.none)
 // After (v7)
 // Compression is required
 const base64: string = ciphertext.saveToBase64(seal.ComprModeType.zstd)
-const array: Uint8Array = ciphertext.saveToVec(seal.ComprModeType.zstd)
+const array: Uint8Array = ciphertext.saveToArray(seal.ComprModeType.zstd)
 ```
 
 ### Typed array requirements
@@ -110,8 +110,8 @@ batchEncoder.encode(BigUint64Array.from([1n, 2n, 3n]))
 - JSDoc generation removed (TS declarations don't preserve comments) => use
   Microsoft SEAL C++ docs for semantics.
 - Method names map directly to C++ now (using camelCase).
-- Coverage mostly exercises Emscripten glue, not C++ => don't treat coverage % as
-  binding coverage.
+- Coverage mostly exercises Emscripten glue, not C++ => don't treat coverage %
+  as binding coverage.
 - Custom `FinalizationRegistry` logic removed:
   - Call `.delete()` on objects you create.
   - Use `.deleteLater()` if immediate cleanup is expensive.
@@ -130,7 +130,8 @@ batchEncoder.encode(BigUint64Array.from([1n, 2n, 3n]))
 
 - No JSDoc / generated readable docs.
 - Coverage numbers aren't representative of C++ coverage.
-- Constructor args, functions don't have named parameters => less idiomatic TS/JS.
+- Constructor args, functions don't have named parameters => less idiomatic
+  TS/JS.
 - `*WithPool()` helpers are currently untested.
 
 ---
@@ -443,8 +444,8 @@ Breaking:
 Feat:
 
 - Supporting Seal v3.5.9
-- `Context` can be created with only the `EncryptionParameters`. By default, it
-  will set expandModulus = `true`, security = `tc128`.
+- `SEALContext` can be created with only the `EncryptionParameters`. By default,
+  it will set expandModulus = `true`, security = `tc128`.
 - `SecretKey.save()` now uses compression (`deflate`) by default
 - `ParmsIdType.values()` returns a `BigUint64Array` containing the underlying
   values
@@ -549,7 +550,7 @@ Feat:
   `KeyGenerator.genRelinKeys()` -> `KeyGenerator.relinKeys()`.
 - KeyGenerator now may only be instantiated with a `SecretKey`.
 - `parametersSet` is now a function (`parametersSet()`) instead of a getter
-  property for `Context` and `EncryptionParameterQualifiers` instances.
+  property for `SEALContext` and `EncryptionParameterQualifiers` instances.
 - `Encryptor.encryptSymmetricSerializable` outputs a `Serializable` object for a
   `CipherText`. This new object cannot be used directly, but instead provides
   50% space savings and is meant to be used when serialized over a network where
@@ -672,7 +673,7 @@ Refactor:
 - Removed underutilized `Util` export for functional composition.
 - Removed print methods for `Vector` as these were used for internal debugging
   only.
-- Renamed `context.print` to `toHuman` which now returns a string instead of
+- Renamed `SEALContext.print` to `toHuman` which now returns a string instead of
   printing to the console.
 - Optimized code by removed unnecessary checks for exceptions.
 
@@ -680,7 +681,7 @@ Refactor:
 
 Breaking:
 
-- `CipherText.reserve` now requires two arguments to be provided, `context,
+- `CipherText.reserve` now requires two arguments to be provided, `SEALContext,
 sizeCapacity`. This is because reserving memory before data is encrypted into
   the cipher instance will have no effect. Due to current constructor
   limitations , this is the only way to preemptively reserve memory for a
@@ -1010,10 +1011,11 @@ Feat:
 
 Fix:
 
-- `Context.getContextData({ parmsId })` now returns an instance of `ContextData`
-- `Context.keyContextData` now returns an instance of `ContextData`
-- `Context.firstContextData` now returns an instance of `ContextData`
-- `Context.lastContextData` now returns an instance of `ContextData`
+- `SEALContext.getContextData({ parmsId })` now returns an instance of
+  `ContextData`
+- `SEALContext.keyContextData` now returns an instance of `ContextData`
+- `SEALContext.firstContextData` now returns an instance of `ContextData`
+- `SEALContext.lastContextData` now returns an instance of `ContextData`
 - `EncryptionParameters.plainModulus` now returns a wrapped instance of
   `SmallModulus` instead of the raw WASM instance.
 - `EncryptionParameters.coeffModulus` returns an array of BigInts containing the
@@ -1022,7 +1024,7 @@ Fix:
 
 Feat:
 
-- Added `ContextData` binding which can be used for inspecting a `Context`
+- Added `ContextData` binding which can be used for inspecting a `SEALContext`
   information in greater detail.
 - Added `EncryptionParameterQualifiers` binding to be used for advanced
   debugging.

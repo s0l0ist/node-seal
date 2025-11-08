@@ -1,19 +1,19 @@
 import { beforeAll, describe, expect, test } from 'vitest'
 import MainModuleFactory, {
   type CKKSEncoder,
-  type Context,
   type Decryptor,
   type EncryptionParameters,
   type Encryptor,
   type Evaluator,
   type GaloisKeys,
   type MainModule,
-  type RelinKeys
+  type RelinKeys,
+  type SEALContext
 } from '../index_throws'
 
 let seal: MainModule
 let encParms: EncryptionParameters
-let context: Context
+let context: SEALContext
 let encoder: CKKSEncoder
 let encryptor: Encryptor
 let decryptor: Decryptor
@@ -31,7 +31,7 @@ beforeAll(async () => {
   encParms.setCoeffModulus(
     seal.CoeffModulus.Create(polyModulusDegree, Int32Array.from([40, 16, 40]))
   )
-  context = new seal.Context(encParms, true, securityLevel)
+  context = new seal.SEALContext(encParms, true, securityLevel)
   encoder = new seal.CKKSEncoder(context)
   data = Float64Array.from({ length: encoder.slotCount() }, _ => -5)
   const keyGen = new seal.KeyGenerator(context)

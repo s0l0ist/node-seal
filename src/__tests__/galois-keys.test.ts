@@ -1,14 +1,14 @@
 import { beforeAll, describe, expect, test } from 'vitest'
 import MainModuleFactory, {
-  type Context,
   type EncryptionParameters,
   type KeyGenerator,
-  type MainModule
+  type MainModule,
+  type SEALContext
 } from '../index_throws'
 
 let seal: MainModule
 let keyGen: KeyGenerator
-let context: Context
+let context: SEALContext
 let parms: EncryptionParameters
 
 beforeAll(async () => {
@@ -22,7 +22,7 @@ beforeAll(async () => {
   )
   parms.setPlainModulus(seal.PlainModulus.Batching(polyModulusDegree, 20))
 
-  context = new seal.Context(parms, true, securityLevel)
+  context = new seal.SEALContext(parms, true, securityLevel)
   keyGen = new seal.KeyGenerator(context)
 })
 
@@ -72,8 +72,8 @@ describe('GaloisKeys', () => {
     const key1 = keyGen.createGaloisKeys()
     const key2 = new seal.GaloisKeys()
 
-    const vec = key1.saveToVec(seal.ComprModeType.none)
-    key2.loadFromVec(context, vec)
+    const vec = key1.saveToArray(seal.ComprModeType.none)
+    key2.loadFromArray(context, vec)
 
     expect(key2.saveToBase64(seal.ComprModeType.none)).toEqual(
       key1.saveToBase64(seal.ComprModeType.none)

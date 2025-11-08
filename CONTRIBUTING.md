@@ -42,27 +42,20 @@ First, initialize the Emscripten SDK build environment. This sets up a known wor
 of the SDK to build the project:
 
 ```shell
-npm run em:update      # Updates the tag information
+npm run update:submodule  # Pulls latest changes to emscripten
+npm run update:emsdk      # Updates the tag information
 ```
 
 Finally, configure the Microsoft SEAL build settings:
 
 ```shell
-npm run build          # Will build the two MS-SEAL variants (allows, throws), supporting `node`, `web`, and `worker` emscripten environments. Mac M1+ machines will need to install rosetta (`softwareupdate --install-rosetta`) for the closure compiler.
-npm run test           # Will run jest tests on the *.ts files
-npm run coverage       # Check coverage
-npm run compile        # Test compile before bundling, useful for debugging
+npm run build          # Will build the two MS-SEAL variants (allows, throws). Mac M1+ machines will need to install rosetta (`softwareupdate --install-rosetta`) for the closure compiler.
+npm run compile        # Will run tsc on all *.ts files
+npm run test           # Will run vitest on the *.ts files
 ```
 
 To clean all generated artifacts:
 
 ```shell
 npm run clean
-```
-
-If you want to build your own bundle, perform the steps above and then the following:
-
-```shell
-npm run rollup         # Compiles all TS files, generates declarations, performs minification and places them into `./dist`
-npm run publish:test   # Simulates publishing the bundle to `node-seal`
 ```

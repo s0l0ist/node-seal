@@ -1,13 +1,13 @@
 import { beforeAll, describe, expect, test } from 'vitest'
 import MainModuleFactory, {
-  type Context,
   type EncryptionParameters,
-  type MainModule
+  type MainModule,
+  type SEALContext
 } from '../index_throws'
 
 let seal: MainModule
 let encParms: EncryptionParameters
-let context: Context
+let context: SEALContext
 beforeAll(async () => {
   seal = await MainModuleFactory()
   const schemeType = seal.SchemeType.bfv
@@ -22,7 +22,7 @@ beforeAll(async () => {
   encParms.setPolyModulusDegree(polyModulusDegree)
   encParms.setCoeffModulus(coeffModulus)
   encParms.setPlainModulus(plainModulus)
-  context = new seal.Context(encParms, true, securityLevel)
+  context = new seal.SEALContext(encParms, true, securityLevel)
 })
 
 describe('BatchEncoder', () => {

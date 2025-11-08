@@ -62,7 +62,7 @@ describe('Modulus', () => {
 
   test('It can save/load from a vec', () => {
     const m = new seal.Modulus(3n)
-    const vec = m.saveToVec(seal.ComprModeType.none)
+    const vec = m.saveToArray(seal.ComprModeType.none)
     expect(vec).toEqual(
       Uint8Array.from([
         94, 161, 16, 4, 1, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0,
@@ -70,7 +70,7 @@ describe('Modulus', () => {
       ])
     )
     const m2 = new seal.Modulus(0n)
-    m2.loadFromVec(vec)
+    m2.loadFromArray(vec)
     expect(m2.value()).toBe(3n)
   })
 })

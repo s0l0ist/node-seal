@@ -1,17 +1,17 @@
 import { beforeAll, describe, expect, test } from 'vitest'
 import MainModuleFactory, {
-  type Context,
   type EncryptionParameters,
-  type MainModule
+  type MainModule,
+  type SEALContext
 } from '../index_throws'
 
 let seal: MainModule
 let bfvEncParms: EncryptionParameters
 let bgvEncParms: EncryptionParameters
 let ckksEncParms: EncryptionParameters
-let bfvContext: Context
-let bgvContext: Context
-let ckksContext: Context
+let bfvContext: SEALContext
+let bgvContext: SEALContext
+let ckksContext: SEALContext
 beforeAll(async () => {
   seal = await MainModuleFactory()
 
@@ -21,7 +21,7 @@ beforeAll(async () => {
     seal.CoeffModulus.BFVDefault(4096, seal.SecLevelType.tc128)
   )
   bfvEncParms.setPlainModulus(seal.PlainModulus.Batching(4096, 20))
-  bfvContext = new seal.Context(bfvEncParms, true, seal.SecLevelType.tc128)
+  bfvContext = new seal.SEALContext(bfvEncParms, true, seal.SecLevelType.tc128)
 
   bgvEncParms = new seal.EncryptionParameters(seal.SchemeType.bgv)
   bgvEncParms.setPolyModulusDegree(4096)
@@ -29,14 +29,18 @@ beforeAll(async () => {
     seal.CoeffModulus.BFVDefault(4096, seal.SecLevelType.tc128)
   )
   bgvEncParms.setPlainModulus(seal.PlainModulus.Batching(4096, 20))
-  bgvContext = new seal.Context(bgvEncParms, true, seal.SecLevelType.tc128)
+  bgvContext = new seal.SEALContext(bgvEncParms, true, seal.SecLevelType.tc128)
 
   ckksEncParms = new seal.EncryptionParameters(seal.SchemeType.ckks)
   ckksEncParms.setPolyModulusDegree(4096)
   ckksEncParms.setCoeffModulus(
     seal.CoeffModulus.Create(4096, Int32Array.from([46, 16, 46]))
   )
-  ckksContext = new seal.Context(ckksEncParms, true, seal.SecLevelType.tc128)
+  ckksContext = new seal.SEALContext(
+    ckksEncParms,
+    true,
+    seal.SecLevelType.tc128
+  )
 })
 
 describe('Context, ContextData, EncryptionParameterQualifiers', () => {
@@ -54,7 +58,11 @@ describe('Context, ContextData, EncryptionParameterQualifiers', () => {
       seal.CoeffModulus.BFVDefault(1024, seal.SecLevelType.tc128)
     )
     encParms.setPlainModulus(seal.PlainModulus.Batching(1024, 20))
-    const context = new seal.Context(encParms, true, seal.SecLevelType.tc128)
+    const context = new seal.SEALContext(
+      encParms,
+      true,
+      seal.SecLevelType.tc128
+    )
     context.delete()
     expect(context.isDeleted()).toBe(true)
   })
@@ -137,7 +145,11 @@ describe('Context, ContextData, EncryptionParameterQualifiers', () => {
       seal.CoeffModulus.BFVDefault(1024, seal.SecLevelType.tc128)
     )
     encParms.setPlainModulus(seal.PlainModulus.Batching(1024, 20))
-    const context = new seal.Context(encParms, true, seal.SecLevelType.tc128)
+    const context = new seal.SEALContext(
+      encParms,
+      true,
+      seal.SecLevelType.tc128
+    )
     context.delete()
     expect(context.isDeleted()).toBe(true)
   })
@@ -219,7 +231,11 @@ describe('Context, ContextData, EncryptionParameterQualifiers', () => {
     encParms.setCoeffModulus(
       seal.CoeffModulus.Create(1024, Int32Array.from([27]))
     )
-    const context = new seal.Context(encParms, true, seal.SecLevelType.tc128)
+    const context = new seal.SEALContext(
+      encParms,
+      true,
+      seal.SecLevelType.tc128
+    )
     context.delete()
     expect(context.isDeleted()).toBe(true)
   })

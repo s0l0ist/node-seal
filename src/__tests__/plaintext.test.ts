@@ -1,13 +1,13 @@
 import { beforeAll, describe, expect, test } from 'vitest'
 import MainModuleFactory, {
-  type Context,
   type EncryptionParameters,
-  type MainModule
+  type MainModule,
+  type SEALContext
 } from '../index_throws'
 
 let seal: MainModule
 let encParms: EncryptionParameters
-let context: Context
+let context: SEALContext
 
 beforeAll(async () => {
   seal = await MainModuleFactory()
@@ -27,7 +27,7 @@ beforeAll(async () => {
   encParms.setCoeffModulus(coeffModulus)
   encParms.setPlainModulus(plainModulus)
 
-  context = new seal.Context(encParms, true, sec)
+  context = new seal.SEALContext(encParms, true, sec)
 })
 
 describe('Plaintext', () => {
@@ -104,12 +104,12 @@ describe('Plaintext', () => {
 
     expect(p2.coeffCount()).toBe(4)
   })
-  test('saveToVec / loadFromVec roundtrip', () => {
+  test('saveToArray / loadFromArray roundtrip', () => {
     const p1 = new seal.Plaintext(5)
-    const arr = p1.saveToVec(seal.ComprModeType.none) as Uint8Array
+    const arr = p1.saveToArray(seal.ComprModeType.none) as Uint8Array
 
     const p2 = new seal.Plaintext()
-    p2.loadFromVec(context, arr)
+    p2.loadFromArray(context, arr)
 
     expect(p2.coeffCount()).toBe(5)
   })

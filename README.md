@@ -89,7 +89,7 @@ This sandbox was built for users to experiment and learn how to use Microsoft
 SEAL featuring node-seal.
 
 - **Encryption Parameters:** experiment with many settings to prototype a
-  context.
+  SEALContext.
 - **Keys:** Create, download, upload Secret/Public Keys - even for
   Relinearization and Galois Keys.
 - **Variables:** Create, download, upload PlainTexts or CipherTexts

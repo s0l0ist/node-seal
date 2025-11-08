@@ -1,19 +1,19 @@
 import { beforeAll, describe, expect, test } from 'vitest'
 import MainModuleFactory, {
   type BatchEncoder,
-  type Context,
   type Decryptor,
   type EncryptionParameters,
   type Encryptor,
   type Evaluator,
   type GaloisKeys,
   type MainModule,
-  type RelinKeys
+  type RelinKeys,
+  type SEALContext
 } from '../index_throws'
 
 let seal: MainModule
 let encParms: EncryptionParameters
-let context: Context
+let context: SEALContext
 let encoder: BatchEncoder
 let encryptor: Encryptor
 let decryptor: Decryptor
@@ -32,7 +32,7 @@ beforeAll(async () => {
     seal.CoeffModulus.BFVDefault(polyModulusDegree, securityLevel)
   )
   encParms.setPlainModulus(seal.PlainModulus.Batching(polyModulusDegree, 20))
-  context = new seal.Context(encParms, true, securityLevel)
+  context = new seal.SEALContext(encParms, true, securityLevel)
   encoder = new seal.BatchEncoder(context)
   data = BigInt64Array.from({ length: encoder.slotCount() }, _ => BigInt(-5))
   const keyGen = new seal.KeyGenerator(context)

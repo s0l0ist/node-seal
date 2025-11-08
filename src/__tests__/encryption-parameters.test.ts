@@ -104,7 +104,7 @@ describe('EncryptionParameters', () => {
     expect((encParms.parmsId().values() as BigUint64Array).length).toBe(4)
   })
   test('It should save/load from a typed array', () => {
-    const vec = new seal.EncryptionParameters(seal.SchemeType.none).saveToVec(
+    const vec = new seal.EncryptionParameters(seal.SchemeType.none).saveToArray(
       seal.ComprModeType.none
     )
 
@@ -117,7 +117,7 @@ describe('EncryptionParameters', () => {
     )
 
     const encParms = new seal.EncryptionParameters(seal.SchemeType.bfv)
-    encParms.loadFromVec(vec)
+    encParms.loadFromArray(vec)
     expect(encParms.scheme().value).toBe(seal.SchemeType.none.value)
     expect(encParms.polyModulusDegree()).toBe(0)
     expect(encParms.coeffModulus().size()).toBe(0)
@@ -138,6 +138,6 @@ describe('EncryptionParameters', () => {
       128, 0, 0, 0, 64, 0, 8
     ])
 
-    expect(() => encParms.loadFromVec(array)).toThrow()
+    expect(() => encParms.loadFromArray(array)).toThrow()
   })
 })

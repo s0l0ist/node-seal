@@ -1,13 +1,13 @@
 import { beforeAll, describe, expect, test } from 'vitest'
 import MainModuleFactory, {
-  type Context,
   type EncryptionParameters,
-  type MainModule
+  type MainModule,
+  type SEALContext
 } from '../index_throws'
 
 let seal: MainModule
 let encParms: EncryptionParameters
-let context: Context
+let context: SEALContext
 beforeAll(async () => {
   seal = await MainModuleFactory()
   const schemeType = seal.SchemeType.ckks
@@ -20,7 +20,7 @@ beforeAll(async () => {
   encParms = new seal.EncryptionParameters(schemeType)
   encParms.setPolyModulusDegree(polyModulusDegree)
   encParms.setCoeffModulus(coeffModulus)
-  context = new seal.Context(encParms, true, securityLevel)
+  context = new seal.SEALContext(encParms, true, securityLevel)
 })
 
 describe('CKKSEncoder', () => {

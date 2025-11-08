@@ -4,30 +4,27 @@ about: Create a report to help us improve
 title: ''
 labels: ''
 assignees: s0l0ist
-
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**Describe the bug** A clear and concise description of what the bug is.
 
-**To Reproduce**
-Please provide a code example that illustrates the problem area.
+**To Reproduce** Please provide a code example that illustrates the problem
+area.
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**Expected behavior** A clear and concise description of what you expected to
+happen.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Screenshots** If applicable, add screenshots to help explain your problem.
 
 **Environment**
- - browser:
-   - [ ] Safari
-   - [ ] Chrome
-   - [ ] Firefox
-   - [ ] Edge
-   - [ ] Other (please specify): 
- - nodejs version [e.g. v16.13.0]: 
- - node-seal version [e.g. 4.6.2]: 
 
-**Additional context**
-Add any other context about the problem here.
+- browser:
+  - [ ] Safari
+  - [ ] Chrome
+  - [ ] Firefox
+  - [ ] Edge
+  - [ ] Other (please specify):
+- nodejs version [e.g. v16.13.0]:
+- node-seal version [e.g. 4.6.2]:
+
+**Additional SEALContext** Add any other SEALContext about the problem here.
