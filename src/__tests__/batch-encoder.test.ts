@@ -88,4 +88,68 @@ describe('BatchEncoder', () => {
     const arr2 = encoder.decodeBigInt64(plain) as BigUint64Array
     expect(arr).toEqual(arr2)
   })
+  test('It should encode/decode the max value supported by the minimum polyModulusDegree and plain modulus (26 bits)', () => {
+    const schemeType = seal.SchemeType.bfv
+    const polyModulusDegree = 1024
+    const coeffModulus = seal.CoeffModulus.BFVDefault(
+      polyModulusDegree,
+      seal.SecLevelType.tc128
+    )
+    const encParms = new seal.EncryptionParameters(schemeType)
+    encParms.setPolyModulusDegree(polyModulusDegree)
+    encParms.setCoeffModulus(coeffModulus)
+    const plainModulus = seal.PlainModulus.Batching(polyModulusDegree, 26)
+    encParms.setPlainModulus(plainModulus)
+    const context = new seal.SEALContext(
+      encParms,
+      true,
+      seal.SecLevelType.tc128
+    )
+    const encoder = new seal.BatchEncoder(context)
+    const bitCount = plainModulus.bitCount()
+    expect(bitCount).toBe(26)
+    const maxVal = plainModulus.value() - 1n
+    expect(maxVal).toBe(67_104_768n)
+    const slots = encoder.slotCount()
+    const arr = BigUint64Array.from({ length: slots }, () => maxVal)
+
+    const plain = new seal.Plaintext()
+    encoder.encode(arr, plain)
+
+    const decoded = encoder.decodeBigUint64(plain) as BigUint64Array
+
+    expect(decoded).toEqual(arr)
+  })
+  test('It should encode/decode the max value supported by the maximum plain modulus (60 bits)', () => {
+    const schemeType = seal.SchemeType.bfv
+    const polyModulusDegree = 4096
+    const coeffModulus = seal.CoeffModulus.BFVDefault(
+      polyModulusDegree,
+      seal.SecLevelType.tc128
+    )
+    const encParms = new seal.EncryptionParameters(schemeType)
+    encParms.setPolyModulusDegree(polyModulusDegree)
+    encParms.setCoeffModulus(coeffModulus)
+    const plainModulus = seal.PlainModulus.Batching(polyModulusDegree, 60)
+    encParms.setPlainModulus(plainModulus)
+    const context = new seal.SEALContext(
+      encParms,
+      true,
+      seal.SecLevelType.tc128
+    )
+    const encoder = new seal.BatchEncoder(context)
+    const bitCount = plainModulus.bitCount()
+    expect(bitCount).toBe(60)
+    const maxVal = plainModulus.value() - 1n
+    expect(maxVal).toBe(1_152_921_504_606_830_592n)
+    const slots = encoder.slotCount()
+    const arr = BigUint64Array.from({ length: slots }, () => maxVal)
+
+    const plain = new seal.Plaintext()
+    encoder.encode(arr, plain)
+
+    const decoded = encoder.decodeBigUint64(plain) as BigUint64Array
+
+    expect(decoded).toEqual(arr)
+  })
 })
