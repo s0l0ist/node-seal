@@ -11,8 +11,9 @@ library, for TypeScript and JavaScript.
 
 - **WebAssembly:** Fast, direct bindings to Microsoft SEAL
 - **ESM-first:** Modern module layout, no bundling
-- **Node.js + browser + edge (CF Workers):** Load the WASM separately and run
-  wherever WASM is allowed
+- **Node.js + browser + edge (CF Workers):** Everything you need (JS glue,
+  .wasm, and typings) is in the package, so you can run it anywhere WASM is
+  allowed.
 - **Low-level, close to C++:** Method names and types now map much more directly
   to SEAL
 
@@ -25,8 +26,10 @@ library, for TypeScript and JavaScript.
 - [What Changed in v7](#what-changed-in-v7)
 - [Environment Notes](#environment-notes)
   - [React Native](#react-native)
-- [Demo / Sandbox](#demo--sandbox)
-- [Usage / Docs / Examples](#usage--docs--examples)
+- [Demo](#demo)
+- [Usage](#usage)
+- [Documentation](#documentation)
+- [Examples](#examples)
 - [Benchmarking](#benchmarking)
 - [Caveats](#caveats)
 - [Contributing](#contributing)
@@ -44,8 +47,9 @@ yarn add node-seal
 pnpm add node-seal
 ```
 
-Because v7 is ESM-first and ships the `.wasm` separately, most modern bundlers
-will just work.
+Because v7 is ESM-first and publishes the `.wasm` alongside the JS glue and
+TypeScript definitions, most modern bundlers can import it directly without
+extra configuration.
 
 ## Quick Start
 
@@ -77,9 +81,9 @@ See [here](CHANGES.md).
 
 ### React Native
 
-React Native still can't run WASM like a browser. Use a small HTML/JS app inside
-a WebView, load `node-seal` there, and talk over `postMessage`. Because v7 ships
-a plain `.wasm`, bundling that web app is easier.
+You could use something like the
+[react-native-webassembly](https://github.com/cawfree/react-native-webassembly)
+lib, but this has not been tested.
 
 ## Demo
 
@@ -97,18 +101,30 @@ SEAL featuring node-seal.
 - **Code Generation:** After your experimentation is complete, generate working
   code to use!
 
+> Note: the sandbox targets an earlier version of `node-seal`, so generated code
+> may need adjustments for v7.
+
 ## Usage
 
 Checkout the [basics](USAGE.md)
 
 ## Documentation
 
-View the latest docs [here](https://s0l0ist.github.io/node-seal)
+`v7` doesn't have a dedicated documentation page. Instead, you refer to the [C++
+bindings](https://github.com/s0l0ist/SEAL/blob/master/native/src/seal/bindings.cpp)
+for additional information. The best examples and explanations are found in
+Microsoft SEAL's
+[repository](https://github.com/s0l0ist/SEAL/tree/master/native/examples).
+
+View the docs from `v6.0.3` and earlier
+[here](https://s0l0ist.github.io/node-seal)
 
 ## Examples
 
-Check out the [Sandbox](https://s0l0ist.github.io/seal-sandbox/) to run HE
-functions and even generate working code!
+Check out the [Sandbox](https://s0l0ist.github.io/seal-sandbox/) to try out HE
+operations and even generate example code. Just a heads-up: the sandbox was
+built against an older version of `node-seal`, so while the demos still work,
+the code it generates isn't compatible with v7.
 
 If you'd rather read an example, take a look [here](FULL-EXAMPLE.md).
 
