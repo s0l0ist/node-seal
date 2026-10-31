@@ -27,6 +27,41 @@ beforeAll(async () => {
 })
 
 describe('RelinKeys', () => {
+  test('It should find keys by secret key power', () => {
+    const key = keyGen.createRelinKeys()
+    expect(key.getIndex(2)).toBe(0)
+    expect(key.getIndex(3)).toBe(1)
+    expect(key.hasKey(2)).toBe(true)
+    expect(key.hasKey(3)).toBe(false)
+    expect(new seal.RelinKeys().hasKey(2)).toBe(false)
+  })
+  test('It should return a copy of a key', () => {
+    const key = keyGen.createRelinKeys()
+    const components = key.key(2)
+    const bytes = components[0].saveToArray(seal.ComprModeType.none)
+
+    expect(components.length).toBe(parms.coeffModulus().size() - 1)
+    const loaded = new seal.PublicKey()
+    loaded.loadFromArray(context, bytes)
+    expect(loaded.saveToArray(seal.ComprModeType.none)).toEqual(bytes)
+
+    components[0].assign(new seal.PublicKey())
+    expect(key.key(2)[0].saveToArray(seal.ComprModeType.none)).toEqual(bytes)
+  })
+  test('It should keep a returned key after deleting the keys', () => {
+    const key = keyGen.createRelinKeys()
+    const component = key.key(2)[0]
+    const bytes = component.saveToArray(seal.ComprModeType.none)
+    key.delete()
+
+    expect(component.saveToArray(seal.ComprModeType.none)).toEqual(bytes)
+  })
+  test('It should fail to return a missing key', () => {
+    const key = keyGen.createRelinKeys()
+    expect(() => key.key(1)).toThrow()
+    expect(() => key.key(3)).toThrow()
+    expect(() => new seal.RelinKeys().key(2)).toThrow()
+  })
   test('It should clone', () => {
     const key = new seal.RelinKeys()
     const clone = key.clone()
@@ -34,9 +69,14 @@ describe('RelinKeys', () => {
   })
 
   test('It should copy', () => {
-    const key = new seal.RelinKeys()
+    const key = keyGen.createRelinKeys()
+    const saved = key.saveToBase64(seal.ComprModeType.none)
     const copy = key.copy()
     expect(copy.isAliasOf(key)).toBe(false)
+    expect(copy.saveToBase64(seal.ComprModeType.none)).toBe(saved)
+
+    copy.assign(new seal.RelinKeys())
+    expect(key.saveToBase64(seal.ComprModeType.none)).toBe(saved)
   })
 
   test('It should assign', () => {

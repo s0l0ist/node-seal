@@ -33,9 +33,14 @@ describe('PublicKey', () => {
   })
 
   test('It should copy', () => {
-    const key = new seal.PublicKey()
+    const key = keyGen.createPublicKey()
+    const saved = key.saveToBase64(seal.ComprModeType.none)
     const copy = key.copy()
     expect(copy.isAliasOf(key)).toBe(false)
+    expect(copy.saveToBase64(seal.ComprModeType.none)).toBe(saved)
+
+    copy.assign(new seal.PublicKey())
+    expect(key.saveToBase64(seal.ComprModeType.none)).toBe(saved)
   })
 
   test('It should assign', () => {

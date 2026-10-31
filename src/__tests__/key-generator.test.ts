@@ -35,6 +35,40 @@ describe('KeyGenerator', () => {
     const vec = key.saveToArray(seal.ComprModeType.none) as Uint8Array
     expect(vec.length).toEqual(98392)
   })
+  test('It should return independent copies of the secret key', () => {
+    const keyGen = new seal.KeyGenerator(context)
+    const key = keyGen.secretKey()
+    const copy = keyGen.secretKey()
+    const bytes = key.saveToArray(seal.ComprModeType.none)
+
+    key.assign(new seal.SecretKey())
+
+    expect(copy.saveToArray(seal.ComprModeType.none)).toEqual(bytes)
+    expect(keyGen.secretKey().saveToArray(seal.ComprModeType.none)).toEqual(
+      bytes
+    )
+  })
+  test('It should keep generated keys after deleting the key generator', () => {
+    const keyGen = new seal.KeyGenerator(context)
+    const steps = Int32Array.from([1])
+    const keys = [
+      keyGen.secretKey(),
+      keyGen.createPublicKey(),
+      keyGen.createPublicKeySerializable(),
+      keyGen.createRelinKeys(),
+      keyGen.createRelinKeysSerializable(),
+      keyGen.createGaloisKeys(),
+      keyGen.createGaloisKeysSerializable(),
+      keyGen.createGaloisKeysWithSteps(steps),
+      keyGen.createGaloisKeysSerializableWithSteps(steps)
+    ]
+    const saved = keys.map(key => key.saveToBase64(seal.ComprModeType.none))
+    keyGen.delete()
+
+    for (let i = 0; i < keys.length; i++) {
+      expect(keys[i].saveToBase64(seal.ComprModeType.none)).toBe(saved[i])
+    }
+  })
   test('It should create a public key', () => {
     const key = keyGenerator.createPublicKey()
     const vec = key.saveToArray(seal.ComprModeType.none) as Uint8Array

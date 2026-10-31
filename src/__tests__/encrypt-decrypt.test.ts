@@ -33,6 +33,77 @@ beforeAll(async () => {
 })
 
 describe('Encryptor', () => {
+  test('It should keep serializable ciphertexts after deleting the encryptor', () => {
+    const keyGen = new seal.KeyGenerator(context)
+    const secretKey = keyGen.secretKey()
+    const encryptor = new seal.Encryptor(
+      context,
+      keyGen.createPublicKey(),
+      secretKey
+    )
+    const decryptor = new seal.Decryptor(context, secretKey)
+    const data = new BigInt64Array(encoder.slotCount())
+    data.set([2n, -3n, 4n])
+    const plain = new seal.Plaintext()
+    encoder.encode(data, plain)
+    const pool = seal.MemoryPoolHandle.New(false)
+    const ciphers = [
+      encryptor.encryptSerializable(plain),
+      encryptor.encryptSerializableWithPool(plain, pool),
+      encryptor.encryptSymmetricSerializable(plain),
+      encryptor.encryptSymmetricSerializableWithPool(plain, pool),
+      encryptor.encryptZeroSerializable(),
+      encryptor.encryptZeroSerializableWithPool(pool)
+    ]
+    encryptor.delete()
+    const zero = new BigInt64Array(encoder.slotCount())
+
+    for (let i = 0; i < ciphers.length; i++) {
+      const cipher = new seal.Ciphertext()
+      cipher.loadFromArray(
+        context,
+        ciphers[i].saveToArray(seal.ComprModeType.none)
+      )
+      decryptor.decrypt(cipher, plain)
+      expect(encoder.decodeBigInt64(plain)).toEqual(i < 4 ? data : zero)
+    }
+  })
+  test('It should encrypt with a replacement public key', () => {
+    const keyGen = new seal.KeyGenerator(context)
+    const keyGen2 = new seal.KeyGenerator(context)
+    const encryptor = new seal.Encryptor(context, keyGen.createPublicKey())
+    encryptor.setPublicKey(keyGen2.createPublicKey())
+    const decryptor = new seal.Decryptor(context, keyGen2.secretKey())
+    const arr = BigInt64Array.from([-3n, 0n, 2n])
+    const plain = new seal.Plaintext()
+    encoder.encode(arr, plain)
+    const cipher = new seal.Ciphertext()
+    encryptor.encrypt(plain, cipher)
+    plain.setZero()
+    decryptor.decrypt(cipher, plain)
+    const decoded = encoder.decodeBigInt64(plain) as BigInt64Array
+    expect(decoded.slice(0, 3)).toEqual(arr)
+  })
+  test('It should encrypt with a replacement secret key', () => {
+    const keyGen = new seal.KeyGenerator(context)
+    const keyGen2 = new seal.KeyGenerator(context)
+    const encryptor = new seal.Encryptor(
+      context,
+      keyGen.createPublicKey(),
+      keyGen.secretKey()
+    )
+    encryptor.setSecretKey(keyGen2.secretKey())
+    const decryptor = new seal.Decryptor(context, keyGen2.secretKey())
+    const arr = BigInt64Array.from([-3n, 0n, 2n])
+    const plain = new seal.Plaintext()
+    encoder.encode(arr, plain)
+    const cipher = new seal.Ciphertext()
+    encryptor.encryptSymmetric(plain, cipher)
+    plain.setZero()
+    decryptor.decrypt(cipher, plain)
+    const decoded = encoder.decodeBigInt64(plain) as BigInt64Array
+    expect(decoded.slice(0, 3)).toEqual(arr)
+  })
   test('Encrypt a plaintext to a cipher and decrypt (bfv)', () => {
     const data = BigInt64Array.from({ length: encoder.slotCount() }, (_, i) =>
       BigInt(-i)
@@ -206,5 +277,24 @@ describe('Encryptor', () => {
     decryptor.decrypt(cipher2, plain)
     const decoded = encoder.decodeBigInt64(plain) as BigInt64Array
     expect(decoded).toEqual(data)
+  })
+})
+
+describe('Decryptor', () => {
+  test('It should report the remaining noise budget after multiplication', () => {
+    const plain = new seal.Plaintext()
+    encoder.encode(BigInt64Array.from([2n, 3n, 4n]), plain)
+    const cipher = new seal.Ciphertext()
+    encryptor.encrypt(plain, cipher)
+    const noiseBudget = decryptor.invariantNoiseBudget(cipher)
+    expect(noiseBudget).toBeGreaterThan(0)
+    const evaluator = new seal.Evaluator(context)
+    evaluator.multiplyPlainInplace(cipher, plain)
+    const noiseBudget2 = decryptor.invariantNoiseBudget(cipher)
+    expect(noiseBudget2).toBeGreaterThan(0)
+    expect(noiseBudget2).toBeLessThan(noiseBudget)
+    decryptor.decrypt(cipher, plain)
+    const decoded = encoder.decodeBigInt64(plain) as BigInt64Array
+    expect(decoded.slice(0, 3)).toEqual(BigInt64Array.from([4n, 9n, 16n]))
   })
 })

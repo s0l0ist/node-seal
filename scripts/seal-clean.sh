@@ -4,4 +4,5 @@ rm -rf ./src/seal_*
 rm -rf ./dist
 cd ./submodules/SEAL/
 rm -rf ./build
+rm -rf ./build-native
 cd ../../

@@ -1,8 +1,29 @@
-# List of Changes
+# Changelog
 
-See [Microsoft's Change
-log](https://github.com/microsoft/SEAL/blob/master/CHANGES.md) for more details
-on each SEAL version change.
+For changes to the underlying library, see the
+[Microsoft SEAL changelog](https://github.com/microsoft/SEAL/blob/main/CHANGES.md).
+
+## Version 7.1.0
+
+- Updated Microsoft SEAL to 4.7.2.
+- Added memory profiles for applications that need more control over memory reuse.
+- Fixed pool-specific plaintext and ciphertext factories losing their chosen pool
+  and preallocated space.
+- Reduced temporary memory allocations when creating keys and serializable
+  ciphertexts.
+- Fixed `Ciphertext.correctionFactor()` to return the BGV correction factor
+  instead of the scale. The return type is now `bigint`; update callers that
+  expect a `number`.
+- Added parameter diagnostics and clearer errors for invalid contexts and
+  typed-array inputs.
+- Added access to context precomputations, NTT tables, and individual
+  relinearization and Galois keys.
+- Reorganized the docs around a [getting-started example](docs/getting-started.md)
+  and [JavaScript integration](docs/advanced.md), including cleanup, workers,
+  and memory pools.
+- Added native SEAL benchmarks to compare against Wasm results.
+- Standardized benchmark commands: `build:bench:native`, `build:bench:wasm`,
+  `bench:native`, and `bench:wasm`. See [benchmarks](BENCHMARK.md).
 
 ## Version 7.0.0
 

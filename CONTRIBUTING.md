@@ -1,61 +1,32 @@
 # Contributing
 
-We welcome help on this project, but please create all PRs with feature branches onto Master.
+Open feature branches against `main`.
 
-### Requirements
+## Setup
 
-#### Cmake > 3.12
+Use Node.js with npm, CMake 3.22 or newer, and a C++ build toolchain.
+The repository includes SEAL and Emscripten as submodules.
 
-Download latest stable cmake from:
-https://cmake.org/download/
-
-Install:
-
-```shell
-cd ./cmake-3.15.4
-./bootstrap
-make -j
-sudo make install
-```
-
-### Development
-
-The repository contains a few submodules:
-
-- [Emscripten SDK](https://github.com/emscripten-core/emsdk)
-- [Microsoft SEAL](https://github.com/microsoft/SEAL)
-
-To begin development, first clone the repository and related submodules
-
-```shell
-git clone --recursive https://github.com/s0l0ist/node-seal.git
-
+```sh
+git clone --recurse-submodules https://github.com/s0l0ist/node-seal.git
 cd node-seal
-
-npm install
+npm ci
+npm run update:emsdk
 ```
 
-Inside [package.json](package.json), we have several scripts to help generate the Web
-Assembly code.
+`update:emsdk` installs and activates `latest` from the checked-out emsdk version.
+Use `update:submodule` when you want to update the submodules themselves.
 
-First, initialize the Emscripten SDK build environment. This sets up a known working version
-of the SDK to build the project:
+## Build and test
 
-```shell
-npm run update:submodule  # Pulls latest changes to emscripten
-npm run update:emsdk      # Updates the tag information
+```sh
+npm run build
+npm run compile
+npm test
 ```
 
-Finally, configure the Microsoft SEAL build settings:
+`build` generates both Wasm variants. `compile` copies the package files to
+`dist`. When changing bindings, check both variants and their generated types.
 
-```shell
-npm run build          # Will build the two MS-SEAL variants (allows, throws). Mac M1+ machines will need to install rosetta (`softwareupdate --install-rosetta`) for the closure compiler.
-npm run compile        # Will run tsc on all *.ts files
-npm run test           # Will run vitest on the *.ts files
-```
-
-To clean all generated artifacts:
-
-```shell
-npm run clean
-```
+Clean generated artifacts with `npm run clean`. See [benchmarks](BENCHMARK.md)
+for the native and Wasm benchmark commands.

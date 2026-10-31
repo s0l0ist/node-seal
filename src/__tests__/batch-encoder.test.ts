@@ -85,8 +85,72 @@ describe('BatchEncoder', () => {
     )
     const plain = new seal.Plaintext()
     encoder.encode(arr, plain)
-    const arr2 = encoder.decodeBigInt64(plain) as BigUint64Array
+    const arr2 = encoder.decodeBigInt64(plain) as BigInt64Array
     expect(arr).toEqual(arr2)
+  })
+  test('It should decode BigUint64Array with pool', () => {
+    const encoder = new seal.BatchEncoder(context)
+    const arr = BigUint64Array.from({ length: encoder.slotCount() }, (_, i) =>
+      BigInt(i)
+    )
+    const plain = new seal.Plaintext()
+    encoder.encode(arr, plain)
+    const pool = seal.MemoryPoolHandle.New(false)
+    const arr2 = encoder.decodeBigUint64WithPool(plain, pool) as BigUint64Array
+    expect(arr2).toEqual(arr)
+    expect(pool.allocByteCount()).toBeGreaterThan(0)
+  })
+  test('It should encode a BigInt64Array subarray and decode with pool', () => {
+    const encoder = new seal.BatchEncoder(context)
+    const arr = BigInt64Array.from([99n, -3n, 0n, 2n, 99n])
+    const plain = new seal.Plaintext()
+    encoder.encode(arr.subarray(1, 4), plain)
+    const pool = seal.MemoryPoolHandle.New(false)
+    const arr2 = encoder.decodeBigInt64WithPool(plain, pool) as BigInt64Array
+    const expected = new BigInt64Array(encoder.slotCount())
+    expected.set([-3n, 0n, 2n])
+    expect(arr2).toEqual(expected)
+    expect(pool.allocByteCount()).toBeGreaterThan(0)
+  })
+  test('It should return independent decoded arrays', () => {
+    const encoder = new seal.BatchEncoder(context)
+    const arr = BigInt64Array.from([-3n, 0n, 2n])
+    const plain = new seal.Plaintext()
+    encoder.encode(arr, plain)
+    const arr2 = encoder.decodeBigInt64(plain) as BigInt64Array
+    arr2[0] = 99n
+    const arr3 = encoder.decodeBigInt64(plain) as BigInt64Array
+    expect(arr3[0]).toBe(-3n)
+    encoder.encode(BigInt64Array.from([7n]), plain)
+    expect(arr3.slice(0, 3)).toEqual(arr)
+  })
+  test('It should fail to encode null', () => {
+    const encoder = new seal.BatchEncoder(context)
+    const plain = new seal.Plaintext()
+    try {
+      encoder.encode(null, plain)
+      expect(true).toBe(false)
+    } catch (e: any) {
+      expect(e.constructor.name).toBe('Exception')
+      expect(e.message).toEqual([
+        'std::invalid_argument',
+        'expected one of BigInt64Array, BigUint64Array'
+      ])
+    }
+  })
+  test('It should fail to encode undefined', () => {
+    const encoder = new seal.BatchEncoder(context)
+    const plain = new seal.Plaintext()
+    try {
+      encoder.encode(undefined, plain)
+      expect(true).toBe(false)
+    } catch (e: any) {
+      expect(e.constructor.name).toBe('Exception')
+      expect(e.message).toEqual([
+        'std::invalid_argument',
+        'expected one of BigInt64Array, BigUint64Array'
+      ])
+    }
   })
   test('It should encode/decode the max value supported by the minimum polyModulusDegree and plain modulus (26 bits)', () => {
     const schemeType = seal.SchemeType.bfv

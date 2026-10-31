@@ -47,6 +47,16 @@ describe('VectorModulus', () => {
     expect(V(vector, 2)).toBe(65537n)
   })
 
+  test('It should preserve BigInt values when converting to an array', () => {
+    const arr = [2n, (1n << 60n) + 7n, MAX61]
+    const vector = new seal.VectorModulus()
+    for (const value of arr) {
+      vector.push_back(M(value))
+    }
+
+    expect(seal.jsArrayFromVecModulus(vector)).toEqual(arr)
+  })
+
   test('It should enforce Modulus constraints (<=61 bits, != 1)', () => {
     // Allowed: zero, small odd, max allowed
     const vector = new seal.VectorModulus()

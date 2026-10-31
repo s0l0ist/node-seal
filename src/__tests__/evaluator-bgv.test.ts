@@ -34,7 +34,9 @@ beforeAll(async () => {
   encParms.setPlainModulus(seal.PlainModulus.Batching(polyModulusDegree, 20))
   context = new seal.SEALContext(encParms, true, securityLevel)
   encoder = new seal.BatchEncoder(context)
-  data = BigInt64Array.from({ length: encoder.slotCount() }, _ => BigInt(-5))
+  data = BigInt64Array.from({ length: encoder.slotCount() }, (_, i) =>
+    BigInt((i % 7) - 3)
+  )
   const keyGen = new seal.KeyGenerator(context)
   const pubKey = keyGen.createPublicKey()
   const secKey = keyGen.secretKey()
@@ -663,6 +665,26 @@ describe('Evaluator', () => {
     expect(decoded).toEqual(data.map(x => x ** 2n))
   })
 
+  test('It should preserve the BGV correction factor after modulus switching and saving', () => {
+    const plain = new seal.Plaintext()
+    encoder.encode(data, plain)
+    const cipher = new seal.Ciphertext()
+    encryptor.encrypt(plain, cipher)
+    expect(cipher.correctionFactor()).toBe(1n)
+    evaluator.cipherModSwitchToNextInplace(cipher)
+    expect(cipher.correctionFactor()).toBeGreaterThan(1n)
+    expect(cipher.correctionFactor()).toBeLessThan(
+      encParms.plainModulus().value()
+    )
+    const vec = cipher.saveToArray(seal.ComprModeType.none)
+    const cipher2 = new seal.Ciphertext()
+    cipher2.loadFromArray(context, vec)
+    expect(cipher2.correctionFactor()).toBe(cipher.correctionFactor())
+    decryptor.decrypt(cipher2, plain)
+    const decoded = encoder.decodeBigInt64(plain) as BigInt64Array
+    expect(decoded).toEqual(data)
+  })
+
   // Apply Galois
   test('It should applyGalois on a cipher to a destination cipher', () => {
     const plain = new seal.Plaintext()
@@ -680,7 +702,9 @@ describe('Evaluator', () => {
     )
     decryptor.decrypt(cipherDest, plain)
     const decoded = encoder.decodeBigInt64(plain) as BigInt64Array
-    expect(decoded).toEqual(data.map(x => x))
+    expect(decoded).toEqual(
+      data.map((_, i) => data[(i + data.length / 2) % data.length])
+    )
   })
   test('It should applyGalois on a cipher to a destination cipher with pool', () => {
     const plain = new seal.Plaintext()
@@ -699,7 +723,9 @@ describe('Evaluator', () => {
     )
     decryptor.decrypt(cipherDest, plain)
     const decoded = encoder.decodeBigInt64(plain) as BigInt64Array
-    expect(decoded).toEqual(data.map(x => x))
+    expect(decoded).toEqual(
+      data.map((_, i) => data[(i + data.length / 2) % data.length])
+    )
   })
   test('It should applyGalois on a cipher to a destination cipher inplace', () => {
     const plain = new seal.Plaintext()
@@ -715,7 +741,9 @@ describe('Evaluator', () => {
     )
     decryptor.decrypt(cipher, plain)
     const decoded = encoder.decodeBigInt64(plain) as BigInt64Array
-    expect(decoded).toEqual(data.map(x => x))
+    expect(decoded).toEqual(
+      data.map((_, i) => data[(i + data.length / 2) % data.length])
+    )
   })
   test('It should applyGalois on a cipher to a destination cipher inplace with pool', () => {
     const plain = new seal.Plaintext()
@@ -732,11 +760,13 @@ describe('Evaluator', () => {
     )
     decryptor.decrypt(cipher, plain)
     const decoded = encoder.decodeBigInt64(plain) as BigInt64Array
-    expect(decoded).toEqual(data.map(x => x))
+    expect(decoded).toEqual(
+      data.map((_, i) => data[(i + data.length / 2) % data.length])
+    )
   })
 
   // Rotate rows (only bfv or bgv)
-  test('It should rotate rows on a cipher to a destination cipher', () => {
+  test('It should rotate rows left on a cipher to a destination cipher', () => {
     const plain = new seal.Plaintext()
     encoder.encode(data, plain)
     const cipher = new seal.Ciphertext()
@@ -744,17 +774,17 @@ describe('Evaluator', () => {
     // Clear plaintext
     plain.setZero()
     const cipherDest = new seal.Ciphertext()
-    evaluator.rotateRows(
-      cipher,
-      encParms.polyModulusDegree() / 4,
-      galoisKeys,
-      cipherDest
-    )
+    evaluator.rotateRows(cipher, 1, galoisKeys, cipherDest)
     decryptor.decrypt(cipherDest, plain)
     const decoded = encoder.decodeBigInt64(plain) as BigInt64Array
-    expect(decoded).toEqual(data.map(x => x))
+    const rowSize = data.length / 2
+    expect(decoded).toEqual(
+      data.map(
+        (_, i) => data[(i < rowSize ? 0 : rowSize) + ((i + 1) % rowSize)]
+      )
+    )
   })
-  test('It should rotate rows on a cipher to a destination cipher with pool', () => {
+  test('It should rotate rows right on a cipher to a destination cipher with pool', () => {
     const plain = new seal.Plaintext()
     encoder.encode(data, plain)
     const cipher = new seal.Ciphertext()
@@ -764,32 +794,39 @@ describe('Evaluator', () => {
     const cipherDest = new seal.Ciphertext()
     evaluator.rotateRowsWithPool(
       cipher,
-      encParms.polyModulusDegree() / 4,
+      -1,
       galoisKeys,
       cipherDest,
       seal.MemoryPoolHandle.Global()
     )
     decryptor.decrypt(cipherDest, plain)
     const decoded = encoder.decodeBigInt64(plain) as BigInt64Array
-    expect(decoded).toEqual(data.map(x => x))
+    const rowSize = data.length / 2
+    expect(decoded).toEqual(
+      data.map(
+        (_, i) =>
+          data[(i < rowSize ? 0 : rowSize) + ((i + rowSize - 1) % rowSize)]
+      )
+    )
   })
-  test('It should rotate rows on a cipher to a destination cipher inplace', () => {
+  test('It should rotate rows left on a cipher to a destination cipher inplace', () => {
     const plain = new seal.Plaintext()
     encoder.encode(data, plain)
     const cipher = new seal.Ciphertext()
     encryptor.encrypt(plain, cipher)
     // Clear plaintext
     plain.setZero()
-    evaluator.rotateRowsInplace(
-      cipher,
-      encParms.polyModulusDegree() / 4,
-      galoisKeys
-    )
+    evaluator.rotateRowsInplace(cipher, 1, galoisKeys)
     decryptor.decrypt(cipher, plain)
     const decoded = encoder.decodeBigInt64(plain) as BigInt64Array
-    expect(decoded).toEqual(data.map(x => x))
+    const rowSize = data.length / 2
+    expect(decoded).toEqual(
+      data.map(
+        (_, i) => data[(i < rowSize ? 0 : rowSize) + ((i + 1) % rowSize)]
+      )
+    )
   })
-  test('It should rotate rows on a cipher to a destination cipher inplace with pool', () => {
+  test('It should rotate rows right on a cipher to a destination cipher inplace with pool', () => {
     const plain = new seal.Plaintext()
     encoder.encode(data, plain)
     const cipher = new seal.Ciphertext()
@@ -798,13 +835,19 @@ describe('Evaluator', () => {
     plain.setZero()
     evaluator.rotateRowsInplaceWithPool(
       cipher,
-      encParms.polyModulusDegree() / 4,
+      -1,
       galoisKeys,
       seal.MemoryPoolHandle.Global()
     )
     decryptor.decrypt(cipher, plain)
     const decoded = encoder.decodeBigInt64(plain) as BigInt64Array
-    expect(decoded).toEqual(data.map(x => x))
+    const rowSize = data.length / 2
+    expect(decoded).toEqual(
+      data.map(
+        (_, i) =>
+          data[(i < rowSize ? 0 : rowSize) + ((i + rowSize - 1) % rowSize)]
+      )
+    )
   })
 
   // Rotate columns (only bfv or bgv)
@@ -819,7 +862,9 @@ describe('Evaluator', () => {
     evaluator.rotateColumns(cipher, galoisKeys, cipherDest)
     decryptor.decrypt(cipherDest, plain)
     const decoded = encoder.decodeBigInt64(plain) as BigInt64Array
-    expect(decoded).toEqual(data.map(x => x))
+    expect(decoded).toEqual(
+      data.map((_, i) => data[(i + data.length / 2) % data.length])
+    )
   })
   test('It should rotate columns on a cipher to a destination cipher with pool', () => {
     const plain = new seal.Plaintext()
@@ -837,7 +882,9 @@ describe('Evaluator', () => {
     )
     decryptor.decrypt(cipherDest, plain)
     const decoded = encoder.decodeBigInt64(plain) as BigInt64Array
-    expect(decoded).toEqual(data.map(x => x))
+    expect(decoded).toEqual(
+      data.map((_, i) => data[(i + data.length / 2) % data.length])
+    )
   })
   test('It should rotate columns on a cipher to a destination cipher inplace', () => {
     const plain = new seal.Plaintext()
@@ -849,7 +896,9 @@ describe('Evaluator', () => {
     evaluator.rotateColumnsInplace(cipher, galoisKeys)
     decryptor.decrypt(cipher, plain)
     const decoded = encoder.decodeBigInt64(plain) as BigInt64Array
-    expect(decoded).toEqual(data.map(x => x))
+    expect(decoded).toEqual(
+      data.map((_, i) => data[(i + data.length / 2) % data.length])
+    )
   })
   test('It should rotate columns on a cipher to a destination cipher inplace with pool', () => {
     const plain = new seal.Plaintext()
@@ -865,6 +914,8 @@ describe('Evaluator', () => {
     )
     decryptor.decrypt(cipher, plain)
     const decoded = encoder.decodeBigInt64(plain) as BigInt64Array
-    expect(decoded).toEqual(data.map(x => x))
+    expect(decoded).toEqual(
+      data.map((_, i) => data[(i + data.length / 2) % data.length])
+    )
   })
 })

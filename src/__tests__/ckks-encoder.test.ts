@@ -63,4 +63,28 @@ describe('CKKSEncoder', () => {
     })
     expect(arr).toEqual(arrRounded)
   })
+  test('It should encode a Float64Array subarray and decode with pool', () => {
+    const encoder = new seal.CKKSEncoder(context)
+    const arr = Float64Array.from([99, -3, 0, 2, 99])
+    const plain = new seal.Plaintext()
+    const pool = seal.MemoryPoolHandle.New(false)
+    encoder.encodeWithPool(arr.subarray(1, 4), Math.pow(2, 20), plain, pool)
+    const arr2 = encoder.decodeFloat64WithPool(plain, pool) as Float64Array
+    const expected = new Float64Array(encoder.slotCount())
+    expected.set([-3, 0, 2])
+    expect(arr2.map(x => 0 + Math.round(x))).toEqual(expected)
+    expect(pool.allocByteCount()).toBeGreaterThan(0)
+  })
+  test('It should return independent decoded arrays', () => {
+    const encoder = new seal.CKKSEncoder(context)
+    const arr = Float64Array.from([-3, 0, 2])
+    const plain = new seal.Plaintext()
+    encoder.encode(arr, Math.pow(2, 20), plain)
+    const arr2 = encoder.decodeFloat64(plain) as Float64Array
+    arr2[0] = 99
+    const arr3 = encoder.decodeFloat64(plain) as Float64Array
+    expect(arr3[0]).toBeCloseTo(-3, 2)
+    encoder.encode(Float64Array.from([7]), Math.pow(2, 20), plain)
+    expect(arr3.slice(0, 3).map(x => 0 + Math.round(x))).toEqual(arr)
+  })
 })

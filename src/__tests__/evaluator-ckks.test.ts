@@ -33,7 +33,10 @@ beforeAll(async () => {
   )
   context = new seal.SEALContext(encParms, true, securityLevel)
   encoder = new seal.CKKSEncoder(context)
-  data = Float64Array.from({ length: encoder.slotCount() }, _ => -5)
+  data = Float64Array.from(
+    { length: encoder.slotCount() },
+    (_, i) => (i % 7) - 3
+  )
   const keyGen = new seal.KeyGenerator(context)
   const pubKey = keyGen.createPublicKey()
   const secKey = keyGen.secretKey()
@@ -1148,7 +1151,7 @@ describe('Evaluator', () => {
   })
 
   // Rotate Vector (ckks only)
-  test('It should rotate a vector on a cipher to a destination cipher', () => {
+  test('It should rotate a vector left on a cipher to a destination cipher', () => {
     const plain = new seal.Plaintext()
     encoder.encode(data, Math.pow(2, 20), plain)
     const cipher = new seal.Ciphertext()
@@ -1160,10 +1163,10 @@ describe('Evaluator', () => {
     decryptor.decrypt(cipherDest, plain)
     const decoded = encoder.decodeFloat64(plain) as Float64Array
     expect(decoded.map(x => 0 + Math.round(x))).toEqual(
-      data.map(x => 0 + Math.round(x))
+      data.map((_, i) => data[(i + 1) % data.length])
     )
   })
-  test('It should rotate a vector on a cipher to a destination cipher with pool', () => {
+  test('It should rotate a vector right on a cipher to a destination cipher with pool', () => {
     const plain = new seal.Plaintext()
     encoder.encode(data, Math.pow(2, 20), plain)
     const cipher = new seal.Ciphertext()
@@ -1173,7 +1176,7 @@ describe('Evaluator', () => {
     const cipherDest = new seal.Ciphertext()
     evaluator.rotateVectorWithPool(
       cipher,
-      1,
+      -1,
       galoisKeys,
       cipherDest,
       seal.MemoryPoolHandle.Global()
@@ -1181,10 +1184,10 @@ describe('Evaluator', () => {
     decryptor.decrypt(cipherDest, plain)
     const decoded = encoder.decodeFloat64(plain) as Float64Array
     expect(decoded.map(x => 0 + Math.round(x))).toEqual(
-      data.map(x => 0 + Math.round(x))
+      data.map((_, i) => data[(i + data.length - 1) % data.length])
     )
   })
-  test('It should rotate a vector on a cipher to a destination cipher inplace', () => {
+  test('It should rotate a vector left on a cipher to a destination cipher inplace', () => {
     const plain = new seal.Plaintext()
     encoder.encode(data, Math.pow(2, 20), plain)
     const cipher = new seal.Ciphertext()
@@ -1195,10 +1198,10 @@ describe('Evaluator', () => {
     decryptor.decrypt(cipher, plain)
     const decoded = encoder.decodeFloat64(plain) as Float64Array
     expect(decoded.map(x => 0 + Math.round(x))).toEqual(
-      data.map(x => 0 + Math.round(x))
+      data.map((_, i) => data[(i + 1) % data.length])
     )
   })
-  test('It should rotate a vector on a cipher to a destination cipher inplace with pool', () => {
+  test('It should rotate a vector right on a cipher to a destination cipher inplace with pool', () => {
     const plain = new seal.Plaintext()
     encoder.encode(data, Math.pow(2, 20), plain)
     const cipher = new seal.Ciphertext()
@@ -1207,14 +1210,14 @@ describe('Evaluator', () => {
     plain.setZero()
     evaluator.rotateVectorInplaceWithPool(
       cipher,
-      1,
+      -1,
       galoisKeys,
       seal.MemoryPoolHandle.Global()
     )
     decryptor.decrypt(cipher, plain)
     const decoded = encoder.decodeFloat64(plain) as Float64Array
     expect(decoded.map(x => 0 + Math.round(x))).toEqual(
-      data.map(x => 0 + Math.round(x))
+      data.map((_, i) => data[(i + data.length - 1) % data.length])
     )
   })
 

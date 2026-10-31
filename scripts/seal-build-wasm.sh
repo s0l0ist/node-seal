@@ -17,12 +17,12 @@ fi
 FILE_NAME="seal_${TYPE}"
 FILE_NAME_DEFS="${FILE_NAME}.d.ts"
 printf "Building: ${FILE_NAME}..."
-emcc \
+em++ \
   -Wall \
   -flto \
   -fwasm-exceptions \
   -O3 \
-  -Wl,--whole-archive libseal-4.1.a -Wl,--no-whole-archive \
+  -Wl,--whole-archive libseal.a -Wl,--no-whole-archive \
   -lembind \
   -o "${FILE_NAME}.js" \
   --emit-tsd "${FILE_NAME_DEFS}" \
