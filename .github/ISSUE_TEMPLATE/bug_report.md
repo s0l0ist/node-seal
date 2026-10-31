@@ -1,30 +1,21 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Report a reproducible node-seal issue
 title: ''
 labels: ''
 assignees: s0l0ist
 ---
 
-**Describe the bug** A clear and concise description of what the bug is.
+## Reproduction
 
-**To Reproduce** Please provide a code example that illustrates the problem
-area.
+Provide a minimal code example, including the encryption parameters, and the
+error message or incorrect result.
 
-**Expected behavior** A clear and concise description of what you expected to
-happen.
+## Expected result
 
-**Screenshots** If applicable, add screenshots to help explain your problem.
+## Environment
 
-**Environment**
-
-- browser:
-  - [ ] Safari
-  - [ ] Chrome
-  - [ ] Firefox
-  - [ ] Edge
-  - [ ] Other (please specify):
-- nodejs version [e.g. v16.13.0]:
-- node-seal version [e.g. 4.6.2]:
-
-**Additional SEALContext** Add any other SEALContext about the problem here.
+- node-seal version:
+- Import variant (`node-seal`, `throws`, or `allows`):
+- Runtime and version:
+- OS and CPU architecture:

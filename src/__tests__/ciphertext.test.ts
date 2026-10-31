@@ -57,6 +57,36 @@ describe('Ciphertext', () => {
 
     const c2 = seal.Ciphertext.withContextAndPool(context, pool)
     expect(c2.polyModulusDegree()).toBe(1024)
+    expect(c2.sizeCapacity()).toBe(2)
+  })
+  test('It should construct with context, parmsId and pool', () => {
+    const pool = seal.MemoryPoolHandle.New(false)
+    const parmsId = context.firstParmsId()
+    const cipher = seal.Ciphertext.withContextAndParmsIdTypeAndPool(
+      context,
+      parmsId,
+      pool
+    )
+    expect(cipher.parmsId().values()).toEqual(parmsId.values())
+    expect(cipher.size()).toBe(0)
+    expect(cipher.sizeCapacity()).toBe(2)
+    expect(pool.allocByteCount()).toBeGreaterThan(0)
+    expect(cipher.pool().allocByteCount()).toBe(pool.allocByteCount())
+  })
+  test('It should construct with context, parmsId, capacity and pool', () => {
+    const pool = seal.MemoryPoolHandle.New(false)
+    const parmsId = context.firstParmsId()
+    const cipher = seal.Ciphertext.withContextAndParmsIdTypeAndCapacityAndPool(
+      context,
+      parmsId,
+      4,
+      pool
+    )
+    expect(cipher.parmsId().values()).toEqual(parmsId.values())
+    expect(cipher.size()).toBe(0)
+    expect(cipher.sizeCapacity()).toBe(4)
+    expect(pool.allocByteCount()).toBeGreaterThan(0)
+    expect(cipher.pool().allocByteCount()).toBe(pool.allocByteCount())
   })
   test('clone / copy / assign', () => {
     const ct = new seal.Ciphertext(context)
@@ -71,6 +101,35 @@ describe('Ciphertext', () => {
     const other = new seal.Ciphertext()
     other.assign(ct)
     expect(other.size()).toBe(ct.size())
+  })
+  test('It should copy with one buffer allocation in the default pool', () => {
+    const referencePool = seal.MemoryPoolHandle.New(false)
+    const reference = seal.Ciphertext.withContextAndPool(context, referencePool)
+    const cipher = new seal.Ciphertext(context)
+    encryptor.encryptZero(cipher)
+    cipher.reserve(context, 4)
+    const pool = seal.MemoryPoolHandle.New(false)
+    const previous = seal.MemoryManager.SwitchProfile(
+      new seal.MMProfFixed(pool)
+    )
+
+    try {
+      const copy = cipher.copy()
+      expect(copy.isAliasOf(cipher)).toBe(false)
+      expect(copy.size()).toBe(2)
+      expect(copy.sizeCapacity()).toBe(reference.sizeCapacity())
+      expect(copy.saveToArray(seal.ComprModeType.none)).toEqual(
+        cipher.saveToArray(seal.ComprModeType.none)
+      )
+      expect(copy.pool().allocByteCount()).toBe(pool.allocByteCount())
+      expect(pool.allocByteCount()).toBe(referencePool.allocByteCount())
+
+      copy.release()
+      expect(cipher.size()).toBe(2)
+      expect(cipher.sizeCapacity()).toBe(4)
+    } finally {
+      seal.MemoryManager.SwitchProfile(previous)
+    }
   })
   test('reserve / resize / release', () => {
     const ct = new seal.Ciphertext()
@@ -120,10 +179,11 @@ describe('Ciphertext', () => {
     const s0 = ct.scale()
     const c0 = ct.correctionFactor()
     expect(typeof s0).toBe('number')
-    expect(typeof c0).toBe('number')
+    expect(c0).toBe(1n)
 
     ct.setScale(3.14159)
     expect(ct.scale()).toBeCloseTo(3.14159)
+    expect(ct.correctionFactor()).toBe(c0)
   })
   test('saveToBase64 / loadFromBase64 roundtrip', () => {
     const ct1 = new seal.Ciphertext()

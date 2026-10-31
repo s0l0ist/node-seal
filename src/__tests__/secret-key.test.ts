@@ -33,9 +33,14 @@ describe('SecretKey', () => {
   })
 
   test('It should copy', () => {
-    const key = new seal.SecretKey()
+    const key = keyGen.secretKey()
+    const saved = key.saveToBase64(seal.ComprModeType.none)
     const copy = key.copy()
     expect(copy.isAliasOf(key)).toBe(false)
+    expect(copy.saveToBase64(seal.ComprModeType.none)).toBe(saved)
+
+    copy.assign(new seal.SecretKey())
+    expect(key.saveToBase64(seal.ComprModeType.none)).toBe(saved)
   })
 
   test('It should assign', () => {

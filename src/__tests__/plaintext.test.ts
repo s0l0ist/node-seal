@@ -61,6 +61,14 @@ describe('Plaintext', () => {
     expect(p3.coeffCount()).toBe(8)
     expect(p3.capacity()).toBe(8)
   })
+  test('It should preserve the memory pool and reserved capacity from a factory', () => {
+    const pool = seal.MemoryPoolHandle.New(false)
+    const plain = seal.Plaintext.withCapAndCoeffCountAndPool(16, 4, pool)
+    expect(plain.coeffCount()).toBe(4)
+    expect(plain.capacity()).toBe(16)
+    expect(pool.allocByteCount()).toBeGreaterThan(0)
+    expect(plain.pool().allocByteCount()).toBe(pool.allocByteCount())
+  })
   test('It should clone / copy / assign', () => {
     const plain = new seal.Plaintext()
     const clone = plain.clone()
@@ -73,6 +81,31 @@ describe('Plaintext', () => {
     expect(assign.coeffCount()).toBe(4)
     assign.assign(plain)
     expect(assign.coeffCount()).toBe(0)
+  })
+  test('It should copy with one buffer allocation in the default pool', () => {
+    const referencePool = seal.MemoryPoolHandle.New(false)
+    const reference = seal.Plaintext.withCoeffCountAndPool(4, referencePool)
+    const sourcePool = seal.MemoryPoolHandle.New(false)
+    const plain = seal.Plaintext.withCapAndCoeffCountAndPool(16, 4, sourcePool)
+    const pool = seal.MemoryPoolHandle.New(false)
+    const previous = seal.MemoryManager.SwitchProfile(
+      new seal.MMProfFixed(pool)
+    )
+
+    try {
+      const copy = plain.copy()
+      expect(copy.isAliasOf(plain)).toBe(false)
+      expect(copy.coeffCount()).toBe(reference.coeffCount())
+      expect(copy.capacity()).toBe(4)
+      expect(copy.pool().allocByteCount()).toBe(pool.allocByteCount())
+      expect(pool.allocByteCount()).toBe(referencePool.allocByteCount())
+
+      copy.resize(2)
+      expect(plain.coeffCount()).toBe(4)
+      expect(plain.capacity()).toBe(16)
+    } finally {
+      seal.MemoryManager.SwitchProfile(previous)
+    }
   })
   test('reserve / shrinkToFit / release / resize', () => {
     const plain = new seal.Plaintext()

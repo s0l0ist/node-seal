@@ -54,7 +54,8 @@ describe('Modulus', () => {
   test('It can save/load from a string', () => {
     const m = new seal.Modulus(3n)
     const str = m.saveToBase64(seal.ComprModeType.none)
-    expect(str).toBe('XqEQBAEAAAAYAAAAAAAAAAMAAAAAAAAA')
+    // The header records serialization format 4.0, not the library version.
+    expect(str).toBe('XqEQBAAAAAAYAAAAAAAAAAMAAAAAAAAA')
     const m2 = new seal.Modulus(0n)
     m2.loadFromBase64(str)
     expect(m2.value()).toBe(3n)
@@ -65,12 +66,35 @@ describe('Modulus', () => {
     const vec = m.saveToArray(seal.ComprModeType.none)
     expect(vec).toEqual(
       Uint8Array.from([
-        94, 161, 16, 4, 1, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0,
+        94, 161, 16, 4, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0,
         0, 0
       ])
     )
     const m2 = new seal.Modulus(0n)
     m2.loadFromArray(vec)
     expect(m2.value()).toBe(3n)
+  })
+
+  test('It should load from a Uint8Array subarray', () => {
+    const m = new seal.Modulus(3n)
+    const vec = m.saveToArray(seal.ComprModeType.none) as Uint8Array
+    const array = new Uint8Array(vec.length + 8).fill(255)
+    array.set(vec, 4)
+    const m2 = new seal.Modulus(0n)
+
+    m2.loadFromArray(array.subarray(4, 4 + vec.length))
+    expect(m2.value()).toBe(3n)
+  })
+
+  test('It should keep a saved array after deleting the modulus', () => {
+    const m = new seal.Modulus(3n)
+    const vec = m.saveToArray(seal.ComprModeType.none) as Uint8Array
+    const expected = vec.slice()
+    m.delete()
+
+    const m2 = new seal.Modulus(17n)
+    const vec2 = m2.saveToArray(seal.ComprModeType.none) as Uint8Array
+    vec2.fill(0)
+    expect(vec).toEqual(expected)
   })
 })

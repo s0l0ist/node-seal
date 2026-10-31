@@ -36,7 +36,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org'
 
@@ -57,7 +57,7 @@ jobs:
       - name: Compile TS
         run: npm run compile
 
-      - name: Bundle
+      - name: Test
         run: npm run test
 
       - name: Publish

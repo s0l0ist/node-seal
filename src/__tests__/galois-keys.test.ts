@@ -27,6 +27,41 @@ beforeAll(async () => {
 })
 
 describe('GaloisKeys', () => {
+  test('It should find keys by Galois element', () => {
+    const key = keyGen.createGaloisKeysWithSteps(Int32Array.from([1]))
+    expect(key.getIndex(3)).toBe(1)
+    expect(key.getIndex(9)).toBe(4)
+    expect(key.hasKey(3)).toBe(true)
+    expect(key.hasKey(9)).toBe(false)
+    expect(new seal.GaloisKeys().hasKey(3)).toBe(false)
+  })
+  test('It should return a copy of a key', () => {
+    const key = keyGen.createGaloisKeysWithSteps(Int32Array.from([1]))
+    const components = key.key(3)
+    const bytes = components[0].saveToArray(seal.ComprModeType.none)
+
+    expect(components.length).toBe(parms.coeffModulus().size() - 1)
+    const loaded = new seal.PublicKey()
+    loaded.loadFromArray(context, bytes)
+    expect(loaded.saveToArray(seal.ComprModeType.none)).toEqual(bytes)
+
+    components[0].assign(new seal.PublicKey())
+    expect(key.key(3)[0].saveToArray(seal.ComprModeType.none)).toEqual(bytes)
+  })
+  test('It should keep a returned key after deleting the keys', () => {
+    const key = keyGen.createGaloisKeysWithSteps(Int32Array.from([1]))
+    const component = key.key(3)[0]
+    const bytes = component.saveToArray(seal.ComprModeType.none)
+    key.delete()
+
+    expect(component.saveToArray(seal.ComprModeType.none)).toEqual(bytes)
+  })
+  test('It should fail to return a missing key', () => {
+    const key = keyGen.createGaloisKeysWithSteps(Int32Array.from([1]))
+    expect(() => key.key(2)).toThrow()
+    expect(() => key.key(9)).toThrow()
+    expect(() => new seal.GaloisKeys().key(3)).toThrow()
+  })
   test('It should clone', () => {
     const key = new seal.GaloisKeys()
     const clone = key.clone()
@@ -34,9 +69,14 @@ describe('GaloisKeys', () => {
   })
 
   test('It should copy', () => {
-    const key = new seal.GaloisKeys()
+    const key = keyGen.createGaloisKeysWithSteps(Int32Array.from([1]))
+    const saved = key.saveToBase64(seal.ComprModeType.none)
     const copy = key.copy()
     expect(copy.isAliasOf(key)).toBe(false)
+    expect(copy.saveToBase64(seal.ComprModeType.none)).toBe(saved)
+
+    copy.assign(new seal.GaloisKeys())
+    expect(key.saveToBase64(seal.ComprModeType.none)).toBe(saved)
   })
 
   test('It should assign', () => {

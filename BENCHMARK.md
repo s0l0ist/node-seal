@@ -1,5 +1,33 @@
-Microsoft SEAL now comes with a benchmark binary that can be directly compiled
-to WASM. All numbers are measured in `us` and are ran on an arm64 system.
+# Benchmarks
+
+Run from a [development checkout](CONTRIBUTING.md#setup).
+
+## Native
+
+```sh
+npm run build:bench:native
+npm run bench:native
+```
+
+## WebAssembly
+
+```sh
+npm run build:bench:wasm
+npm run bench:wasm
+```
+
+Pass Google Benchmark options after `--`, for example:
+
+```sh
+npm run bench:wasm -- --benchmark_filter='n=16384' --benchmark_repetitions=5
+```
+
+Use the same cases and timing settings when comparing results. Include the
+hardware, runtime, SEAL version, and build flags with your measurements.
+
+## Historical results
+
+These results are from an older release. Times are in microseconds.
 
 Test specs:
 

@@ -91,8 +91,9 @@ describe('EncryptionParameters', () => {
     const str = new seal.EncryptionParameters(
       seal.SchemeType.none
     ).saveToBase64(seal.ComprModeType.none)
+    // Both the outer header and nested modulus use serialization format 4.0.
     expect(str).toBe(
-      'XqEQBAEAAAA5AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXqEQBAEAAAAYAAAAAAAAAAAAAAAAAAAA'
+      'XqEQBAAAAAA5AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXqEQBAAAAAAYAAAAAAAAAAAAAAAAAAAA'
     )
 
     const encParms = new seal.EncryptionParameters(seal.SchemeType.bfv)
@@ -110,8 +111,8 @@ describe('EncryptionParameters', () => {
 
     expect(vec).toEqual(
       Uint8Array.from([
-        94, 161, 16, 4, 1, 0, 0, 0, 57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 94, 161, 16, 4, 1, 0, 0, 0, 24, 0, 0,
+        94, 161, 16, 4, 0, 0, 0, 0, 57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 94, 161, 16, 4, 0, 0, 0, 0, 24, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
       ])
     )
