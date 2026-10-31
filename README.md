@@ -46,7 +46,7 @@ subtracting a ciphertext from itself. Both variants expose the same API.
   and [tests](src/__tests__) cover the available API.
 - [Microsoft SEAL examples](https://github.com/microsoft/SEAL/tree/main/native/examples)
   explain the underlying library. Some C++ overloads are not available here.
-- [Benchmarks](BENCHMARK.md), [contributing](CONTRIBUTING.md), and
+- [contributing](CONTRIBUTING.md), and
   [release notes](CHANGES.md).
 
 ## License
