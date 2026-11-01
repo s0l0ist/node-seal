@@ -14,7 +14,7 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Pull & update submodules
         run: |
@@ -26,7 +26,7 @@ jobs:
           echo "EMSDK_SHA=$(./submodules/emsdk/emsdk list | grep recommended | awk -F'[()]' '{print $2}')" >> $GITHUB_ENV
       - name: Cache EMSDK
         id: cache-emsdk
-        uses: actions/cache@v3
+        uses: actions/cache@v6
         with:
           path: submodules/emsdk
           key: ${{ runner.os }}-e-emsdk-${{ env.EMSDK_SHA }}
@@ -34,7 +34,7 @@ jobs:
             ${{ runner.os }}-e-emsdk-
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: 'npm'
