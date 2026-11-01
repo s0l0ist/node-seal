@@ -108,7 +108,7 @@ describe('CKKSEncoder', () => {
         expect(e.constructor.name).toBe('Exception')
         expect(e.message).toEqual([
           'std::invalid_argument',
-          'scale must be finite'
+          'scale out of bounds'
         ])
       }
       expect(plain.capacity()).toBe(0)
@@ -150,7 +150,7 @@ describe('CKKSEncoder', () => {
         expect(e.constructor.name).toBe('Exception')
         expect(e.message).toEqual([
           'std::invalid_argument',
-          'scale must be finite'
+          'scale out of bounds'
         ])
       }
       expect(plain.capacity()).toBe(0)
