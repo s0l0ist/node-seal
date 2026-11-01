@@ -6,7 +6,15 @@ For changes to the underlying library, see the
 ## Version 7.1.0
 
 - Updated Microsoft SEAL to 4.7.2.
-- Added memory profiles for applications that need more control over memory reuse.
+- Improved Base64 conversion performance, with roughly doubled throughput for
+  larger payloads in local Wasm benchmarks.
+- Base64 loading now rejects malformed input, including invalid characters and
+  padding. Valid unpadded input remains supported.
+- Renamed `jsArrayFromVecModulus()` to `modulusValues()` and
+  `vecFromArrayModulus()` to `modulusVectorFromArray()`. Update existing callers.
+- CKKS encoding now rejects `NaN` and infinities in values and scales before
+  encoding, keeping the instance usable after invalid input.
+- Added memory-profile controls for advanced allocation experiments.
 - Fixed pool-specific plaintext and ciphertext factories losing their chosen pool
   and preallocated space.
 - Reduced temporary memory allocations when creating keys and serializable
@@ -18,12 +26,14 @@ For changes to the underlying library, see the
   typed-array inputs.
 - Added access to context precomputations, NTT tables, and individual
   relinearization and Galois keys.
-- Reorganized the docs around a [getting-started example](docs/getting-started.md)
-  and [JavaScript integration](docs/advanced.md), including cleanup, workers,
-  and memory pools.
+- Added a runnable README example and expanded [getting started](docs/getting-started.md)
+  with serialization. [Advanced usage](docs/advanced.md) covers scheme and parameter
+  choices, compact serialization, and performance, with an optional
+  [pool API reference](docs/memory-pools.md).
 - Added native SEAL benchmarks to compare against Wasm results.
 - Standardized benchmark commands: `build:bench:native`, `build:bench:wasm`,
   `bench:native`, and `bench:wasm`. See [benchmarks](BENCHMARK.md).
+- Maintenance: organized the Wasm bindings into smaller files by API area.
 
 ## Version 7.0.0
 

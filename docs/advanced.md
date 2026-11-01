@@ -1,98 +1,173 @@
-# Advanced JavaScript usage
+# Advanced usage
 
-Start with the [basic example](getting-started.md). For parameter selection,
-levels, scales, and rotations, see the
-[Microsoft SEAL examples](https://github.com/microsoft/SEAL/tree/main/native/examples).
+Start with [getting started](getting-started.md). This guide covers the choices
+that matter when turning that example into an application. Code snippets use
+its `seal`, `context`, `keygen`, `encoder`, `encryptor`, and plaintext/ciphertext
+objects.
 
-## Typed arrays
+## Choose a scheme
 
-| API                                                    | JavaScript input                    |
-| ------------------------------------------------------ | ----------------------------------- |
-| `BatchEncoder.encode()`                                | `BigInt64Array` or `BigUint64Array` |
-| `CKKSEncoder.encode()`                                 | `Float64Array`                      |
-| `CoeffModulus.Create()`, `createGaloisKeysWithSteps()` | `Int32Array`                        |
-| `loadFromArray()`                                      | `Uint8Array`                        |
+| Scheme | Use it for | Encoder |
+| --- | --- | --- |
+| BFV | Exact modular integer arithmetic. A useful starting point for integer workloads. | `BatchEncoder` |
+| BGV | Exact modular integer arithmetic with different noise and modulus-switching behavior. Compare it with BFV for your multiplication-heavy workloads. | `BatchEncoder` |
+| CKKS | Approximate real arithmetic, such as statistics, distances, or numerical models that tolerate a chosen error. | `CKKSEncoder` |
 
-Use `bigint` for modulus values and other 64-bit integers. Sizes and rotation
-steps use `number`.
+BFV and BGV results wrap modulo the plaintext modulus; they are not unbounded
+JavaScript integers. CKKS trades exactness for real-number arithmetic and
+requires a plan for precision and multiplication depth. Neither BFV nor BGV
+is universally faster: benchmark the calculation with suitable parameters.
 
-Encoding and loading copy data into Wasm. Decoded and saved arrays are independent
-JS copies, so they remain usable after the source handle is deleted.
+SEAL's [BFV](https://github.com/microsoft/SEAL/blob/main/native/examples/1_bfv_basics.cpp),
+[BGV](https://github.com/microsoft/SEAL/blob/main/native/examples/4_bgv_basics.cpp),
+and [CKKS](https://github.com/microsoft/SEAL/blob/main/native/examples/5_ckks_basics.cpp)
+examples explain the arithmetic and noise/scale management.
 
-`loadFromArray()` checks the array type. Wrap a Node.js `Buffer` before passing it:
+## Plan parameters around the calculation
+
+Parameters usually matter more than binding-level optimizations. Larger
+polynomial degrees increase operation cost, memory use, and ciphertext size.
+Choose them around the value ranges, multiplication depth, precision, and
+security level your application needs. BFV/BGV batch up to `degree` integers;
+our CKKS binding encodes up to `degree / 2` real values per ciphertext.
+
+`CoeffModulus.BFVDefault()` is a starting point, not a planner for your program.
+`context.parametersSet()` checks that the configuration is valid; it does not
+prove that the calculation has enough noise budget or precision. Test the
+whole calculation against cleartext results at your expected input bounds.
+
+For automated CKKS parameter selection, see Microsoft's
+[EVA compiler](https://github.com/microsoft/EVA#readme), referenced by
+[SEAL's README](https://github.com/microsoft/SEAL#readme). It selects parameters
+and inserts rescaling and relinearization for a program and its precision
+requirements.
+
+## Choose how to create and send objects
+
+### Symmetric or public-key encryption
+
+Use `encrypt()` when the sender has a public key. Use `encryptSymmetric()` when
+the sender owns the secret key; it avoids the cost of public-key encryption.
+Both produce ciphertexts that the same evaluator and decryptor can use.
+The side performing outsourced computation needs neither encryption key to
+add ciphertexts; operations such as relinearization and rotation need the
+corresponding evaluation keys.
+
+### Regular or serializable factories
+
+| What happens next | Method to choose |
+| --- | --- |
+| Use a key locally | `createPublicKey()`, `createRelinKeys()`, `createGaloisKeysWithSteps()` |
+| Save a key to send elsewhere | `createPublicKeySerializable()`, `createRelinKeysSerializable()`, `createGaloisKeysSerializableWithSteps()` |
+| Use a ciphertext locally or reuse its storage | `encrypt(plain, destination)` or `encryptSymmetric(plain, destination)` |
+| Save a secret-key ciphertext to send elsewhere | `encryptSymmetricSerializable(plain)` |
+
+Create `Serializable*` objects through these factory methods. They expose saving
+methods, and the recipient loads the bytes into a regular key or ciphertext.
+For keys and symmetric ciphertexts, the seeded form saves a random seed in place
+of part of the generated data. This reduces the bytes sent; loading expands it
+back into the full object. Use regular factories for local work to avoid a
+save/load round trip.
 
 ```javascript
-const bytes = new Uint8Array(
-  buffer.buffer,
-  buffer.byteOffset,
-  buffer.byteLength
-)
+using exportedKey = keygen.createPublicKeySerializable()
+const keyBytes = exportedKey.saveToArray(seal.ComprModeType.zstd)
+
+// On the recipient, with matching parameters:
+using loadedPublicKey = new seal.PublicKey()
+loadedPublicKey.loadFromArray(context, keyBytes)
 ```
 
-## Object lifetime
-
-Objects such as `Plaintext` and `Ciphertext` need explicit cleanup. Use `using`
-in runtimes that support it and `Symbol.dispose`. With an existing encoder and
-decryptor:
+On the secret-key owner's side, configure the encryptor with that key to produce
+compact symmetric ciphertexts:
 
 ```javascript
-function decryptValues(cipher) {
-  using plain = new seal.Plaintext()
-  decryptor.decrypt(cipher, plain)
-  return encoder.decodeBigInt64(plain)
+encryptor.setSecretKey(secretKey)
+using request = encryptor.encryptSymmetricSerializable(plain)
+const symmetricBytes = request.saveToArray(seal.ComprModeType.zstd)
+```
+
+`encryptSerializable()` also supports direct saving in public-key mode, but
+public-key ciphertexts do not have the seeded size reduction. SEAL's
+[serialization example](https://github.com/microsoft/SEAL/blob/main/native/examples/7_serialization.cpp)
+explains which objects support it.
+
+Start with `zstd` for saved objects, and compare `none` when serialization time
+matters more than size. `zlib` is also available. The Base64 methods use the same
+serialization and compression modes when a string is needed.
+
+## Reuse work and storage
+
+| Choice | When it helps |
+| --- | --- |
+| Reuse the initialized module, context, keys, and helpers | Setup and key generation should happen once for a stable parameter/key set. |
+| Fill batching slots | Amortize one encrypted operation over many values instead of encrypting each value separately. |
+| Encode public constants once and use `addPlain` / `multiplyPlain` | Avoid encrypting values that do not need to be private. |
+| Use `*Inplace()` methods | The input can become the result, avoiding a separate destination object. |
+| Reuse destination objects and reserve capacity | Repeated calls can reuse their existing buffers. |
+| Generate only the evaluation keys you need | Addition needs no relinearization or rotation keys. Request specific Galois steps with an `Int32Array`. |
+
+For repeated ciphertext multiplication, keep the destination outside the loop:
+
+```javascript
+using relinKeys = keygen.createRelinKeys()
+using destination = new seal.Ciphertext()
+
+for (const encrypted of encryptedInputs) {
+  evaluator.square(encrypted, destination)
+  evaluator.relinearizeInplace(destination, relinKeys)
+  // Consume or save destination before the next iteration overwrites it.
 }
 ```
 
-The returned array survives cleanup. If you return a native handle instead,
-leave its cleanup to the caller; a local `using` would delete it on return.
-Without `using`, call `.delete()` in `finally`.
+CKKS plaintext constants must match the level and scale of the operation. Follow
+SEAL's [levels](https://github.com/microsoft/SEAL/blob/main/native/examples/3_levels.cpp)
+and CKKS examples for that schedule. Measure the full pipeline, including key
+setup when relevant, serialization, and steady-state computation.
 
-Returned handles, including getters, need cleanup too. `.clone()` creates
-another handle to the same native object; `.copy()` creates an independent copy
-where available. `.assign()` lets you reuse an existing destination.
+The default memory pools and profiles shoud be sufficient, but the [pool reference](memory-pools.md) describes the exposed APIs.
 
-Reuse contexts, keys, encoders, and evaluators across calls. Keep mutable
-plaintexts and ciphertexts local to each request when work can interleave across
-`await` calls.
+## JavaScript inputs
 
-## Saving and loading
+| API | Input |
+| --- | --- |
+| `BatchEncoder.encode()` | `BigInt64Array` or `BigUint64Array` |
+| `CKKSEncoder.encode()` | `Float64Array` |
+| `CoeffModulus.Create()`, Galois-key step factories | `Int32Array` |
+| `loadFromArray()` | `Uint8Array` |
 
-Save objects before sending them to another process or runtime:
+Use `bigint` for modulus values and other 64-bit integers. Sizes and rotation
+steps use `number`. `CoeffModulus.Create()` returns `VectorModulus`;
+`modulusValues(vector)` extracts `bigint[]`, and `modulusVectorFromArray(moduli)`
+builds a vector from `Modulus[]`.
 
-```javascript
-const bytes = cipher.saveToArray(seal.ComprModeType.zstd)
-using loaded = new seal.Ciphertext()
-loaded.loadFromArray(context, bytes)
-```
+CKKS values and scales must be finite. Encoding rejects `NaN` and infinities
+before arithmetic begins.
 
-`saveToBase64()` and `loadFromBase64()` provide the string form. Saving requires
-a compression mode: `none`, `zlib`, or `zstd`.
+## Object lifetime
 
-`Serializable*` factory results expose saving methods. Save them, then load into
-a regular key or ciphertext before evaluation.
+Emscripten supports finalizers, but our generated runtime attaches them only to
+smart-pointer-backed handles, with cleanup scheduled by the garbage collector.
+Ordinary constructors such as `Plaintext`,
+`Ciphertext`, and keys are not covered. Garbage collection alone will not release
+those native objects. See [Embind's memory-management documentation](https://emscripten.org/docs/porting/connecting_cpp_and_javascript/embind.html#memory-management).
 
-## Workers
+Use `using` to release native handles at scope exit. Where `using` is unavailable,
+call `.delete()` in `finally`. Returned handles, including getters, need cleanup
+too; a function returning a native handle leaves cleanup to its caller.
+Decoded arrays and saved bytes are JS-owned and need no native cleanup.
 
-Initialization is asynchronous, but encryption and evaluation calls are
-synchronous. Move long jobs to a Web Worker or Node.js `worker_threads` worker
-to keep them off the main thread.
+In hot loops, reuse destinations and reserve capacity rather than repeatedly
+constructing objects. Cleanup and reuse make storage available inside the Wasm
+heap; they do not shrink its linear memory.
 
-Initialize SEAL inside the worker and load the same parameters there. Native
-handles belong to the instance that created them. Send saved bytes between
-instances:
-
-```javascript
-const bytes = cipher.saveToArray(seal.ComprModeType.zstd)
-worker.postMessage(bytes, [bytes.buffer])
-```
-
-The saved array owns its buffer, so it can be transferred without another JS
-copy. Transferring detaches the sender's array. Load it into a ciphertext using
-the worker's context.
+`.clone()` shares the same native object; `.copy()` creates an independent copy
+where available, and `.assign()` reuses an existing destination. Keep mutable
+plaintexts and ciphertexts local when requests can interleave across `await` calls.
 
 ## Wasm deployment
 
-If your bundler moves the Wasm file, point the loader at its served location:
+If your bundler relocates the Wasm file, point the loader at its served location:
 
 ```javascript
 const seal = await SEAL({
@@ -100,17 +175,11 @@ const seal = await SEAL({
 })
 ```
 
-Serve `seal_throws.wasm` or `seal_allows.wasm` for the selected variant. Keep
-the JS module and Wasm binary from the same release.
+Keep the JS module and the selected `seal_throws.wasm` or `seal_allows.wasm`
+binary from the same release.
 
 ## Native errors
 
-C++ failures throw `WebAssembly.Exception`, whose `.message` contains
+C++ failures throw `WebAssembly.Exception`. Its `.message` contains
 `[type, description]`, such as `['std::invalid_argument', 'expected Uint8Array']`.
-Account for this when logging errors or wrapping them in an application error.
-
-## Memory and context data
-
-Most applications can keep the default memory pool. See [memory pools](memory-pools.md)
-for scoped allocations and profile switching in JavaScript, and
-[context data](context-data.md) for the return types and cleanup of low-level accessors.
+Handle that shape when logging errors or wrapping them in an application error.

@@ -1,4 +1,4 @@
-// src/index_throws.ts
+// src/index_allows.ts
 import MainModuleFactory, { type MainModule } from './seal_allows.js'
 export type * from './seal_allows.js'
 
