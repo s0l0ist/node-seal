@@ -128,14 +128,42 @@ describe('Plaintext', () => {
     expect(plain.capacity()).toBe(0)
     expect(plain.coeffCount()).toBe(0)
   })
-  test('saveToBase64 / loadFromBase64 roundtrip', () => {
-    const p1 = new seal.Plaintext(4)
-    const s = p1.saveToBase64(seal.ComprModeType.none)
+  test('It should save and load standard Base64 with each padding length', () => {
+    for (const count of [0, 1, 2]) {
+      const p1 = new seal.Plaintext(count)
+      const bytes = p1.saveToArray(seal.ComprModeType.none) as Uint8Array
+      const encoded = Buffer.from(bytes).toString('base64')
+      expect(p1.saveToBase64(seal.ComprModeType.none)).toBe(encoded)
 
-    const p2 = new seal.Plaintext()
-    p2.loadFromBase64(context, s)
+      const p2 = new seal.Plaintext()
+      p2.loadFromBase64(context, encoded)
+      expect(p2.coeffCount()).toBe(count)
+    }
+  })
+  test('It should load valid unpadded Base64', () => {
+    for (const count of [0, 1, 2]) {
+      const p1 = new seal.Plaintext(count)
+      const bytes = p1.saveToArray(seal.ComprModeType.none) as Uint8Array
+      const encoded = Buffer.from(bytes).toString('base64').replace(/=+$/, '')
 
-    expect(p2.coeffCount()).toBe(4)
+      const p2 = new seal.Plaintext()
+      p2.loadFromBase64(context, encoded)
+      expect(p2.coeffCount()).toBe(count)
+    }
+  })
+  test('It should accept nonzero unused Base64 trailing bits', () => {
+    for (const count of [0, 2]) {
+      const p1 = new seal.Plaintext(count)
+      const bytes = p1.saveToArray(seal.ComprModeType.none) as Uint8Array
+      const encoded = Buffer.from(bytes).toString('base64')
+      // These zero-valued plaintexts end in 'A', whose unused bits can be changed to 'B'.
+      const noncanonical = encoded.replace(/A(=+)$/, 'B$1')
+      expect(noncanonical).not.toBe(encoded)
+
+      const p2 = new seal.Plaintext()
+      p2.loadFromBase64(context, noncanonical)
+      expect(p2.saveToArray(seal.ComprModeType.none)).toEqual(bytes)
+    }
   })
   test('saveToArray / loadFromArray roundtrip', () => {
     const p1 = new seal.Plaintext(5)

@@ -21,7 +21,7 @@ describe('PlainModulus', () => {
       4096,
       Int32Array.from([20, 20, 20])
     )
-    const arr = seal.jsArrayFromVecModulus(vecModulus)
+    const arr = seal.modulusValues(vecModulus)
     expect(arr).toEqual([925697n, 974849n, 1032193n])
   })
 

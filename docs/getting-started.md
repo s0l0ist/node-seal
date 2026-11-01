@@ -1,9 +1,12 @@
 # Getting started
 
-This example uses BFV to double encrypted integers, then decrypts the result.
-Save it as `example.mjs` in a project with node-seal installed and run
-`node example.mjs`. It uses `using` for cleanup; see
-[object lifetime](advanced.md#object-lifetime) for the manual alternative.
+This example follows a small encrypted request: the owner encrypts integers,
+serializes a ciphertext, sends it for computation, and decrypts the returned
+result. The computation doubles each value without decrypting it.
+
+Save this as `example.mjs` with node-seal installed and run `node example.mjs`.
+The example uses `using`; see [object lifetime](advanced.md#object-lifetime)
+if your runtime needs manual cleanup.
 
 ```javascript
 import SEAL from 'node-seal'
@@ -11,21 +14,20 @@ import SEAL from 'node-seal'
 const seal = await SEAL()
 const degree = 4096
 const security = seal.SecLevelType.tc128
+const mode = seal.ComprModeType.zstd
 
-// Parameters and context.
-using encParms = new seal.EncryptionParameters(seal.SchemeType.bfv)
+using parameters = new seal.EncryptionParameters(seal.SchemeType.bfv)
 using coeffModulus = seal.CoeffModulus.BFVDefault(degree, security)
 using plainModulus = seal.PlainModulus.Batching(degree, 20)
-encParms.setPolyModulusDegree(degree)
-encParms.setCoeffModulus(coeffModulus)
-encParms.setPlainModulus(plainModulus)
+parameters.setPolyModulusDegree(degree)
+parameters.setCoeffModulus(coeffModulus)
+parameters.setPlainModulus(plainModulus)
 
-using context = new seal.SEALContext(encParms, true, security)
+using context = new seal.SEALContext(parameters, true, security)
 if (!context.parametersSet()) {
   throw new Error(context.parameterErrorMessage())
 }
 
-// Keys and helpers.
 using keygen = new seal.KeyGenerator(context)
 using publicKey = keygen.createPublicKey()
 using secretKey = keygen.secretKey()
@@ -34,19 +36,41 @@ using encryptor = new seal.Encryptor(context, publicKey)
 using decryptor = new seal.Decryptor(context, secretKey)
 using evaluator = new seal.Evaluator(context)
 
-// Encrypt and calculate.
-const data = BigInt64Array.from([1n, 2n, 3n])
+// Client: encode and encrypt the input.
+const values = BigInt64Array.from([1n, 2n, 3n])
 using plain = new seal.Plaintext()
-encoder.encode(data, plain)
+encoder.encode(values, plain)
 using cipher = new seal.Ciphertext()
 encryptor.encrypt(plain, cipher)
-evaluator.addInplace(cipher, cipher)
+const requestBytes = cipher.saveToArray(mode)
 
-// Decrypt the result.
-decryptor.decrypt(cipher, plain)
+// Send requestBytes from the client to the server.
+
+// Server: load and compute using the same parameters. No secret key is needed.
+using received = new seal.Ciphertext()
+received.loadFromArray(context, requestBytes)
+evaluator.addInplace(received, received)
+const responseBytes = received.saveToArray(mode)
+
+// Send responseBytes from the server back to the client.
+
+// Client: load and decrypt the result.
+using result = new seal.Ciphertext()
+result.loadFromArray(context, responseBytes)
+decryptor.decrypt(result, plain)
 const decoded = encoder.decodeBigInt64(plain)
-console.log(Array.from(decoded.slice(0, data.length)))
+console.log(Array.from(decoded.slice(0, values.length)))
 // [2n, 4n, 6n]
 ```
 
-Continue with [advanced usage](advanced.md) for JavaScript integration.
+`saveToArray()` returns a `Uint8Array` that can be sent or stored. The receiving
+side loads it using the same encryption parameters. This example keeps both
+sides in one program; in an application, the secret key stays with the owner.
+
+Use `saveToBase64(mode)` and `loadFromBase64(context, text)` when a string is
+more convenient. Parameters can also be saved and loaded; their
+`loadFromArray(bytes)` method does not take a context.
+
+These parameters are enough for this addition example. See
+[advanced usage](advanced.md) for choosing a scheme, planning your parameters,
+and reducing key and ciphertext sizes.

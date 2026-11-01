@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Pull & update submodules
         run: |
@@ -22,7 +22,7 @@ jobs:
           echo "EMSDK_SHA=$(./submodules/emsdk/emsdk list | grep recommended | awk -F'[()]' '{print $2}')" >> $GITHUB_ENV
       - name: Cache EMSDK
         id: cache-emsdk
-        uses: actions/cache@v3
+        uses: actions/cache@v6
         with:
           path: submodules/emsdk
           key: ${{ runner.os }}-e-emsdk-${{ env.EMSDK_SHA }}
@@ -40,7 +40,7 @@ jobs:
 
       - name: Save artifacts
         if: steps.cache-seal.outputs.cache-hit != 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: seal-artifacts
           path: src/
@@ -50,9 +50,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: 'npm'
@@ -62,7 +62,7 @@ jobs:
           npm ci
 
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: seal-artifacts
           path: src/

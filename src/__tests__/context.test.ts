@@ -89,7 +89,7 @@ describe('Context, ContextData, EncryptionParameterQualifiers', () => {
         context.firstContextData(),
         context.lastContextData()
       ]) {
-        const primes: bigint[] = seal.jsArrayFromVecModulus(
+        const primes: bigint[] = seal.modulusValues(
           contextData.parms().coeffModulus()
         )
         const words = contextData.totalCoeffModulus()
@@ -112,7 +112,7 @@ describe('Context, ContextData, EncryptionParameterQualifiers', () => {
   test('It should return plaintext scaling constants (bfv / bgv)', () => {
     for (const context of [bfvContext, bgvContext]) {
       const contextData = context.keyContextData()
-      const primes: bigint[] = seal.jsArrayFromVecModulus(
+      const primes: bigint[] = seal.modulusValues(
         contextData.parms().coeffModulus()
       )
       const q = primes.reduce((product, prime) => product * prime, 1n)
@@ -150,7 +150,7 @@ describe('Context, ContextData, EncryptionParameterQualifiers', () => {
       seal.SecLevelType.tc128
     )
     const contextData = context.keyContextData()
-    const primes: bigint[] = seal.jsArrayFromVecModulus(encParms.coeffModulus())
+    const primes: bigint[] = seal.modulusValues(encParms.coeffModulus())
     const q = primes.reduce((product, prime) => product * prime, 1n)
     const t = encParms.plainModulus().value()
     const increment = contextData.plainUpperHalfIncrement()
@@ -161,7 +161,7 @@ describe('Context, ContextData, EncryptionParameterQualifiers', () => {
   })
   test('It should return signed decoding constants (ckks)', () => {
     const contextData = ckksContext.keyContextData()
-    const primes: bigint[] = seal.jsArrayFromVecModulus(
+    const primes: bigint[] = seal.modulusValues(
       contextData.parms().coeffModulus()
     )
     const q = primes.reduce((product, prime) => product * prime, 1n)
@@ -201,7 +201,7 @@ describe('Context, ContextData, EncryptionParameterQualifiers', () => {
     for (const context of [bfvContext, bgvContext, ckksContext]) {
       const contextData = context.keyContextData()
       const encParms = contextData.parms()
-      const primes: bigint[] = seal.jsArrayFromVecModulus(
+      const primes: bigint[] = seal.modulusValues(
         encParms.coeffModulus()
       )
       const smallTables = contextData.smallNttTables()

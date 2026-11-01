@@ -61,6 +61,48 @@ describe('Modulus', () => {
     expect(m2.value()).toBe(3n)
   })
 
+  test('It should reject invalid Base64 lengths', () => {
+    const modulus = new seal.Modulus(0n)
+    for (const encoded of ['A', 'AAAAA', 'Zg=', 'Zg===']) {
+      try {
+        modulus.loadFromBase64(encoded)
+        expect(true).toBe(false)
+      } catch (e: any) {
+        expect(e.constructor.name).toBe('Exception')
+        expect(e.message).toEqual(['std::invalid_argument', 'invalid base64'])
+      }
+    }
+  })
+
+  test('It should reject invalid Base64 characters', () => {
+    const modulus = new seal.Modulus(0n)
+    for (const encoded of [
+      '!!!!', 'AA A', 'AA\nA', 'AA-A', 'AA_A', 'AA\0A', 'AAéA',
+      'AAAA!AAAAAAAAAAA', 'AAAAAAAAAAAAAAA!'
+    ]) {
+      try {
+        modulus.loadFromBase64(encoded)
+        expect(true).toBe(false)
+      } catch (e: any) {
+        expect(e.constructor.name).toBe('Exception')
+        expect(e.message).toEqual(['std::invalid_argument', 'invalid base64'])
+      }
+    }
+  })
+
+  test('It should reject invalid Base64 padding', () => {
+    const modulus = new seal.Modulus(0n)
+    for (const encoded of ['=AAA', 'A=AA', 'AA=A', 'A===', '====', 'Zg==AAAA']) {
+      try {
+        modulus.loadFromBase64(encoded)
+        expect(true).toBe(false)
+      } catch (e: any) {
+        expect(e.constructor.name).toBe('Exception')
+        expect(e.message).toEqual(['std::invalid_argument', 'invalid base64'])
+      }
+    }
+  })
+
   test('It can save/load from a vec', () => {
     const m = new seal.Modulus(3n)
     const vec = m.saveToArray(seal.ComprModeType.none)

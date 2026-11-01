@@ -1,13 +1,12 @@
 import { beforeAll, describe, expect, test } from 'vitest'
 import MainModuleFactory, {
-  type EncryptionParameters,
   type MainModule,
   type SEALContext
 } from '../index_throws'
 
 let seal: MainModule
-let encParms: EncryptionParameters
 let context: SEALContext
+
 beforeAll(async () => {
   seal = await MainModuleFactory()
   const schemeType = seal.SchemeType.ckks
@@ -17,7 +16,7 @@ beforeAll(async () => {
     polyModulusDegree,
     Int32Array.from([46, 16, 46])
   )
-  encParms = new seal.EncryptionParameters(schemeType)
+  const encParms = new seal.EncryptionParameters(schemeType)
   encParms.setPolyModulusDegree(polyModulusDegree)
   encParms.setCoeffModulus(coeffModulus)
   context = new seal.SEALContext(encParms, true, securityLevel)
@@ -65,7 +64,7 @@ describe('CKKSEncoder', () => {
   })
   test('It should encode a Float64Array subarray and decode with pool', () => {
     const encoder = new seal.CKKSEncoder(context)
-    const arr = Float64Array.from([99, -3, 0, 2, 99])
+    const arr = Float64Array.from([NaN, -3, 0, 2, Infinity])
     const plain = new seal.Plaintext()
     const pool = seal.MemoryPoolHandle.New(false)
     encoder.encodeWithPool(arr.subarray(1, 4), Math.pow(2, 20), plain, pool)
@@ -75,6 +74,89 @@ describe('CKKSEncoder', () => {
     expect(arr2.map(x => 0 + Math.round(x))).toEqual(expected)
     expect(pool.allocByteCount()).toBeGreaterThan(0)
   })
+
+  test('It should reject non-finite values with encode', () => {
+    for (const value of [NaN, Infinity, -Infinity]) {
+      const encoder = new seal.CKKSEncoder(context)
+      const plain = new seal.Plaintext()
+      const scale = Math.pow(2, 20)
+
+      try {
+        encoder.encode(Float64Array.from([1, 2, value]), scale, plain)
+        expect(true).toBe(false)
+      } catch (e: any) {
+        expect(e.constructor.name).toBe('Exception')
+        expect(e.message).toEqual([
+          'std::invalid_argument',
+          'values must be finite'
+        ])
+      }
+      expect(plain.capacity()).toBe(0)
+    }
+  })
+
+  test('It should reject non-finite scale with encode', () => {
+    for (const value of [NaN, Infinity, -Infinity]) {
+      const encoder = new seal.CKKSEncoder(context)
+      const plain = new seal.Plaintext()
+      const arr = Float64Array.from([1, 2, 3])
+
+      try {
+        encoder.encode(arr, value, plain)
+        expect(true).toBe(false)
+      } catch (e: any) {
+        expect(e.constructor.name).toBe('Exception')
+        expect(e.message).toEqual([
+          'std::invalid_argument',
+          'scale must be finite'
+        ])
+      }
+      expect(plain.capacity()).toBe(0)
+    }
+  })
+
+  test('It should reject non-finite values with encodeWithPool', () => {
+    for (const value of [NaN, Infinity, -Infinity]) {
+      const encoder = new seal.CKKSEncoder(context)
+      const plain = new seal.Plaintext()
+      const pool = seal.MemoryPoolHandle.New(false)
+      const scale = Math.pow(2, 20)
+
+      try {
+        encoder.encodeWithPool(Float64Array.from([1, 2, value]), scale, plain, pool)
+        expect(true).toBe(false)
+      } catch (e: any) {
+        expect(e.constructor.name).toBe('Exception')
+        expect(e.message).toEqual([
+          'std::invalid_argument',
+          'values must be finite'
+        ])
+      }
+      expect(plain.capacity()).toBe(0)
+    }
+  })
+
+  test('It should reject non-finite scale with encodeWithPool', () => {
+    for (const value of [NaN, Infinity, -Infinity]) {
+      const encoder = new seal.CKKSEncoder(context)
+      const plain = new seal.Plaintext()
+      const pool = seal.MemoryPoolHandle.New(false)
+      const arr = Float64Array.from([1, 2, 3])
+
+      try {
+        encoder.encodeWithPool(arr, value, plain, pool)
+        expect(true).toBe(false)
+      } catch (e: any) {
+        expect(e.constructor.name).toBe('Exception')
+        expect(e.message).toEqual([
+          'std::invalid_argument',
+          'scale must be finite'
+        ])
+      }
+      expect(plain.capacity()).toBe(0)
+    }
+  })
+
   test('It should return independent decoded arrays', () => {
     const encoder = new seal.CKKSEncoder(context)
     const arr = Float64Array.from([-3, 0, 2])

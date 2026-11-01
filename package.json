@@ -9,8 +9,7 @@
   "homepage": "https://s0l0ist.github.io/seal-sandbox/",
   "author": {
     "name": "Nick Angelou",
-    "email": "angelou.nick@gmail.com",
-    "url": "https://s0l0ist.github.io/seal-sandbox/"
+    "email": "angelou.nick@gmail.com"
   },
   "keywords": [
     "homomorphic",
@@ -65,11 +64,10 @@
     "update:emsdk": "bash scripts/em-update.sh"
   },
   "devDependencies": {
-    "@types/node": "^26.6.2",
-    "@vitest/coverage-v8": "^5.0.1",
-    "node-seal": "^7.0.0",
+    "@types/node": "^26.6.6",
+    "@vitest/coverage-v8": "^5.0.5",
     "typescript": "^7.0.2",
-    "vite": "^8.3.0",
-    "vitest": "^5.0.1"
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
   }
 }

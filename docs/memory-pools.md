@@ -1,59 +1,40 @@
-# Memory pools in JavaScript
+# Memory pools and profiles
 
-Keep the default pool unless profiling shows a reason to change it. Reuse
-contexts and keys, and check handle cleanup first.
+These
+APIs are available for allocation experiments, not required application setup.
 
-## Pass a pool explicitly
+## What changes in Wasm
 
-Use the pool factories for object storage and evaluator `WithPool` methods for
-temporary allocations. With an existing evaluator, ciphertext, and keys:
+SEAL's pools manage buffer allocation and reuse inside Wasm's linear memory.
+Releasing a private pool makes its buffers available to the underlying allocator,
+but does not shrink the Wasm memory buffer or return that capacity to the host.
+Changing pools is not a way to reduce the size of an already-grown Wasm heap.
 
-```javascript
-using storagePool = seal.MemoryPoolHandle.New(false)
-using plain = seal.Plaintext.withCoeffCountAndPool(1024, storagePool)
+For normal application work, reuse contexts, keys, and destinations, and release
+native handles with `using` or `.delete()`. The default pool already reuses
+buffers.
 
-using scratchPool = seal.MemoryPoolHandle.New(false)
-evaluator.squareInplaceWithPool(cipher, scratchPool)
-evaluator.relinearizeInplaceWithPool(cipher, relinKeys, scratchPool)
-```
+## API reference
 
-Reuse the scratch pool across calls. Deleting the pool's JS handle doesn't free
-it while native objects still use it. A handle returned from a function can keep
-that pool alive after the function returns.
+| API | Role |
+| --- | --- |
+| `MemoryPool` | SEAL's native allocator and cached buffers; accessed through a handle in JS. |
+| `MemoryPoolHandle` | A reference to a pool. Explicit pool factories select object storage; `WithPool` methods select temporary working storage. |
+| `MemoryManager` | Selects default pools through the active profile. `GetPool()` returns a handle; `SwitchProfile()` installs a profile and returns the previous one. |
+| `MMProfGlobal` | Selects the global pool. This is the default. |
+| `MMProfFixed(pool)` | Selects the supplied pool for default-pool requests. |
+| `MMProfNew` | Creates a new pool on every default-pool request, losing reuse across those requests. |
+| `MMProfThreadLocal` | Selects the native thread's pool; usually unnecessary in this single-threaded build. |
 
-## Switch defaults for synchronous work
+`MMProf` is the base type for profiles. Creating a profile does not activate it.
+Switching profiles changes defaults for the entire SEAL instance and does not
+move existing objects between pools. If experimenting with a temporary switch,
+restore the previous profile in `finally` and do not `await` while it is installed.
 
-`MMProfFixed` lets a group of calls use the same default pool. Restore the previous
-profile in `finally`, and dispose the handle returned by the restoring call too:
-
-```javascript
-using jobPool = seal.MemoryPoolHandle.New(false)
-using profile = new seal.MMProfFixed(jobPool)
-using previous = seal.MemoryManager.SwitchProfile(profile)
-
-try {
-  using jobPlain = new seal.Plaintext(1024)
-} finally {
-  seal.MemoryManager.SwitchProfile(previous).delete()
-}
-```
-
-This changes defaults for the entire SEAL instance. Keep temporary switches
-synchronous: don't `await` while a job's profile is installed, since other
-requests could allocate from its pool. Existing objects keep their pools.
-Creating or deleting a profile handle doesn't activate or deactivate it;
-`SwitchProfile()` controls that.
+`pool.allocByteCount()` measures that pool's buffers, including cached ones,
+not the total Wasm heap or process memory. A lower pool count does not mean the
+Wasm memory buffer has shrunk. Measure the complete workload before keeping a
+custom allocation policy.
 
 See [SEAL's memory manager reference](https://github.com/microsoft/SEAL/blob/main/native/src/seal/memorymanager.h)
-for the behavior of the other profile types. The shipped Wasm build doesn't use
-pthreads; separate workers have separate SEAL instances and pools.
-
-## Reading memory usage
-
-`pool.allocByteCount()` includes cached native blocks. It doesn't include
-JS-owned decoded arrays or serialized data. Released objects can leave cached
-memory in the pool, so a rising count alone doesn't establish a leak.
-
-Releasing a private pool returns its blocks to the Wasm allocator. It doesn't
-shrink the Wasm `ArrayBuffer`. Measure both operation time and memory use before
-keeping a pool change.
+for the native API details.

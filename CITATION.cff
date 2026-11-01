@@ -3,7 +3,7 @@ message: "If you use node-seal in your research, please cite it as below."
 
 title: "node-seal, a Homomorphic Encryption library for TypeScript or JavaScript using Microsoft SEAL"
 version: 7.1.0
-date-released: 2026-10-31
+date-released: 2026-11-01
 type: software
 license: MIT
 
